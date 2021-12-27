@@ -1,0 +1,78 @@
+///
+/// @file    SceneTitle.cpp
+/// @brief   タイトル画面
+/// @date    2021/12/06
+/// @author yamawaki kota
+/// @copyright (C) Amusement Media Academy All rights Resved.
+///
+#include "AppFrame.h"
+#include "SceneTeam.h"
+#include <DxLib.h>
+//using namespace Asset;
+
+namespace SceneTeam {
+  /// コンストラクタ
+  SceneTeam::SceneTeam(Game& game)
+    :Scene{ game }
+  {
+  }
+  /// 初期化
+  void SceneTeam::Init() {
+    // 使用する画像のテーブル
+    const /*Asset::*/AssetServer::TextureMap textureToUsed{
+      {"TeamBg",          {"title/team.png",          1, 1, 1920, 1080}},
+      //{"GameTitleTeam",        {"GameTitle.png",        1, 1, 1553, 224}},
+      //{"LeftClickToStartTeam", {"LeftClickToStart.png", 1, 1, 1135, 107}},
+    };
+    // アセットサーバーの取得
+    auto& as = GetAssetServer();
+    // 画像の読み込み
+    as.LoadTextures(textureToUsed);
+
+
+    // 画像のハンドル取得
+    _teamBgHandle = as.GetTexture("TeamBg");
+    //_gameTitleHandle = as.GetTexture("GameTitleTeam");
+    //_leftClickToStart = as.GetTexture("LeftClickToStartTeam");
+
+    // サウンドコンポーネントの取得
+    auto& sc = GetSoundComponent();
+    sc.PlayLoop("bgm1");
+    sc.SetVolume("bgm1", 50);
+
+  }
+  ///
+  /// 入口処理
+  /// 
+  void SceneTeam::Enter() {
+    _alpha = 0;
+  }
+  ///
+  /// 入力処理.
+  ///
+  void SceneTeam::Input(InputComponent& input) {
+    if (input.GetMouse().LeftClick()) {
+      // 左クリックでInGameへ遷移
+      GetSceneServer().GoToScene("Title");
+      _alpha = 255;
+    }
+  }
+  void SceneTeam::Update() {
+    _alpha = (_alpha + 8) % 255;
+    if (_alpha > 200) {
+      // Teamへ遷移
+      GetSceneServer().GoToScene("Title");
+      _alpha = 255;
+    }
+  }
+  ///
+  /// 描画
+  ///
+  void SceneTeam::Render() {
+    DrawGraph(0, 0, _teamBgHandle, FALSE);
+    SetDrawBlendMode(DX_BLENDMODE_ALPHA, _alpha);
+    //  DrawGraph(1920 / 2 - 1135 / 2, 700 - 107 / 2, _leftClickToStart, TRUE);
+    SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+    //  DrawGraph(0, 0, _gameTeamHandle, TRUE);
+  }
+}

@@ -1,0 +1,18 @@
+[
+	{
+		"name":"tackle",
+		"type":"0.0",
+		"energy":"10.0",
+		"searchrange":"30.0",
+		"r":"50.0",
+		"speed":"5.0"
+	},
+	{
+		"name":"grab",
+		"type":"1.0",
+		"energy":"20.0",
+		"searchrange":"60.0",
+		"r":"50.0",
+		"speed":"3.0"
+	}
+]

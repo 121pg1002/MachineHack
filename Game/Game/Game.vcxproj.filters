@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="source\Game.cpp" />
+    <ClCompile Include="source\Enemy\TackleEnemy.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Stage\Stage.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scene\SceneInGame.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scene\SceneTitle.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Player\Player.cpp">
+      <Filter>Player</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Load\Load.cpp">
+      <Filter>Load</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Enemy\EnemyParameter.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scene\SceneAMG.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scene\SceneTeam.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Enemy\EnemyBase.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scene\EffectServer.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Camera\CameraComponent.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Actor\Actor.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Actor\ActorServer.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Model\ModelAnimComponent.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Model\ModelComponent.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Actor\ActorFactory.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="source\State\StateComponent.cpp">
+      <Filter>State</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Collision\CollisionComponent.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Gimmick\Gimmick.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Gimmick\GimmickBase.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Enemy">
+      <UniqueIdentifier>{0db063d1-1595-4600-a1c5-f932f1adefeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Player">
+      <UniqueIdentifier>{a071c76c-ca19-4926-ae96-7d92ff54b229}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{28acd787-ad53-40a4-955c-2c1306c4d19a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Stage">
+      <UniqueIdentifier>{3d17c49c-1f7b-4388-bc4e-982cbaa773dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Load">
+      <UniqueIdentifier>{47e6e890-aede-46b4-b423-8fb05ca20dce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{90c234d1-0ef2-4b08-98b8-b29d2b193f42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Model">
+      <UniqueIdentifier>{635c5090-7225-4aee-8cf3-6d2c77651322}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor">
+      <UniqueIdentifier>{d15d2d85-3c3b-4f38-9163-806fc5d5f7ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collision">
+      <UniqueIdentifier>{806d1a20-c71f-41bc-880b-12479904aebc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="State">
+      <UniqueIdentifier>{11bb1512-b798-46e5-b3c4-268eeb793b30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gimmick">
+      <UniqueIdentifier>{e62a35b4-2050-4f98-8260-d72b5c0e0935}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="nlohmann">
+      <UniqueIdentifier>{8335ae00-6d4a-4c9a-9b94-d5010234acb4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\Enemy\TackleEnemy.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Stage\Stage.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Scene\SceneInGame.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Scene\SceneTitle.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Player\Player.h">
+      <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Load\Load.h">
+      <Filter>Load</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Enemy\EnemyParameter.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Scene\SceneAMG.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Scene\SceneTeam.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Enemy\EnemyBase.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Scene\EffectServer.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Camera\CameraComponent.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Actor\Actor.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Actor\ActorServer.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Model\ModelAnimComponent.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Model\ModelComponent.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Actor\ActorFactory.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="source\State\StateComponent.h">
+      <Filter>State</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Collision\CollisionComponent.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Gimmick\Gimmick.h">
+      <Filter>Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Gimmick\GimmickBase.h">
+      <Filter>Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="source\nlohmann\json.hpp">
+      <Filter>nlohmann</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="source\Asset\AssetServer.cpp">
+      <Filter>Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Input\InputComponent.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Sound\SoundComponent.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scene\Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scene\SceneFade.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scene\SceneServer.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="source\WinMain.cpp" />
+    <ClCompile Include="source\Math\Matrix44.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Math\ToDx.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Math\Utility.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Math\Vector4.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Math\Vector2.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\Asset\AssetServer.h">
+      <Filter>Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Input\InputComponent.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Sound\SoundComponent.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Scene\Scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Scene\SceneFade.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Scene\SceneServer.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AppFrame.h" />
+    <ClInclude Include="source\Math\Matrix44.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Math\ToDx.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Math\Utility.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Math\Vector4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Math\Vector2.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Game.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Asset">
+      <UniqueIdentifier>{d43e651a-323f-46ae-bd64-f00b9b483360}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{be631b5b-14de-40bc-8a74-79a59e6eb93b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{5214b031-7b21-4f72-9601-0ce6b0ed917c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sound">
+      <UniqueIdentifier>{63792d58-0961-4621-82ce-5b47d73bd42a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{c0f788a6-e2ad-4315-ad0c-17487e3de2e8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
