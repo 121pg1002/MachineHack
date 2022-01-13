@@ -85,7 +85,7 @@ namespace MachineHuck::Collision {
 		 * @param  max  最大座標
 		 * @return 成否
 		 */
-		bool CircleToAABB(const Actor::Actor& act, const AppFrame::Math::Vector2 min, const AppFrame::Math::Vector2 max);
+		bool CircleToAABB(const Actor::Actor& act, const AppFrame::Math::Vector4 min, const AppFrame::Math::Vector4 max);
 
 
 		/**
@@ -113,6 +113,9 @@ namespace MachineHuck::Collision {
 		 */
 		bool CircleToLine(const Actor::Actor& act1, const Math::Vector4 start, const Math::Vector4 end);
 
+
+
+
 		/*
 		*@brief 円と扇形の当たり判定を行う
 		*/
@@ -134,6 +137,16 @@ namespace MachineHuck::Collision {
 		 * @return 成否
 		 */
 		bool LineToAABB(const Actor::Actor& act1, const Actor::Actor& act2, const AABB box);
+
+		///**
+		// * @brief  線分とAABBの当たり判定を行う
+		// * @param  act
+		// * @param  min
+		// * @param  max
+		// * @return 成否
+		// */
+		//bool LineToAABB(const Actor::Actor& act1, const Math::Vector2 min, const Math::Vector2 max);
+
 
 		/**
 		 * @brief  平面との交差テスト

@@ -171,21 +171,21 @@ namespace MachineHuck::Collision {
     }
 
 
-    bool CollisionComponent::CircleToAABB(const Actor::Actor& act, const AppFrame::Math::Vector2 min, const AppFrame::Math::Vector2 max)
+    bool CollisionComponent::CircleToAABB(const Actor::Actor& act, const AppFrame::Math::Vector4 min, const AppFrame::Math::Vector4 max)
     {
         //主人公が球act1, 相手がAABB act2
         //double dx1 = act2.GetMin().GetX() - act1.GetMin().GetX(); //!< minが左側にある
-        auto pos = (max + min) / 2;
+        //auto pos = (max + min) / 2;
        const auto& circlePos = act.GetPosition();
 
         //auto min = act2.GetMin();
         //auto max = act2.GetMax();
 
         //double dx1 = act2.GetPosition().GetX() + act2.GetMin().GetX() - act1.GetPosition().GetX();
-        //double dx2 = act1.GetPosition().GetX() - (act2.GetPosition().GetX() + act2.GetMax().GetX()) ;
+        //double dx2 = act1.GetPosition().GetX() - (act2.GetPosition().GetX() + act2.GetMax().GetX());
 
-        double dx1 = pos.GetX() + min.GetX() - circlePos.GetX();
-        double dx2 = circlePos.GetX() - (pos.GetX() + max.GetX());
+        double dx1 = min.GetX() - circlePos.GetX();
+        double dx2 = circlePos.GetX() - max.GetX();
 
         dx1 = dx1 > 0.0 ? dx1 : 0.0;
         dx2 = dx1 > dx2 ? dx1 : dx2;
@@ -193,8 +193,8 @@ namespace MachineHuck::Collision {
 
         //double dz1 = act2.GetPosition().GetZ() + act2.GetMin().GetZ() - act1.GetPosition().GetZ();
         //double dz2 = act1.GetPosition().GetZ() - (act2.GetPosition().GetZ() + act2.GetMax().GetZ());
-        double dz1 = pos.GetZ() + min.GetZ() - circlePos.GetZ();
-        double dz2 = circlePos.GetZ() - (pos.GetZ() + max.GetZ());
+        double dz1 = min.GetZ() - circlePos.GetZ();
+        double dz2 = circlePos.GetZ() - max.GetZ();
 
         dz1 = dz1 > 0.0 ? dz1 : 0.0;
         dz2 = dz1 > dz2 ? dz1 : dz2;
@@ -591,6 +591,37 @@ namespace MachineHuck::Collision {
         
         return false;
     }
+
+
+    //bool CollisionComponent::LineToAABB(const Actor::Actor& act, const Math::Vector2 min, const Math::Vector2 max) {
+
+
+    //    std::vector<double> tValues;
+
+    //   // auto [minX, minZ, maxX, maxZ] = box;
+
+    //    Math::Vector4 lMin = { act.GetPosition().GetX(), 150.0, act.GetPosition().GetZ() };
+    //    Math::Vector4 lMax = {act.GetPosition().GetX(), -9999.0, act.GetPosition().GetZ()};
+    //   // auto boxMin = act2.GetMin();
+
+
+    //    //x平面のテスト
+    //    TestSidePlane(lMin.GetX(), lMax.GetX(), min.GetX(), tValues);
+    //    TestSidePlane(lMin.GetX(), lMax.GetX(), max.GetX(), tValues);
+
+    //    //z平面のテスト
+    //    TestSidePlane(lMin.GetZ(), lMax.GetZ(), min.GetZ(), tValues);
+    //    TestSidePlane(lMin.GetZ(), lMax.GetZ(), max.GetZ(), tValues);
+
+    //    Math::Vector4 point;
+    //    for (auto t : tValues) {
+
+    //        // _interSection = PointOnSegment(lMin, lMax, t);
+    //        return true;
+    //    }
+
+    //    return false;
+    //}
 
     bool CollisionComponent::TestSidePlane(const double start, const double end, const double negd, std::vector<double>& out) {
 

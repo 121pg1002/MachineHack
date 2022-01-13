@@ -24,6 +24,7 @@ namespace AppFrame::Math {
 
     //点と三角形の内外判定
     bool Utility::InsideTrianglePoint(const Vector4& trianglePoint0, const Vector4& trianglePoint1, const Vector4& trianglePoint2, const Vector4& point) {
+        
         const auto v01 = trianglePoint1 - trianglePoint0;
         const auto v12 = trianglePoint2 - trianglePoint1;
         const auto v20 = trianglePoint0 - trianglePoint2;
