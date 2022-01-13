@@ -63,16 +63,6 @@ namespace MachineHuck::Actor {
 
             Actor(AppFrame::Game& game);
             virtual ~Actor();
-
-            ////ムーブコンストラクタ
-            //Actor(Actor&& act)
-            //    : _position(act._position)
-            //    , _rotation(act._rotation)
-            //    , _scale(act._scale) 
-            //    , _game(act._game)
-            //{
-            //}
-
             virtual	void	Init() {};
             virtual	void	Input(AppFrame::Input::InputComponent& input) {};
             virtual	void	Update() {};

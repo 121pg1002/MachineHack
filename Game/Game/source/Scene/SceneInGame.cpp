@@ -21,7 +21,6 @@ namespace MachineHuck::Scene {
     /// 初期化
     void SceneInGame::Init() {
         // 使用するモデル
-
         AppFrame::Asset::AssetServer::ModelMap usedInGame{
         {"Player",    "SDChar/SDChar.mv1"},
         {"SkySphere", "skysphere.mv1"},
@@ -31,7 +30,6 @@ namespace MachineHuck::Scene {
         {"floor",     "floor.mv1"},
         {"wall",      "wall.mv1"}
         };
-
         // モデルの読み込み
         GetAssetServer().LoadModels(usedInGame);                                                         //追加
     }
@@ -44,8 +42,6 @@ namespace MachineHuck::Scene {
         // af.Register("GrabEnemy", std::make_unique<GrabEnemyCreator>());
        //  af.Register("AlartEnemy", std::make_unique<AlartEnemyCreator>());
         af.Register("Stage", std::make_unique<MachineHuck::Actor::StageCreator>());
-
-
         //for (int i = 0; i < StageAll; i++) {
 
         //    //ステージ番号をstringに変換
@@ -125,7 +121,8 @@ namespace MachineHuck::Scene {
 
         if (input.GetMouse().RightClick()) {
             // 右クリックでタイトルへ遷移
-            GetSceneServer().GoToScene("Title");
+            //GetSceneServer().GoToScene("Title");
+            GetSceneServer().GoToScene("Epilogue");
         }
         GetActorServer().Input(input);
     }

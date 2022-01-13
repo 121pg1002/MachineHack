@@ -11,7 +11,9 @@
 namespace AppFrame::Input {
 	class InputComponent;
 }
-
+namespace MachineHuck::Effect {
+	class EffectLaser;
+}
 namespace MachineHuck::Scene {
 	/// @class   SceneTitle
 /// @brief   タイトル画面クラスの宣言
@@ -37,6 +39,7 @@ namespace MachineHuck::Scene {
 		int _leftClickToStart{ -1 }; ///< Left click to Start画像
 		int _teamBgHandle{ -1 };    ///< 背景画像
 		int _alpha{ 0 };
+		std::unique_ptr<MachineHuck::Effect::EffectLaser> laser;
 	};
 }
 

@@ -31,6 +31,7 @@ namespace MachineHuck::Parameter {
 		 */
 		std::string GetName() { return _fileName; }
 
+
 		/**
 		 * @biref ˆÊ’uî•ñ‚ğ•Û‘¶
 		 * @param pos ˆÊ’u

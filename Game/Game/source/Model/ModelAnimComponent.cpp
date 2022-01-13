@@ -406,8 +406,8 @@ namespace MachineHuck::Model {
 
 
         DrawLine3D(ToDX(leftDown), ToDX(leftUp), GetColor(255, 0, 0));
-        DrawLine3D(ToDX(leftDown), ToDX(rightDown), GetColor(0, 255, 0));
-        DrawLine3D(ToDX(rightUp), ToDX(leftUp), GetColor(0, 0, 255));
+        DrawLine3D(ToDX(leftDown), ToDX(rightDown), GetColor(255, 255, 0));
+        DrawLine3D(ToDX(rightUp), ToDX(leftUp), GetColor(255, 255, 0));
         DrawLine3D(ToDX(rightDown), ToDX(rightUp), GetColor(255, 255, 0));
 #endif
 

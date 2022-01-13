@@ -54,6 +54,16 @@ namespace MachineHuck::Scene {
             GetSceneServer().GoToScene("InGame");
             _alpha = 255;
         }
+        if (input.GetJoypad().Button_A()) {
+            GetSceneServer().GoToScene("InGame");
+            _alpha = 255;
+            return;
+        }
+        if (input.GetKeyBoard().Button_Enter()) { 
+            GetSceneServer().GoToScene("InGame");
+            _alpha = 255;
+            return;
+        }
     }
 
     //çXêV

@@ -10,10 +10,12 @@
 #include "../source/Scene/SceneTeam.h"
 #include "../source/Scene/SceneTitle.h"
 #include "../source/Scene/SceneTeam.h"
+#include "../source/Scene/SceneEpilogue.h"
 #include "../source/Scene/SceneAMG.h"
 #include "../source/Actor/ActorServer.h"
 #include "../source/Actor/ActorFactory.h"
 #include "../source/Stage/StageParameter.h"
+#include "../source/Effect/EffectServer.h"
 #include <DxLib.h>
 
 AppFrame::Game::Game() {
@@ -37,6 +39,9 @@ bool AppFrame::Game::Initialize() {
   SetBackgroundColor(100, 0, 255);
   // 描画先画面を裏にする
   SetDrawScreen(DX_SCREEN_BACK);
+
+  //Effekseerの初期化
+  MachineHuck::Effect::EffectServer::EffekseerInit();                     //追加
 
   // Ｚバッファを有効にする
   SetUseZBuffer3D(TRUE);
@@ -100,6 +105,7 @@ bool AppFrame::Game::Initialize() {
  
   _sceneServer->Register("Team", std::make_shared<MachineHuck::Scene::SceneTeam>(*this));
   _sceneServer->Register("Title", std::make_shared<MachineHuck::Scene::SceneTitle>(*this));
+  _sceneServer->Register("Epilogue", std::make_shared<MachineHuck::Scene::SceneEpilogue>(*this));
 
   // インゲームを生成してシーンとして登録
   _sceneServer->Register("InGame", std::make_shared<MachineHuck::Scene::SceneInGame>(*this));
@@ -119,7 +125,9 @@ void AppFrame::Game::Run() {
 }
 /// 停止
 void AppFrame::Game::Shutdown() {                                                     //追加
-  // Dxライブラリ終了
+    //Effekseer終了処理
+    MachineHuck::Effect::EffectServer::EndEffekseer();            //追加
+                                                                                      // Dxライブラリ終了
   DxLib_End();
 }
 /// 入力
