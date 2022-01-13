@@ -7,13 +7,12 @@
  *********************************************************************/
 
 #include "Gimmick.h"
+namespace Gimmick {
+  Gimmick::Gimmick(Game& game) : GimmickBase(game) {}
 
-namespace MachineHuck::Gimmick {
-	Gimmick::Gimmick(AppFrame::Game& game) : GimmickBase(game) {}
+  void Gimmick::Update()
+  {
 
-	void Gimmick::Update()
-	{
-
-	}
-	void Gimmick::Draw() {}
+  }
+  void Gimmick::Draw() {}
 }

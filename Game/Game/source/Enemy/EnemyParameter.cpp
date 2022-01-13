@@ -1,9 +1,10 @@
+
 /*****************************************************************//**
  * @file   EnemyParameter.cpp
  * @brief  エネミーのパラメーターをjsonから読み込む
  * 
  * @author hikaru  Goto
- * @date   December 26 2021
+ * @date   December 22 2021
  *********************************************************************/
 #include"../Enemy/EnemyParameter.h"
 #include "../nlohmann/json.hpp"
@@ -11,181 +12,125 @@
 #include <fstream> 
 #include "../../../../AppFrame/source/Asset/AssetServer.h"
 
+using json = nlohmann::json;
 
-using Json = nlohmann::json;
-namespace Math = AppFrame::Math;
+namespace Enemy {
+	EnemyParameter::EnemyParameter()
+	{
+		_enemyStageMap.clear();
+		_enemyParamMap.clear();
+	}
 
-namespace MachineHuck::Enemy {
-    //コンストラクタ
-    EnemyParameter::EnemyParameter()
-    {
-        _eType.clear();
-        _eSMap.clear();
-        /*_enemyStageParamMap.clear();*/
-            //_enemyParamMap.clear();//EParam
-            //_enemyParameterMap.clear();//double
-        _vDoubleMap.clear();
-    }
-    //デストラクタ
-    EnemyParameter::~EnemyParameter()
-    {
-        _eType.clear();
-        _eSMap.clear();
-        /*_enemyStageParamMap.clear();*/
-        //_enemyParamMap.clear();
-        //_enemyParameterMap.clear();
-        _vDoubleMap.clear();
-    }
-    //エネミーのステージ配置情報をjsonから読み込む
-    void EnemyParameter::LoadStageEnemyParam(const std::string& filePath)
-    {
-        //// Jsonファイルの読み込み
-        std::ifstream jsonFile(filePath);
-        auto jsRoot = Json::parse(jsonFile);
-        auto j = jsRoot["stageenemy"];
-        //敵の種類で読み込むjsonを変える
-        //if (filePath.find("tackle")) {
-
-        //	str = "tackle";
-        //}
-        //else if (filePath.find("grab")) {
-        //	str = "grab";
-        //}
-        //else {
-        //	printf("filepath is enemy name error");
-        //	return;
-        //}
-
-        //// パラメータをjsonから取得
-        /// 
-        for (int i = 0; i < j.size(); i++) {
-            const auto& stageNo = j.at(i)["stageNo"];
-            const auto& handleName = j.at(i)["handlename"];
-            const auto& type = j.at(i)["type"];
-            auto& tx = j.at(i)["tx"];
-            auto& ty = j.at(i)["ty"];
-            auto& tz = j.at(i)["tz"];
-            auto& rx = j.at(i)["rx"];
-            auto& ry = j.at(i)["ry"];
-            auto& rz = j.at(i)["rz"];
-            auto& sx = j.at(i)["sx"];
-            auto& sy = j.at(i)["sy"];
-            auto& sz = j.at(i)["sz"];
-            auto& level = j.at(i)["level"];
-            Math::Vector4 pos = { tx, ty, tz };
-            Math::Vector4 rot = { rx, ry, rz };
-            Math::Vector4 scale = { sx, sy, sz };
-            Parameter::EStageParam eSP;
-            //eSP.SetName(handleName);
-            eSP.SetPos(pos);
-            eSP.SetRot(rot);
-            eSP.SetScale(scale);
-            eSP.SetLevel(level);
-            std::unordered_map<std::string, Parameter::EStageParam>     enemyStageParamMap; //!< 敵のステージ配置を保存
-            std::unordered_map<std::string, Type>            eType;              //!< 敵の種類をキーとした要素を保存
-            enemyStageParamMap.emplace(handleName, eSP);
-            eType.emplace(type, enemyStageParamMap);
-            _eSMap.emplace(stageNo, eType);
-        }
-    }
-
-    void EnemyParameter::LoadEnemyParam(const std::string& filePath)
-    {
-        ////////////////////ここで、タックルとグラブとアラートのjsonを読み込もう
-
-        //// Jsonファイルの読み込み
-        std::ifstream jsonFile(filePath);
-        auto jsRoot = Json::parse(jsonFile);
-
-        auto str = "";
-
-        //敵の種類で読み込むjsonを変える
-        if (filePath.find("tackle")) {
-
-            str = "tackle";
-        }
-        else if (filePath.find("grab")) {
-            str = "grab";
-        }
-        else {
-            printf("filepath is enemy name error");
-            return;
-        }
-
-        ////// パラメータをjsonから取得	
-        /*const auto&  type = jsRoot["enemy"]["type"];*/
-
-        //const auto& level = jsRoot["enemy"]["level"];
-
-        //at()の中は、レベル-1を入れる
-
-        for (int i = 0; i < jsRoot[str].size(); i++) {
-
-            const auto& energy = jsRoot[str].at(i)["energy"];
-
-#ifdef _DEBUG
+	EnemyParameter::~EnemyParameter()
+	{
+		_enemyStageMap.clear();
+		_enemyParamMap.clear();
+	}
 
 
-            if (energy > 150.0)
-            {
-                printfDx("energy is over range");
-                //return;
-            }
+	void EnemyParameter::LoadStageEnemyParam(const std::string& filepath)
+	{
+		std::filesystem::path fs = filepath;
+		std::string filename = fs.parent_path().string() + "/";
 
-#endif
+		//// Jsonファイルの読み込み
+		std::ifstream jsonFile(filepath);
+		auto jsRoot = json::parse(jsonFile);
 
-            const auto& searchRange = jsRoot[str].at(i)["searchrange"];
+		//// パラメータをjsonから取得
+		_handlename = jsRoot["handle"];
 
-#ifdef _DEBUG
-            if (searchRange > 90)
-            {
-                printfDx("searchrange is over range");
-                //return;
-            }
-#endif
+		_position = { jsRoot["px"], jsRoot["py"], jsRoot["pz"] };
+		_rotation = { jsRoot["rx"], jsRoot["ry"], jsRoot["rz"] };
+		_scale = { jsRoot["sx"], jsRoot["sy"], jsRoot["sz"] };
 
-            const auto& r = jsRoot[str].at(i)["r"];
-            const auto& speed = jsRoot[str].at(i)["speed"];
+		EStageParam eSP;
+		eSP.clear();
+		eSP["position"] = _position;
+		eSP["rotation"] = _rotation;
+		eSP["scale"] = _scale;
 
-            //EParam eParam;
+		_enemyStageMap.emplace(_filename, eSP);
 
-            //eParam.SetEnergy(energy);
-            //eParam.SetSearchRange(searchRange);
-            //eParam.SetR(r);
-            //eParam.SetSpeed(speed);
+	}
 
-            //_enemyParamMap.emplace(type, energy);
-            std::unordered_map<std::string, double> enemyParameterMap;
-            //_enemyParamMap.emplace("level", level);
-            enemyParameterMap.emplace("energy", energy);
-            enemyParameterMap.emplace("searchrange", searchRange);
-            enemyParameterMap.emplace("r", r);
-            enemyParameterMap.emplace("speed", speed);
+	void EnemyParameter::LoadEnemyParam(const std::string& filepath)
+	{
 
-            _vDoubleMap.emplace_back(enemyParameterMap);
+		std::filesystem::path fs = filepath;
+		std::string filename = fs.parent_path().string() + "/";
 
-        }
+		//// Jsonファイルの読み込み
+		std::ifstream jsonFile(filepath);
+		auto jsRoot = json::parse(jsonFile);
 
+		////// パラメータをjsonから取得	
+		_type = jsRoot["type"];
+		_energy = jsRoot["energy"];
 
-    }
+		if (_energy > 100.0)
+		{
+			printfDx("energy is over range");
+			return;
+		}
 
+		_searchRange = jsRoot["searchrange"];
+		if (_searchRange > 90)
+		{
+			printfDx("searchrange is over range");
+			return;
+		}
 
-    double EnemyParameter::GetEnemyParam(const std::string& paramName, int no)
-    {
+		_r = jsRoot["r"];
+		_speed = jsRoot["speed"];
 
-        //パラメータがあったら返す
-        if (_vDoubleMap[no].contains(paramName))
-        {
-            return _vDoubleMap[no].find(paramName)->second;
-        }
-        else
-        {
-            printfDx("enemy parameter is not");
-            return 0;
-        }
-        return 0;
-    }
+		EParam eP;
+		eP.clear();
+		eP["type"] = _type;
+		eP["energy"] = _energy;
+		eP["searchrange"] = _searchRange;
+		eP["r"] = _r;
+		eP["speed"] = _speed;
+
+		//_enemyParamMap.emplace(_filename, _type);
+		//_enemyParamMap.emplace(_filename, _energy);
+		//_enemyParamMap.emplace(_filename, _searchRange);
+		//_enemyParamMap.emplace(_filename, _r);
+		//_enemyParamMap.emplace(_filename, _speed);
+		_enemyParamMap.emplace(filepath, eP);
+	}
+
+	//double EnemyParameter::GetEnemyParam(const std::string& paramName)
+	//{
+	//	auto ite = _enemyParamMap.find(paramName);
+
+	//	//パラメータがあったら返す
+	//	if (ite != _enemyParamMap.end())
+	//	{
+	//		return ite->second;
+	//	}
+	//	else 
+	//	{
+	//		printfDx("enemy parameter is not");
+	//	
+	//	}
+	//}
+
+	double EnemyParameter::GetEnemyParam(const std::string& paramName)
+	{
+		auto ite = _enemyParamMap.find(paramName);
+
+		//パラメータがあったら返す
+		if (ite != _enemyParamMap.end())
+		{
+			return ite->second[paramName];
+		}
+		else
+		{
+			printfDx("enemy parameter is not");
+			return 0;
+		}
+		return 0;
+	}
 }
-
-
 

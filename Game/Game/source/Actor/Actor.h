@@ -13,208 +13,151 @@
 
 class Game;
 class ActorServer;
-namespace Input {
-    class InputComponent;
-}
-
-namespace MachineHuck::State {
-    class StateComponent;
-}
-
-namespace MachineHuck::Model {
-    class ModelAnimeComponent;
-}
-
-namespace MachineHuck::Camera {
-    class CameraComponent;
-}
-
-namespace MachineHuck::Collision {
-    class CollisionComponent;
-}
+class InputComponent;
+class StateComponent;
+class ModelAnimeComponent;
+class CameraComponent;
+class CollisionComponent;
 //class CollisionBase;
-
-//namespace Camera = MachineHuck::Camera;
-//namespace Collision = MachineHuck::Collision;
-namespace Math = AppFrame::Math;
-
-namespace MachineHuck::Actor {
-
-
-        class Actor {
-        public:
-            enum class TypeId {
-                Actor = 0,
-                Player,
-                Enemy,
-                Stage,
-                Gimmick
-            };
+//namespace Actor {
+  class Actor {
+  public:
+    enum class TypeId {
+      Actor = 0,
+      Player,
+      Enemy,
+      Stage,
+      Gimmick
+    };
 
 
 
-            enum class ActorState {
-                Active,
-                Paused,
-                Dead,
-                Hucking,
-                Hucked
-            };
+    enum class ActorState {
+      Active,
+      Paused,
+      Dead,
+      Hucking,
+      Hucked
+    };
 
-            Actor(AppFrame::Game& game);
-            virtual ~Actor();
-            virtual	void	Init() {};
-            virtual	void	Input(AppFrame::Input::InputComponent& input) {};
-            virtual	void	Update() {};
-            virtual	void	Draw() {};
+    Actor(Game& game);
+    virtual ~Actor();
+    virtual	void	Init() {};
+    virtual	void	Input(InputComponent& input) {};
+    virtual	void	Update() {};
+    virtual	void	Draw() {};
 
-            virtual TypeId GetTypeId() const = 0;
+    virtual TypeId GetTypeId() const = 0;
 
-            bool isDead() const { return (_actorState == ActorState::Dead); }
-            bool isActive() const { return (_actorState == ActorState::Active); }
+    bool isDead() const { return (_actorState == ActorState::Dead); }
+    bool isActive() const { return (_actorState == ActorState::Active); }
 
-            AppFrame::Game& GetGame() { return _game; }
-            virtual void ComputeWorldTransform();
-            const MATRIX& GetWorldTransform() const { return _worldTransform; }
-            //VECTOR GetForward() const { return VTransform({0, 0, 1}, MGetRotY(_rotation.GetY())); }
+    Game& GetGame() { return _game; }
+    virtual void ComputeWorldTransform();
+    const MATRIX& GetWorldTransform() const { return _worldTransform; }
+    //VECTOR GetForward() const { return VTransform({0, 0, 1}, MGetRotY(_rotation.GetY())); }
 
-            void SetPosition(const Math::Vector4& position) { _position = position; }
-            Math::Vector4 GetPosition() const { return _position; }
-            void SetRotation(const Math::Vector4& rotation) { _rotation = rotation; }
-            Math::Vector4 GetRotation() const { return _rotation; }
-            void SetScale(const Math::Vector4& scale) { _scale = scale; }
-            Math::Vector4 GetScale() const { return _scale; }
+    void SetPosition(const math::Vector4& position) { _position = position; }
+    math::Vector4 GetPosition() const { return _position; }
+    void SetRotation(const math::Vector4& rotation) { _rotation = rotation; }
+    math::Vector4 GetRotation() const { return _rotation; }
+    void SetScale(const math::Vector4& scale) { _scale = scale; }
+    math::Vector4 GetScale() const { return _scale; }
 
-            void SetMove(const Math::Vector4& move) { _move = move; }
-            Math::Vector4 GetMove() const { return _move; }
+    void SetMove(const math::Vector4& move) { _move = move; }
+    math::Vector4 GetMove() const { return _move; }
 
-            void SetStateComponent(std::unique_ptr<State::StateComponent> state);
-            void SetModelComponent(std::unique_ptr<Model::ModelAnimeComponent> model);
-            void SetCameraComponent(std::shared_ptr<Camera::CameraComponent> camera);
-
-
-            /// ////////////////////追加分 12/01
-
-           // Math::Vector4 GetOld() const { return _oldPos; }
-            /*
-            *@brief     円の半径を取得
-            *@return _r 円の半径
-            */
-            double GetR() const { return _r; }
-
-            /**
-             * @brief   ハッキング範囲円の半径を取得      
-             * @return  _huckR ハッキング範囲円
-             */
-            double GetHuckR()const { return _huckR; }
-
-            /*
-            *@brief                索敵範囲の角度を取得
-            *@return _searchRange  索敵範囲の角度
-            */
-            const double GetSearchRange() const { return _searchRange; }
-
-            /**
-             * @brief                ハッキングされる範囲を取得
-             * @return _huckingRange ハッキングされる範囲
-             */
-            const double GetHuckingRange() const { return _huckingRange; }
-
-            /// ////////////////////////////////////////追加分12/02
-              /**
-               * @brief   AABB用のmin値を取得
-               * @return  _minXZ
-               */
-            Math::Vector2 GetMin()const { return _minXZ; }
-
-            /**
-             * @brief  AABB用のmax値を取得
-             * @return _maxXZ
-             */
-            Math::Vector2 GetMax()const { return _maxXZ; }
-
-            ////////////************************////////////
-
-             /**
-              * @brief 線分用のmin値を取得
-              * @return _lmin
-              */
-            Math::Vector4 GetLMin() const { return _lmin; }
-
-            /**
-             * @brief 線分用のmax値を取得
-             * @return _lmax
-             */
-            Math::Vector4 GetLMax() const { return _lmax; }
-
-            //void SetState(State state) { _state = state; }
-            //State GetState() const { return _state; }
-
-            State::StateComponent& GetState() { return *_state; }
-            Model::ModelAnimeComponent& GetModel() { return *_model; }
-            Camera::CameraComponent& GetCamera() { return *_camera; }
-
-            ActorServer& GetActorServer();
-
-            ActorState GetActorState() const { return _actorState; }
-            void SetActorState(ActorState state) { _actorState = state; }
-
-            Collision::CollisionComponent& GetCollision() { return *_collision; }
-
-            void SetIsHit(bool isHit) { _isHit = isHit; };
-
-        protected:
-
-            ////*********************************///追加分 12/01
-            /*
-            *@brief 当たり判定基底クラスの参照
-            */
-            //CollisionComponent& GetCollision();
-          ////////////***********************///
+    void SetStateComponent(std::unique_ptr<StateComponent> state);
+    void SetModelComponent(std::unique_ptr</*Model::*/ModelAnimeComponent> model);
+    void SetCameraComponent(std::shared_ptr<CameraComponent> camera);
 
 
-            AppFrame::Game& _game;
-            ActorState _actorState{ ActorState::Active };
-            std::unique_ptr<State::StateComponent> _state;
-            std::unique_ptr<Model::ModelAnimeComponent> _model;
-            std::shared_ptr<Camera::CameraComponent> _camera;
-            std::unique_ptr<Collision::CollisionComponent> _collision;
+    /// ////////////////////追加分 12/01
+
+    math::Vector4 GetOld() const { return _oldPos; }
+    /*
+    *@brief     円の半径を取得
+    *@return _r 円の半径
+    */
+    double Get_r() const { return _r; }
+
+    /*
+    *@brief                索敵範囲の角度を取得
+    *@return _searchRange  索敵範囲の角度
+    */
+    double GetSearchRange() const { return _searchRange; }
+
+    /// ////////////////////////////////////////追加分12/02
+
+    math::Vector2 GetMin()const { return _minXZ; }
+    math::Vector2 GetMax()const { return _maxXZ; }
+
+    ////////////************************////////////
+
+    math::Vector4 GetLMin() const { return _lmin; }
+    math::Vector4 GetLMax() const { return _lmax; }
+
+    //void SetState(State state) { _state = state; }
+    //State GetState() const { return _state; }
+
+    /*  State::*/StateComponent& GetState() { return *_state; }
+    /*Model::*/ModelAnimeComponent& GetModel() { return *_model; }
+    CameraComponent& GetCamera() { return *_camera; }
+
+    ActorServer& GetActorServer();
+
+    ActorState GetActorState() const { return _actorState; }
+    void SetActorState(ActorState state) { _actorState = state; }
+
+    CollisionComponent& GetCollision() { return *_collision; }
+
+    void SetIsHit(bool isHit) { _isHit = isHit; };
+
+  protected:
+
+    ////*********************************///追加分 12/01
+    /*
+    *@brief 当たり判定基底クラスの参照
+    */
+    //CollisionComponent& GetCollision();
+  ////////////***********************///
 
 
-            //std::unique_ptr<CollisionBase> _collision;  //!< 当たり判定基底クラス用のポインタ
+    Game& _game;
+    ActorState _actorState{ ActorState::Active };
+    std::unique_ptr</*State::*/StateComponent> _state;
+    std::unique_ptr</*Model::*/ModelAnimeComponent> _model;
+    std::shared_ptr<CameraComponent> _camera;
+    //CameraComponent* _camera;
+    std::unique_ptr<CollisionComponent> _collision;
 
 
-            //State _state{State::Active};
-
-            MATRIX _worldTransform{ MGetIdent() };
-            Math::Vector4 _position{ 0, 0, 0 };
-            Math::Vector4 _rotation{ 0, 0, 0 };
-            Math::Vector4 _scale{ 1, 1, 1 };
-
-            Math::Vector4 _move{ 0, 0, 0 };
+    //std::unique_ptr<CollisionBase> _collision;  //!< 当たり判定基底クラス用のポインタ
 
 
-            double _r{ 0.0 };                            //!< 当たり判定の円の半径
-            double _huckR{ 0.0 };                        //!< ハッキング判定の円の半径
-            Math::Vector4 _oldPos{ 0.0, 0.0, 0.0 };  //!< 前フレームの座標
+    //State _state{State::Active};
 
-            Math::Vector2 _minXZ{ 0.0, 0.0 };                 //!< 当たり判定のAABB用の座標
-            Math::Vector2 _maxXZ{ 0.0, 0.0 };
+    MATRIX _worldTransform{ MGetIdent() };
+    math::Vector4 _position{ 0, 0, 0 };
+    math::Vector4 _rotation{ 0, 0, 0 };
+    math::Vector4 _scale{ 1, 1, 1 };
 
+    math::Vector4 _move{ 0, 0, 0 };
 
-            Math::Vector4 _lmin{ 0.0, 0.0, 0.0 };     //!< 当たり判定の線分用の座標
-            Math::Vector4 _lmax{ 0.0, 0.0, 0.0 };
+    ////*********************************///追加分 12/01
+    double _r{ 0 };                            //!< 当たり判定の円の半径
+    math::Vector4 _oldPos{ 0.0, 0.0, 0.0 };  //!< 前フレームの座標
+    ///////******************************///////追加分 12/02
+    math::Vector2 _minXZ{ 0.0, 0.0 };                 //!< 当たり判定のAABB用の座標
+    math::Vector2 _maxXZ{ 0.0, 0.0 };
+    //***********************************//////
 
-            bool _isHit{ false };
-            double _searchRange{ 0.0 };
-            double _huckingRange{ 0.0 };
-        private:
+    math::Vector4 _lmin{ 0.0, 0.0, 0.0 };     //!< 当たり判定の線分用の座標
+    math::Vector4 _lmax{ 0.0, 0.0, 0.0 };
 
-        };
-    
-    
+    bool _isHit{ false };
+    double _searchRange{ 0.0 };
+  private:
 
-}
-
-
-
+  };
+//}

@@ -1,27 +1,22 @@
-/*****************************************************************//**
- * @file   EnemyParameter.h
- * @brief  エネミーパラメーターを読み込むクラス
- * 
- * @author hikaru Goto
- * @date   December 26 2021
- *********************************************************************/
+/**
+ * @file    EnemyParameter.h
+ * @brief  パラメーターをjsonから読み込む
+ *
+ *
+ * @author Hikaru Goto
+ * @date   2021/11/27
+ */
+
 #pragma once
 #include<unordered_map>
 #include<string>
 #include<DxLib.h>
-#include "../Parameter/EStageParam.h"
-#include "../Parameter/EParam.h"
+#include "AppFrame.h"
 
+using EStageParam = std::unordered_map < std::string, math::Vector4>;
+using EParam      = std::unordered_map < std::string, double>;
 
-
-
-namespace MachineHuck::Enemy {
-
-
-	using Type = std::unordered_map<std::string, Parameter::EStageParam>;
-	using StageMap = std::unordered_map<std::string, Type>;
-	using DoubleMap = std::unordered_map<std::string, double>;
-
+namespace Enemy {
 	class EnemyParameter
 	{
 	public:
@@ -37,13 +32,13 @@ namespace MachineHuck::Enemy {
 		~EnemyParameter();
 
 		/**
-		 * @brief  エネミーのステージ配置情報をjsonから読み込む
+		 * @brief  エネミーのステージ配置パラメーターをjsonから読み込む
 		 * @param  filePath
 		 */
 		void LoadStageEnemyParam(const std::string& filePath);
 
 		/*
-		* @brief  jsonから敵の情報を読み込む
+		* @brief  jsonから敵のパラメーターを読み込む
 		* @param  filePath
 		*/
 		void LoadEnemyParam(const std::string& filePath);
@@ -53,27 +48,25 @@ namespace MachineHuck::Enemy {
 		* @param  filePath
 		* @return パラメーター
 		*/
-		double GetEnemyParam(const std::string& paramName, int no);
-
-		/**
-		 * @brief  ステージの敵配置マップを取得
-		 * @return _enemyStageParamMap
-		 */
-		std::unordered_map<std::string, Parameter::EStageParam>GetStageEnemyParameter() { return _enemyStageParamMap; }
+		double GetEnemyParam(const std::string& paramName);
 
 	private:
-		std::unordered_map<std::string, Parameter::EStageParam>     _enemyStageParamMap; //!< 敵のステージ配置を保存
-		std::unordered_map<std::string, Type>            _eType;              //!< 敵の種類をキーとした要素を保存
-		std::unordered_map<std::string, StageMap>        _eSMap;              //!< ステージ番号をキーとして要素を保存
-
-
-	   // std::unordered_map<std::string, double> _enemyParamMap; //!< 敵のパラメーターを保存
+		std::unordered_map<std::string, EStageParam>     _enemyStageMap; //!< 敵のステージ配置を保存
+	 // std::unordered_map<std::string, double> _enemyParamMap; //!< 敵のパラメーターを保存
 		//std::unordered_map<std::string, EnemyParameter> _enemyParamMap;
+		std::unordered_map<std::string, EParam> _enemyParamMap;
+		std::string _filename;
+		std::string _handlename;
+		math::Vector4 _position;
+		math::Vector4 _rotation;
+		math::Vector4 _scale;
 
-		std::vector<DoubleMap> _vDoubleMap;
-		std::unordered_map<std::string, Parameter::EParam> _enemyParamMap;//!< 敵のパラメーターを保存
-		//std::unordered_map<std::string, double> _enemyParameterMap;//!< 敵のパラメーターを保存
+
+		double _type{ 0.0 };  //!< 種類
+		double _energy{ 0.0 }; //!< エナジー量
+		double _searchRange{ 0.0 }; //!< 索敵範囲の角度
+		double _r{ 0.0 }; //!< 索敵半径
+		double _speed{ 0.0 }; //!< 速さ
 
 	};
 }
-

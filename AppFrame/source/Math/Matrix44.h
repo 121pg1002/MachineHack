@@ -13,14 +13,13 @@
 #include <tuple>
 #include <DxLib.h>
 
-namespace AppFrame::Math {
 
-    class Vector4;
-}
-
-
-namespace AppFrame::Math 
+namespace math 
 {
+    /*
+    *@brief 二重インクルード防止 
+    */
+    class Vector4;
 
 
     constexpr unsigned int row_max = 4;         //!< 行数

@@ -8,18 +8,15 @@
 #pragma once
 #include "AppFrame.h"
 
-namespace AppFrame::Input {
-	class InputComponent;
-}
-
-namespace MachineHuck::Scene {
+class InputComponent;
+namespace SceneAMG {
 	/// @class   SceneTitle
 	/// @brief   タイトル画面クラスの宣言
-	class SceneAMG : public AppFrame::Scene::Scene {
+	class SceneAMG : public Scene {
 	public:
 		/// コンストラクタ
 		/// @param[in] game Gameクラスの参照
-		SceneAMG(AppFrame::Game& game);
+		SceneAMG(Game& game);
 		/// デストラクタ
 		~SceneAMG() = default;
 		/// 初期化
@@ -27,7 +24,7 @@ namespace MachineHuck::Scene {
 		/// 入口
 		virtual void Enter() override;
 		/// 入力
-		void Input(AppFrame::Input::InputComponent& input) override;
+		void Input(InputComponent& input) override;
 		/// 更新
 		void Update() override;
 		/// 描画
@@ -39,4 +36,3 @@ namespace MachineHuck::Scene {
 		int _alpha{ 0 };
 	};
 }
-

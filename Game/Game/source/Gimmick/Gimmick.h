@@ -9,13 +9,11 @@
 
 #include "AppFrame.h"
 #include "GimmickBase.h"
-
-namespace MachineHuck::Gimmick {
-
+namespace Gimmick {
 	class Gimmick : public GimmickBase
 	{
 	public:
-		Gimmick(AppFrame::Game& game);
+		Gimmick(Game& game);
 		~Gimmick()override = default;
 
 		void Update() override;
@@ -23,4 +21,3 @@ namespace MachineHuck::Gimmick {
 
 	};
 }
-

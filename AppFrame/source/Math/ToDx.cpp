@@ -14,15 +14,15 @@
 #include "Matrix44.h"
 #include <utility>
 
-VECTOR ToDX(AppFrame::Math::Vector4& vector) {
+VECTOR ToDX(math::Vector4& vector) {
     return VGet(static_cast<float>(vector.GetX()), static_cast<float>(vector.GetY()), static_cast<float>(vector.GetZ()));
 }
 
-MATRIX ToDX(AppFrame::Math::Matrix44& matrix) {
+MATRIX ToDX(math::Matrix44& matrix) {
     MATRIX ret;
 
-    for (auto i = 0; i < AppFrame::Math::row_max; ++i) {
-        for (auto j = 0; j < AppFrame::Math::column_max; ++j) {
+    for (auto i = 0; i < math::row_max; ++i) {
+        for (auto j = 0; j < math::column_max; ++j) {
             ret.m[i][j] = static_cast<float>(matrix.GetValue(i, j));
         }
     }
@@ -30,11 +30,11 @@ MATRIX ToDX(AppFrame::Math::Matrix44& matrix) {
     return ret;
 }
 
-AppFrame::Math::Matrix44 ToMath(MATRIX& matrix) {
-    AppFrame::Math::Matrix44 ret;
+math::Matrix44 ToMath(MATRIX& matrix) {
+    math::Matrix44 ret;
 
-    for (auto i = 0; i < AppFrame::Math::row_max; ++i) {
-        for (auto j = 0; j < AppFrame::Math::column_max; ++j) {
+    for (auto i = 0; i < math::row_max; ++i) {
+        for (auto j = 0; j < math::column_max; ++j) {
             ret.SetValue(i, j, static_cast<double>(matrix.m[i][j]));
         }
     }

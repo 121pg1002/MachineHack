@@ -9,10 +9,10 @@
 #include "../AppFrame/source/Math/Vector4.h"
 #include "../AppFrame/source/Math/Utility.h"
 
-namespace AppFrame::Math {
+using namespace math;
 
     // –Ê‚Ì–@ü‚ğ‹‚ß‚é
-    Vector4 Utility::Normal(const Vector4& point0, const Vector4& point1, const Vector4& point2)
+    Vector4 Utility::Normal(const Vector4& point0, const Vector4& point1, const Vector4& point2) 
     {
         // –Ê‚Ì–@ü‚ğ‹‚ß‚é
         const auto v0 = point1 - point0;
@@ -21,9 +21,6 @@ namespace AppFrame::Math {
 
         return cross.Normalize();
     }
-}
-
-
 
 
 

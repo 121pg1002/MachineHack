@@ -7,11 +7,10 @@
 ///
 #include "InputComponent.h"
 
-namespace Input = AppFrame::Input;
 ///
 /// 更新.
 ///
-void Input::MouseState::Update() {
+void MouseState::Update() {
   // マウスのボタン状態更新
   auto old = _fresh;
   _fresh = GetMouseInput();
@@ -31,7 +30,7 @@ void Input::MouseState::Update() {
 ///
 /// 更新.
 ///
-void Input::JoypadState::Update() {
+void JoypadState::Update() {
 
   //前フレームのパッド状態を保存
   XINPUT_STATE _old = _fresh;
@@ -47,7 +46,7 @@ void Input::JoypadState::Update() {
 
 }
 
-void Input::KeyBoardState::Update() {
+void KeyBoardState::Update() {
 
     int _oldkey[5]{0};
     for (int i = 0; i < 5; i++) 
@@ -93,7 +92,7 @@ void Input::KeyBoardState::Update() {
 ///
 /// 更新.
 ///
-void Input::InputComponent::Update() {
+void InputComponent::Update() {
   _mouseState.Update();
   _joypadState.Update();
   _keyboardState.Update();

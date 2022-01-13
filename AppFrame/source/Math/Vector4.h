@@ -8,7 +8,7 @@
 
 #pragma once
 
-namespace AppFrame::Math
+namespace math 
 {
 
     class Matrix44;
@@ -40,7 +40,7 @@ namespace AppFrame::Math
 
 
         // デストラクタ
-        ~Vector4() = default;
+        virtual ~Vector4() = default;
 
         /*
         *  @brief  ベクトル同士の加算

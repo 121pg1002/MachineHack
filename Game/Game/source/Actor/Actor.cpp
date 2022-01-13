@@ -13,11 +13,10 @@
 #include "../State/StateComponent.h"
 #include "../Collision/CollisionComponent.h"
 
-namespace MachineHuck::Actor {
-
-	Actor::Actor(AppFrame::Game& game) : _game{ game }
+//namespace Actor {
+	Actor::Actor(Game& game) : _game{ game }
 	{
-		_collision = std::make_unique<Collision::CollisionComponent>(*this);
+		_collision = std::make_unique<CollisionComponent>(*this);
 	}
 
 	Actor::~Actor() {
@@ -31,9 +30,9 @@ namespace MachineHuck::Actor {
 
 	void Actor::ComputeWorldTransform() {
 		auto world = MGetScale(ToDX(_scale));
-		world = MMult(world, MGetRotZ(static_cast<float>(_rotation.GetZ())));
-		world = MMult(world, MGetRotX(static_cast<float>(_rotation.GetX())));
-		world = MMult(world, MGetRotY(static_cast<float>(_rotation.GetY())));
+		world = MMult(world, MGetRotZ(_rotation.GetZ()));
+		world = MMult(world, MGetRotX(_rotation.GetX()));
+		world = MMult(world, MGetRotY(_rotation.GetY()));
 		_worldTransform = MMult(world, MGetTranslate(ToDX(_position)));
 	}
 
@@ -41,16 +40,15 @@ namespace MachineHuck::Actor {
 		return _game.GetActorServer();
 	}
 
-	void Actor::SetStateComponent(std::unique_ptr<State::StateComponent> state) {
+	void Actor::SetStateComponent(std::unique_ptr<StateComponent> state) {
 		_state = std::move(state);
 	}
 
-	void Actor::SetModelComponent(std::unique_ptr<Model::ModelAnimeComponent> model) {
+	void Actor::SetModelComponent(std::unique_ptr</*Model::*/ModelAnimeComponent> model) {
 		_model = std::move(model);
 	}
 
-	void Actor::SetCameraComponent(std::shared_ptr<Camera::CameraComponent> camera) {
+	void Actor::SetCameraComponent(std::shared_ptr<CameraComponent> camera) {
 		_camera = camera;
 	}
-}
-
+//}

@@ -8,12 +8,11 @@
 
 #pragma once
 #include "../Actor/Actor.h"
-
-namespace MachineHuck::Enemy {
-	class EnemyBase : public Actor::Actor
+namespace Enemy {
+	class EnemyBase : public Actor
 	{
 	public:
-		EnemyBase(AppFrame::Game& game);
+		EnemyBase(Game& game);
 		~EnemyBase();
 
 		bool IsHucked(const EnemyBase& enemy);
@@ -33,8 +32,7 @@ namespace MachineHuck::Enemy {
 			ISHUCKING,
 			ISHUCKED,
 			SEARCH,
-			CHASE,
-			DYING
+			CHASE
 		};
 		virtual Type GetType() const = 0;
 
@@ -50,5 +48,3 @@ namespace MachineHuck::Enemy {
 
 	};
 }
-
-

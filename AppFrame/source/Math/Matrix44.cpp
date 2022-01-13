@@ -12,7 +12,7 @@
 #include "Matrix44.h"
 #include "Vector4.h"
 
-namespace AppFrame::Math {
+using namespace math;
 
     Matrix44::Matrix44() {
         DiagonalValueToOne();
@@ -69,8 +69,8 @@ namespace AppFrame::Math {
 
     void Matrix44::Perspective(const double angle, const double aspect, const double near_z, const double far_z) {
         auto ScaleY = 1.0 / tan(angle * 0.5);
-        auto ScaleX = ScaleY / aspect;
-        auto ScaleZ = 1 / (far_z - near_z) / far_z;
+        auto ScaleX = ScaleY/aspect;
+        auto ScaleZ = 1/(far_z- near_z) / far_z;
         auto TransZ = -near_z / (far_z - near_z) * far_z;
 
         ValueToZero(row_column);
@@ -113,33 +113,33 @@ namespace AppFrame::Math {
     }
 
     void Matrix44::VectorToMatrix44(const double x, const double y, const double z) {
-
-        DiagonalValueToOne();
-
+        
+            DiagonalValueToOne();
+        
 
         row_column[3][0] += x;
         row_column[3][1] += y;
         row_column[3][2] += z;
     }
 
-    Vector4 Matrix44::VectorToTransform(const Vector4 vec, Matrix44 matrix)
+    Vector4 Matrix44::VectorToTransform(const Vector4 vec, Matrix44 matrix) 
     {
-        auto x = vec.GetX() * matrix.row_column[0][0] + vec.GetY() * matrix.row_column[1][0] + vec.GetZ() * matrix.row_column[2][0] + matrix.row_column[3][0];
-        auto y = vec.GetX() * matrix.row_column[0][1] + vec.GetY() * matrix.row_column[1][1] + vec.GetZ() * matrix.row_column[2][1] + matrix.row_column[3][1];
-        auto z = vec.GetX() * matrix.row_column[0][2] + vec.GetY() * matrix.row_column[1][2] + vec.GetZ() * matrix.row_column[2][2] + matrix.row_column[3][2];
+       auto x = vec.GetX()* matrix.row_column[0][0] + vec.GetY() * matrix.row_column[1][0] + vec.GetZ() * matrix.row_column[2][0] + matrix.row_column[3][0];
+       auto y = vec.GetX() * matrix.row_column[0][1] + vec.GetY() * matrix.row_column[1][1] + vec.GetZ() * matrix.row_column[2][1] + matrix.row_column[3][1];
+       auto z = vec.GetX() * matrix.row_column[0][2] + vec.GetY() * matrix.row_column[1][2] + vec.GetZ() * matrix.row_column[2][2] + matrix.row_column[3][2];
 
-        Vector4 v;
-
-        return  v = { x, y, z };
+       Vector4 v;
+    
+    return  v = { x, y, z };
     }
 
     void Matrix44::Scale(const double x, const double y, const double z, bool make) {
-
-        if (make)
+        
+        if (make) 
         {
             DiagonalValueToOne();
         }
-
+        
 
         row_column[0][0] *= x;
         row_column[1][1] *= y;
@@ -216,7 +216,4 @@ namespace AppFrame::Math {
         std::pair<double, double> _sin_cos = { std::sin(radian), std::cos(radian) };
         return _sin_cos;
     }
-}
-
-
 

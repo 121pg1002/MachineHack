@@ -13,7 +13,7 @@
 struct tagVECTOR;
 struct tagMATRIX;
 
-namespace AppFrame::Math {
+namespace math {
     class Vector4;
     class Matrix44;
 }
@@ -21,16 +21,16 @@ namespace AppFrame::Math {
 *@brief Vector4クラスからDxLibのVECTORに変換
 *@param vector ベクトル
 */
-VECTOR ToDX(AppFrame::Math::Vector4& vector);
+VECTOR ToDX(math::Vector4& vector);
 
 /*
 *@brief Matrix44クラスからDxLibのMATRIXに変換
 *@param matrix 行列
 */
-MATRIX ToDX(AppFrame::Math::Matrix44& matrix);
+MATRIX ToDX(math::Matrix44& matrix);
 
 /*
 *@brief DxLibのMATRIXからMatrix44クラスに変換
 *@param matrix 行列
 */
-AppFrame::Math::Matrix44 ToMath(MATRIX& matrix);
+math::Matrix44 ToMath(MATRIX& matrix);

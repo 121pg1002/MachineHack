@@ -6,27 +6,19 @@
 /// @copyright (C) Amusement Media Academy All rights Resved.
 ///
 #pragma once
-#include <memory>
-#include <vector>
 #include "../Actor/Actor.h"
+#include <memory>
 
-namespace MachineHuck::Model {
-	class ModelComponent;
+class ModelComponent;
+namespace Stage {
+  class Stage : public Actor {
+  public:
+    Stage(Game& game);
+    virtual void Update() override;
+    void Draw() override;
+    TypeId GetTypeId() const override { return TypeId::Stage; };
+  private:
+    std::unique_ptr<ModelComponent> _skySphere;
+    std::unique_ptr<ModelComponent> _ground;
+  };
 }
-
-namespace MachineHuck::Stage {
-	class Stage : public Actor::Actor {
-	public:
-		Stage(AppFrame::Game& game);
-		virtual void Update() override;
-		void Draw() override;
-		TypeId GetTypeId() const override { return TypeId::Stage; };
-	private:
-		std::unique_ptr<Model::ModelComponent> _skySphere;
-		std::unique_ptr<Model::ModelComponent> _ground;
-
-		std::vector<std::unique_ptr<Model::ModelComponent>> _grounds;
-	};
-}
-
-
