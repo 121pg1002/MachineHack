@@ -163,13 +163,22 @@ namespace MachineHuck::Stage {
 					//描画するフロア番号で回す
 					for (auto no : _drawFloorV) {
 
-						auto value =_allFloorMap[no];
+						//主人公の座標が移動フロアに触れている場合
+						if (no != _stageNo) {
 
-						//フロア内のブロックを描画
-						for (auto floor : value) {
+							auto value = _allFloorMap[no];
 
-							floor->Draw();
+							//フロア内のブロックを描画
+							for (auto floor : value) {
+
+								floor->Draw();
+							}
+
 						}
+						else {
+						
+						}
+
 						
 					}
 				

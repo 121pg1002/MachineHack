@@ -5,6 +5,7 @@
 /// @author yamawaki kota
 /// @copyright (C) Amusement Media Academy All rights Resved.
 ///
+/// 
 #pragma once
 #include <memory>
 #include <vector>
@@ -31,8 +32,15 @@ namespace MachineHuck::Stage {
 
 #ifdef _DEBUG
 
+		/**
+		 * @brief  フロア位置を描画     
+		 */
 		void DrawFloor();
 
+		/**
+		 * @brief  ポリゴンによるフロア作成
+		 * @return 成否
+		 */
 		bool CreateGround();
 #endif 
 
