@@ -65,6 +65,30 @@
     <ClCompile Include="source\Gimmick\GimmickBase.cpp">
       <Filter>Gimmick</Filter>
     </ClCompile>
+    <ClCompile Include="source\JsonSave\JsonSave.cpp">
+      <Filter>JsonSave</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Parameter\EParam.cpp">
+      <Filter>Parameter</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Parameter\EStageParam.cpp">
+      <Filter>Parameter</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Parameter\GParam.cpp">
+      <Filter>Parameter</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Parameter\GStageParam.cpp">
+      <Filter>Parameter</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Parameter\StageParam.cpp">
+      <Filter>Parameter</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Parameter\StageParameterBase.cpp">
+      <Filter>Parameter</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Stage\StageParameter.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Enemy">
@@ -102,6 +126,12 @@
     </Filter>
     <Filter Include="nlohmann">
       <UniqueIdentifier>{8335ae00-6d4a-4c9a-9b94-d5010234acb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JsonSave">
+      <UniqueIdentifier>{eac25499-53c1-4aeb-bb24-9bdb59c63c9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Parameter">
+      <UniqueIdentifier>{a34ea8f7-930a-452e-ae49-ec15c3d4a1b1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -170,6 +200,30 @@
     </ClInclude>
     <ClInclude Include="source\nlohmann\json.hpp">
       <Filter>nlohmann</Filter>
+    </ClInclude>
+    <ClInclude Include="source\JsonSave\JsonSave.h">
+      <Filter>JsonSave</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Parameter\EParam.h">
+      <Filter>Parameter</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Parameter\EStageParam.h">
+      <Filter>Parameter</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Parameter\GParam.h">
+      <Filter>Parameter</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Parameter\GStageParam.h">
+      <Filter>Parameter</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Parameter\StageParam.h">
+      <Filter>Parameter</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Parameter\StageParameterBase.h">
+      <Filter>Parameter</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Stage\StageParameter.h">
+      <Filter>Stage</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

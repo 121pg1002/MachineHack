@@ -7,14 +7,18 @@
  */
 
 #include "EnemyBase.h"
-namespace Enemy {
-	EnemyBase::EnemyBase(Game& game) : Actor{ game } {
+
+namespace MachineHuck::Enemy {
+	EnemyBase::EnemyBase(AppFrame::Game& game) : Actor::Actor{ game } {
 
 	}
+
 	EnemyBase::~EnemyBase() {}
+
+
 	bool IsHucked(const EnemyBase& enemy)
 	{
-		if (enemy.GetTypeId() != Actor::TypeId::Enemy)
+		if (enemy.GetTypeId() != Actor::Actor::TypeId::Enemy)
 		{
 			return false;
 		}
@@ -22,6 +26,7 @@ namespace Enemy {
 		{
 			if (enemy.isDead())
 			{
+
 				return false;
 			}
 			else
@@ -34,7 +39,13 @@ namespace Enemy {
 				{
 					return true;
 				}
+
 			}
+
+
 		}
+
 	}
 }
+
+

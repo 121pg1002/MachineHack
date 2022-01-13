@@ -8,4 +8,38 @@
 
 #include "Vector2.h"
 
+namespace AppFrame::Math {
+
+    double Vector2::Dot(const Vector2& rhs) const
+    {
+        return _x * rhs.GetX() + _z * rhs.GetZ();
+    }
+
+    double Vector2::Cross(const Vector2& rhs) const
+    {
+        return _x * rhs.GetZ() - _z * rhs.GetX();
+    }
+
+    const Vector2 Vector2::operator +(const Vector2& rhs) const
+    {
+        return Vector2(_x + rhs.GetX(), _z + rhs.GetZ());
+    }
+
+    const Vector2 Vector2::operator -(const Vector2& rhs) const
+    {
+        return Vector2(_x - rhs.GetX(), _z - rhs.GetZ());
+    }
+
+    const Vector2 Vector2::operator *(const double rhs) const
+    {
+        return Vector2(_x * rhs, _z * rhs);
+    }
+
+    const Vector2 Vector2::operator /(const double rhs) const
+    {
+        return Vector2(_x / rhs, _z / rhs);
+    }
+
+}
+
 
