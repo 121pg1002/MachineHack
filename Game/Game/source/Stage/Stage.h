@@ -6,19 +6,72 @@
 /// @copyright (C) Amusement Media Academy All rights Resved.
 ///
 #pragma once
-#include "../Actor/Actor.h"
 #include <memory>
+#include <vector>
+#include <tuple>
+#include "../Actor/Actor.h"
 
-class ModelComponent;
-namespace Stage {
-  class Stage : public Actor {
-  public:
-    Stage(Game& game);
-    virtual void Update() override;
-    void Draw() override;
-    TypeId GetTypeId() const override { return TypeId::Stage; };
-  private:
-    std::unique_ptr<ModelComponent> _skySphere;
-    std::unique_ptr<ModelComponent> _ground;
-  };
+namespace MachineHuck::Model {
+	class ModelComponent;
 }
+
+namespace MachineHuck::Stage {
+
+	using Floor = std::vector<std::shared_ptr<Model::ModelComponent>>;
+	using StageFloor = std::unordered_map<int, std::tuple<AppFrame::Math::Vector2, AppFrame::Math::Vector2, int>>;
+	
+
+	class Stage : public Actor::Actor {
+	public:
+		Stage(AppFrame::Game& game);
+		~Stage();
+
+		virtual void Update() override;
+		void Draw() override;
+		TypeId GetTypeId() const override { return TypeId::Stage; };
+
+		/**
+		 * @brief ステージの配置を作る
+		 * @return 成功or失敗
+		 */
+		bool CreateStage(AppFrame::Game& game);
+
+		/**
+		 * @brief  プレイヤーのいるステージ番号を返す         
+		 * @return ステージ番号
+		 */
+		int PlayerOnStageNumber();
+		/** 
+		 * @biref フロアの位置番号を取得
+		 * @param x
+		 * @param z
+		 * @return フロアの位置番号
+		 */
+		//int GetBoard(int x, int z);
+
+		///**
+		// * @brief ボードにフロアの位置番号を書き込む
+		// * @param x
+		// * @param z
+		// * @param n 番号
+		// */
+		//void SetBoard(int x, int z, int n);
+	private:
+		std::unique_ptr<Model::ModelComponent> _skySphere;
+		std::unique_ptr<Model::ModelComponent> _ground;
+		//static const int _boardW = 10;     //!< ボードの幅
+		//static const int _boardH = 10;     //!< ボードの高さ
+		//int _board[_boardW * _boardH];     //!< ボード
+		//std::vector<int> _boardStageNum;   //!< キーがフロア番号、バリューがステージ番号
+
+
+		StageFloor _stageFloor;                        //!< 各ステージフロア番号をキーとしたminおよびmaxの座標およびステージ番号を格納
+		//Floor _floor;                                //!< 1フロア情報格納体
+		std::unordered_multimap<int, Floor> _allFloor; //!< 全フロアの情報
+
+		int _stageNo;  //!< 現在のフロア番号
+		
+	};
+}
+
+

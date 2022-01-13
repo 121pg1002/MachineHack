@@ -11,7 +11,9 @@
 #include <algorithm>
 #include <cmath>
 #include <numbers>
-//namespace Camera {
+
+namespace MachineHuck::Camera {
+
 	///
 	/// コンストラクタ.
 	///
@@ -24,12 +26,12 @@
 	void CameraComponent::Init() {
 		SetCameraNearFar(50.0f, 10000.0f);
 	}
-	void CameraComponent::Input(InputComponent& input) {
+	void CameraComponent::Input(AppFrame::Input::InputComponent& input) {
 	}
 	///
 	/// 更新.
 	///
-	void CameraComponent::Update(math::Vector4 move) {
+	void CameraComponent::Update(Math::Vector4 move) {
 		//// ターゲットの向き※Yは無視
 		//auto forward = _forwardOfTarget;
 		//forward.y = 0.f;
@@ -48,6 +50,8 @@
 	/// 描画.
 	///
 	void CameraComponent::Draw(bool isHit) {
+
+
 		if (isHit)
 		{
 			DrawString(0, 0, "当たっている", GetColor(255, 255, 0));
@@ -111,4 +115,5 @@
 	//
 	//    return camera_matrix;
 	//}
-//}
+}
+

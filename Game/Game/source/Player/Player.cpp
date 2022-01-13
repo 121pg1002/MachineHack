@@ -15,18 +15,21 @@
 #include "../Enemy/TackleEnemy.h"
 
 #include <numbers>
-namespace Player {
+
+
+namespace MachineHuck::Player {
 	//コンストラクタ
-	Player::Player(Game& game) : Actor{ game } {
-		_r = 50;
+	Player::Player(AppFrame::Game& game) : Actor{ game } {
+		_r = 100.0;
 		_minXZ = { -100, -100 };
 		_maxXZ = { 100, 100 };
 		_isHit = false;
 		_searchRange = 60.0;
+		_huckingRange = 30.0;
 	}
 
 	//入力
-	void Player::Input(InputComponent& input) {
+	void Player::Input(AppFrame::Input::InputComponent& input) {
 		_camera->Input(input);  // カメラの入力
 
 		auto& _joypad = input.GetJoypad();
@@ -93,14 +96,14 @@ namespace Player {
 		_huckcount--;
 		/////********************//////////////////////////
 
-		//if (_key.Button_C() != 0) 
-		//{
-		//    ly = -1.0;
-		//}
-		//else if (_key.Button_E() != 0)
-		//{
+	  //if (_key.Button_C() != 0) 
+	  //{
+	  //    ly = -1.0;
+	  //}
+	  //else if (_key.Button_E() != 0)
+	  //{
 		 // ly = 1.0;
-		//}
+	  //}
 		_state->Input(input);
 	}
 
@@ -119,17 +122,17 @@ namespace Player {
 		//// ステータスに合わせてアニメーションのアタッチ
 		//switch (_status) {
 		//case STATUS::WAIT:
-		 // _model->ChangeAnime("Idle");
-		 // break;
+		   // _model->ChangeAnime("Idle");
+		   // break;
 		//case STATUS::WALK:
-		 // _model->ChangeAnime("Run");
-		 // break;
+		   // _model->ChangeAnime("Run");
+		   // break;
 
 		//case STATUS::HUCKING:
-		 // _model->ChangeAnime("Attack");
+		   // _model->ChangeAnime("Attack");
 
 		//case STATUS::HUCKED:
-		 // _model->ChangeAnime("Idle");
+		   // _model->ChangeAnime("Idle");
 		//}
 
 
@@ -139,8 +142,8 @@ namespace Player {
 		// カメラの更新
 		//_camera->SetTarget(_position, _move);
 
-		// アクターサーバーに位置を通知
-		std::pair<math::Vector4, math::Vector4> pos_dir = { _position, _dir };
+		  // アクターサーバーに位置を通知
+		std::pair<Math::Vector4, Math::Vector4> pos_dir = { _position, _dir };
 		GetActorServer().Register("Player", pos_dir);
 
 		_state->Update();
@@ -161,21 +164,20 @@ namespace Player {
 
 				//if (GetCollision().CircleToCircle(_owner, **i))
 				//{
-				 // (*i)->SetPosition((*i)->GetOld());
+				   // (*i)->SetPosition((*i)->GetOld());
 
-				 // auto _dif_vec = (*i)->GetPosition() - _position;
-				 // auto _length = _dif_vec.Length_XZ();
-				 // if (_length < Get_r() + (*i)->Get_r())
-				 // {
-					//   auto _pos = (*i)->GetPosition() + _move;
-					//   (*i)->SetPosition(_pos);
-				 // }
+				   // auto _dif_vec = (*i)->GetPosition() - _position;
+				   // auto _length = _dif_vec.Length_XZ();
+				   // if (_length < GetR() + (*i)->GetR())
+				   // {
+					  //   auto _pos = (*i)->GetPosition() + _move;
+					  //   (*i)->SetPosition(_pos);
+				   // }
 				//}
 
 				//CircleとAABBの当たり判定を調べる
 				if (_collision->CircleToFan(*this, **i))
 				{
-
 					_isHit = true;
 				}
 				else
@@ -192,17 +194,17 @@ namespace Player {
 	void Player::Draw() {
 		_state->Draw();
 
-#ifdef _DEBUG;
-		_model->Draw(*this, _isHit, _searchRange);
+#ifdef _DEBUG
+		_model->Draw(*this, _isHit, _searchRange, true);
 		_camera->Draw(_isHit);
 #endif
 	}
 
 	void Player::ComputeWorldTransform() {
 		auto world = MGetScale(ToDX(_scale));
-		world = MMult(world, MGetRotZ(_rotation.GetZ()));
-		world = MMult(world, MGetRotX(_rotation.GetX()));
-		world = MMult(world, MGetRotY(_rotation.GetY() + std::numbers::pi_v<float>));
+		world = MMult(world, MGetRotZ(static_cast<float>(_rotation.GetZ())));
+		world = MMult(world, MGetRotX(static_cast<float>(_rotation.GetX())));
+		world = MMult(world, MGetRotY(static_cast<float>(_rotation.GetY()) + std::numbers::pi_v<float>));
 		_worldTransform = MMult(world, MGetTranslate(ToDX(_position)));
 	}
 
@@ -213,17 +215,17 @@ namespace Player {
 
 		_oldPos = _position;
 		//横方向の傾きと縦方向の傾きの大きさ
-		float length = sqrt(lx * lx + ly * ly);
+		double length = sqrt(lx * lx + ly * ly);
 		if (length < _analogMin) {
 			// 入力が小さかったら動かなかったことにする
 			length = 0.0;
 		}
 		else {
-			length = 3.0;
+			length = 5.0;
 		}
 
 		//横方向と縦方向の角度
-		float rad = atan2(ly, lx);
+		double rad = atan2(ly, lx);
 
 		//x軸方向の移動量
 		auto _move_x = cos(rad) * length;
@@ -265,21 +267,21 @@ namespace Player {
 	}
 
 	void Player::StateBase::Draw() {
-		_owner._model->/*Model::ModelAnimeComponent::*/Draw();
+		_owner._model->Draw();
 	}
 	/// 待機
 	void Player::StateIdle::Enter() {
-		_owner._model->/*Model::ModelAnimeComponent::*/ChangeAnime("Idle", true);
+		_owner._model->ChangeAnime("Idle", true);
 		//_status = STATUS::WAIT;
 	}
 
-	void Player::StateIdle::Input(InputComponent& input) {
+	void Player::StateIdle::Input(AppFrame::Input::InputComponent& input) {
 
-		if (input.GetJoypad().Button_B()) {
-			_owner._state->PushBack("Attack");
-		}
+		//if (input.GetJoypad().Button_B()) {
+		//	_owner._state->PushBack("Attack");
+		//}
 
-		if (math::Vector4 v{ 0.0, 0.0, 0.0 }; v.GetX() != _owner.GetMove().GetX() || v.GetZ() != _owner.GetMove().GetZ()) {
+		if (Math::Vector4 v{ 0.0, 0.0, 0.0 }; v.GetX() != _owner.GetMove().GetX() || v.GetZ() != _owner.GetMove().GetZ()) {
 			_owner._state->PushBack("Run");
 		}
 
@@ -298,18 +300,18 @@ namespace Player {
 
 	/// 走り
 	void Player::StateRun::Enter() {
-		_owner._model->/*Model::ModelAnimeComponent::*/ChangeAnime("Run", true);
+		_owner._model->ChangeAnime("Run", true);
 		/*_status = STATUS::WALK;*/
 	}
 
 
-	void Player::StateRun::Input(InputComponent& input) {
+	void Player::StateRun::Input(AppFrame::Input::InputComponent& input) {
 
-		if (input.GetJoypad().Button_B()) {
-			_owner._state->PushBack("Attack");
-			return;
-		}
-		if (math::Vector4 v{ 0.0, 0.0, 0.0 }; v.GetX() != _owner.GetMove().GetX() || v.GetZ() != _owner.GetMove().GetZ()) {
+		//if (input.GetJoypad().Button_B()) {
+		//	_owner._state->PushBack("Attack");
+		//	return;
+		//}
+		if (Math::Vector4 v{ 0.0, 0.0, 0.0 }; v.GetX() != _owner.GetMove().GetX() || v.GetZ() != _owner.GetMove().GetZ()) {
 			return;
 		}
 		_owner._state->PopBack();
@@ -318,15 +320,14 @@ namespace Player {
 
 
 	void Player::StateRun::Update() {
-		_owner.HitCheckFromEnemy();
-
+		//_owner.HitCheckFromEnemy();
 
 	}
 
 	/// 攻撃
 	void Player::StateAttack::Enter() {
-		_owner._model->/*Model::ModelAnimeComponent::*/ChangeAnime("Attack");
-		_attackcount = 30;
+		//_owner._model->ChangeAnime("Attack");
+		//_attackcount = 30;
 	}
 
 	//void Player::StateAttack::Input(InputComponent& input) {
@@ -342,32 +343,32 @@ namespace Player {
 	//}
 
 	void Player::StateAttack::Update() {
-		auto cnt = _owner._model->/*Model::ModelAnimeComponent::*/GetRepeatedCount();
-		if (cnt > 0) {
-			_owner._state->PopBack();
-			return;
-		}
-		auto playTime = _owner._model->/*Model::ModelAnimeComponent::*/GetPlayTime();
-		if (playTime < 3.5f || playTime > 20.f) {
-			_owner.HitCheckFromEnemy();
-			return;
-		}
-		_owner._collision->EnemyFromPlayer();
+		//auto cnt = _owner._model->GetRepeatedCount();
+		//if (cnt > 0) {
+		//	_owner._state->PopBack();
+		//	return;
+		//}
+		//auto playTime = _owner._model->GetPlayTime();
+		//if (playTime < 3.5f || playTime > 20.f) {
+		//	_owner.HitCheckFromEnemy();
+		//	return;
+		//}
+		//_owner._collision->EnemyFromPlayer();
 	}
 	void Player::StateAttack::Draw() {
-		_owner._model->/*Model::ModelAnimeComponent::*/Draw();
-#ifdef _DEBUG
-		auto playTime = _owner._model->/*Model::ModelAnimeComponent::*/GetPlayTime();
-		if (playTime < 3.5f || playTime > 20.f) {
-			return;
-		}
-
-		auto handle = _owner._model->/*Model::ModelAnimeComponent::*/GetHandle();
-		auto mat = MV1GetFrameLocalWorldMatrix(handle, 28);
-		auto pos = VTransform({ 0, 0, 0 }, mat);
-		DrawSphere3D(pos, 20, 16, GetColor(255, 0, 0), GetColor(0, 0, 0), TRUE);
-
-#endif
+		//	_owner._model->Draw();
+		//#ifdef _DEBUG
+		//	auto playTime = _owner._model->GetPlayTime();
+		//	if (playTime < 3.5f || playTime > 20.f) {
+		//	  return;
+		//	}
+		//
+		//	auto handle = _owner._model->GetHandle();
+		//	auto mat = MV1GetFrameLocalWorldMatrix(handle, 28);
+		//	auto pos = VTransform({0, 0, 0}, mat);
+		//	DrawSphere3D(pos, 20, 16, GetColor(255, 0, 0), GetColor(0, 0, 0), TRUE);
+		//
+		//#endif
 	}
 
 	///// ノックバック
@@ -388,7 +389,7 @@ namespace Player {
 	/// ハッキング中
 	void Player::StateHucking::Enter() {
 
-		_owner._model->/*Model::ModelAnimeComponent::*/ChangeAnime("Idle");
+		_owner._model->ChangeAnime("Idle");
 		/*_status = STATUS::HUCKING;*/
 	}
 
@@ -415,71 +416,82 @@ namespace Player {
 
 					//if (GetCollision().CircleToCircle(_owner, **i))
 					//{
-						 // (*i)->SetPosition((*i)->GetOld());
+					   // (*i)->SetPosition((*i)->GetOld());
 
-						 // auto _dif_vec = (*i)->GetPosition() - _position;
-						 // auto _length = _dif_vec.Length_XZ();
-						 // if (_length < Get_r() + (*i)->Get_r())
-						 // {
-							//   auto _pos = (*i)->GetPosition() + _move;
-							//   (*i)->SetPosition(_pos);
-						 // }
+					   // auto _dif_vec = (*i)->GetPosition() - _position;
+					   // auto _length = _dif_vec.Length_XZ();
+					   // if (_length < GetR() + (*i)->GetR())
+					   // {
+						  //   auto _pos = (*i)->GetPosition() + _move;
+						  //   (*i)->SetPosition(_pos);
+					   // }
 					//}
 
 					//CircleとAABBの当たり判定を調べる
-					if (_owner._collision->CircleToFan(_owner, **i))
-					{
+					//敵の中心が入っているかどうか
+					if (_owner._collision->CircleToFan(_owner, **i, true)) {
+
+						////自分の中心が敵のハッキング範囲に入っているかどうか
+						if (_owner._collision->CircleToFan(**i, _owner, false)) {
+
+							if (_owner._status == STATUS::HUCKING)
+							{
+
+								(*i)->SetActorState(ActorState::Hucking);
+
+								auto enem_pos = (*i)->GetPosition();
+
+								if (enem_pos.GetX() - 1 < _owner._position.GetX() && _owner._position.GetX() < enem_pos.GetX() + 1 && enem_pos.GetZ() - 1 < _owner._position.GetZ() && _owner._position.GetZ() < enem_pos.GetZ() + 1) {
+									_owner._status = STATUS::HUCKED;
+									_owner._state->GoToState("Hucked");
+								}
+								else {
+									//if (Math::Vector4 v{0.0, 0.0, 0.0}; _dif.GetX() == v.GetX() && _dif.GetZ() == v.GetZ())
+									//{
+									_dif = enem_pos - _owner._position;
+									_length = _dif.Normalize();
+									//}
+
+									////横方向と縦方向の角度
+									//float rad = atan2(_dif.GetZ(), _dif.GetX());
+
+									////x軸方向の移動量
+									//auto _move_x = cos(rad) * _length;
+
+									////z軸方向の移動量
+									//auto _move_z = sin(rad) * _length;
+
+									//Math::Vector4 _move = { _move_x, 0.0f, _move_z };
+
+									// 移動
+									_owner._position = _owner._position + _length;
+									//std::pair<Math::Vector4, Math::Vector4> pos_dir = {_owner._position, _owner.GetActorServer().GetDir("Player")};
+									//_owner.GetActorServer().Register("Player", pos_dir);
+								}
+
+
+
+
+
+
+								//auto enemy = GetActorServer().GetPosition("Tackle");
+								//Math::Vector4 v = { 1.0, 0.0, 0.0 };
+								//_position = enemy + v;
+							}
+							_owner._isHit = true;
+							(*i)->SetIsHit(true);
+
+						}
+						else {
+
+							_owner._isHit = false;
+							(*i)->SetIsHit(false);
+
+						}
 						//if (_status != STATUS::HUCKING && _status != STATUS::HUCKED)
 
 
-						if (_owner._status == STATUS::HUCKING)
-						{
 
-							(*i)->SetActorState(ActorState::Hucking);
-
-							auto enem_pos = (*i)->GetPosition();
-
-							if (enem_pos.GetX() - 1 < _owner._position.GetX() && _owner._position.GetX() < enem_pos.GetX() + 1 && enem_pos.GetZ() - 1 < _owner._position.GetZ() && _owner._position.GetZ() < enem_pos.GetZ() + 1)
-							{
-								_owner._status = STATUS::HUCKED;
-								_owner._state->GoToState("Hucked");
-							}
-							else
-							{
-								//if (math::Vector4 v{0.0, 0.0, 0.0}; _dif.GetX() == v.GetX() && _dif.GetZ() == v.GetZ())
-								//{
-								_dif = enem_pos - _owner._position;
-								_length = _dif.Normalize();
-								//}
-
-								////横方向と縦方向の角度
-								//float rad = atan2(_dif.GetZ(), _dif.GetX());
-
-								////x軸方向の移動量
-								//auto _move_x = cos(rad) * _length;
-
-								////z軸方向の移動量
-								//auto _move_z = sin(rad) * _length;
-
-								//math::Vector4 _move = { _move_x, 0.0f, _move_z };
-
-								// 移動
-								_owner._position = _owner._position + _length;
-								//std::pair<math::Vector4, math::Vector4> pos_dir = {_owner._position, _owner.GetActorServer().GetDir("Player")};
-								//_owner.GetActorServer().Register("Player", pos_dir);
-							}
-
-
-
-
-
-
-							//auto enemy = GetActorServer().GetPosition("Tackle");
-							//math::Vector4 v = { 1.0, 0.0, 0.0 };
-							//_position = enemy + v;
-						}
-						_owner._isHit = true;
-						(*i)->SetIsHit(true);
 					}
 					else
 					{
@@ -509,7 +521,7 @@ namespace Player {
 	/// ハッキング
 	void Player::StateHucked::Enter() {
 
-		_owner._model->/*Model::ModelAnimeComponent::*/ChangeAnime("Idle");
+		_owner._model->ChangeAnime("Idle");
 		/*_status = STATUS::HUCKING;*/
 	}
 
@@ -535,4 +547,5 @@ namespace Player {
 		}
 	}
 }
+
 

@@ -1,0 +1,16 @@
+{
+  "enemy": {
+
+    "type": "tackle",
+    "level": 1,
+  "energy": 100.0,
+  "position": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "r": 50.0,
+  "searchrange": 30.0,
+  "speed": 5.0
+  }
+}

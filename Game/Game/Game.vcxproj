@@ -30,9 +30,16 @@
     <ClCompile Include="source\Game.cpp" />
     <ClCompile Include="source\Gimmick\Gimmick.cpp" />
     <ClCompile Include="source\Gimmick\GimmickBase.cpp" />
+    <ClCompile Include="source\JsonSave\JsonSave.cpp" />
     <ClCompile Include="source\Load\Load.cpp" />
     <ClCompile Include="source\Model\ModelAnimComponent.cpp" />
     <ClCompile Include="source\Model\ModelComponent.cpp" />
+    <ClCompile Include="source\Parameter\EParam.cpp" />
+    <ClCompile Include="source\Parameter\EStageParam.cpp" />
+    <ClCompile Include="source\Parameter\GParam.cpp" />
+    <ClCompile Include="source\Parameter\GStageParam.cpp" />
+    <ClCompile Include="source\Parameter\StageParam.cpp" />
+    <ClCompile Include="source\Parameter\StageParameterBase.cpp" />
     <ClCompile Include="source\Player\Player.cpp" />
     <ClCompile Include="source\Scene\EffectServer.cpp" />
     <ClCompile Include="source\Scene\SceneAMG.cpp" />
@@ -40,6 +47,7 @@
     <ClCompile Include="source\Scene\SceneTeam.cpp" />
     <ClCompile Include="source\Scene\SceneTitle.cpp" />
     <ClCompile Include="source\Stage\Stage.cpp" />
+    <ClCompile Include="source\Stage\StageParameter.cpp" />
     <ClCompile Include="source\State\StateComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -53,10 +61,17 @@
     <ClInclude Include="source\Enemy\EnemyParameter.h" />
     <ClInclude Include="source\Gimmick\Gimmick.h" />
     <ClInclude Include="source\Gimmick\GimmickBase.h" />
+    <ClInclude Include="source\JsonSave\JsonSave.h" />
     <ClInclude Include="source\Load\Load.h" />
     <ClInclude Include="source\Model\ModelAnimComponent.h" />
     <ClInclude Include="source\Model\ModelComponent.h" />
     <ClInclude Include="source\nlohmann\json.hpp" />
+    <ClInclude Include="source\Parameter\EParam.h" />
+    <ClInclude Include="source\Parameter\EStageParam.h" />
+    <ClInclude Include="source\Parameter\GParam.h" />
+    <ClInclude Include="source\Parameter\GStageParam.h" />
+    <ClInclude Include="source\Parameter\StageParam.h" />
+    <ClInclude Include="source\Parameter\StageParameterBase.h" />
     <ClInclude Include="source\Player\Player.h" />
     <ClInclude Include="source\Scene\EffectServer.h" />
     <ClInclude Include="source\Scene\SceneAMG.h" />
@@ -64,6 +79,7 @@
     <ClInclude Include="source\Scene\SceneTeam.h" />
     <ClInclude Include="source\Scene\SceneTitle.h" />
     <ClInclude Include="source\Stage\Stage.h" />
+    <ClInclude Include="source\Stage\StageParameter.h" />
     <ClInclude Include="source\State\StateComponent.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
