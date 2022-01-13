@@ -24,6 +24,10 @@
     <ClCompile Include="source\Actor\ActorServer.cpp" />
     <ClCompile Include="source\Camera\CameraComponent.cpp" />
     <ClCompile Include="source\Collision\CollisionComponent.cpp" />
+    <ClCompile Include="source\Effect\EffectBase.cpp" />
+    <ClCompile Include="source\Effect\EffectLaser.cpp" />
+    <ClCompile Include="source\Effect\EffectServer.cpp" />
+    <ClCompile Include="source\Effect\EffectWind.cpp" />
     <ClCompile Include="source\Enemy\TackleEnemy.cpp" />
     <ClCompile Include="source\Enemy\EnemyBase.cpp" />
     <ClCompile Include="source\Enemy\EnemyParameter.cpp" />
@@ -41,8 +45,8 @@
     <ClCompile Include="source\Parameter\StageParam.cpp" />
     <ClCompile Include="source\Parameter\StageParameterBase.cpp" />
     <ClCompile Include="source\Player\Player.cpp" />
-    <ClCompile Include="source\Scene\EffectServer.cpp" />
     <ClCompile Include="source\Scene\SceneAMG.cpp" />
+    <ClCompile Include="source\Scene\SceneEpilogue.cpp" />
     <ClCompile Include="source\Scene\SceneInGame.cpp" />
     <ClCompile Include="source\Scene\SceneTeam.cpp" />
     <ClCompile Include="source\Scene\SceneTitle.cpp" />
@@ -56,6 +60,10 @@
     <ClInclude Include="source\Actor\ActorServer.h" />
     <ClInclude Include="source\Camera\CameraComponent.h" />
     <ClInclude Include="source\Collision\CollisionComponent.h" />
+    <ClInclude Include="source\Effect\EffectBase.h" />
+    <ClInclude Include="source\Effect\EffectLaser.h" />
+    <ClInclude Include="source\Effect\EffectServer.h" />
+    <ClInclude Include="source\Effect\EffectWind.h" />
     <ClInclude Include="source\Enemy\TackleEnemy.h" />
     <ClInclude Include="source\Enemy\EnemyBase.h" />
     <ClInclude Include="source\Enemy\EnemyParameter.h" />
@@ -73,8 +81,8 @@
     <ClInclude Include="source\Parameter\StageParam.h" />
     <ClInclude Include="source\Parameter\StageParameterBase.h" />
     <ClInclude Include="source\Player\Player.h" />
-    <ClInclude Include="source\Scene\EffectServer.h" />
     <ClInclude Include="source\Scene\SceneAMG.h" />
+    <ClInclude Include="source\Scene\SceneEpilogue.h" />
     <ClInclude Include="source\Scene\SceneInGame.h" />
     <ClInclude Include="source\Scene\SceneTeam.h" />
     <ClInclude Include="source\Scene\SceneTitle.h" />

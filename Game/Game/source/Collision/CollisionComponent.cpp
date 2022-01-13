@@ -170,6 +170,50 @@ namespace MachineHuck::Collision {
         }
     }
 
+
+    bool CollisionComponent::CircleToAABB(const Actor::Actor& act, const AppFrame::Math::Vector2 min, const AppFrame::Math::Vector2 max)
+    {
+        //主人公が球act1, 相手がAABB act2
+        //double dx1 = act2.GetMin().GetX() - act1.GetMin().GetX(); //!< minが左側にある
+        auto pos = (max + min) / 2;
+       const auto& circlePos = act.GetPosition();
+
+        //auto min = act2.GetMin();
+        //auto max = act2.GetMax();
+
+        //double dx1 = act2.GetPosition().GetX() + act2.GetMin().GetX() - act1.GetPosition().GetX();
+        //double dx2 = act1.GetPosition().GetX() - (act2.GetPosition().GetX() + act2.GetMax().GetX()) ;
+
+        double dx1 = pos.GetX() + min.GetX() - circlePos.GetX();
+        double dx2 = circlePos.GetX() - (pos.GetX() + max.GetX());
+
+        dx1 = dx1 > 0.0 ? dx1 : 0.0;
+        dx2 = dx1 > dx2 ? dx1 : dx2;
+        //double dx2 = abs(act2.GetMin().GetX() - act1.GetMax().GetX()); //!< minが中にあるため右にずらす
+
+        //double dz1 = act2.GetPosition().GetZ() + act2.GetMin().GetZ() - act1.GetPosition().GetZ();
+        //double dz2 = act1.GetPosition().GetZ() - (act2.GetPosition().GetZ() + act2.GetMax().GetZ());
+        double dz1 = pos.GetZ() + min.GetZ() - circlePos.GetZ();
+        double dz2 = circlePos.GetZ() - (pos.GetZ() + max.GetZ());
+
+        dz1 = dz1 > 0.0 ? dz1 : 0.0;
+        dz2 = dz1 > dz2 ? dz1 : dz2;
+
+        double distance = dx2 * dx2 + dz2 * dz2;
+        auto length = act.GetR() * act.GetR();
+        if (distance < length)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+
+
+
     bool CollisionComponent::CicrleToOrientedAABB(const Actor::Actor& act1, const Actor::Actor& act2) {
 
         auto dir = act2.GetRotation();
@@ -179,33 +223,24 @@ namespace MachineHuck::Collision {
 
         //z軸を0度とするため
         auto nine = std::numbers::pi / 180.0 * 90.0;
-
         auto rad = rotY + nine;
 
+        //回転による移動量
         Math::Vector4 move = { std::cos(rad), 0.0, std::sin(rad) };
 
+        //矩形の位置
         auto pos = act2.GetPosition();
+        //円の位置
         auto circlePos = act1.GetPosition();
 
+        //矩形の最小点
         auto min = act2.GetMin();
+
+        //矩形の最大点
         auto max = act2.GetMax();
 
-        //Math::Vector4 leftUp = { min.GetX(), 0.0, max.GetZ()};
-        //Math::Vector4 leftDown = { min.GetX(), 0.0, min.GetZ()};
-        //Math::Vector4 rightUp = { max.GetX(), 0.0, max.GetZ()};
-        //Math::Vector4 rightDown = { max.GetX(), 0.0, min.GetZ()};
-
+        
         auto Length = 1.0;
-
-        //先に単位円上で回転させる
-        //auto leftUpX = (leftUp.GetX() * move.GetX() - leftUp.GetZ() * move.GetZ()) * Length;
-        //auto leftUpZ = (leftUp.GetX() * move.GetZ() + leftUp.GetZ() * move.GetX()) * Length;
-        //auto leftDownX = (leftDown.GetX() * move.GetX() - leftDown.GetZ() * move.GetZ()) * Length;
-        //auto leftDownZ = (leftDown.GetX() * move.GetZ() + leftDown.GetZ() * move.GetX()) * Length;
-        //auto rightUpZ = (rightUp.GetX() * move.GetZ() + rightUp.GetZ() * move.GetX()) * Length;
-        //auto rightUpX = (rightUp.GetX() * move.GetX() - rightUp.GetZ() * move.GetZ()) * Length;
-        //auto rightDownX = (rightDown.GetX() * move.GetX() - rightDown.GetZ() * move.GetZ()) * Length;
-        //auto rightDownZ = (rightDown.GetX() * move.GetZ() + rightDown.GetZ() * move.GetX()) * Length;
 
         //先に単位円上で回転させる
         auto leftUpX = (min.GetX() * move.GetX() - max.GetZ() * move.GetZ()) * Length;
@@ -217,136 +252,95 @@ namespace MachineHuck::Collision {
         auto rightDownX = (max.GetX() * move.GetX() - min.GetZ() * move.GetZ()) * Length;
         auto rightDownZ = (max.GetX() * move.GetZ() + min.GetZ() * move.GetX()) * Length;
 
-        //回転させた点を敵座標に並行移動
-        //leftUp = { leftUpX + pos.GetX() , 0.0, leftUpZ + pos.GetZ() };
-        //leftDown = { leftDownX + pos.GetX() , 0.0, leftDownZ + pos.GetZ() };
-        //rightUp = { rightUpX + pos.GetX() , 0.0, rightUpZ + pos.GetZ() };
-        //rightDown = { rightDownX + pos.GetX() , 0.0, rightDownZ + pos.GetZ() };
-
-        //auto leftDownToLeftUp      = leftUp - leftDown;
-        //auto leftUpToRightUp       = rightUp - leftUp;
-        //auto rightUpToRightDown    = rightDown - rightUp;
-        //auto rightDownToLeftDown   = leftDown - rightDown;
-
-        //auto leftDownToCirclePos  = circlePos - leftDown;
-        //auto leftUpToCirclePos    = circlePos - leftUp;
-        //auto rightUpToCirclePos   = circlePos - rightUp;
-        //auto rightDownToCirclePos = circlePos - rightDown;
-
         //円の中心点
         Math::Vector2 circlePosXZ = { act1.GetPosition().GetX(), act1.GetPosition().GetZ() };
 
         //回転させた点を敵座標に並行移動
-        Math::Vector2 leftUpXZ = { leftUpX + pos.GetX(), leftUpZ + pos.GetZ() };
-        Math::Vector2 leftDownXZ = { leftDownX + pos.GetX(), leftDownZ + pos.GetZ() };
-        Math::Vector2 rightUpXZ = { rightUpX + pos.GetX(), rightUpZ + pos.GetZ() };
-        Math::Vector2 rightDownXZ = { rightDownX + pos.GetX(), rightDownZ + pos.GetZ() };
+        Math::Vector4 leftUp =    { leftUpX    + pos.GetX(), pos.GetY(), leftUpZ    + pos.GetZ() };
+        Math::Vector4 leftDown =  { leftDownX  + pos.GetX(), pos.GetY(), leftDownZ  + pos.GetZ() };
+        Math::Vector4 rightUp =   { rightUpX   + pos.GetX(), pos.GetY(), rightUpZ   + pos.GetZ() };
+        Math::Vector4 rightDown = { rightDownX + pos.GetX(), pos.GetY(), rightDownZ + pos.GetZ() };
 
-        auto leftDownToLeftUp = leftUpXZ - leftDownXZ;
-        auto leftUpToRightUp = rightUpXZ - leftUpXZ;
-        auto rightUpToRightDown = rightDownXZ - rightUpXZ;
-        auto rightDownToLeftDown = leftDownXZ - rightDownXZ;
+        //円の中心が四角形の中にある場合
+        auto first = AppFrame::Math::Utility::InsideTrianglePoint(leftDown, leftUp, rightDown, circlePos);
+        auto second = AppFrame::Math::Utility::InsideTrianglePoint(rightDown, leftUp, rightUp, circlePos);
 
-        auto leftDownToCirclePos = circlePosXZ - leftDownXZ;
-        auto leftUpToCirclePos = circlePosXZ - leftUpXZ;
-        auto rightUpToCirclePos = circlePosXZ - rightUpXZ;
-        auto rightDownToCirclePos = circlePosXZ - rightDownXZ;
-
-        std::pair<Math::Vector2, Math::Vector2> data[] = {
-            {leftDownToLeftUp, leftDownToCirclePos},
-            {leftUpToRightUp, leftUpToCirclePos},
-            {rightUpToRightDown, rightUpToCirclePos},
-            {rightDownToLeftDown, rightDownToCirclePos}
-
-        };
-
-        ////AABBのminXを出す
-        //auto AABBminX = leftUpXZ.GetX() < leftDownXZ.GetX() ? leftUpXZ.GetX() : leftDownXZ.GetX();
-        //AABBminX = AABBminX < rightUpXZ.GetX() ? AABBminX : rightUpXZ.GetX();
-        //AABBminX = AABBminX < rightDownXZ.GetX() ? AABBminX : rightDownXZ.GetX();
-
-        ////AABBのminZを出す
-        //auto AABBminZ = leftUpXZ.GetZ() < leftDownXZ.GetZ() ? leftUpXZ.GetZ() : leftDownXZ.GetZ();
-        //AABBminZ = AABBminZ < rightUpXZ.GetZ() ? AABBminX : rightUpXZ.GetZ();
-        //AABBminZ = AABBminZ < rightDownXZ.GetZ() ? AABBminX : rightDownXZ.GetZ();
-
-        ////AABBのmaxXを出す
-        //auto AABBmaxX = leftUpXZ.GetX() > leftDownXZ.GetX() ? leftUpXZ.GetX() : leftDownXZ.GetX();
-        //AABBmaxX = AABBmaxX > rightUpXZ.GetX() ? AABBminX : rightUpXZ.GetX();
-        //AABBmaxX = AABBmaxX > rightDownXZ.GetX() ? AABBminX : rightDownXZ.GetX();
-
-        ////AABBのmaxZを出す
-        //auto AABBmaxZ = leftUpXZ.GetZ() > leftDownXZ.GetZ() ? leftUpXZ.GetZ() : leftDownXZ.GetZ();
-        //AABBmaxZ = AABBmaxZ > rightUpXZ.GetZ() ? AABBminX : rightUpXZ.GetZ();
-        //AABBmaxZ = AABBmaxZ > rightDownXZ.GetZ() ? AABBminX : rightDownXZ.GetZ();
-
-
-
-        ////double dx1 = pos.GetX() + min.GetX() - circlePos.GetX();
-        ////double dx2 = circlePos.GetX() - (pos.GetX() + max.GetX());
-
-        //double dx1 = AABBminX - circlePos.GetX();
-        //double dx2 = circlePos.GetX() - AABBmaxX;
-
-        //dx1 = dx1 > 0.0 ? dx1 : 0.0;
-        //dx2 = dx1 > dx2 ? dx1 : dx2;
-        //
-        ////dx1 = dx1 < dx2 ? dx1 : dx2;
-        //
-        ////double dx2 = abs(act2.GetMin().GetX() - act1.GetMax().GetX()); //!< minが中にあるため右にずらす
-
-        ////double dz1 = act2.GetPosition().GetZ() + act2.GetMin().GetZ() - act1.GetPosition().GetZ();
-        ////double dz2 = act1.GetPosition().GetZ() - (act2.GetPosition().GetZ() + act2.GetMax().GetZ());
-
-        //double dz1 = AABBminZ - circlePos.GetZ();
-        //double dz2 = circlePos.GetZ() - AABBmaxZ;
-
-        //dz1 = dz1 > 0.0 ? dz1 : 0.0;
-        //dz2 = dz1 > dz2 ? dz1 : dz2;
-
-        //double distance = dx2 * dx2 + dz2 * dz2;
-        //auto length = act1.GetR() * act1.GetR();
-        //if (distance < length)
-        //{
-        //    return true;
-        //}
-        //else
-        //{
-        //    return false;
-        //}
-
-
-        for (int i = 0; i < 4; i++) {
-
-            auto cross = data[i].first.Cross(data[i].second);
-
-            //円の中心が中にある
-            if (0 > cross) {
+        if (first || second) {
                 return true;
-            }
-
         }
 
-        auto distance = circlePos - pos;
-        auto length = distance.Length_XZ();
+        //円の中心が四角形の外にある場合
+        if (CircleToLine(act1, leftDown, leftUp)) {
+            return true;
+        }
 
-        // if(act1.GetR() + )
+        if (CircleToLine(act1, leftUp, rightUp)) {
+            return true;
+        }
 
+        if (CircleToLine(act1, rightUp, rightDown)) {
+            return true;
+        }
 
-
-         //円の中心が外にある
-        return false;
+        if (CircleToLine(act1, rightDown, leftDown)) {
+            return true;
+        }
+        
+            return false;
+        
 
     }
 
 
     bool CollisionComponent::CircleToLine(const Actor::Actor& act1, const Actor::Actor& act2)
     {
-        Math::Vector4 Start = act2.GetLMin() + act2.GetPosition() - act1.GetPosition();
-        Math::Vector4 End = act2.GetLMax() + act2.GetPosition() - act1.GetPosition();
-        double a = End.Dot(End);
-        double b = 2.0 * Start.Dot(End);
-        double c = Start.Dot(Start) - act1.GetR() * act1.GetR();
+        Math::Vector4 start = act2.GetLMin() + act2.GetPosition() - act1.GetPosition();
+        Math::Vector4 end = act2.GetLMax() + act2.GetPosition() - act1.GetPosition();
+        double a = end.Dot(end);
+        double b = 2.0 * start.Dot(end);
+        double c = start.Dot(start) - act1.GetR() * act1.GetR();
+
+        double disc = b * b - 4.0f * a * c;
+
+        if (disc < 0.0f)
+        {
+            return false;
+        }
+        else
+        {
+            disc = std::sqrt(disc);
+
+            double tMin = (-b - disc) / (2.0 * a);
+            double tMax = (-b + disc) / (2.0 * a);
+            if (tMin >= 0.0 && tMin <= 1.0)
+            {
+                //  outT = tMin;
+                return true;
+            }
+            else if (tMax >= 0.0 && tMax <= 1.0)
+            {
+                //  outT = tMax;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    bool CollisionComponent::CircleToLine(const Actor::Actor& act, const Math::Vector4 start, const Math::Vector4 end)
+    {
+
+        Math::Vector4 X = start - act.GetPosition();
+        Math::Vector4 Y = end - start;
+
+        double a = Y.Dot(Y);
+        double b = 2.0 * X.Dot(Y);
+        double c = X.Dot(X) - act.GetR() * act.GetR();
+
 
         double disc = b * b - 4.0f * a * c;
 
@@ -569,14 +563,61 @@ namespace MachineHuck::Collision {
         return false;
     }
 
-    bool CollisionComponent::LineToAABB(const Actor::Actor& act1, const Actor::Actor& act2) {
+    bool CollisionComponent::LineToAABB(const Actor::Actor& act1, const Actor::Actor& act2, const AABB box) {
 
+
+        std::vector<double> tValues;
+
+        auto [minX, minZ, maxX, maxZ] = box;
+       
+        auto lMin = act1.GetPosition();
+        auto lMax = act2.GetPosition();
+        auto boxMin = act2.GetMin();
+
+        //x平面のテスト
+        TestSidePlane(lMin.GetX(), lMax.GetX(), minX, tValues);
+        TestSidePlane(lMin.GetX(), lMax.GetX(), maxX, tValues);
+
+        //z平面のテスト
+        TestSidePlane(lMin.GetZ(), lMax.GetZ(), minZ, tValues);
+        TestSidePlane(lMin.GetZ(), lMax.GetZ(), maxZ, tValues);
+
+        Math::Vector4 point;
+        for (auto t : tValues) {
+        
+           // _interSection = PointOnSegment(lMin, lMax, t);
+            return true;
+        }
+        
         return false;
     }
 
-    bool CollisionComponent::TestSidePlane(const double start, double const end, double const negd) {
+    bool CollisionComponent::TestSidePlane(const double start, const double end, const double negd, std::vector<double>& out) {
 
-        return false;
+        auto denom = end - start;
+        if (-0.001 < denom && denom < 0.001) {
+            return false;
+        }
+        else {
+        
+            auto numer = -start + negd;
+            auto t = numer / denom;
+
+            //tが範囲内にあるかどうか
+            if (t >= 0.0 && t <= 1.0) {
+                out.emplace_back(t);
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+    }
+
+    const Math::Vector4 CollisionComponent::PointOnSegment(const Math::Vector4 start, const Math::Vector4 end, const double t) {
+    
+        return start + (end - start) * t;
     }
 }
 
