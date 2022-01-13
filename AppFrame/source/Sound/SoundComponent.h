@@ -11,21 +11,26 @@
 
 class Game;
 
-class SoundComponent {
-public:
-  SoundComponent(Game& game): _game{game} {};
-  virtual ~SoundComponent();
+namespace AppFrame::Sound{
 
-  void Play(std::string_view key);
-  void PlayLoop(std::string_view key);
+	class SoundComponent {
+	public:
+		SoundComponent(Game& game) : _game{ game } {};
+		virtual ~SoundComponent();
 
-  void SetVolume(std::string_view key, int volume);
-  void SetMute(bool isMute) { _isMute = isMute; }
-protected:
-  void Play(std::string_view key, int playType);
+		void Play(std::string_view key);
+		void PlayLoop(std::string_view key);
 
-private:
-  Game& _game;
-  bool _isMute{ false };
-};
+		void SetVolume(std::string_view key, int volume);
+		void SetMute(bool isMute) { _isMute = isMute; }
+	protected:
+		void Play(std::string_view key, int playType);
+
+	private:
+		Game& _game;
+		bool _isMute{ false };
+	};
+}
+
+
 

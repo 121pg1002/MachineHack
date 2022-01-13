@@ -8,15 +8,20 @@
 #pragma once
 #include "AppFrame.h"
 
-class InputComponent; 
-namespace SceneTeam {
+namespace AppFrame::Input {
+	class InputComponent;
+}
+namespace MachineHuck::Effect {
+	class EffectLaser;
+}
+namespace MachineHuck::Scene {
 	/// @class   SceneTitle
-	/// @brief   タイトル画面クラスの宣言
-	class SceneTeam : public Scene {
+/// @brief   タイトル画面クラスの宣言
+	class SceneTeam : public AppFrame::Scene::Scene {
 	public:
 		/// コンストラクタ
 		/// @param[in] game Gameクラスの参照
-		SceneTeam(Game& game);
+		SceneTeam(AppFrame::Game& game);
 		/// デストラクタ
 		~SceneTeam() = default;
 		/// 初期化
@@ -24,7 +29,7 @@ namespace SceneTeam {
 		/// 入口
 		virtual void Enter() override;
 		/// 入力
-		void Input(InputComponent& input) override;
+		void Input(AppFrame::Input::InputComponent& input) override;
 		///更新
 		void Update() override;
 		/// 描画
@@ -34,6 +39,8 @@ namespace SceneTeam {
 		int _leftClickToStart{ -1 }; ///< Left click to Start画像
 		int _teamBgHandle{ -1 };    ///< 背景画像
 		int _alpha{ 0 };
+		std::unique_ptr<MachineHuck::Effect::EffectLaser> laser;
 	};
 }
+
 

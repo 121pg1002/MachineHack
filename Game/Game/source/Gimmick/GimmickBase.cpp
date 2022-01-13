@@ -8,8 +8,10 @@
 
 #include "GimmickBase.h"
 #include "../Actor/Actor.h"
-namespace Gimmick {
-	GimmickBase::GimmickBase(Game& game) : Actor(game)
+
+namespace MachineHuck::Gimmick {
+
+	GimmickBase::GimmickBase(AppFrame::Game& game) : Actor::Actor(game)
 	{
 
 	}
@@ -29,3 +31,5 @@ namespace Gimmick {
 		return false;
 	}
 }
+
+

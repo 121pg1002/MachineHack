@@ -10,18 +10,21 @@
 #include "../source/Scene/SceneTeam.h"
 #include "../source/Scene/SceneTitle.h"
 #include "../source/Scene/SceneTeam.h"
+#include "../source/Scene/SceneEpilogue.h"
 #include "../source/Scene/SceneAMG.h"
 #include "../source/Actor/ActorServer.h"
 #include "../source/Actor/ActorFactory.h"
+#include "../source/Stage/StageParameter.h"
+#include "../source/Effect/EffectServer.h"
 #include <DxLib.h>
 
-Game::Game() {
+AppFrame::Game::Game() {
 }
 
-Game::~Game() {
+AppFrame::Game::~Game() {
 }
 /// 初期化
-bool Game::Initialize() {
+bool AppFrame::Game::Initialize() {
   // 画面モードのを設定
   SetGraphMode(1920, 1080, 32);
   // ウィンドウモードに指定する
@@ -36,6 +39,9 @@ bool Game::Initialize() {
   SetBackgroundColor(100, 0, 255);
   // 描画先画面を裏にする
   SetDrawScreen(DX_SCREEN_BACK);
+
+  //Effekseerの初期化
+  MachineHuck::Effect::EffectServer::EffekseerInit();                     //追加
 
   // Ｚバッファを有効にする
   SetUseZBuffer3D(TRUE);
@@ -56,20 +62,20 @@ bool Game::Initialize() {
 
 
   // インプットコンポーネントの生成
-  _input = std::make_unique<InputComponent>();
+  _input = std::make_unique<AppFrame::Input::InputComponent>();
 
   // サウンドコンポーネントの生成
-  _sound = std::make_unique<SoundComponent>(*this);
+  _sound = std::make_unique<AppFrame::Sound::SoundComponent>(*this);
 
   // アクターサーバーの生成
-  _actorServer = std::make_unique<ActorServer>();
+  _actorServer = std::make_unique<MachineHuck::Actor::ActorServer>();
 
   // アクターファクトリーの生成
-  _actorFactory = std::make_unique<ActorFactory>(*this);
+  _actorFactory = std::make_unique<MachineHuck::Actor::ActorFactory>(*this);
 
 
   // アセットサーバーの生成
-  _assetServer = std::make_unique<AssetServer>(*this);
+  _assetServer = std::make_unique<AppFrame::Asset::AssetServer>(*this);
 
   // アセットサーバーの取得
   auto& as = GetAssetServer();
@@ -77,7 +83,7 @@ bool Game::Initialize() {
   as.ChangeCurrentPath("resource");
 
   // 使用する音のテーブル
-  const /*Asset::*/AssetServer::SoundMap soundToUsed{
+  const AppFrame::Asset::AssetServer::SoundMap soundToUsed{
     {"damage", {"damage.wav", true}},
     {"bgm1", {"sublight.wav", false}},
     {"bgm2", {"stage1.mid", false}},
@@ -94,33 +100,38 @@ bool Game::Initialize() {
 #endif
 
   // シーンサーバーを生成＆タイトルを生成して最初のシーンとして登録
-  _sceneServer = std::make_unique<SceneServer>("AMG", std::make_shared<SceneAMG::SceneAMG>(*this));
+  _sceneServer = std::make_unique<AppFrame::Scene::SceneServer>("AMG", std::make_shared<MachineHuck::Scene::SceneAMG>(*this));
   
  
-  _sceneServer->Register("Team", std::make_shared<SceneTeam::SceneTeam>(*this));
-  _sceneServer->Register("Title", std::make_shared<SceneTitle::SceneTitle>(*this));
+  _sceneServer->Register("Team", std::make_shared<MachineHuck::Scene::SceneTeam>(*this));
+  _sceneServer->Register("Title", std::make_shared<MachineHuck::Scene::SceneTitle>(*this));
+  _sceneServer->Register("Epilogue", std::make_shared<MachineHuck::Scene::SceneEpilogue>(*this));
 
   // インゲームを生成してシーンとして登録
-  _sceneServer->Register("InGame", std::make_shared<SceneInGame::SceneInGame>(*this));
+  _sceneServer->Register("InGame", std::make_shared<MachineHuck::Scene::SceneInGame>(*this));
+
+  _stageParam = std::make_unique<MachineHuck::Stage::StageParameter>();
 
   return true;
 }
 /// 実行
-void Game::Run() {
+void AppFrame::Game::Run() {
   // メインループ
   while (_state != State::Quit) {
-    Input();  // 入力
+    Input(*_input);  // 入力
     Update(); // 更新
     Render(); // 描画
   }
 }
 /// 停止
-void Game::Shutdown() {                                                     //追加
-  // Dxライブラリ終了
+void AppFrame::Game::Shutdown() {                                                     //追加
+    //Effekseer終了処理
+    MachineHuck::Effect::EffectServer::EndEffekseer();            //追加
+                                                                                      // Dxライブラリ終了
   DxLib_End();
 }
 /// 入力
-void Game::Input() {
+void AppFrame::Game::Input(AppFrame::Input::InputComponent& input) {
   // Windows 特有の面倒な処理をライブラリにやらせる
   if (ProcessMessage() == -1) {
     _state = State::Quit;  // -1 が返ってきたのでゲームを終了する
@@ -133,11 +144,11 @@ void Game::Input() {
   _sceneServer->Input(*_input);    // シーンサーバーの入力処理を実行
 }
 /// 更新
-void Game::Update() {
+void AppFrame::Game::Update() {
   _sceneServer->Update(); // シーンサーバーの更新処理を実行
 }
 /// 描画
-void Game::Render() {
+void AppFrame::Game::Render() {
   ClearDrawScreen();      // 画面をクリアする
   _sceneServer->Render(); // シーンサーバーの描画処理を実行
   ScreenFlip();           // 裏画面を表示する
@@ -146,4 +157,3 @@ void Game::Render() {
 //ActorServer& Game::GetActorServer() const {
 //  return _sceneServer->GetScene().GetActorServer();
 //}
-

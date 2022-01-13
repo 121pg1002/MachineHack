@@ -32,9 +32,6 @@
     <ClCompile Include="source\Enemy\EnemyBase.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="source\Scene\EffectServer.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="source\Camera\CameraComponent.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
@@ -64,6 +61,45 @@
     </ClCompile>
     <ClCompile Include="source\Gimmick\GimmickBase.cpp">
       <Filter>Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="source\JsonSave\JsonSave.cpp">
+      <Filter>JsonSave</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Stage\StageParameter.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Parameter\StageParameterBase.cpp">
+      <Filter>Parameter</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Parameter\EStageParam.cpp">
+      <Filter>Parameter</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Parameter\StageParam.cpp">
+      <Filter>Parameter</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Parameter\EParam.cpp">
+      <Filter>Parameter</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Parameter\GParam.cpp">
+      <Filter>Parameter</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Parameter\GStageParam.cpp">
+      <Filter>Parameter</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scene\SceneEpilogue.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Effect\EffectBase.cpp">
+      <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Effect\EffectLaser.cpp">
+      <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Effect\EffectServer.cpp">
+      <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Effect\EffectWind.cpp">
+      <Filter>Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +139,15 @@
     <Filter Include="nlohmann">
       <UniqueIdentifier>{8335ae00-6d4a-4c9a-9b94-d5010234acb4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="JsonSave">
+      <UniqueIdentifier>{ca51c917-f182-432a-a89e-eb318704d54b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Parameter">
+      <UniqueIdentifier>{7aeb22e6-8d91-4b5f-a248-2f0e36607371}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Effect">
+      <UniqueIdentifier>{917c3e19-e5dc-49b0-a463-bb3c154de1e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Enemy\TackleEnemy.h">
@@ -134,9 +179,6 @@
     </ClInclude>
     <ClInclude Include="source\Enemy\EnemyBase.h">
       <Filter>Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Scene\EffectServer.h">
-      <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="source\Camera\CameraComponent.h">
       <Filter>Camera</Filter>
@@ -170,6 +212,45 @@
     </ClInclude>
     <ClInclude Include="source\nlohmann\json.hpp">
       <Filter>nlohmann</Filter>
+    </ClInclude>
+    <ClInclude Include="source\JsonSave\JsonSave.h">
+      <Filter>JsonSave</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Stage\StageParameter.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Parameter\StageParameterBase.h">
+      <Filter>Parameter</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Parameter\EStageParam.h">
+      <Filter>Parameter</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Parameter\StageParam.h">
+      <Filter>Parameter</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Parameter\EParam.h">
+      <Filter>Parameter</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Parameter\GParam.h">
+      <Filter>Parameter</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Parameter\GStageParam.h">
+      <Filter>Parameter</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Scene\SceneEpilogue.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Effect\EffectBase.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Effect\EffectLaser.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Effect\EffectServer.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Effect\EffectWind.h">
+      <Filter>Effect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

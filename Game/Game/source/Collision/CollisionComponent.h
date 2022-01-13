@@ -10,71 +10,125 @@
 #include <memory>
 #include <DxLib.h>
 #include "AppFrame.h"
-//namespace  Collision {
-  struct Sphere {
-    Sphere(const math::Vector4& center, float radius);
-    bool Contains(const math::Vector4& point) const;
 
-    math::Vector4 center;
-    float radius;
-  };
-
-  bool Intersect(const Sphere& a, const Sphere& b);
-
-  class Actor;
-
-  class CollisionComponent {
-  public:
-    enum class ReportId {
-      None,
-      HitFromPlayer,
-      HitFromEnemy,
-      HuckedFromPlayer,
-    };
-
-    struct Report {
-      ReportId id{ ReportId::None };
-      math::Vector4 position{ 0, 0, 0 };
-    };
+namespace Math = AppFrame::Math;
 
 
+//struct Sphere {
+//  Sphere(const Math::Vector4& center, float radius);
+//  bool Contains(const Math::Vector4& point) const;
+//
+//  Math::Vector4 center;
+//  float radius;
+//};
 
-    CollisionComponent(Actor& owner);
+//bool Intersect(const Sphere& a, const Sphere& b);
+namespace MachineHuck::Actor {
+	class Actor;
+}
 
-    void EnemyFromPlayer();
-    void PlayerFromEnemy();
+namespace MachineHuck::Collision {
+	class CollisionComponent {
+	public:
+		//enum class ReportId {
+		//  None,
+		//  HitFromPlayer,
+		//  HitFromEnemy,
+		//  HuckedFromPlayer,
+		//};
 
-    void SetReport(Report report) { *_report = report; }
-    Report& GetReport() const { return *_report; }
+		//struct Report {
+		//  ReportId id{ReportId::None};
+		//  Math::Vector4 position{0, 0, 0};
+		//};
 
-    /*
-    *@brief ‰~‚Æ‰~‚Ì“–‚½‚è”»’è‚ğs‚¤
-    */
-    bool CircleToCircle(const Actor& act1, const Actor& act2);
 
-    /*
-    *@brief ‹éŒ`‚Æ‹éŒ`‚Ì“–‚½‚è”»’è‚ğs‚¤
-    */
-    bool AABBToAABB(const Actor& act1, const Actor& act2);
 
-    /*
-    *@brief ‰~‚ÆAABB‚Ì“–‚½‚è”»’è‚ğs‚¤
-    */
-    bool CircleToAABB(const Actor& act1, const Actor& act2);
+		CollisionComponent(Actor::Actor& owner);
 
-    /*
-    *@brief ‰~‚Æü•ª‚Ì“–‚½‚è”»’è‚ğs‚¤
-    */
-    bool CircleToLine(const Actor& act1, const Actor& act2);
+		//void EnemyFromPlayer();
+		//void PlayerFromEnemy();
 
-    /*
-    *@brief ‰~‚ÆîŒ`‚Ì“–‚½‚è”»’è‚ğs‚¤
-    */
-    bool CircleToFan(const Actor& act1, const Actor& act2);
+		//void SetReport(Report report) { *_report = report; }
+		//Report& GetReport() const { return *_report; }
 
-  private:
-    Actor& _owner;
-    std::unique_ptr<Report> _report;
-    double _r1{ 0.0 }, _r2{ 0.0 }; //!< ‰~‚Ì”¼Œa
-  };
-//}
+		/**
+		 * @brief  ‰~‚Æ‰~‚Ì“–‚½‚è”»’è‚ğs‚¤
+		 * @param  act1 ©•ª
+		 * @param  act2 ‘Šè
+		 * @return ¬”Û
+		 */
+		bool CircleToCircle(const Actor::Actor& act1, const Actor::Actor& act2);
+
+		/**
+		 * @brief  ‹éŒ`‚Æ‹éŒ`‚Ì“–‚½‚è”»’è‚ğs‚¤
+		 * @param  act1 ©•ª
+		 * @param  act2 ‘Šè
+		 * @return ¬”Û
+		 */
+		bool AABBToAABB(const Actor::Actor& act1, const Actor::Actor& act2);
+
+		/**
+		 * @brief  ‰~‚Æ‹éŒ`‚Ì“–‚½‚è”»’è‚ğs‚¤
+		 * @param  act1 ©•ª(‰~)
+		 * @param  act2 ‘Šè(‹éŒ`)
+		 * @return ¬”Û
+		 */
+		bool CircleToAABB(const Actor::Actor& act1, const Actor::Actor& act2);
+
+
+		/**
+		 * @brief  ‰~‚Æ‰ñ“]‚µ‚½‹éŒ`‚Ì“–‚½‚è”»’è‚ğs‚¤
+		 * @param  act1 ©•ª(‰~)
+		 * @param  act2 ‘Šè(‰ñ“]‚µ‚½‹éŒ`)
+		 * @return
+		 */
+		bool CicrleToOrientedAABB(const Actor::Actor& act1, const Actor::Actor& act2);
+
+		/**
+		 * @brief  ‰~‚Æü•ª‚Ì“–‚½‚è”»’è‚ğs‚¤
+		 * @param  act1 ©•ª
+		 * @param  act2 ‘Šè
+		 * @return ¬”Û
+		 */
+		bool CircleToLine(const Actor::Actor& act1, const Actor::Actor& act2);
+
+		/*
+		*@brief ‰~‚ÆîŒ`‚Ì“–‚½‚è”»’è‚ğs‚¤
+		*/
+		bool CircleToFan(const Actor::Actor& act1, const Actor::Actor& act2);
+
+		/**
+		 * @brief  ‰~‚ÆîŒ`‚Ì“–‚½‚è”»’è‚ğs‚¤
+		 * @param  act1  ©•ª
+		 * @param  act2  ‘Šè
+		 * @param  select true‚Íõ“G”ÍˆÍ false‚ÍƒnƒbƒLƒ“ƒO”ÍˆÍ‚Ì”»’è
+		 * @return ¬”Û
+		 */
+		bool CircleToFan(const Actor::Actor& act1, const Actor::Actor& act2, bool select);
+
+		/**
+		 * @brief  ü•ª‚ÆAABB‚Ì“–‚½‚è”»’è‚ğs‚¤
+		 * @param  act1
+		 * @param  act2
+		 * @return ¬”Û
+		 */
+		bool LineToAABB(const Actor::Actor& act1, const Actor::Actor& act2);
+
+		/**
+		 * @brief  •½–Ê‚Æ‚ÌŒğ·ƒeƒXƒg
+		 * @param  start
+		 * @param  end
+		 * @param  negd
+		 * @return ¬”Û
+		 */
+		bool TestSidePlane(const double start, double const end, double const negd);
+
+
+	private:
+		Actor::Actor& _owner;
+		/*std::unique_ptr<Report> _report;*/
+		double _r1{ 0.0 }, _r2{ 0.0 }; //!< ‰~‚Ì”¼Œa
+	};
+}
+

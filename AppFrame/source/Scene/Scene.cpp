@@ -9,31 +9,33 @@
 #include "Scene.h"
 #include "../Game.h"
 
-//namespace Scene {
-	/// コンストラクタ
-	Scene::Scene(Game& game) : _game{ game } {
-	}
-	/// デストラクタ
-	Scene::~Scene() {
-	}
-	ActorServer& Scene::GetActorServer() {
-		return _game.GetActorServer();
-	}
-	ActorFactory& Scene::GetActorFactory() {
-		return _game.GetActorFactory();
-	}
+namespace Asset = AppFrame::Asset;
+namespace Scene = AppFrame::Scene;
+namespace Sound = AppFrame::Sound;
+/// コンストラクタ
+Scene::Scene::Scene(Game& game): _game{game} {
+}
+/// デストラクタ
+Scene::Scene::~Scene() {
+}
+MachineHuck::Actor::ActorServer& Scene::Scene::GetActorServer() {
+	return _game.GetActorServer();
+}
+MachineHuck::Actor::ActorFactory& Scene::Scene::GetActorFactory() {
+	return _game.GetActorFactory();
+}
 
-	/// アセットサーバーの取得
-	AssetServer& Scene::GetAssetServer() {
-		return _game.GetAssetServer();
-	}
-	/// シーンサーバーの取得
-	SceneServer& Scene::GetSceneServer() {
-		return _game.GetSceneServer();
-	}
+/// アセットサーバーの取得
+Asset::AssetServer& Scene::Scene::GetAssetServer() {
+  return _game.GetAssetServer();
+}
+/// シーンサーバーの取得
+Scene::SceneServer& Scene::Scene::GetSceneServer() {
+  return _game.GetSceneServer();
+}
 
-	SoundComponent& Scene::GetSoundComponent() {
-		return _game.GetSoundComponent();
-	}
+Sound::SoundComponent& Scene::Scene::GetSoundComponent() {
+	return _game.GetSoundComponent();
+}
 
 
