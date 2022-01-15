@@ -105,6 +105,15 @@ int Asset::AssetServer::LoadModel(std::string_view key, const std::string_view f
 		_models.erase(key.data());
 	}
 	auto handle = MV1LoadModel(filename.data());
+
+
+    ////////////ここにフロアの名前を入力 ↓↓にコリジョンメッシュを入力
+    //if (filename == "floor") {
+    //    _frameMapCollision = MV1SearchFrame(handle, "collisionname");
+    //}
+
+
+
 	std::vector<int> handles{handle};
 	_models.emplace(key, std::make_pair(filename.data(), handles));
 	return handle;

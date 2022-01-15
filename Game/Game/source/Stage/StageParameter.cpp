@@ -64,6 +64,7 @@ namespace MachineHuck::Stage {
 				Math::Vector4 rot = { rx, ry, rz };
 				Math::Vector4 scale = { sx, sy, sz };
 
+
 				sP.SetName(fileName);
 				sP.SetPos(pos);
 				sP.SetRot(rot);

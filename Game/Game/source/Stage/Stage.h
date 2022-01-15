@@ -58,21 +58,13 @@ namespace MachineHuck::Stage {
 		 * @return ステージ番号
 		 */
 		int PlayerOnStageNumber();
-		/** 
-		 * @biref フロアの位置番号を取得
-		 * @param x
-		 * @param z
-		 * @return フロアの位置番号
-		 */
-		//int GetBoard(int x, int z);
 
-		///**
-		// * @brief ボードにフロアの位置番号を書き込む
-		// * @param x
-		// * @param z
-		// * @param n 番号
-		// */
-		//void SetBoard(int x, int z, int n);
+		/**
+		 * @brief  マップコリジョン情報を取得       
+		 * @return _frameMapCollision
+		 */
+		const int GetMapCollision() const  { return _frameMapCollision; };
+
 	private:
 		std::unique_ptr<Model::ModelComponent> _skySphere;
 		std::unique_ptr<Model::ModelComponent> _ground;
@@ -99,7 +91,7 @@ namespace MachineHuck::Stage {
 		std::vector<unsigned short> _groundIndex;
 
 #endif
-
+		int _frameMapCollision; //!< マップのコリジョン情報
 		
 	};
 }

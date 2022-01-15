@@ -35,6 +35,8 @@ namespace MachineHuck::Scene {
 		/// ПoМы
 		void Exit() override;
 	private:
+		
+		
 	};
 }
 

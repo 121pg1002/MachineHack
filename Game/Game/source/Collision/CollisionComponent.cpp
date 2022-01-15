@@ -650,5 +650,14 @@ namespace MachineHuck::Collision {
     
         return start + (end - start) * t;
     }
+
+    void CollisionComponent::SetMapCollision(int handle) {
+
+		//ナビメッシュの名前
+		_frameMapCollision = MV1SearchFrame(handle, "dungeon_collision");
+		MV1SetupCollInfo(handle, _frameMapCollision, 16, 16, 16);
+    
+    }
+
 }
 

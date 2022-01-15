@@ -82,6 +82,5 @@ namespace MachineHuck::Stage {
 		std::vector<StageV> _stageTableV; //!< ステージテーブルを格納する配列
 
 
-
 	};
 }

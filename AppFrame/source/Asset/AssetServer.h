@@ -124,6 +124,17 @@ namespace AppFrame {
 			/// @return 音ファイル名, ハンドル
 			virtual std::pair<std::string, int> GetSoundInfo(std::string_view key);
 
+			///**
+			// * @brief  マップコリジョンを取得
+			// * @return _frameMapCollision
+			// */
+			//int GetMapCollision() { return _frameMapCollision; };
+
+			///**
+			// * @brief マップコリジョンを設定
+			// * @param frameMapCollision コリジョン情報
+			// */
+			//void SetMapCollision(int frameMapCollision);
 		private:
 			Game& _game;
 
@@ -136,6 +147,8 @@ namespace AppFrame {
 			std::unordered_map<std::string, std::pair<std::string, int>> _sounds;
 			/// 任意の文字列をキーにしてモデルファイル名とハンドルのペアを管理
 			std::unordered_map<std::string, std::pair<std::string, std::vector<int>>> _models;
+
+			//int _frameMapCollision; //!< マップのコリジョン情報
 		};
 	}
 

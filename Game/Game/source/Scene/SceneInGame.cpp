@@ -28,10 +28,13 @@ namespace MachineHuck::Scene {
         {"Spider",    "Spider_3.mv1"},
         {"pCube",      "pCube.mv1"},
         {"floor",     "floor.mv1"},
-        {"wall",      "wall.mv1"}
+        {"wall",      "wall.mv1"},
+        {"Dungeon",   "Dungeon.mv1"}
         };
         // モデルの読み込み
         GetAssetServer().LoadModels(usedInGame);                                                         //追加
+    
+
     }
     /// 入口
     void SceneInGame::Enter() {
@@ -44,6 +47,9 @@ namespace MachineHuck::Scene {
         af.Register("Stage", std::make_unique<MachineHuck::Actor::StageCreator>());
         //for (int i = 0; i < StageAll; i++) {
 
+
+
+        
         //    //ステージ番号をstringに変換
         //    auto no = std::to_string(i);
         //    //下の二つを起動すればjsonが読み込める

@@ -51,6 +51,7 @@ namespace MachineHuck::Enemy {
         class StateBase : public State::StateBaseRoot {
         public:
             StateBase(TackleEnemy& owner) : _owner{ owner } {};
+            void CollisionFloor(AppFrame::Math::Vector4 oldPos);
             void Draw() override;
         protected:
             TackleEnemy& _owner;
@@ -105,7 +106,7 @@ namespace MachineHuck::Enemy {
         class StateTackle : public StateBase {
         public:
             StateTackle(TackleEnemy& owner);
-            void Enter() override;
+            void Enter();
             void Update() override;
         private:
             int _tackleTime;

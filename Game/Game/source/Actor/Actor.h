@@ -95,7 +95,7 @@ namespace MachineHuck::Actor {
 
             /// ////////////////////’Ç‰Á•ª 12/01
 
-           // Math::Vector4 GetOld() const { return _oldPos; }
+            Math::Vector4 GetOld() const { return _oldPos; }
             /*
             *@brief     ‰~‚Ì”¼Œa‚ðŽæ“¾
             *@return _r ‰~‚Ì”¼Œa

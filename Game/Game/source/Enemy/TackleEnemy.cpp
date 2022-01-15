@@ -136,8 +136,9 @@ namespace MachineHuck::Enemy {
 				SetRotation(rot);
 
 				// アクターサーバーに位置を通知
-				std::pair<Math::Vector4, Math::Vector4> pos_dir = { _position, rot };
-				GetActorServer().Register("TackleEnemy", pos_dir);
+				std::pair<Math::Vector4, Math::Vector4> posDir = { _position, rot };
+				GetActorServer().Register("TackleEnemy", posDir);
+
 
 				// ワールド行列の計算
 				//ComputeWorldTransform();
@@ -152,6 +153,7 @@ namespace MachineHuck::Enemy {
 				SetRotation(rot);
 				//LockOn();
 
+				
 				//ComputeWorldTransform();
 			}
 
@@ -171,7 +173,6 @@ namespace MachineHuck::Enemy {
 				auto rotY = std::atan2(move.GetX(), move.GetZ());
 				Math::Vector4 rot = { 0.0, rotY, 0.0 };
 				SetRotation(rot);
-
 
 			}
 			else
@@ -193,8 +194,9 @@ namespace MachineHuck::Enemy {
 				_numberTimes++;
 			}
 
-
 		}
+
+		//CollisionFloor(_oldPos);
 
 	}
 
@@ -228,6 +230,52 @@ namespace MachineHuck::Enemy {
 		//}
 	}
 
+	void TackleEnemy::StateBase::CollisionFloor(AppFrame::Math::Vector4 oldPos) {
+	
+		//Actorの方に移動した方がいいどのみち全部判定するから
+
+		// 移動した先でコリジョン判定
+		MV1_COLL_RESULT_POLY hitPoly;
+
+		auto handle = _owner.GetGame().GetAssetServer().GetModel("Dungeon");
+
+		for (auto i = _owner.GetActorServer().GetActors().begin(); i != _owner.GetActorServer().GetActors().end(); i++) {
+
+			if ((*i)->GetTypeId() != TypeId::Stage) {
+				continue;
+			}
+			else {
+
+				auto frameMapCollision = (*i)->GetCollision().GetMapCollision();
+
+				Math::Vector4 dif = { 0.0, 40.0, 0.0 };
+				Math::Vector4 under = { 0.0, -99999.0, 0.0 };
+				auto startPos = _owner.GetPosition() + dif;
+				auto endPos = _owner.GetPosition() + under;
+				// 主人公の腰位置から下方向への直線
+				hitPoly = MV1CollCheck_Line(handle.first, frameMapCollision, ToDX(startPos), ToDX(endPos));
+
+				if (hitPoly.HitFlag) {
+					// 当たった
+					// 当たったY位置をキャラ座標にする
+					_owner._position = { _owner.GetPosition().GetX(), hitPoly.HitPosition.y, _owner.GetPosition().GetZ() };
+
+					// カメラも移動する
+					//_cam._vPos = VAdd(_cam._vPos, v);
+					//_cam._vTarget = VAdd(_cam._vTarget, v);
+				}
+				else {
+					// 当たらなかった。元の座標に戻す
+					_owner._position = oldPos;
+				}
+
+			}
+
+		}
+
+	
+	}
+
 
 	void TackleEnemy::StateBase::Draw() {
 		_owner._model->Draw();
@@ -249,8 +297,8 @@ namespace MachineHuck::Enemy {
 		}
 		else
 		{
-			Math::Vector4 _pos = { _owner.GetPosition().GetX(), 0.0, _owner.GetPosition().GetZ() };
-			_owner._position = _pos;
+			Math::Vector4 pos = { _owner.GetPosition().GetX(), 0.0, _owner.GetPosition().GetZ() };
+			_owner._position = pos;
 			_owner._state->GoToState("Idle");
 		}
 	}
@@ -312,10 +360,10 @@ namespace MachineHuck::Enemy {
 		//	return;
 		//}
 		/*_owner.LockOn();*/
-
+		Math::Vector4 oldPos = _owner.GetPosition();
 		_owner.Move();
 
-
+		
 		//追跡状態か
 		if (_owner._status == STATUS::CHASE)
 		{
@@ -414,6 +462,7 @@ namespace MachineHuck::Enemy {
 	//	_owner._collision->PlayerFromEnemy();
 	//
 	//}
+	
 	//void Enemy::StateAttack::Draw() {
 	//	_owner._model->Draw();
 	//#ifdef _DEBUG
@@ -439,22 +488,49 @@ namespace MachineHuck::Enemy {
 	}
 
 	void TackleEnemy::StateTackle::Enter() {
+
+
+
 		_tackleTime = 60;
 
-		auto player = _owner.GetActorServer().GetPosition("Player");
-		auto dif = player - _owner.GetPosition();
-		auto length = dif.Length_XZ();
+		if (_owner.GetActorState() == ActorState::Hucked) {
+
+			auto player = _owner.GetActorServer().GetDir("Player");
+			auto rotY = std::atan2(player.GetX(), player.GetZ());
 
 
-		auto rotY = std::atan2(dif.GetX(), dif.GetZ());
-		Math::Vector4 rot = { 0.0, rotY, 0.0 };
-		_owner.SetRotation(rot);
+			//仕様書より6m/s
+			auto length = 600.0;
 
-		if (length < 600.0) {
+			Math::Vector4 move = { std::cos(rotY), 0.0, std::sin(rotY) };
+			
+			//目線の先に目標をつくる
+			auto forward = move * length;
 
-			auto mat = length / 600.0;
-			dif = dif / mat;
+			
+			_norm = forward.Normalize();
+
 		}
+		else {
+
+			auto player = _owner.GetActorServer().GetPosition("Player");
+			auto dif = player - _owner.GetPosition();
+			auto length = dif.Length_XZ();
+
+			auto rotY = std::atan2(dif.GetX(), dif.GetZ());
+			Math::Vector4 rot = { 0.0, rotY, 0.0 };
+			_owner.SetRotation(rot);
+
+			if (length < 600.0) {
+
+				auto mat = length / 600.0;
+				dif = dif / mat;
+			}
+			_norm = dif.Normalize();
+
+		}
+
+
 
 		//auto div = dif.Length_XZ();
 
@@ -463,20 +539,25 @@ namespace MachineHuck::Enemy {
 
 		////差分を60分割した値
 		//_norm = dif / div;
-		_norm = dif.Normalize();
-
+		
 		_owner._model->ChangeAnime("Attack", true);
 	}
 
 	void TackleEnemy::StateTackle::Update() {
 
 		if (_tackleTime < 0) {
-
 			_owner._state->GoToState("TackleAfter");
-
 		}
 		else {
+
+			//地面のコリジョンから出ないなら
+			Math::Vector4 oldPos = _owner.GetPosition();
+
 			_owner._position = _owner.GetPosition() + _norm * _speed;
+
+			//地面から出たかどうか
+			CollisionFloor(oldPos);
+
 
 			// Y軸の回転角度を求める※時計回りz⇔x
 			//auto _rot_y = std::atan2(forward.GetX(), forward.GetZ());
@@ -501,7 +582,7 @@ namespace MachineHuck::Enemy {
 					//プレイヤーが円で自分がAABB
 					if (_owner._collision->CicrleToOrientedAABB(**i, _owner)) {
 
-						int x = 0;
+						//int x = 0;
 						//_owner._state->GoToState("Run");
 						//_owner._status = STATUS::CHASE;
 					}

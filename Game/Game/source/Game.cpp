@@ -61,6 +61,7 @@ bool AppFrame::Game::Initialize() {
 #endif
 
 
+
   // インプットコンポーネントの生成
   _input = std::make_unique<AppFrame::Input::InputComponent>();
 

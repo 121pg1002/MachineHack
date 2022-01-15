@@ -33,9 +33,9 @@ namespace MachineHuck::Stage {
 		//_skySphere->SetModel("SkySphere");
 		//_skySphere->SetScale({ 80.f,  80.f, 80.f });
 		//// 地面のモデル
-		//_ground = std::make_unique<ModelComponent>(*this);
-		//_ground->SetModel("Ground");
-		//_ground->SetScale({10.f, 10.f, 10.f});
+		_ground = std::make_unique<Model::ModelComponent>(*this);
+		_ground->SetModel("Dungeon");
+		//_ground->SetScale({1.f, 1.f, 1.f});
 
 		//for (int i = 0; i < _boardH; i++) {
 
@@ -94,6 +94,12 @@ namespace MachineHuck::Stage {
 
 		//	_floor.push_back(std::move(ground));
 		//}
+		
+		//フロアの名前を入れる
+		auto handle = game.GetAssetServer().GetModel("Dungeon");
+
+		//ナビメッシュのコリジョン情報を設定
+		GetCollision().SetMapCollision(handle.first);
 
 
 		CreateGround();
@@ -120,13 +126,14 @@ namespace MachineHuck::Stage {
 		//auto pos = GetActorServer().GetPosition("Player");
 		// スカイスフィアをプレイヤと同じ位置にする
 	   //_skySphere->SetPosition(ToDX(pos));
+
 		_stageNo = PlayerOnStageNumber();
 
 	}
 
 	void Stage::Draw() {
 		//_skySphere->Draw();   // スカイスフィア
-		//_ground->Draw();      // 地面
+		_ground->Draw();      // 地面
 
 		//表示するステージ番号のみ表示
 		//キーの数を取得
@@ -163,8 +170,8 @@ namespace MachineHuck::Stage {
 					//描画するフロア番号で回す
 					for (auto no : _drawFloorV) {
 
-						//主人公の座標が移動フロアに触れている場合
-						if (no != _stageNo) {
+						//主人公の触れているフロア番号と一致した場合
+						if (no == _stageNo) {
 
 							auto value = _allFloorMap[no];
 
@@ -188,6 +195,8 @@ namespace MachineHuck::Stage {
 					auto stageNo = std::to_string(_stageNo);
 					DrawFloor();
 					DrawString(0, 50,stageNo.c_str(), GetColor(255, 0, 0));
+
+
 #endif 
 			//}
 

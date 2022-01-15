@@ -111,6 +111,7 @@ namespace AppFrame {
 		std::unique_ptr<Sound::SoundComponent> _sound;
 
 		std::unique_ptr<MachineHuck::Stage::StageParameter> _stageParam;//!< 
+
 	};
 }
 
