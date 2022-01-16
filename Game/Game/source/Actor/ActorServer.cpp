@@ -23,9 +23,14 @@ namespace MachineHuck::Actor {
     void ActorServer::Input(AppFrame::Input::InputComponent& input) {
         _updating = true;
         for (auto&& actor : _actors) {
-            if (actor->isActive()) {
+            if (actor->IsActive()) {
                 // アクターに入力する
                 actor->Input(input);
+            }
+            else if (actor->IsHucked()) {
+            
+                actor->Input(input);
+            
             }
         }
         _updating = false;
@@ -34,7 +39,7 @@ namespace MachineHuck::Actor {
     void ActorServer::Update() {
         _updating = true;
         for (auto&& actor : _actors) {
-            if (!actor->isDead()) {
+            if (!actor->IsDead()) {
                 // アクターを更新する
                 actor->Update();
             }
@@ -50,12 +55,12 @@ namespace MachineHuck::Actor {
         _pendingActors.clear();
 
         // 死んだアクターを削除する
-        erase_if(_actors, [](auto&& act) { return act->isDead(); });
+        erase_if(_actors, [](auto&& act) { return act->IsDead(); });
     }
     /// 描画
     void ActorServer::Render() {
         for (auto&& actor : _actors) {
-            if (!actor->isDead()) {
+            if (!actor->IsDead()) {
                 actor->Draw();
             }
         }

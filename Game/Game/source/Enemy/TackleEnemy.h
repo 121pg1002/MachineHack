@@ -25,6 +25,7 @@ namespace MachineHuck::Enemy {
         void LoadJson(const std::string& filepath);
 
         virtual void Update() override;
+        void Input(AppFrame::Input::InputComponent& input) override;
         void Draw() override;
 
         TypeId GetTypeId() const override { return TypeId::Enemy; };
@@ -42,6 +43,14 @@ namespace MachineHuck::Enemy {
         //std::unique_ptr<ModelAnimeComponent> _model;
 
         virtual void Move();
+
+        /**
+         * @brief  ƒnƒbƒLƒ“ƒO‚³‚ê‚½‚Æ‚«‚ÌˆÚ“®         
+         * @param  lx ‰¡•ûŒü‚ÌŒX‚«
+         * @param  ly c•ûŒü‚ÌŒX‚«
+         */
+        void HuckedMove(double lx, double ly);
+
         virtual void LockOn();
         void Tackle(Math::Vector4 target);
 
@@ -51,7 +60,7 @@ namespace MachineHuck::Enemy {
         class StateBase : public State::StateBaseRoot {
         public:
             StateBase(TackleEnemy& owner) : _owner{ owner } {};
-            void CollisionFloor(AppFrame::Math::Vector4 oldPos);
+            void CollisionFloor(AppFrame::Math::Vector4 oldPos);//©‚±‚ê‚ÍActor‚É‚Á‚Ä‚Á‚½‚Ù‚¤‚ª‚¢‚¢
             void Draw() override;
         protected:
             TackleEnemy& _owner;
@@ -139,6 +148,7 @@ namespace MachineHuck::Enemy {
         public:
             StateHucked(TackleEnemy& owner) : StateBase{ owner } {};
             void Enter() override;
+            void Input(AppFrame::Input::InputComponent& input) override;
             void Update() override;
 
         };

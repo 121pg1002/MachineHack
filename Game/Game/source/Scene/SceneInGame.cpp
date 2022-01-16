@@ -29,7 +29,14 @@ namespace MachineHuck::Scene {
         {"pCube",      "pCube.mv1"},
         {"floor",     "floor.mv1"},
         {"wall",      "wall.mv1"},
-        {"Dungeon",   "Dungeon.mv1"}
+        {"Dungeon",   "Dungeon.mv1"},
+        {"breakwall",  "breakwall.mv1"},
+        {"enemy",      "enemy.mv1"},
+        {"gate",       "gate.mv1"},
+        {"normalfloor",  "normalfloor.mv1"},
+        {"normalwall",  "normalwall.mv1"},
+        {"secretfloor", "secretfloor.mv1"},
+        {"secretwall", "secretwall.mv1"}
         };
         // ÉÇÉfÉãÇÃì«Ç›çûÇ›
         GetAssetServer().LoadModels(usedInGame);                                                         //í«â¡

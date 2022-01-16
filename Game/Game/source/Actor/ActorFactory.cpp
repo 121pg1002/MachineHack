@@ -96,7 +96,7 @@ namespace MachineHuck::Actor {
         // カメラの生成
         auto camera = std::make_shared<Camera::CameraComponent>();
         camera->Init();
-        camera->SetPosition({ 0, 3000, -200 });
+        camera->SetPosition({ 0, 800, -200 });
         camera->SetTarget({ 0, 0, 0 });
 
         // プレイヤーの生成

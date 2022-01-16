@@ -80,6 +80,9 @@ namespace MachineHuck::Stage {
 		std::unordered_map<int, Floor>      _allFloorMap;//!< ‘SƒtƒƒA‚Ìî•ñ
 		std::vector<int>                    _drawFloorV; //!< •`‰æ‚·‚éƒtƒƒA”Ô†‚ðŠi”[
 
+		std::unordered_map<int, std::vector<int>>  _secretVMap; //!< ‰B‚µ‚Ä‚¢‚éƒtƒƒA”z—ñ‚ð•”‰®”Ô†‚ÅŠi”[‚·‚éƒ}ƒbƒv      
+		std::vector<int>                    _secretV;          //!< ‰B‚µ‚Ä‚¢‚éƒtƒƒA‚Ì”Ô†‚ðŠi”[
+
 		int _stageNo;  //!< Œ»Ý‚ÌƒtƒƒA”Ô†
 
 #ifdef _DEBUG

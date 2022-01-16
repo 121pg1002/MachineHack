@@ -77,9 +77,9 @@ namespace MachineHuck::Model {
 	/// ägëÂó¶ÇÃê›íË
 	void ModelComponent::SetScale(VECTOR  scale) {
 
-		scale.x = scale.x * 75.0f;
-		scale.y = scale.y * 75.0f;
-		scale.z = scale.z * 75.0f;
+		scale.x = scale.x * 800.0f;
+		scale.y = scale.y * 800.0f;
+		scale.z = scale.z * 800.0f;
 
 		//scale.x = scale.x / 70.0;
 		//scale.y = scale.y / 70.0;

@@ -91,6 +91,10 @@ namespace MachineHuck::Enemy {
 
 	}
 
+	void TackleEnemy::Input(AppFrame::Input::InputComponent& input) {
+		_state->Input(input);
+	}
+
 	void TackleEnemy::Draw() {
 		// 足のトゲの為のアルファテスト設定
 		MV1SetMaterialDrawAlphaTest(_model->GetHandle(), 3, TRUE, DX_CMP_LESS, 200);
@@ -114,8 +118,11 @@ namespace MachineHuck::Enemy {
 		//_position = _position + delta;
 
 		_oldPos = _position;
+
+		//索敵中ではない
 		if (_status != STATUS::SEARCH) {
 
+			//ハッキングされたまたはハッキング中ではない
 			if (_status != STATUS::ISHUCKED && _status != STATUS::ISHUCKING) {
 				auto player = GetActorServer().GetPosition("Player");
 				// プレイヤーに向かうベクトル
@@ -142,15 +149,15 @@ namespace MachineHuck::Enemy {
 
 				// ワールド行列の計算
 				//ComputeWorldTransform();
-			}
+			} //ハッキング中ではない
 			else if (_status != STATUS::ISHUCKING) {
-				auto playermove = GetActorServer().GetPosition("Player");
-				_position = playermove;
-				// Y軸の回転角度を求める※時計回りz⇔x
-				auto dir = GetActorServer().GetDir("Player");
-				auto rotY = std::atan2(dir.GetX(), dir.GetZ());
-				Math::Vector4 rot = { 0.0, rotY, 0.0 };
-				SetRotation(rot);
+				//auto playermove = GetActorServer().GetPosition("Player");
+				//_position = playermove;
+				//// Y軸の回転角度を求める※時計回りz⇔x
+				//auto dir = GetActorServer().GetDir("Player");
+				//auto rotY = std::atan2(dir.GetX(), dir.GetZ());
+				//Math::Vector4 rot = { 0.0, rotY, 0.0 };
+				//SetRotation(rot);
 				//LockOn();
 
 				
@@ -197,6 +204,62 @@ namespace MachineHuck::Enemy {
 		}
 
 		//CollisionFloor(_oldPos);
+
+	}
+
+	//ハッキングされたときの移動
+	void TackleEnemy::HuckedMove(double lx, double ly) {
+	
+		_move = { 0.0, 0.0, 0.0 };
+
+		//_oldPos = _position;
+		//横方向の傾きと縦方向の傾きの大きさ
+		double length = sqrt(lx * lx + ly * ly);
+		if (length < 0.3) {
+			// 入力が小さかったら動かなかったことにする
+			length = 0.0;
+		}
+		else {
+			length = 5.0;
+		}
+
+		//横方向と縦方向の角度
+		double rad = atan2(ly, lx);
+
+		//x軸方向の移動量
+		auto moveX = cos(rad) * length;
+
+		//z軸方向の移動量
+		auto moveZ = sin(rad) * length;
+
+		_move = { moveX, 0.0, moveZ };
+		// 移動
+		_position = _position + _move;
+
+		if (_move.Length() > 0.0)
+		{
+		   auto dir = _move;
+		   auto yRot = std::atan2(dir.GetX(), dir.GetZ());
+
+		   Math::Vector4 rot = { 0.0, yRot, 0.0 };
+		   SetRotation(rot);
+		}
+
+		//主人公のカメラに移動量を送る
+		SetHuckedMove(_move);
+
+		// ワールド行列の更新
+		//ComputeWorldTransform();
+
+		// Y軸の回転角度を求める※時計回りz⇔x
+		//auto dir = GetActorServer().GetDir("Player");
+		
+		//Math::Vector4 rot = { 0.0, rad, 0.0 };
+			
+		//rot.Set(0.0, rad, 0.0);
+		//SetRotation(rot);
+		//LockOn();
+
 
 	}
 
@@ -490,19 +553,23 @@ namespace MachineHuck::Enemy {
 	void TackleEnemy::StateTackle::Enter() {
 
 
-
 		_tackleTime = 60;
 
-		if (_owner.GetActorState() == ActorState::Hucked) {
+		//ハッキングされている場合
+		if (_owner.GetStatus() == STATUS::ISHUCKED) {
 
-			auto player = _owner.GetActorServer().GetDir("Player");
-			auto rotY = std::atan2(player.GetX(), player.GetZ());
-
+			//auto player = _owner.GetActorServer().GetDir("Player");
+			
+			auto rot = _owner.GetRotation();
+			
+			//z軸を0度とする
+			auto nine = std::numbers::pi * 90.0 / 180.0;
 
 			//仕様書より6m/s
 			auto length = 600.0;
 
-			Math::Vector4 move = { std::cos(rotY), 0.0, std::sin(rotY) };
+			//主人公の回転方向は反対向きのためマイナス
+			Math::Vector4 move = { std::cos(-rot.GetY() + nine), 0.0, std::sin(-rot.GetY() + nine) };
 			
 			//目線の先に目標をつくる
 			auto forward = move * length;
@@ -513,6 +580,7 @@ namespace MachineHuck::Enemy {
 		}
 		else {
 
+			//追跡中
 			auto player = _owner.GetActorServer().GetPosition("Player");
 			auto dif = player - _owner.GetPosition();
 			auto length = dif.Length_XZ();
@@ -530,15 +598,6 @@ namespace MachineHuck::Enemy {
 
 		}
 
-
-
-		//auto div = dif.Length_XZ();
-
-		////長さを600で割る
-		//div = div / 600.0;
-
-		////差分を60分割した値
-		//_norm = dif / div;
 		
 		_owner._model->ChangeAnime("Attack", true);
 	}
@@ -558,36 +617,39 @@ namespace MachineHuck::Enemy {
 			//地面から出たかどうか
 			CollisionFloor(oldPos);
 
+			if (_owner.IsHucked()) {
 
-			// Y軸の回転角度を求める※時計回りz⇔x
-			//auto _rot_y = std::atan2(forward.GetX(), forward.GetZ());
-			//auto rot = std::atan2(_norm.GetX(), _norm.GetZ());
-			//Math::Vector4 rotY = { 0.0, rot, 0.0 };
-			//_owner.SetRotation(rotY);
+				for (auto i = _owner.GetActorServer().GetActors().begin(); i != _owner.GetActorServer().GetActors().end(); i++) {
 
-			// Y軸の回転角度を求める※時計回りz⇔x
-			//auto dir = _owner.GetActorServer().GetDir("Player");
-			//auto rotY = std::atan2(dir.GetX(), dir.GetZ());
-			//Math::Vector4 rot = { 0.0, rotY, 0.0 };
-			//_owner.SetRotation(rot);
-
-			for (auto i = _owner.GetActorServer().GetActors().begin(); i != _owner.GetActorServer().GetActors().end(); i++) {
-
-				//!< プレイヤーではなかったら次へ
-				if ((*i)->GetTypeId() != TypeId::Player) {
-					continue;
-				}
-				else {
-
-					//プレイヤーが円で自分がAABB
-					if (_owner._collision->CicrleToOrientedAABB(**i, _owner)) {
-
-						//int x = 0;
-						//_owner._state->GoToState("Run");
-						//_owner._status = STATUS::CHASE;
+					//!< 敵ではなかったら次へ
+					if ((*i)->GetTypeId() != TypeId::Enemy) {
+						continue;
 					}
+					else {
+						//ハッキングされていたら次へ	
+						if ((*i)->IsHucked()) {
 
+							continue;
+						}
+						else {
+
+							//相手の円と自分のAABB
+							if (_owner._collision->CicrleToOrientedAABB(**i, _owner)) {
+
+								//int x = 0;
+								(*i)->SetActorState(ActorState::Dead);
+								//_owner._state->GoToState("Run");
+								//_owner._status = STATUS::CHASE;
+							}
+
+						}
+
+
+
+					}
 				}
+			
+
 			}
 
 
@@ -604,10 +666,13 @@ namespace MachineHuck::Enemy {
 	void TackleEnemy::StateTackleAfter::Update() {
 
 
-		if (_owner.GetStatus() == STATUS::ISHUCKING)
-		{
+		if (_owner.GetStatus() == STATUS::ISHUCKING){
 			_owner._state->GoToState("IsHucking");
 			//_loseSightTime = 60;
+		}
+		else if (_owner.GetStatus() == STATUS::ISHUCKED) {
+		
+			_owner._state->GoToState("IsHucked");
 		}
 
 
@@ -649,13 +714,56 @@ namespace MachineHuck::Enemy {
 	}
 
 
-	void TackleEnemy::StateHucked::Enter()
-	{
+	void TackleEnemy::StateHucked::Enter(){
 		_owner._model->ChangeAnime("Attack");
 	}
 
-	void TackleEnemy::StateHucked::Update()
-	{
+	void TackleEnemy::StateHucked::Input(AppFrame::Input::InputComponent& input) {
+	
+		auto& joypad = input.GetJoypad();
+		auto& key = input.GetKeyBoard();
+		auto lx = 0.0, ly = 0.0;
+
+		   // 右移動と左移動
+			if (joypad.LHorison() != 0.0)
+			{
+				lx = input.GetJoypad().LHorison() / 1000.0;
+			}
+			else if (key.Button_D() != 0)
+			{
+				lx = 1.0;
+			}
+			else if (key.Button_A() != 0)
+			{
+				lx = -1.0;
+			}
+
+			// 前進と後退
+			if (input.GetJoypad().LVertical() != 0.0)
+			{
+				ly = input.GetJoypad().LVertical() / 1000.0;
+			}
+			else if (key.Button_W() != 0)
+			{
+				ly = 1.0;
+			}
+			else if (key.Button_S() != 0)
+			{
+				ly = -1.0;
+			}
+		
+		if (input.GetJoypad().Button_RT()) {
+			
+			_owner._state->GoToState("Tackle");
+
+		}
+		else {
+			_owner.HuckedMove(lx, ly);
+		}
+		
+	}
+
+	void TackleEnemy::StateHucked::Update(){
 		//// ハッキングされたか確認
 		//_owner.HitCheckFrom();
 		//if (_owner.GetActorState() != ActorState::Hucked)

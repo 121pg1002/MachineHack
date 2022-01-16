@@ -57,6 +57,8 @@ namespace MachineHuck::Stage {
 		//_boardStageNum.clear();
 		//_allFloor.clear();
 		_allFloorMap.clear();
+		_secretV.clear();
+		_secretVMap.clear();
 		//_floor.clear();
 
 		//////とりあえず、↓は仮
@@ -170,21 +172,41 @@ namespace MachineHuck::Stage {
 					//描画するフロア番号で回す
 					for (auto no : _drawFloorV) {
 
-						//主人公の触れているフロア番号と一致した場合
-						if (no == _stageNo) {
+						if (no != 0 && no != 3) {
+
+
+
+							//主人公の触れているフロア番号と一致した場合
+		//					if (no == _stageNo) {
 
 							auto value = _allFloorMap[no];
+							//auto secret = _secretVMap[no];
 
-							//フロア内のブロックを描画
+							////フロア内のブロックを描画
 							for (auto floor : value) {
 
 								floor->Draw();
 							}
+						}
 
-						}
-						else {
-						
-						}
+							//隠し扉用の機構(試し)
+							//for (auto i = 0; i != value.size(); i++) {
+							//
+							//	for (auto match : secret) {
+							//	
+							//		if (i != match) {
+
+							//			value[i]->Draw();
+							//		}
+							//		
+							//	}
+							//	
+							//}
+
+						//}
+						//else {
+						//
+						//}
 
 						
 					}
@@ -384,6 +406,12 @@ namespace MachineHuck::Stage {
 					auto ground = std::make_unique<Model::ModelComponent>(*this);
 					ground->SetModel(sP.GetName(), 1000000);
 
+					//とりあえず、仮で隠しの壁およびタイルを隠しようのベクターに登録
+					if (sP.GetName() == "secretwall" || sP.GetName() == "secretfloor") {
+						_secretV.push_back(k);
+					}
+					
+
 					ground->SetPosition(ToDX(pos));
 					ground->SetRotation(ToDX(rot));
 					ground->SetScale(ToDX(scale));
@@ -391,6 +419,9 @@ namespace MachineHuck::Stage {
 					floor.push_back(std::move(ground));
 
 				}
+
+				//とりあえず、仮で隠しの壁およびタイルを隠しようのステージ番号に登録
+				_secretVMap.emplace(num, _secretV);
 
 				offsetX += Differ;
 

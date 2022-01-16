@@ -153,6 +153,7 @@ namespace MachineHuck::Player {
         public:
             StateHucked(Player& owner) : StateBase{ owner } {};
             void Enter() override;
+            void Input(AppFrame::Input::InputComponent& input) override;
             void Update() override;
         private:
             //int _freezeTime{ 0 };

@@ -36,6 +36,7 @@ namespace MachineHuck::Stage {
 		std::ifstream jsonFile(filePath);
 		auto jsRoot = Json::parse(jsonFile);
 
+		_stageParamV.clear();
 		//ì«Ç›çûÇﬂÇ»Ç©Ç¡ÇΩÇ∆Ç´
 		if (jsRoot["Stage"].size() == 0) {
 
