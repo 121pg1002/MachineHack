@@ -32,6 +32,7 @@
     <ClCompile Include="source\Enemy\EnemyBase.cpp" />
     <ClCompile Include="source\Enemy\EnemyParameter.cpp" />
     <ClCompile Include="source\Game.cpp" />
+    <ClCompile Include="source\Gauge\GaugeBase.cpp" />
     <ClCompile Include="source\Gimmick\Gimmick.cpp" />
     <ClCompile Include="source\Gimmick\GimmickBase.cpp" />
     <ClCompile Include="source\JsonSave\JsonSave.cpp" />
@@ -48,15 +49,11 @@
     <ClCompile Include="source\Scene\SceneAMG.cpp" />
     <ClCompile Include="source\Scene\SceneEpilogue.cpp" />
     <ClCompile Include="source\Scene\SceneInGame.cpp" />
-    <ClCompile Include="source\Scene\ScenePrologue.cpp" />
     <ClCompile Include="source\Scene\SceneTeam.cpp" />
     <ClCompile Include="source\Scene\SceneTitle.cpp" />
-    <ClCompile Include="source\Shader\Shader.cpp" />
     <ClCompile Include="source\Stage\Stage.cpp" />
     <ClCompile Include="source\Stage\StageParameter.cpp" />
     <ClCompile Include="source\State\StateComponent.cpp" />
-    <ClCompile Include="source\UI\Sprite.cpp" />
-    <ClCompile Include="source\UI\UIComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Actor\Actor.h" />
@@ -71,6 +68,7 @@
     <ClInclude Include="source\Enemy\TackleEnemy.h" />
     <ClInclude Include="source\Enemy\EnemyBase.h" />
     <ClInclude Include="source\Enemy\EnemyParameter.h" />
+    <ClInclude Include="source\Gauge\GaugeBase.h" />
     <ClInclude Include="source\Gimmick\Gimmick.h" />
     <ClInclude Include="source\Gimmick\GimmickBase.h" />
     <ClInclude Include="source\JsonSave\JsonSave.h" />
@@ -88,30 +86,11 @@
     <ClInclude Include="source\Scene\SceneAMG.h" />
     <ClInclude Include="source\Scene\SceneEpilogue.h" />
     <ClInclude Include="source\Scene\SceneInGame.h" />
-    <ClInclude Include="source\Scene\ScenePrologue.h" />
     <ClInclude Include="source\Scene\SceneTeam.h" />
     <ClInclude Include="source\Scene\SceneTitle.h" />
-    <ClInclude Include="source\Shader\Shader.h" />
     <ClInclude Include="source\Stage\Stage.h" />
     <ClInclude Include="source\Stage\StageParameter.h" />
-    <ClInclude Include="source\State\StateBaseRoot.h" />
     <ClInclude Include="source\State\StateComponent.h" />
-    <ClInclude Include="source\UI\Sprite.h" />
-    <ClInclude Include="source\UI\UIComponent.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="resource\shader\PixelShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-    </FxCompile>
-    <FxCompile Include="resource\shader\VertexShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-    </FxCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -130,7 +109,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -143,7 +122,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>

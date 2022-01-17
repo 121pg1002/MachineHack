@@ -1,10 +1,10 @@
-/*****************************************************************//**
- * @file   Player.cpp
- * @brief  プレイヤークラス
- *
- * @author yamawaki kota
- * @date   December 28 2021
- *********************************************************************/
+///
+/// @file    Player.cpp
+/// @brief   プレイヤー
+/// @date    2021/11/26
+/// @author yamawaki kota
+/// @copyright (C) Amusement Media Academy All rights Resved.
+///
 #include "AppFrame.h"
 #include "Player.h"
 #include "../Enemy/EnemyBase.h"
@@ -32,22 +32,22 @@ namespace MachineHuck::Player {
 	void Player::Input(AppFrame::Input::InputComponent& input) {
 		_camera->Input(input);  // カメラの入力
 
-		auto& _joypad = input.GetJoypad();
-		auto& _key = input.GetKeyBoard();
+		auto& joypad = input.GetJoypad();
+		auto& key = input.GetKeyBoard();
 		lx = 0.0, ly = 0.0;
 
 
-		if (_status != STATUS::HUCKING)
+		if (_status != STATUS::HUCKING && _status != STATUS::HUCKED)
 		{   // 右移動と左移動
-			if (_joypad.LHorison() != 0.0)
+			if (joypad.LHorison() != 0.0)
 			{
 				lx = input.GetJoypad().LHorison() / 1000.0;
 			}
-			else if (_key.Button_D() != 0)
+			else if (key.Button_D() != 0)
 			{
 				lx = 1.0;
 			}
-			else if (_key.Button_A() != 0)
+			else if (key.Button_A() != 0)
 			{
 				lx = -1.0;
 			}
@@ -57,11 +57,11 @@ namespace MachineHuck::Player {
 			{
 				ly = input.GetJoypad().LVertical() / 1000.0;
 			}
-			else if (_key.Button_W() != 0)
+			else if (key.Button_W() != 0)
 			{
 				ly = 1.0;
 			}
-			else if (_key.Button_S() != 0)
+			else if (key.Button_S() != 0)
 			{
 				ly = -1.0;
 			}
@@ -72,7 +72,7 @@ namespace MachineHuck::Player {
 		if (_huckcount <= 0)
 		{
 
-			if (_joypad.Button_RT())
+			if (joypad.Button_RT())
 			{
 				//HUCKINGとHUCKEDで無かったら
 				if (_status != STATUS::HUCKING && _status != STATUS::HUCKED)
@@ -80,15 +80,21 @@ namespace MachineHuck::Player {
 					_status = STATUS::HUCKING;
 					_huckcount = 200;
 				}
-				else if (_status == STATUS::HUCKED)//HUCKED中なら
-				{
-					_status = STATUS::WAIT;
-					_huckcount = 200;
-				}
+
+				//if (_status == STATUS::HUCKED)//HUCKED中なら
+				//{
+				//	_status = STATUS::WAIT;
+				//	_huckcount = 200;
+				//}
 			}
 			else if (_huckcount == 0 && _status != STATUS::HUCKED)
 			{
 				_status = STATUS::WAIT;
+			}
+
+			if (joypad.Button_A() && _status == STATUS::HUCKED) {
+					_status = STATUS::WAIT;
+					_huckcount = 200;
 			}
 
 		}
@@ -108,15 +114,14 @@ namespace MachineHuck::Player {
 	}
 
 	void Player::Update() {
+		//動かないときの処理に使用
+		//auto oldMove = _move;
+
+
+		Math::Vector4 oldPos = _position;
 
 		Move();
 
-
-
-		if (_move.Length() > 0.0)
-		{
-			_dir = _move;
-		}
 
 
 		//// ステータスに合わせてアニメーションのアタッチ
@@ -141,14 +146,39 @@ namespace MachineHuck::Player {
 
 		// カメラの更新
 		//_camera->SetTarget(_position, _move);
+		//if (_move.GetX() != oldMove.GetX() && _move.GetZ() != oldMove.GetZ()) {
+		//
+		//	Math::Vector4 cameraDif = { 0.0, 500.0,  -200.0 };
+		//	_camera->SetPosition(_position + cameraDif);
+		//}
 
 		  // アクターサーバーに位置を通知
 		std::pair<Math::Vector4, Math::Vector4> pos_dir = { _position, _dir };
 		GetActorServer().Register("Player", pos_dir);
 
 		_state->Update();
+		
+		//if (_status != STATUS::HUCKED) {
 
-		_camera->Update(_move);
+			
+
+		//地面に触れているかどうか
+		if (!CollisionFloor(oldPos)) {
+
+			Math::Vector4 zero = { 0.0, 0.0, 0.0 };
+			_camera->Update(zero);
+		}
+		else {
+			_camera->Update(_move);
+		}
+			
+
+
+		//}
+		//else {
+		//	//ハッキング中は敵から移動量を取得
+		//	_camera->Update(_huckedMove);
+		//}
 
 		for (auto i = GetActorServer().GetActors().begin(); i != GetActorServer().GetActors().end(); i++)
 		{
@@ -216,6 +246,7 @@ namespace MachineHuck::Player {
 		_oldPos = _position;
 		//横方向の傾きと縦方向の傾きの大きさ
 		double length = sqrt(lx * lx + ly * ly);
+
 		if (length < _analogMin) {
 			// 入力が小さかったら動かなかったことにする
 			length = 0.0;
@@ -228,29 +259,36 @@ namespace MachineHuck::Player {
 		double rad = atan2(ly, lx);
 
 		//x軸方向の移動量
-		auto _move_x = cos(rad) * length;
+		auto moveX = cos(rad) * length;
 
 		//z軸方向の移動量
-		auto _move_z = sin(rad) * length;
+		auto moveZ = sin(rad) * length;
 
-		_move = { _move_x, 0.0f, _move_z };
+		_move = { moveX, 0.0, moveZ };
+
 		// 移動
 		_position = _position + _move;
+		
 		// ワールド行列の更新
 		ComputeWorldTransform();
 
+		if (_move.Length() > 0.0)
+		{
+			_dir = _move;
+		}
+
 		//主人公の角度を取得
-		auto angle = GetRotation();
+		//auto angle = GetRotation();
 
 		//y軸回転を出す
-		auto _y_rot = atan2(_dir.GetX(), _dir.GetZ());
-
+		auto yRot = atan2(_dir.GetX(), _dir.GetZ());
+		Math::Vector4 rot = { 0.0, yRot, 0.0 };
 		////z軸を0度とする
 		//auto nine = std::numbers::pi / 180.0 * 90.0;
 		//_y_rot += 90.0;
-		angle.Set(0.0, _y_rot, 0.0);
+		//angle.Set(0.0, _y_rot, 0.0);
 		//角度を更新
-		SetRotation(angle);
+		SetRotation(rot);
 
 	}
 
@@ -525,8 +563,43 @@ namespace MachineHuck::Player {
 		/*_status = STATUS::HUCKING;*/
 	}
 
+	void Player::StateHucked::Input(AppFrame::Input::InputComponent& input) {
+	
+		//if (input.GetJoypad().Button_RT()) {
+		//
+		//	for (auto i = _owner.GetActorServer().GetActors().begin(); i != _owner.GetActorServer().GetActors().end(); i++)
+		//	{
+		//		if ((*i)->GetActorState() != ActorState::Hucked)
+		//		{
+		//			continue;
+		//		}
+		//		else
+		//		{
+		//		    _owner._position = (*i)->GetPosition();
+		//			//_owner._state->GoToState("Idle");
+		//		}
+		//	}
+		//}
+	}
+
 	/// ハッキング
 	void Player::StateHucked::Update() {
+
+		for (auto i = _owner.GetActorServer().GetActors().begin(); i != _owner.GetActorServer().GetActors().end(); i++)
+		{
+				if ((*i)->GetActorState() != ActorState::Hucked)
+				{
+					continue;
+				}
+				else
+				{
+					//ハッキングした対象に追従
+				    _owner._position = (*i)->GetPosition();
+					_owner._rotation = (*i)->GetRotation();
+					//_owner._huckedMove = (*i)->GetHuckedMove();
+					_owner._move = (*i)->GetHuckedMove();
+				}
+		}
 
 		if (_owner._status != STATUS::HUCKED)
 		{

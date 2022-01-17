@@ -64,15 +64,6 @@ int Asset::AssetServer::GetTexture(std::string_view key, int no) {
 	auto handle = handles.at(no);
 	return handle;
 }
-bool Asset::AssetServer::GetTextures(std::string_view key, std::vector<int>& outHandles) {
-    if (!_textures.contains(key.data())) {
-        return false;
-    }
-    auto&& [divGraph, handles] = _textures[key.data()];
-    outHandles.resize(handles.size());
-    outHandles = handles;
-    return true;
-}
 /// 画像ハンドルの分割数の取得
 int Asset::AssetServer::GetTextureCount(std::string_view& key) {
   if (!_textures.contains(key.data())) {
@@ -114,6 +105,15 @@ int Asset::AssetServer::LoadModel(std::string_view key, const std::string_view f
 		_models.erase(key.data());
 	}
 	auto handle = MV1LoadModel(filename.data());
+
+
+    ////////////ここにフロアの名前を入力 ↓↓にコリジョンメッシュを入力
+    //if (filename == "floor") {
+    //    _frameMapCollision = MV1SearchFrame(handle, "collisionname");
+    //}
+
+
+
 	std::vector<int> handles{handle};
 	_models.emplace(key, std::make_pair(filename.data(), handles));
 	return handle;

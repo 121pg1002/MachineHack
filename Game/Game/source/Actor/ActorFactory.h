@@ -1,10 +1,11 @@
-/*****************************************************************//**
- * @file   ActorFactory.cpp
- * @brief  アクターファクトリー
- *
- * @author yamawaki kota
- * @date   December 6 2021
- *********************************************************************/
+///
+/// @file    ActorFactory.h
+/// @brief   アクターファクトリー
+/// @date    2021/12/6
+/// @author yamawaki kota
+/// @copyright (C) Amusement Media Academy All rights Resved.
+///
+
 #pragma once
 #include <memory>
 #include <random>

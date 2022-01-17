@@ -1,10 +1,11 @@
-/*****************************************************************//**
- * @file  StateComponent.cpp
- * @brief  ステートコンポーネント
- *
- * @author yamawaki kota
- * @date   December 6 2021
- *********************************************************************/
+///
+/// @file    StateComponent.cpp
+/// @brief   ステートコンポーネント
+/// @date    2021/12/06
+/// @author yamawaki kota
+/// @copyright (C) Amusement Media Academy All rights Resved.
+///
+
 #include "StateComponent.h"
 
 namespace MachineHuck::State {

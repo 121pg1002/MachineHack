@@ -1,10 +1,10 @@
-/*****************************************************************//**
- * @file   ModelComponent.h
- * @brief  スタティックモデル用のコンポーネント
- *
- * @author yamawaki kota
- * @date   December 6 2021
- *********************************************************************/
+///
+/// @file    ModelComponent.h
+/// @brief   スタティックモデル用のコンポーネント
+/// @date    2021/11/26
+/// @author yamawaki kota
+/// @copyright (C) Amusement Media Academy All rights Resved.
+///
 #pragma once
 #include <DxLib.h>
 #include <string_view>

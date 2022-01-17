@@ -21,7 +21,8 @@ namespace MachineHuck::Stage {
 
 	public:
 
-		using StageMap = std::unordered_map<std::string, Parameter::StageParam>;
+		using SMV = std::vector<Parameter::StageParam>;
+		using StageV = std::vector<int>;
 
 		/**
 		 * @brief 変数の初期化
@@ -35,9 +36,16 @@ namespace MachineHuck::Stage {
 
 		/**
 		* @brief  ステージの配置情報をjsonから読み込む
+		* @param  num ステージ番号
 		* @param  filePath
 		*/
-		void LoadStageParameter(const std::string& filePath);
+		void LoadStageParameter(const int num, const std::string& filePath);
+
+        /**
+         * @brief　ステージのテーブルをjsonから読み込む
+         * @param filePath
+         */
+		void LoadStageTable(const std::string& filePath);
 
 		/**
 		 * @brief   コンテナを取得する
@@ -51,11 +59,28 @@ namespace MachineHuck::Stage {
 		  */
 		std::vector<Parameter::StageParam> GetStageVector() { return _stageParamV; }
 
+		/**
+		 * @brief  フロア番号の情報を取得
+		 * @return _stageNumMap
+		 */
+		std::unordered_map<int, SMV> GetFloorMap() { return _stageNumMap; }
+
+		/**
+		  * @brief   ステージテーブル配列を取得する
+		  * @return  _stageTableV
+		  */
+		std::vector<StageV> GetStageTableVector() { return _stageTableV; }
+
 
 	private:
-		//std::vector<StageP>  _stageParamV; //!<ステージ情報を格納するvector
-		StageMap _stageParamMap;//!<ステージ情報を格納するmap
-		std::vector<Parameter::StageParam> _stageParamV;
+
+
+		SMV _stageParamV; //!< 1フロア情報を格納
+
+		std::unordered_map<int, SMV> _stageNumMap; //!< フロア番号ごとに格納
+
+		std::vector<StageV> _stageTableV; //!< ステージテーブルを格納する配列
+
 
 	};
 }

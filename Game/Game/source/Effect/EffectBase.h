@@ -1,10 +1,3 @@
-/*****************************************************************//**
- * @file   EffectBase.h
- * @brief  エフェクト基底クラス
- *
- * @author yamawaki kota
- * @date   December 28 2021
- *********************************************************************/
 #pragma once
 #include "appframe.h"
 #include <utility>

@@ -13,9 +13,6 @@ namespace MachineHuck::Actor {
 	class ActorServer;
 	class ActorFactory;
 }
-namespace MachineHuck::UI {
-	class UIComponent;
-}
 
 namespace AppFrame {
 	class Game;
@@ -81,9 +78,6 @@ namespace AppFrame::Scene {
 		/// サウンドコンポーネントの取得
 		/// @return サウンドコンポーネントの参照
 		Sound::SoundComponent& GetSoundComponent();
-		/// UIコンポーネントの取得
-		/// @return UIコンポーネントの参照
-		MachineHuck::UI::UIComponent& uiComponent();
 	private:
 		/// ゲームクラスの参照
 		Game& _game;

@@ -1,15 +1,15 @@
-/*****************************************************************//**
- * @file  StateComponent.h
- * @brief  ステートコンポーネント
- *
- * @author yamawaki kota
- * @date   December 6 2021
- *********************************************************************/
+///
+/// @file    StateComponent.h
+/// @brief   ステートコンポーネント
+/// @date    2021/12/06
+/// @author yamawaki kota
+/// @copyright (C) Amusement Media Academy All rights Resved.
+///
 #pragma once
 #include <string>
 #include <unordered_map>
 #include <memory>
-#include "StateBaseRoot.h"
+
 
 //class Actor;
 
@@ -20,14 +20,14 @@ namespace AppFrame::Input {
 }
 
 namespace MachineHuck::State {
-	//class StateBaseRoot {
-	//public:
-	//	StateBaseRoot() {};
-	//	virtual void Enter() {};
-	//	virtual void Input(AppFrame::Input::InputComponent& input) {};
-	//	virtual void Update() {};
-	//	virtual void Draw() {};
-	//};
+	class StateBaseRoot {
+	public:
+		StateBaseRoot() {};
+		virtual void Enter() {};
+		virtual void Input(AppFrame::Input::InputComponent& input) {};
+		virtual void Update() {};
+		virtual void Draw() {};
+	};
 
 	class StateComponent {
 	public:

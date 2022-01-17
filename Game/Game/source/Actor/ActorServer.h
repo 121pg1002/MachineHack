@@ -1,10 +1,10 @@
-/*****************************************************************//**
- * @file   ActorServer.h
- * @brief  アクターサーバー
- *
- * @author yamawaki kota
- * @date   December 6 2021
- *********************************************************************/
+///
+/// @file    ActorServer.h
+/// @brief   アクターサーバー.
+/// @date    2021/11/26
+/// @author yamawaki kota
+/// @copyright (C) Amusement Media Academy All rights Resved.
+///
 #pragma once
 #include <memory>
 #include <vector>

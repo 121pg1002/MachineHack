@@ -65,19 +65,10 @@
     <ClCompile Include="source\JsonSave\JsonSave.cpp">
       <Filter>JsonSave</Filter>
     </ClCompile>
-    <ClCompile Include="source\Stage\StageParameter.cpp">
-      <Filter>Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Parameter\StageParameterBase.cpp">
+    <ClCompile Include="source\Parameter\EParam.cpp">
       <Filter>Parameter</Filter>
     </ClCompile>
     <ClCompile Include="source\Parameter\EStageParam.cpp">
-      <Filter>Parameter</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Parameter\StageParam.cpp">
-      <Filter>Parameter</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Parameter\EParam.cpp">
       <Filter>Parameter</Filter>
     </ClCompile>
     <ClCompile Include="source\Parameter\GParam.cpp">
@@ -86,8 +77,14 @@
     <ClCompile Include="source\Parameter\GStageParam.cpp">
       <Filter>Parameter</Filter>
     </ClCompile>
-    <ClCompile Include="source\Shader\Shader.cpp">
-      <Filter>Shader</Filter>
+    <ClCompile Include="source\Parameter\StageParam.cpp">
+      <Filter>Parameter</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Parameter\StageParameterBase.cpp">
+      <Filter>Parameter</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Stage\StageParameter.cpp">
+      <Filter>Stage</Filter>
     </ClCompile>
     <ClCompile Include="source\Effect\EffectBase.cpp">
       <Filter>Effect</Filter>
@@ -104,14 +101,8 @@
     <ClCompile Include="source\Scene\SceneEpilogue.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="source\Scene\ScenePrologue.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="source\UI\Sprite.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
-    <ClCompile Include="source\UI\UIComponent.cpp">
-      <Filter>UI</Filter>
+    <ClCompile Include="source\Gauge\GaugeBase.cpp">
+      <Filter>Gauge</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -152,19 +143,16 @@
       <UniqueIdentifier>{8335ae00-6d4a-4c9a-9b94-d5010234acb4}</UniqueIdentifier>
     </Filter>
     <Filter Include="JsonSave">
-      <UniqueIdentifier>{ca51c917-f182-432a-a89e-eb318704d54b}</UniqueIdentifier>
+      <UniqueIdentifier>{1d5738b1-ff87-443c-9cd6-c08d109a30c3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Parameter">
-      <UniqueIdentifier>{7aeb22e6-8d91-4b5f-a248-2f0e36607371}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shader">
-      <UniqueIdentifier>{dba4bbc3-22f4-4ebd-8fbf-bba427d57237}</UniqueIdentifier>
+      <UniqueIdentifier>{0a837a55-a1e1-4350-8c43-2f54f11f32b7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Effect">
-      <UniqueIdentifier>{e9d35d54-048e-4e83-83e7-0783f384591f}</UniqueIdentifier>
+      <UniqueIdentifier>{d3f6535b-1f3d-4333-b6f8-892b80e6c6e6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UI">
-      <UniqueIdentifier>{83914418-653a-4ad6-a18e-92f1d37912c5}</UniqueIdentifier>
+    <Filter Include="Gauge">
+      <UniqueIdentifier>{c0a849c4-a1eb-402b-9bbb-947a9bb27929}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -234,19 +222,10 @@
     <ClInclude Include="source\JsonSave\JsonSave.h">
       <Filter>JsonSave</Filter>
     </ClInclude>
-    <ClInclude Include="source\Stage\StageParameter.h">
-      <Filter>Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Parameter\StageParameterBase.h">
+    <ClInclude Include="source\Parameter\EParam.h">
       <Filter>Parameter</Filter>
     </ClInclude>
     <ClInclude Include="source\Parameter\EStageParam.h">
-      <Filter>Parameter</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Parameter\StageParam.h">
-      <Filter>Parameter</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Parameter\EParam.h">
       <Filter>Parameter</Filter>
     </ClInclude>
     <ClInclude Include="source\Parameter\GParam.h">
@@ -255,8 +234,14 @@
     <ClInclude Include="source\Parameter\GStageParam.h">
       <Filter>Parameter</Filter>
     </ClInclude>
-    <ClInclude Include="source\Shader\Shader.h">
-      <Filter>Shader</Filter>
+    <ClInclude Include="source\Parameter\StageParam.h">
+      <Filter>Parameter</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Parameter\StageParameterBase.h">
+      <Filter>Parameter</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Stage\StageParameter.h">
+      <Filter>Stage</Filter>
     </ClInclude>
     <ClInclude Include="source\Effect\EffectBase.h">
       <Filter>Effect</Filter>
@@ -273,25 +258,8 @@
     <ClInclude Include="source\Scene\SceneEpilogue.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="source\Scene\ScenePrologue.h">
-      <Filter>Scene</Filter>
+    <ClInclude Include="source\Gauge\GaugeBase.h">
+      <Filter>Gauge</Filter>
     </ClInclude>
-    <ClInclude Include="source\State\StateBaseRoot.h">
-      <Filter>State</Filter>
-    </ClInclude>
-    <ClInclude Include="source\UI\Sprite.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="source\UI\UIComponent.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="resource\shader\PixelShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="resource\shader\VertexShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
   </ItemGroup>
 </Project>

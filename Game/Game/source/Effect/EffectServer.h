@@ -1,10 +1,9 @@
-/*****************************************************************//**
- * @file   EffectServer.cpp
- * @brief  エフェクトサーバー
- *
- * @author yamawaki kota
- * @date   December 28 2021
- *********************************************************************/
+///
+/// @file    EffectServer.h
+/// @brief   コリジョン判定
+/// @date    2021/12/6
+/// @author 
+/// @copyright (C) Amusement Media Academy All rights Resved.
 #pragma once
 #include <unordered_map>
 #include <string>

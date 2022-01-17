@@ -1,10 +1,10 @@
-/*****************************************************************//**
- * @file   ModelComponent.cpp
- * @brief  スタティックモデル用のコンポーネント
- *
- * @author yamawaki kota
- * @date   December 6 2021
- *********************************************************************/
+///
+/// @file    ModelComponent.cpp
+/// @brief   スタティックモデル用のコンポーネント
+/// @date    2021/11/26
+/// @author yamawaki kota
+/// @copyright (C) Amusement Media Academy All rights Resved.
+///
 #include "ModelComponent.h"
 #include "../Actor/Actor.h"
 #include "AppFrame.h"
@@ -71,15 +71,14 @@ namespace MachineHuck::Model {
 		rotation.y = 3.141592f / 180.0f * rotation.y;
 		rotation.z = 3.141592f / 180.0f * rotation.z;
 
-
 		MV1SetRotationXYZ(_handle, rotation);
 	}
 	/// 拡大率の設定
 	void ModelComponent::SetScale(VECTOR  scale) {
 
-		scale.x = scale.x * 75.0f;
-		scale.y = scale.y * 75.0f;
-		scale.z = scale.z * 75.0f;
+		scale.x = scale.x * 800.0f;
+		scale.y = scale.y * 800.0f;
+		scale.z = scale.z * 800.0f;
 
 		//scale.x = scale.x / 70.0;
 		//scale.y = scale.y / 70.0;

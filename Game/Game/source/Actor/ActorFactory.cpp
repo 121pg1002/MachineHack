@@ -1,10 +1,10 @@
-/*****************************************************************//**
- * @file   ActorFactory.cpp
- * @brief  アクターファクトリー
- *
- * @author yamawaki kota
- * @date   December 6 2021
- *********************************************************************/
+///
+/// @file    ActorFactory.cpp
+/// @brief   アクターファクトリー
+/// @date    2021/12/6
+/// @author yamawaki kota
+/// @copyright (C) Amusement Media Academy All rights Resved.
+///
 #include "ActorFactory.h"
 #include "ActorServer.h"
 #include "../Player/Player.h"
@@ -96,7 +96,7 @@ namespace MachineHuck::Actor {
         // カメラの生成
         auto camera = std::make_shared<Camera::CameraComponent>();
         camera->Init();
-        camera->SetPosition({ 0, 500, -200 });
+        camera->SetPosition({ 0, 800, -200 });
         camera->SetTarget({ 0, 0, 0 });
 
         // プレイヤーの生成

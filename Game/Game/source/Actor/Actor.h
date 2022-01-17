@@ -1,10 +1,10 @@
-/*****************************************************************//**
- * @file   Actor.h
- * @brief  アクタークラス
- *
- * @author yamawaki kota
- * @date   December 19 2021
- *********************************************************************/
+///
+/// @file    Actor.h
+/// @brief   アクター
+/// @date    2021/11/26
+/// @author yamawaki kota
+/// @copyright (C) Amusement Media Academy All rights Resved.
+///
 #pragma once
 #include <DxLib.h>
 #include "AppFrame.h"
@@ -70,8 +70,43 @@ namespace MachineHuck::Actor {
 
             virtual TypeId GetTypeId() const = 0;
 
-            bool isDead() const { return (_actorState == ActorState::Dead); }
-            bool isActive() const { return (_actorState == ActorState::Active); }
+            /**
+             * @brief  死亡しているかどうか    
+             * @return _actorState
+             */
+            bool IsDead() const { return (_actorState == ActorState::Dead); }
+
+            /**
+             * @brief  Activeかどうか   
+             * @return _actorState
+             */
+            bool IsActive() const { return (_actorState == ActorState::Active); }
+
+            /**
+             * @brief  ハッキングされたかどうか         
+             * @return _actorState
+             */
+            bool IsHucked() const { return (_actorState == ActorState::Hucked); }
+
+            /**
+             * @brief ステージフロアとの当たり判定
+             * @param oldPos 
+             * @return 当たっているか当たっていないか
+             */
+            bool CollisionFloor(AppFrame::Math::Vector4 oldPos);//←これはActorに持ってったほうがいい
+
+
+            /**
+             * @brief  ハッキングしたときの敵の移動量を取得         
+             * @return _huckedMove
+             */
+            Math::Vector4 GetHuckedMove() { return _huckedMove; }
+
+            /**
+             * @brief  ハッキングしたときの敵の移動量を設定       
+             * @param  huckedMove
+             */
+            void SetHuckedMove(Math::Vector4 huckedMove) { _huckedMove = huckedMove; }
 
             AppFrame::Game& GetGame() { return _game; }
             virtual void ComputeWorldTransform();
@@ -95,7 +130,7 @@ namespace MachineHuck::Actor {
 
             /// ////////////////////追加分 12/01
 
-           // Math::Vector4 GetOld() const { return _oldPos; }
+            Math::Vector4 GetOld() const { return _oldPos; }
             /*
             *@brief     円の半径を取得
             *@return _r 円の半径
@@ -208,6 +243,8 @@ namespace MachineHuck::Actor {
             bool _isHit{ false };
             double _searchRange{ 0.0 };
             double _huckingRange{ 0.0 };
+
+            Math::Vector4 _huckedMove{0.0, 0.0, 0.0};
         private:
 
         };

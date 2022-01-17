@@ -1,10 +1,3 @@
-/*****************************************************************//**
- * @file   EffectLaser.h
- * @brief  レーザーエフェクトクラス
- *
- * @author yamawaki kota
- * @date   December 28 2021
- *********************************************************************/
 #pragma once
 #include "EffectBase.h"
 namespace MachineHuck::Effect {
