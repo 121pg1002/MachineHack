@@ -124,8 +124,6 @@ namespace MachineHuck::Player {
 
 
 
-
-
 		//// ステータスに合わせてアニメーションのアタッチ
 		//switch (_status) {
 		//case STATUS::WAIT:

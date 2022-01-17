@@ -101,6 +101,9 @@
     <ClCompile Include="source\Scene\SceneEpilogue.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="source\Gauge\GaugeBase.cpp">
+      <Filter>Gauge</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Enemy">
@@ -147,6 +150,9 @@
     </Filter>
     <Filter Include="Effect">
       <UniqueIdentifier>{d3f6535b-1f3d-4333-b6f8-892b80e6c6e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gauge">
+      <UniqueIdentifier>{c0a849c4-a1eb-402b-9bbb-947a9bb27929}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -251,6 +257,9 @@
     </ClInclude>
     <ClInclude Include="source\Scene\SceneEpilogue.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Gauge\GaugeBase.h">
+      <Filter>Gauge</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

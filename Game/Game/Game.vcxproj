@@ -32,6 +32,7 @@
     <ClCompile Include="source\Enemy\EnemyBase.cpp" />
     <ClCompile Include="source\Enemy\EnemyParameter.cpp" />
     <ClCompile Include="source\Game.cpp" />
+    <ClCompile Include="source\Gauge\GaugeBase.cpp" />
     <ClCompile Include="source\Gimmick\Gimmick.cpp" />
     <ClCompile Include="source\Gimmick\GimmickBase.cpp" />
     <ClCompile Include="source\JsonSave\JsonSave.cpp" />
@@ -67,6 +68,7 @@
     <ClInclude Include="source\Enemy\TackleEnemy.h" />
     <ClInclude Include="source\Enemy\EnemyBase.h" />
     <ClInclude Include="source\Enemy\EnemyParameter.h" />
+    <ClInclude Include="source\Gauge\GaugeBase.h" />
     <ClInclude Include="source\Gimmick\Gimmick.h" />
     <ClInclude Include="source\Gimmick\GimmickBase.h" />
     <ClInclude Include="source\JsonSave\JsonSave.h" />

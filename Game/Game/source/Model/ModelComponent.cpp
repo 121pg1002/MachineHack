@@ -71,7 +71,6 @@ namespace MachineHuck::Model {
 		rotation.y = 3.141592f / 180.0f * rotation.y;
 		rotation.z = 3.141592f / 180.0f * rotation.z;
 
-
 		MV1SetRotationXYZ(_handle, rotation);
 	}
 	/// ägëÂó¶ÇÃê›íË

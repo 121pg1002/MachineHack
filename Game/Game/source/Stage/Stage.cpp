@@ -16,6 +16,7 @@
 
 
 namespace MachineHuck::Stage {
+
 	namespace {
 
 		constexpr int StageAll = 3;        //!< “Ç‚Ýž‚Þstagejson‚Ì”
@@ -25,6 +26,7 @@ namespace MachineHuck::Stage {
 
 		//constexpr double HalfSize = 0.5 * Differ;
 		//constexpr int StartZ = -5.0 * Differ;
+
 	}
 
 	Stage::Stage(AppFrame::Game& game) : Actor::Actor{ game } {
