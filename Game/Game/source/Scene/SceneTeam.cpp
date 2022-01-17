@@ -1,10 +1,10 @@
-///
-/// @file    SceneTitle.cpp
-/// @brief   タイトル画面
-/// @date    2021/12/06
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   SceneTeam.cpp
+ * @brief  チームロゴ画面
+ *
+ * @author yamawaki kota
+ * @date   December 6 2021
+ *********************************************************************/
 #include "AppFrame.h"
 #include "SceneTeam.h"
 #include <DxLib.h>

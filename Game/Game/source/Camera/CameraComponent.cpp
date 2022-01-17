@@ -1,10 +1,10 @@
-///
-/// @file    CameraComponent.cpp
-/// @brief   カメラコンポーネント
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   CameraComponent.cpp
+ * @brief  カメラコンポーネント
+ *
+ * @author yamawaki kota
+ * @date   December 19 2021
+ *********************************************************************/
 #include "CameraComponent.h"
 #include "AppFrame.h"
 #include <DxLib.h>

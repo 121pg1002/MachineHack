@@ -1,3 +1,10 @@
+/*****************************************************************//**
+ * @file   EffectLaser.cpp
+ * @brief  レーザーエフェクトクラス
+ *
+ * @author yamawaki kota
+ * @date   December 28 2021
+ *********************************************************************/
 #include "EffectLaser.h"
 namespace MachineHuck::Effect {
     void EffectLaser::LoadEffect(std::string _keyname, std::string _filepass, float expansion) {
@@ -13,7 +20,7 @@ namespace MachineHuck::Effect {
         }
         EffectServer::SetPositionEffect2D(GetPosition2D(), keyname[0]);
         //int x = GetPosition2D().first + 5;
-        int x = GetPosition2D().first + 40;
+        int x = GetPosition2D().first + 180;
         SetEffect2DPos(x, GetPosition2D().second);
         PassingTime(1);
         EffectServer::UpdateEffect2D();

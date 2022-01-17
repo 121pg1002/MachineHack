@@ -10,12 +10,15 @@
 #include "../source/Scene/SceneTeam.h"
 #include "../source/Scene/SceneTitle.h"
 #include "../source/Scene/SceneTeam.h"
+#include "../source/Scene/ScenePrologue.h"
 #include "../source/Scene/SceneEpilogue.h"
 #include "../source/Scene/SceneAMG.h"
 #include "../source/Actor/ActorServer.h"
 #include "../source/Actor/ActorFactory.h"
 #include "../source/Stage/StageParameter.h"
 #include "../source/Effect/EffectServer.h"
+#include "../source/UI/UIComponent.h"
+#include "../source/UI/Sprite.h"
 #include <DxLib.h>
 
 AppFrame::Game::Game() {
@@ -61,7 +64,6 @@ bool AppFrame::Game::Initialize() {
 #endif
 
 
-
   // インプットコンポーネントの生成
   _input = std::make_unique<AppFrame::Input::InputComponent>();
 
@@ -74,9 +76,14 @@ bool AppFrame::Game::Initialize() {
   // アクターファクトリーの生成
   _actorFactory = std::make_unique<MachineHuck::Actor::ActorFactory>(*this);
 
+  // スプライトサーバーの生成
+  _spriteServer = std::make_unique<MachineHuck::UI::SpriteServer>();
 
   // アセットサーバーの生成
   _assetServer = std::make_unique<AppFrame::Asset::AssetServer>(*this);
+
+  // UIコンポーネントの生成
+  _ui = std::make_unique<MachineHuck::UI::UIComponent>(*this);
 
   // アセットサーバーの取得
   auto& as = GetAssetServer();
@@ -106,6 +113,7 @@ bool AppFrame::Game::Initialize() {
  
   _sceneServer->Register("Team", std::make_shared<MachineHuck::Scene::SceneTeam>(*this));
   _sceneServer->Register("Title", std::make_shared<MachineHuck::Scene::SceneTitle>(*this));
+  _sceneServer->Register("Prologue", std::make_shared<MachineHuck::Scene::ScenePrologue>(*this));
   _sceneServer->Register("Epilogue", std::make_shared<MachineHuck::Scene::SceneEpilogue>(*this));
 
   // インゲームを生成してシーンとして登録

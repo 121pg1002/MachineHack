@@ -1,10 +1,10 @@
-///
-/// @file    Player.h
-/// @brief   プレイヤー
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   Player.h
+ * @brief  プレイヤークラス
+ *
+ * @author yamawaki kota
+ * @date   December 28 2021
+ *********************************************************************/
 #pragma once
 #include "../Actor/Actor.h"
 #include "../State/StateComponent.h"
@@ -153,7 +153,6 @@ namespace MachineHuck::Player {
         public:
             StateHucked(Player& owner) : StateBase{ owner } {};
             void Enter() override;
-            void Input(AppFrame::Input::InputComponent& input) override;
             void Update() override;
         private:
             //int _freezeTime{ 0 };

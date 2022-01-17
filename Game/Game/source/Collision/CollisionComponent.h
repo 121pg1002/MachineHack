@@ -10,7 +10,6 @@
 #include <memory>
 #include <DxLib.h>
 #include "AppFrame.h"
-#include <tuple>
 
 namespace Math = AppFrame::Math;
 
@@ -42,7 +41,7 @@ namespace MachineHuck::Collision {
 		//  ReportId id{ReportId::None};
 		//  Math::Vector4 position{0, 0, 0};
 		//};
-		using AABB = std::tuple<double, double, double, double>;
+
 
 
 		CollisionComponent(Actor::Actor& owner);
@@ -77,16 +76,6 @@ namespace MachineHuck::Collision {
 		 */
 		bool CircleToAABB(const Actor::Actor& act1, const Actor::Actor& act2);
 
-	
-		/**
-		 * @brief  円と矩形の当たり判定を行う       
-		 * @param  act  プレイヤー
-		 * @param  min  最小座標
-		 * @param  max  最大座標
-		 * @return 成否
-		 */
-		bool CircleToAABB(const Actor::Actor& act, const AppFrame::Math::Vector4 min, const AppFrame::Math::Vector4 max);
-
 
 		/**
 		 * @brief  円と回転した矩形の当たり判定を行う
@@ -103,18 +92,6 @@ namespace MachineHuck::Collision {
 		 * @return 成否
 		 */
 		bool CircleToLine(const Actor::Actor& act1, const Actor::Actor& act2);
-
-		/**
-		 * @brief  円と線分の当たり判定を行う
-		 * @param  act1 自分
-		 * @param  start 始点
-		 * @param  end 終点 
-		 * @return 成否
-		 */
-		bool CircleToLine(const Actor::Actor& act1, const Math::Vector4 start, const Math::Vector4 end);
-
-
-
 
 		/*
 		*@brief 円と扇形の当たり判定を行う
@@ -136,56 +113,22 @@ namespace MachineHuck::Collision {
 		 * @param  act2
 		 * @return 成否
 		 */
-		bool LineToAABB(const Actor::Actor& act1, const Actor::Actor& act2, const AABB box);
-
-		///**
-		// * @brief  線分とAABBの当たり判定を行う
-		// * @param  act
-		// * @param  min
-		// * @param  max
-		// * @return 成否
-		// */
-		//bool LineToAABB(const Actor::Actor& act1, const Math::Vector2 min, const Math::Vector2 max);
-
+		bool LineToAABB(const Actor::Actor& act1, const Actor::Actor& act2);
 
 		/**
 		 * @brief  平面との交差テスト
 		 * @param  start
 		 * @param  end
 		 * @param  negd
-		 * @param  out
 		 * @return 成否
 		 */
-		bool TestSidePlane(const double start, const double end, const double negd, std::vector<double>& out);
+		bool TestSidePlane(const double start, double const end, double const negd);
 
-		/** 
-		 * @brief  線分上の座標を計算  
-		 * @param  start
-		 * @param  end     
-		 * @param  t
-		 * @return 座標
-		 */
-		const Math::Vector4 PointOnSegment(const Math::Vector4 start, const Math::Vector4 end, const double t);
-
-		/**
-		 * @brief  マップコリジョン情報を取得       
-		 * @return _frameMapCollision
-		 */
-		const int GetMapCollision() const  { return _frameMapCollision; };
-
-		/**
-		 * @brief  マップコリジョン情報の設定       
-		 * @param  handle
-		 */
-		void SetMapCollision(int handle);
 
 	private:
 		Actor::Actor& _owner;
 		/*std::unique_ptr<Report> _report;*/
 		double _r1{ 0.0 }, _r2{ 0.0 }; //!< 円の半径
-
-		Math::Vector4 _interSection;//!< 線分と回転した四角形との交点
-		int _frameMapCollision; //!< マップのコリジョン情報
 	};
 }
 

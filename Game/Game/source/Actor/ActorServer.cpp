@@ -1,10 +1,10 @@
-///
-/// @file    ActorServer.cpp
-/// @brief   アクターサーバー.
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   ActorServer.cpp
+ * @brief  アクターサーバー
+ *
+ * @author yamawaki kota
+ * @date   December 6 2021
+ *********************************************************************/
 #include "ActorServer.h"
 #include "Actor.h"
 
@@ -23,14 +23,9 @@ namespace MachineHuck::Actor {
     void ActorServer::Input(AppFrame::Input::InputComponent& input) {
         _updating = true;
         for (auto&& actor : _actors) {
-            if (actor->IsActive()) {
+            if (actor->isActive()) {
                 // アクターに入力する
                 actor->Input(input);
-            }
-            else if (actor->IsHucked()) {
-            
-                actor->Input(input);
-            
             }
         }
         _updating = false;
@@ -39,7 +34,7 @@ namespace MachineHuck::Actor {
     void ActorServer::Update() {
         _updating = true;
         for (auto&& actor : _actors) {
-            if (!actor->IsDead()) {
+            if (!actor->isDead()) {
                 // アクターを更新する
                 actor->Update();
             }
@@ -55,12 +50,12 @@ namespace MachineHuck::Actor {
         _pendingActors.clear();
 
         // 死んだアクターを削除する
-        erase_if(_actors, [](auto&& act) { return act->IsDead(); });
+        erase_if(_actors, [](auto&& act) { return act->isDead(); });
     }
     /// 描画
     void ActorServer::Render() {
         for (auto&& actor : _actors) {
-            if (!actor->IsDead()) {
+            if (!actor->isDead()) {
                 actor->Draw();
             }
         }

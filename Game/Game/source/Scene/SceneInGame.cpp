@@ -1,16 +1,17 @@
-///
-/// @file    SceneInGame.cpp
-/// @brief   インゲーム画面
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   SceneInGame.cpp
+ * @brief  インゲーム画面
+ *
+ * @author yamawaki kota
+ * @date   December 6 2021
+ *********************************************************************/
 #include "AppFrame.h"
 #include "SceneInGame.h"
 #include "../Actor/ActorServer.h"
 #include "../Actor/ActorFactory.h"
 #include <numbers>
 #include "../Enemy/EnemyParameter.h"
+#include "../UI/UIComponent.h"
 
 namespace MachineHuck::Scene {
     /// コンストラクタ
@@ -28,21 +29,18 @@ namespace MachineHuck::Scene {
         {"Spider",    "Spider_3.mv1"},
         {"pCube",      "pCube.mv1"},
         {"floor",     "floor.mv1"},
-        {"wall",      "wall.mv1"},
-        {"Dungeon",   "Dungeon.mv1"},
-        {"breakwall",  "breakwall.mv1"},
-        {"enemy",      "enemy.mv1"},
-        {"gate",       "gate.mv1"},
-        {"normalfloor",  "normalfloor.mv1"},
-        {"normalwall",  "normalwall.mv1"},
-        {"secretfloor", "secretfloor.mv1"},
-        {"secretwall", "secretwall.mv1"}
+        {"wall",      "wall.mv1"}
         };
         // モデルの読み込み
         GetAssetServer().LoadModels(usedInGame);                                                         //追加
-    
-
+        // 使用するテクスチャ
+        AppFrame::Asset::AssetServer::TextureMap TexUsed{
+          {"BarFrame", {"BarFrame.png", 1, 1, 340, 50}}
+        };
+        // テクスチャの読み込み
+        GetAssetServer().LoadTextures(TexUsed);
     }
+
     /// 入口
     void SceneInGame::Enter() {
         // ファクトリの生成とクリエイターの登録
@@ -54,9 +52,6 @@ namespace MachineHuck::Scene {
         af.Register("Stage", std::make_unique<MachineHuck::Actor::StageCreator>());
         //for (int i = 0; i < StageAll; i++) {
 
-
-
-        
         //    //ステージ番号をstringに変換
         //    auto no = std::to_string(i);
         //    //下の二つを起動すればjsonが読み込める
@@ -127,6 +122,7 @@ namespace MachineHuck::Scene {
         // ステージの生成と追加
         auto stage = af.Create("Stage");
         as.Add(std::move(stage));
+        uiComponent().Enter();
         Update();
     }
     /// 入力処理
@@ -143,11 +139,13 @@ namespace MachineHuck::Scene {
     void SceneInGame::Update() {
         GetActorFactory().UpdateSpawn();
         GetActorServer().Update();
+        uiComponent().Update();
     }
 
     /// 描画
     void SceneInGame::Render() {
         GetActorServer().Render();
+        uiComponent().Render();
     }
     /// 出口
     void SceneInGame::Exit() {

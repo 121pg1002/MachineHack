@@ -16,7 +16,7 @@ namespace MachineHuck::Enemy {
 		EnemyBase(AppFrame::Game& game);
 		~EnemyBase();
 
-		//bool IsHucked(const EnemyBase& enemy);
+		bool IsHucked(const EnemyBase& enemy);
 
 		enum class Type
 		{

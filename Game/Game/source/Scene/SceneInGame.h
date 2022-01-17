@@ -1,16 +1,16 @@
-///
-/// @file    SceneInGame.h
-/// @brief   インゲーム画面
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   SceneInGame.h
+ * @brief  インゲーム画面
+ *
+ * @author yamawaki kota
+ * @date   December 6 2021
+ *********************************************************************/
 #pragma once
 #include "AppFrame.h"
 #include <memory>
 
 class CameraComponent;
-
+//class UIInGame;
 namespace MachineHuck::Scene {
 	/// @class   SceneInGame
 	/// @brief   インゲーム画面クラスの宣言
@@ -35,8 +35,6 @@ namespace MachineHuck::Scene {
 		/// 出口
 		void Exit() override;
 	private:
-		
-		
 	};
 }
 

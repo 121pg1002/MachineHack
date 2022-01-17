@@ -1,3 +1,10 @@
+/*****************************************************************//**
+ * @file   EffectWind.cpp
+ * @brief  風エフェクトクラス
+ *
+ * @author yamawaki kota
+ * @date   December 28 2021
+ *********************************************************************/
 #include "EffectWind.h"
 namespace MachineHuck::Effect {
     void EffectWind::LoadEffect(std::string _keyname, std::string _filepass, float expansion) {

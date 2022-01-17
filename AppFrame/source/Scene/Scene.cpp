@@ -39,3 +39,7 @@ Sound::SoundComponent& Scene::Scene::GetSoundComponent() {
 }
 
 
+/// UIコンポーネントの取得
+MachineHuck::UI::UIComponent& Scene::Scene::uiComponent() {
+	return _game.uiComponent();
+}
