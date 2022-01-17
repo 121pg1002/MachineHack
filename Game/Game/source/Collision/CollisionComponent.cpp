@@ -239,7 +239,7 @@ namespace MachineHuck::Collision {
         //‹éŒ`‚ÌÅ‘å“_
         auto max = act2.GetMax();
 
-        
+
         auto Length = 1.0;
 
         //æ‚É’PˆÊ‰~ã‚Å‰ñ“]‚³‚¹‚é

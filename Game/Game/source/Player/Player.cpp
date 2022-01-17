@@ -117,6 +117,9 @@ namespace MachineHuck::Player {
 		//動かないときの処理に使用
 		//auto oldMove = _move;
 
+
+		Math::Vector4 oldPos = _position;
+
 		Move();
 
 
@@ -157,13 +160,27 @@ namespace MachineHuck::Player {
 
 		_state->Update();
 		
-		if (_status != STATUS::HUCKED) {
-			_camera->Update(_move);
+		//if (_status != STATUS::HUCKED) {
+
+			
+
+		//地面に触れているかどうか
+		if (!CollisionFloor(oldPos)) {
+
+			Math::Vector4 zero = { 0.0, 0.0, 0.0 };
+			_camera->Update(zero);
 		}
 		else {
-			//ハッキング中は敵から移動量を取得
-			_camera->Update(_huckedMove);
+			_camera->Update(_move);
 		}
+			
+
+
+		//}
+		//else {
+		//	//ハッキング中は敵から移動量を取得
+		//	_camera->Update(_huckedMove);
+		//}
 
 		for (auto i = GetActorServer().GetActors().begin(); i != GetActorServer().GetActors().end(); i++)
 		{
@@ -231,6 +248,7 @@ namespace MachineHuck::Player {
 		_oldPos = _position;
 		//横方向の傾きと縦方向の傾きの大きさ
 		double length = sqrt(lx * lx + ly * ly);
+
 		if (length < _analogMin) {
 			// 入力が小さかったら動かなかったことにする
 			length = 0.0;
@@ -249,8 +267,10 @@ namespace MachineHuck::Player {
 		auto moveZ = sin(rad) * length;
 
 		_move = { moveX, 0.0, moveZ };
+
 		// 移動
 		_position = _position + _move;
+		
 		// ワールド行列の更新
 		ComputeWorldTransform();
 
@@ -578,7 +598,8 @@ namespace MachineHuck::Player {
 					//ハッキングした対象に追従
 				    _owner._position = (*i)->GetPosition();
 					_owner._rotation = (*i)->GetRotation();
-					_owner._huckedMove = (*i)->GetHuckedMove();
+					//_owner._huckedMove = (*i)->GetHuckedMove();
+					_owner._move = (*i)->GetHuckedMove();
 				}
 		}
 

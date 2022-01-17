@@ -41,8 +41,9 @@ namespace MachineHuck::Enemy {
 
 		//2つめの値がレベル
 		_r = eParam->GetEnemyParam("r", 0);
+		_r = 10.0;
 		//_huckR = eParam->GetEnemyParam("r", 1);
-		_huckR = 100.0;
+		_huckR = 50.0;
 
 		_searchRange = eParam->GetEnemyParam("searchrange", 1);
 		_huckingRange = eParam->GetEnemyParam("searchrange", 0);////////←とりあえず、仮
@@ -159,6 +160,8 @@ namespace MachineHuck::Enemy {
 				//Math::Vector4 rot = { 0.0, rotY, 0.0 };
 				//SetRotation(rot);
 				//LockOn();
+				
+
 
 				
 				//ComputeWorldTransform();
@@ -210,6 +213,7 @@ namespace MachineHuck::Enemy {
 	//ハッキングされたときの移動
 	void TackleEnemy::HuckedMove(double lx, double ly) {
 	
+
 		_move = { 0.0, 0.0, 0.0 };
 
 		//_oldPos = _position;
@@ -247,6 +251,8 @@ namespace MachineHuck::Enemy {
 
 		//主人公のカメラに移動量を送る
 		SetHuckedMove(_move);
+
+
 
 		// ワールド行列の更新
 		//ComputeWorldTransform();
@@ -293,51 +299,6 @@ namespace MachineHuck::Enemy {
 		//}
 	}
 
-	void TackleEnemy::StateBase::CollisionFloor(AppFrame::Math::Vector4 oldPos) {
-	
-		//Actorの方に移動した方がいいどのみち全部判定するから
-
-		// 移動した先でコリジョン判定
-		MV1_COLL_RESULT_POLY hitPoly;
-
-		auto handle = _owner.GetGame().GetAssetServer().GetModel("Dungeon");
-
-		for (auto i = _owner.GetActorServer().GetActors().begin(); i != _owner.GetActorServer().GetActors().end(); i++) {
-
-			if ((*i)->GetTypeId() != TypeId::Stage) {
-				continue;
-			}
-			else {
-
-				auto frameMapCollision = (*i)->GetCollision().GetMapCollision();
-
-				Math::Vector4 dif = { 0.0, 40.0, 0.0 };
-				Math::Vector4 under = { 0.0, -99999.0, 0.0 };
-				auto startPos = _owner.GetPosition() + dif;
-				auto endPos = _owner.GetPosition() + under;
-				// 主人公の腰位置から下方向への直線
-				hitPoly = MV1CollCheck_Line(handle.first, frameMapCollision, ToDX(startPos), ToDX(endPos));
-
-				if (hitPoly.HitFlag) {
-					// 当たった
-					// 当たったY位置をキャラ座標にする
-					_owner._position = { _owner.GetPosition().GetX(), hitPoly.HitPosition.y, _owner.GetPosition().GetZ() };
-
-					// カメラも移動する
-					//_cam._vPos = VAdd(_cam._vPos, v);
-					//_cam._vTarget = VAdd(_cam._vTarget, v);
-				}
-				else {
-					// 当たらなかった。元の座標に戻す
-					_owner._position = oldPos;
-				}
-
-			}
-
-		}
-
-	
-	}
 
 
 	void TackleEnemy::StateBase::Draw() {
@@ -570,12 +531,15 @@ namespace MachineHuck::Enemy {
 
 			//主人公の回転方向は反対向きのためマイナス
 			Math::Vector4 move = { std::cos(-rot.GetY() + nine), 0.0, std::sin(-rot.GetY() + nine) };
+
 			
 			//目線の先に目標をつくる
 			auto forward = move * length;
 
 			
 			_norm = forward.Normalize();
+
+
 
 		}
 		else {
@@ -614,8 +578,20 @@ namespace MachineHuck::Enemy {
 
 			_owner._position = _owner.GetPosition() + _norm * _speed;
 
-			//地面から出たかどうか
-			CollisionFloor(oldPos);
+
+			//地面と触れているかどうか
+			if (_owner.CollisionFloor(oldPos)) {
+
+				//主人公のカメラに移動量を送る
+				_owner.SetHuckedMove(_norm * _speed);
+			}
+			else {
+			
+				Math::Vector4 zero = { 0.0, 0.0, 0.0 };
+				//主人公のカメラに移動量を送る
+				_owner.SetHuckedMove(zero);
+			}
+			
 
 			if (_owner.IsHucked()) {
 
@@ -702,6 +678,7 @@ namespace MachineHuck::Enemy {
 		if (_owner.GetStatus() == STATUS::ISHUCKING)
 		{
 			auto player = _owner.GetActorServer().GetPosition("Player");
+
 			if (player.GetX() - 1 < _owner._position.GetX() && _owner._position.GetX() < player.GetX() + 1 && player.GetZ() - 1 < _owner._position.GetZ() && _owner._position.GetZ() < player.GetZ() + 1)
 			{
 				_owner.SetActorState(ActorState::Hucked);
@@ -722,43 +699,39 @@ namespace MachineHuck::Enemy {
 	
 		auto& joypad = input.GetJoypad();
 		auto& key = input.GetKeyBoard();
-		auto lx = 0.0, ly = 0.0;
+		_lx = 0.0, _ly = 0.0;
 
 		   // 右移動と左移動
 			if (joypad.LHorison() != 0.0)
 			{
-				lx = input.GetJoypad().LHorison() / 1000.0;
+				_lx = input.GetJoypad().LHorison() / 1000.0;
 			}
 			else if (key.Button_D() != 0)
 			{
-				lx = 1.0;
+				_lx = 1.0;
 			}
 			else if (key.Button_A() != 0)
 			{
-				lx = -1.0;
+				_lx = -1.0;
 			}
 
 			// 前進と後退
 			if (input.GetJoypad().LVertical() != 0.0)
 			{
-				ly = input.GetJoypad().LVertical() / 1000.0;
+				_ly = input.GetJoypad().LVertical() / 1000.0;
 			}
 			else if (key.Button_W() != 0)
 			{
-				ly = 1.0;
+				_ly = 1.0;
 			}
 			else if (key.Button_S() != 0)
 			{
-				ly = -1.0;
+				_ly = -1.0;
 			}
 		
 		if (input.GetJoypad().Button_RT()) {
 			
 			_owner._state->GoToState("Tackle");
-
-		}
-		else {
-			_owner.HuckedMove(lx, ly);
 		}
 		
 	}
@@ -771,6 +744,17 @@ namespace MachineHuck::Enemy {
 		//	_owner._state->GoToState("Run");
 		//	_owner._status = STATUS::CHASE;
 		//}
+		//移動時にフロアの壁との判定を取る
+		Math::Vector4 oldPos = _owner.GetPosition();
+		_owner.HuckedMove(_lx, _ly);
+
+		//地面と触れているかどうか
+		if (!_owner.CollisionFloor(oldPos)) {
+			Math::Vector4 zero = { 0.0, 0.0, 0.0 };
+			//主人公のカメラに移動量を送る
+			_owner.SetHuckedMove(zero);
+		}
+
 
 		if (_owner.GetActorState() != ActorState::Hucked)
 		{

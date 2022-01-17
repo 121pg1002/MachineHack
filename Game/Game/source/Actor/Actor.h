@@ -88,6 +88,13 @@ namespace MachineHuck::Actor {
              */
             bool IsHucked() const { return (_actorState == ActorState::Hucked); }
 
+            /**
+             * @brief ステージフロアとの当たり判定
+             * @param oldPos 
+             * @return 当たっているか当たっていないか
+             */
+            bool CollisionFloor(AppFrame::Math::Vector4 oldPos);//←これはActorに持ってったほうがいい
+
 
             /**
              * @brief  ハッキングしたときの敵の移動量を取得         

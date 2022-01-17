@@ -37,6 +37,51 @@ namespace MachineHuck::Actor {
 		_worldTransform = MMult(world, MGetTranslate(ToDX(_position)));
 	}
 
+	bool Actor::CollisionFloor(AppFrame::Math::Vector4 oldPos) {
+
+		//Actorの方に移動した方がいいどのみち全部判定するから
+
+		// 移動した先でコリジョン判定
+		MV1_COLL_RESULT_POLY hitPoly;
+
+		auto handle = GetGame().GetAssetServer().GetModel("Dungeon");
+
+		for (auto i = GetActorServer().GetActors().begin(); i != GetActorServer().GetActors().end(); i++) {
+
+			if ((*i)->GetTypeId() != TypeId::Stage) {
+				continue;
+			}
+			else {
+
+				auto frameMapCollision = (*i)->GetCollision().GetMapCollision();
+
+				Math::Vector4 dif = { 0.0, 40.0, 0.0 };
+				Math::Vector4 under = { 0.0, -99999.0, 0.0 };
+				auto startPos = _position + dif;
+				auto endPos = _position + under;
+				// 主人公の腰位置から下方向への直線
+				hitPoly = MV1CollCheck_Line(handle.first, frameMapCollision, ToDX(startPos), ToDX(endPos));
+
+				if (hitPoly.HitFlag) {
+					// 当たった
+					// 当たったY位置をキャラ座標にする
+					_position = { _position.GetX(), hitPoly.HitPosition.y, _position.GetZ() };
+					return true;
+				}
+				else {
+					// 当たらなかった。元の座標に戻す
+					_position = oldPos;
+
+					return false;
+				}
+
+			}
+
+		}
+
+
+	}
+
 	ActorServer& Actor::GetActorServer() {
 		return _game.GetActorServer();
 	}
