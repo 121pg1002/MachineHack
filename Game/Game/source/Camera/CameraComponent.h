@@ -1,10 +1,11 @@
-///
-/// @file    CameraComponent.h
-/// @brief   カメラコンポーネント
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   CameraComponent.h
+ * @brief  カメラコンポーネント
+ *
+ * @author yamawaki kota
+ * @date   December 19 2021
+ *********************************************************************/
+
 #pragma once
 #include <utility>
 #include <memory>

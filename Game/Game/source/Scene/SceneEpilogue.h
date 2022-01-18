@@ -1,10 +1,11 @@
-///
-/// @file    SceneEpilogue.h
-/// @brief   タイトル画面
-/// @date    2021/12/06
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   SceneEpilogue.h
+ * @brief  エピローグ画面
+ *
+ * @author yamawaki kota
+ * @date   December 6 2021
+ *********************************************************************/
+
 #pragma once
 #include "AppFrame.h"
 

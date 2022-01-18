@@ -1,11 +1,11 @@
-///
-/// @file    Scene.cpp
-/// @brief   シーンの基底クラス
-///          各シーンはこのクラスを継承する
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file  Scene.cpp
+ * @brief シーンの基底クラス
+ *
+ * @author Kota Yamawaki
+ * @date   November 26 2021
+*********************************************************************/
+
 #include "Scene.h"
 #include "../Game.h"
 
@@ -36,6 +36,11 @@ Scene::SceneServer& Scene::Scene::GetSceneServer() {
 
 Sound::SoundComponent& Scene::Scene::GetSoundComponent() {
 	return _game.GetSoundComponent();
+}
+
+/// UIコンポーネントの取得
+MachineHuck::UI::UIComponent& Scene::Scene::GetUiComponent() {
+	return _game.GetUiComponent();
 }
 
 

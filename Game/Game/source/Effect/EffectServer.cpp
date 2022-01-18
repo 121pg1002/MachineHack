@@ -1,10 +1,11 @@
-///
-/// @file    EffectServer.cpp
-/// @brief   コリジョン判定
-/// @date    2021/12/6
-/// @author 
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   EffectServer.cpp
+ * @brief  エフェクトサーバー
+ *
+ * @author yamawaki kota
+ * @date   December 28 2021
+ *********************************************************************/
+
 #include "EffectServer.h"
 namespace MachineHuck::Effect {
 	std::unordered_map<std::string, std::pair<int, std::string >> EffectServer::_effects;

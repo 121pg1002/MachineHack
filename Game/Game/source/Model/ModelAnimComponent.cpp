@@ -1,10 +1,11 @@
-///
-/// @file    ModelAnimComponent.cpp
-/// @brief   アニメーションモデル用のコンポーネント
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   ModelAnimComponent.cpp
+ * @brief  アニメーションモデル用のコンポーネント
+ *
+ * @author yamawaki kota
+ * @date   December 6 2021
+ *********************************************************************/
+
 #include "ModelAnimComponent.h"
 #include <DxLib.h>
 #include "AppFrame.h"

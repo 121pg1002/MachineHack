@@ -38,6 +38,15 @@ namespace MachineHuck::Scene {
         auto& sc = GetSoundComponent();
         sc.PlayLoop("bgm1");
         sc.SetVolume("bgm1", 50);
+        shader.Init(" shader/Texture0.bmp", "shader / VertexShader.vso", "shader / PixelShader.pso");
+        shader.MakeVertex(VGet(100.0f, 356.0f, 0.0f), GetColorU8(255, 255, 255, 255), 0.0f, 0.0f);
+        shader.MakeVertex(VGet(356.0f, 356.0f, 0.0f), GetColorU8(255, 255, 255, 255), 1.0f, 0.0f);
+        shader.MakeVertex(VGet(100.0f, 100.0f, 0.0f), GetColorU8(255, 255, 255, 255), 0.0f, 1.0f);
+        shader.MakeVertex(VGet(356.0f, 100.0f, 0.0f), GetColorU8(255, 255, 255, 255), 1.0f, 1.0f);
+        shader.MakeVertex(VGet(100.0f, 100.0f, 0.0f), GetColorU8(255, 255, 255, 255), 0.0f, 1.0f);
+        shader.MakeVertex(VGet(356.0f, 356.0f, 0.0f), GetColorU8(255, 255, 255, 255), 1.0f, 0.0f);
+        shader.SetShader();
+
     }
     ///
     /// “üŒû
@@ -55,12 +64,15 @@ namespace MachineHuck::Scene {
             _alpha = 255;
         }
         if (input.GetJoypad().Button_A()) {
-            GetSceneServer().GoToScene("InGame");
+            //GetSceneServer().GoToScene("InGame");
+            GetSceneServer().GoToScene("Prologue");
             _alpha = 255;
             return;
         }
         if (input.GetKeyBoard().Button_Enter()) { 
-            GetSceneServer().GoToScene("InGame");
+            GetSceneServer().GoToScene("Prologue");
+            //GetSceneServer().GoToScene("InGame");
+
             _alpha = 255;
             return;
         }
@@ -79,6 +91,7 @@ namespace MachineHuck::Scene {
         DrawGraph(1920 / 2 - 1135 / 2, 700 - 107 / 2, _leftClickToStart, TRUE);
         SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
         DrawGraph(0, 0, _gameTitleHandle, TRUE);
+        shader.Draw(2);
     }
 }
 

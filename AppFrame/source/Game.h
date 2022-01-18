@@ -33,6 +33,11 @@ namespace MachineHuck::Actor {
 	class ActorServer;
 }
 
+namespace MachineHuck::UI {
+	class UIComponent;
+	class SpriteServer;
+}
+
 namespace MachineHuck::Stage {
 	class StageParameter;
 }
@@ -84,6 +89,12 @@ namespace AppFrame {
 		/// サウンドコンポーネントの取得
 		/// @return サウンドコンポーネントの参照
 		Sound::SoundComponent& GetSoundComponent() const { return *_sound; };
+		/// スプライトサーバーの取得
+        /// @return スプライトサーバーの参照
+		MachineHuck::UI::SpriteServer& spriteServer() const { return *_spriteServer; }
+		/// UIコンポーネントの取得
+        /// @return UIコンポーネントの参照
+		MachineHuck::UI::UIComponent& GetUiComponent() const { return *_ui; }
 
 		/**
 		 * @brief ステージパラメーターの取得
@@ -109,7 +120,11 @@ namespace AppFrame {
 		std::unique_ptr<Input::InputComponent> _input;
 		/// サウンドコンポーネントのユニークポインタ
 		std::unique_ptr<Sound::SoundComponent> _sound;
-
+		/// スプライトサーバーの取得
+		/// スプライトサーバーのユニークポインタ
+		std::unique_ptr<MachineHuck::UI::SpriteServer> _spriteServer;
+		/// UIコンポーネントのユニークポインタ
+		std::unique_ptr<MachineHuck::UI::UIComponent> _ui;
 		std::unique_ptr<MachineHuck::Stage::StageParameter> _stageParam;//!< 
 
 	};

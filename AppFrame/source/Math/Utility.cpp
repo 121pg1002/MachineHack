@@ -1,10 +1,11 @@
-/**
- * @file   Utility.h
- * @brief  便利な機能クラス
+/*****************************************************************//**
+ * @file  Utility.cpp
+ * @brief 便利な機能クラス
  *
  * @author Hikaru Goto
- * @date   2021/11/30
- */
+ * @date   November 30 2021
+*********************************************************************/
+
 
 #include "../AppFrame/source/Math/Vector4.h"
 #include "../AppFrame/source/Math/Utility.h"

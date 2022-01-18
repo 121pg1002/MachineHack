@@ -1,10 +1,11 @@
-///
-/// @file    Actor.h
-/// @brief   アクター
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   Actor.h
+ * @brief  アクタークラス
+ *
+ * @author yamawaki kota
+ * @date   December 19 2021
+ *********************************************************************/
+
 #pragma once
 #include <memory>
 #include <DxLib.h>

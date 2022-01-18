@@ -1,10 +1,11 @@
-///
-/// @file    AssetServer.h
-///   アセットサーバー
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   AssetServer.h
+ * @brief  アセットサーバー
+ *
+ * @author Kota Yamawaki
+ * @date   November 26 2021
+ *********************************************************************/
+
 #pragma once
 #include <filesystem>
 #include <unordered_map>
@@ -72,7 +73,7 @@ namespace AppFrame {
 			/// @param[in] no  分割時の番号
 			/// @return 画像のハンドル
 			virtual int GetTexture(std::string_view key, int no = 0);
-
+			virtual bool GetTextures(std::string_view key, std::vector<int>& outHandles);
 			/// 画像ハンドルの分割数の取得
 			/// @param[in] key 登録済みのキー
 			/// @return 分割総数
@@ -124,17 +125,6 @@ namespace AppFrame {
 			/// @return 音ファイル名, ハンドル
 			virtual std::pair<std::string, int> GetSoundInfo(std::string_view key);
 
-			///**
-			// * @brief  マップコリジョンを取得
-			// * @return _frameMapCollision
-			// */
-			//int GetMapCollision() { return _frameMapCollision; };
-
-			///**
-			// * @brief マップコリジョンを設定
-			// * @param frameMapCollision コリジョン情報
-			// */
-			//void SetMapCollision(int frameMapCollision);
 		private:
 			Game& _game;
 
@@ -148,7 +138,7 @@ namespace AppFrame {
 			/// 任意の文字列をキーにしてモデルファイル名とハンドルのペアを管理
 			std::unordered_map<std::string, std::pair<std::string, std::vector<int>>> _models;
 
-			//int _frameMapCollision; //!< マップのコリジョン情報
+ 
 		};
 	}
 

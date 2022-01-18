@@ -79,6 +79,8 @@ namespace MachineHuck::Player {
         int _huckCount{ 0 };
 
         bool _isHit; //!< 扇形の確認(仮)
+    private:
+        float _hp{ 100 };//プレイヤーのエネルギー残量
 
     public:
         /// @class  StateBase

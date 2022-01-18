@@ -7,6 +7,8 @@
 ///
 #pragma once
 #include "AppFrame.h"
+#include "../Shader/Shader.h" //田川　シェーダー描画サンプル用に追加（以下サンプル描画用に追加したコードは//tで表す）
+
 namespace AppFrame::Input {
 	class InputComponent;
 }
@@ -37,6 +39,7 @@ namespace MachineHuck::Scene {
 		int _leftClickToStart{ -1 }; ///< Left click to Start画像
 		int _titleBgHandle{ -1 };    ///< 背景画像
 		int _alpha{ 0 };
+		Shader shader;
 	};
 }
 

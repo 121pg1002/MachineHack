@@ -49,11 +49,17 @@
     <ClCompile Include="source\Scene\SceneAMG.cpp" />
     <ClCompile Include="source\Scene\SceneEpilogue.cpp" />
     <ClCompile Include="source\Scene\SceneInGame.cpp" />
+    <ClCompile Include="source\Scene\ScenePrologue.cpp" />
     <ClCompile Include="source\Scene\SceneTeam.cpp" />
     <ClCompile Include="source\Scene\SceneTitle.cpp" />
+    <ClCompile Include="source\Shader\Shader.cpp" />
     <ClCompile Include="source\Stage\Stage.cpp" />
     <ClCompile Include="source\Stage\StageParameter.cpp" />
     <ClCompile Include="source\State\StateComponent.cpp" />
+    <ClCompile Include="source\UI\AnimeSprite.cpp" />
+    <ClCompile Include="source\UI\Sprite.cpp" />
+    <ClCompile Include="source\UI\SpriteServer.cpp" />
+    <ClCompile Include="source\UI\UIComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Actor\Actor.h" />
@@ -86,11 +92,18 @@
     <ClInclude Include="source\Scene\SceneAMG.h" />
     <ClInclude Include="source\Scene\SceneEpilogue.h" />
     <ClInclude Include="source\Scene\SceneInGame.h" />
+    <ClInclude Include="source\Scene\ScenePrologue.h" />
     <ClInclude Include="source\Scene\SceneTeam.h" />
     <ClInclude Include="source\Scene\SceneTitle.h" />
+    <ClInclude Include="source\Shader\Shader.h" />
     <ClInclude Include="source\Stage\Stage.h" />
     <ClInclude Include="source\Stage\StageParameter.h" />
+    <ClInclude Include="source\State\StateBaseRoot.h" />
     <ClInclude Include="source\State\StateComponent.h" />
+    <ClInclude Include="source\UI\AnimeSprite.h" />
+    <ClInclude Include="source\UI\Sprite.h" />
+    <ClInclude Include="source\UI\SpriteServer.h" />
+    <ClInclude Include="source\UI\UIComponent.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

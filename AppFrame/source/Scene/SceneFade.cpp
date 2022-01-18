@@ -1,11 +1,11 @@
-///
-/// @file    SceneFade.cpp
-/// @brief   シーンのフェードクラス
-///          画面の最前面にフルスクリーンサイズの画像を重ねてアルファ値によるフェードを行う
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file  SceneFade.cpp
+ * @brief シーンのフェードクラス 画面の最前面にフルスクリーンサイズの画像を重ねてアルファ値によるフェードを行う
+ *
+ * @author Kota Yamawaki
+ * @date   November 26 2021
+*********************************************************************/
+
 #include "SceneFade.h"
 #include "SceneServer.h"
 #include <DxLib.h>

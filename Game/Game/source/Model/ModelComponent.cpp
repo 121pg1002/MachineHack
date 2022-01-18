@@ -1,10 +1,11 @@
-///
-/// @file    ModelComponent.cpp
-/// @brief   スタティックモデル用のコンポーネント
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   ModelComponent.cpp
+ * @brief  スタティックモデル用のコンポーネント
+ *
+ * @author yamawaki kota
+ * @date   December 6 2021
+ *********************************************************************/
+
 #include "ModelComponent.h"
 #include "../Actor/Actor.h"
 #include "AppFrame.h"

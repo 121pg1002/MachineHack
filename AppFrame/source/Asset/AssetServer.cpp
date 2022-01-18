@@ -1,10 +1,11 @@
-///
-/// @file    AssetServer.cpp
-/// @brief   アセットサーバー
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   AssetServer.cpp
+ * @brief  アセットサーバー
+ *
+ * @author Kota Yamawaki
+ * @date   November 26 2021
+ *********************************************************************/
+
 #include "AssetServer.h"
 #include <DxLib.h>
 
@@ -63,6 +64,16 @@ int Asset::AssetServer::GetTexture(std::string_view key, int no) {
   auto&& [divGraph, handles] = _textures[key.data()];
 	auto handle = handles.at(no);
 	return handle;
+}
+
+bool Asset::AssetServer::GetTextures(std::string_view key, std::vector<int>& outHandles) {
+    if (!_textures.contains(key.data())) {
+        return false;
+    }
+    auto&& [divGraph, handles] = _textures[key.data()];
+    outHandles.resize(handles.size());
+    outHandles = handles;
+    return true;
 }
 /// 画像ハンドルの分割数の取得
 int Asset::AssetServer::GetTextureCount(std::string_view& key) {

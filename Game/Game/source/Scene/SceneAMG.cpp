@@ -1,10 +1,11 @@
-///
-/// @file    SceneTitle.cpp
-/// @brief   É^ÉCÉgÉãâÊñ 
-/// @date    2021/12/06
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   SceneAMG.cpp
+ * @brief  AMGÉçÉSâÊñ 
+ *
+ * @author yamawaki kota
+ * @date   December 6 2021
+ *********************************************************************/
+
 #include "AppFrame.h"
 #include "SceneAMG.h"
 #include <DxLib.h>

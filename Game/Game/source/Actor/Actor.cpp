@@ -1,10 +1,11 @@
-///
-/// @file    Actor.cpp
-/// @brief   アクター
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   Actor.cpp
+ * @brief  アクタークラス
+ *
+ * @author yamawaki kota
+ * @date   December 19 2021
+ *********************************************************************/
+
 #include "AppFrame.h"
 #include "Actor.h"
 #include "ActorServer.h"

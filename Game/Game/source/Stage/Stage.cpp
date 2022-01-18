@@ -1,10 +1,11 @@
-///
-/// @file    Stage.cpp
-/// @brief   ステージ
-/// @date    2021/12/06
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   Stage.cpp
+ * @brief  ステージ
+ *
+ * @author yamawaki kota, hikaru goto
+ * @date   December 6 2021
+ *********************************************************************/
+
 
 #include "Stage.h"
 #include <DxLib.h>

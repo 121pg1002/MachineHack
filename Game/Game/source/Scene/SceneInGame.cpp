@@ -1,16 +1,19 @@
-///
-/// @file    SceneInGame.cpp
-/// @brief   インゲーム画面
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
-#include "AppFrame.h"
+/*****************************************************************//**
+ * @file   SceneInGame.cpp
+ * @brief  インゲーム画面
+ *
+ * @author yamawaki kota
+ * @date   December 6 2021
+ *********************************************************************/
+
+
 #include "SceneInGame.h"
+#include <numbers>
+#include "AppFrame.h"
 #include "../Actor/ActorServer.h"
 #include "../Actor/ActorFactory.h"
-#include <numbers>
 #include "../Enemy/EnemyParameter.h"
+#include "../UI/UIComponent.h"
 
 namespace MachineHuck::Scene {
     /// コンストラクタ
@@ -40,7 +43,12 @@ namespace MachineHuck::Scene {
         };
         // モデルの読み込み
         GetAssetServer().LoadModels(usedInGame);                                                         //追加
-    
+            // 使用するテクスチャ
+        AppFrame::Asset::AssetServer::TextureMap TexUsed{
+          {"BarFrame", {"BarFrame.png", 1, 1, 340, 50}}
+        };
+        // テクスチャの読み込み
+        GetAssetServer().LoadTextures(TexUsed);
 
     }
     /// 入口
@@ -122,6 +130,8 @@ namespace MachineHuck::Scene {
         as.Register("Player", pos_dir);
         as.Add(std::move(player));
 
+        GetUiComponent().Enter();
+
         // 疑似乱数
         //std::random_device seed;
         //std::mt19937 engine{seed()};
@@ -145,11 +155,13 @@ namespace MachineHuck::Scene {
     void SceneInGame::Update() {
         GetActorFactory().UpdateSpawn();
         GetActorServer().Update();
+        GetUiComponent().Update();
     }
 
     /// 描画
     void SceneInGame::Render() {
         GetActorServer().Render();
+        GetUiComponent().Render();
     }
     /// 出口
     void SceneInGame::Exit() {

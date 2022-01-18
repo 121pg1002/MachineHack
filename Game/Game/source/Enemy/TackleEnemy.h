@@ -113,7 +113,7 @@ namespace MachineHuck::Enemy {
         class StateTackle : public StateBase {
         public:
             StateTackle(TackleEnemy& owner);
-            void Enter();
+            void Enter() override;
             void Update() override;
         private:
             int _tackleTime;

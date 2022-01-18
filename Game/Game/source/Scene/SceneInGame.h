@@ -1,10 +1,11 @@
-///
-/// @file    SceneInGame.h
-/// @brief   インゲーム画面
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   SceneInGame.h
+ * @brief  インゲーム画面
+ *
+ * @author yamawaki kota
+ * @date   December 6 2021
+ *********************************************************************/
+
 #pragma once
 #include "AppFrame.h"
 #include <memory>

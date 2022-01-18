@@ -1,17 +1,21 @@
-///
-/// @file    Scene.h
-/// @brief   シーンの基底クラス
-///          各シーンはこのクラスを継承する
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file  Scene.h
+ * @brief シーンの基底クラス
+ *
+ * @author Kota Yamawaki
+ * @date   November 26 2021
+*********************************************************************/
+
 #pragma once
 #include <memory>
 
 namespace MachineHuck::Actor {
 	class ActorServer;
 	class ActorFactory;
+}
+
+namespace MachineHuck::UI {
+	class UIComponent;
 }
 
 namespace AppFrame {
@@ -78,6 +82,10 @@ namespace AppFrame::Scene {
 		/// サウンドコンポーネントの取得
 		/// @return サウンドコンポーネントの参照
 		Sound::SoundComponent& GetSoundComponent();
+		/// UIコンポーネントの取得
+		/// @return UIコンポーネントの参照
+		MachineHuck::UI::UIComponent& GetUiComponent();
+
 	private:
 		/// ゲームクラスの参照
 		Game& _game;

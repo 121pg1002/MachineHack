@@ -1,10 +1,11 @@
-///
-/// @file    SceneServer.h
-/// @brief   シーンサーバークラスの宣言
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file  SceneServer.h
+ * @brief シーンサーバー
+ *
+ * @author Kota Yamawaki
+ * @date   November 26 2021
+*********************************************************************/
+
 #pragma once
 #include <memory>
 #include <unordered_map>

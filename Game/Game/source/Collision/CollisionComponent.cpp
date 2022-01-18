@@ -1,10 +1,11 @@
-///
-/// @file    CollisionComponent.cpp
-/// @brief   コリジョン判定
-/// @date    2021/12/6
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   CollisionComponent.cpp
+ * @brief  衝突判定クラス
+ *
+ * @author yamawaki kota, hikaru goto
+ * @date   December 19 2021
+ *********************************************************************/
+
 #include "CollisionComponent.h"
 #include <cmath>
 #include <numbers>

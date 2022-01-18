@@ -1,10 +1,10 @@
-///
-/// @file    SoundComponent.cpp
-/// @brief   音入力コンポーネント
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file  SoundComponent.cpp
+ * @brief 音入力コンポーネント
+ *
+ * @author Kota Yamawaki
+ * @date   November 26 2021
+*********************************************************************/
 #include "../Asset/AssetServer.h"
 #include "SoundComponent.h"
 #include "../Game.h"

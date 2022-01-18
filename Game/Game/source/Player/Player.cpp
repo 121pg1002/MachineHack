@@ -14,6 +14,8 @@
 #include "../Collision/CollisionComponent.h"
 #include "../Enemy/TackleEnemy.h"
 #include "../Gauge/GaugeBase.h"
+#include "../UI/UIComponent.h"
+
 
 #include <numbers>
 
@@ -179,6 +181,8 @@ namespace MachineHuck::Player {
 		//	//ナビメッシュに収まっている場合
 			_camera->Update(_move);
 		//}
+					//エネルギー残量ゲージの設定
+			GetGame().GetUiComponent().UpdatePlayerHp(_hp, 100);
 
 		for (auto i = GetActorServer().GetActors().begin(); i != GetActorServer().GetActors().end(); i++)
 		{
@@ -265,9 +269,17 @@ namespace MachineHuck::Player {
 		if (length < _analogMin) {
 			// 入力が小さかったら動かなかったことにする
 			length = 0.0;
+			_hp++;
 		}
 		else {
 			length = 5.0;
+			_hp -= 0.1f;//エネルギー現象
+		}
+		if (_hp < 0) {
+			_hp = 0;
+		}
+		if (_hp > 100) {
+			_hp = 100;
 		}
 
 		//横方向と縦方向の角度
