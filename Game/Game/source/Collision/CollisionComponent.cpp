@@ -6,12 +6,12 @@
 /// @copyright (C) Amusement Media Academy All rights Resved.
 ///
 #include "CollisionComponent.h"
-
+#include <cmath>
+#include <numbers>
 #include "../Actor/Actor.h"
 #include "../Actor/ActorServer.h"
 #include "../Model/ModelAnimComponent.h"
-#include <cmath>
-#include <numbers>
+
 
 
 //Sphere::Sphere(const Math::Vector4& center, float radius)
@@ -37,6 +37,7 @@
 namespace MachineHuck::Collision {
 
     CollisionComponent::CollisionComponent(Actor::Actor& owner) : _owner{ owner } {
+        _frameMapCollision = 0;
         /*_report = std::make_unique<Report>();*/
     }
 
@@ -239,18 +240,15 @@ namespace MachineHuck::Collision {
         //ãÈå`ÇÃç≈ëÂì_
         auto max = act2.GetMax();
 
-
-        auto Length = 1.0;
-
         //êÊÇ…íPà â~è„Ç≈âÒì]Ç≥ÇπÇÈ
-        auto leftUpX = (min.GetX() * move.GetX() - max.GetZ() * move.GetZ()) * Length;
-        auto leftUpZ = (min.GetX() * move.GetZ() + max.GetZ() * move.GetX()) * Length;
-        auto leftDownX = (min.GetX() * move.GetX() - min.GetZ() * move.GetZ()) * Length;
-        auto leftDownZ = (min.GetX() * move.GetZ() + min.GetZ() * move.GetX()) * Length;
-        auto rightUpZ = (max.GetX() * move.GetZ() + max.GetZ() * move.GetX()) * Length;
-        auto rightUpX = (max.GetX() * move.GetX() - max.GetZ() * move.GetZ()) * Length;
-        auto rightDownX = (max.GetX() * move.GetX() - min.GetZ() * move.GetZ()) * Length;
-        auto rightDownZ = (max.GetX() * move.GetZ() + min.GetZ() * move.GetX()) * Length;
+        auto leftUpX    = min.GetX() * move.GetX() - max.GetZ() * move.GetZ();
+        auto leftUpZ    = min.GetX() * move.GetZ() + max.GetZ() * move.GetX();
+        auto leftDownX  = min.GetX() * move.GetX() - min.GetZ() * move.GetZ();
+        auto leftDownZ  = min.GetX() * move.GetZ() + min.GetZ() * move.GetX();
+        auto rightUpZ   = max.GetX() * move.GetZ() + max.GetZ() * move.GetX();
+        auto rightUpX   = max.GetX() * move.GetX() - max.GetZ() * move.GetZ();
+        auto rightDownX = max.GetX() * move.GetX() - min.GetZ() * move.GetZ();
+        auto rightDownZ = max.GetX() * move.GetZ() + min.GetZ() * move.GetX();
 
         //â~ÇÃíÜêSì_
         Math::Vector2 circlePosXZ = { act1.GetPosition().GetX(), act1.GetPosition().GetZ() };
@@ -286,50 +284,51 @@ namespace MachineHuck::Collision {
             return true;
         }
         
+           //ìñÇΩÇ¡ÇƒÇ¢Ç»Ç¢
             return false;
         
 
     }
 
 
-    bool CollisionComponent::CircleToLine(const Actor::Actor& act1, const Actor::Actor& act2)
-    {
-        Math::Vector4 start = act2.GetLMin() + act2.GetPosition() - act1.GetPosition();
-        Math::Vector4 end = act2.GetLMax() + act2.GetPosition() - act1.GetPosition();
-        double a = end.Dot(end);
-        double b = 2.0 * start.Dot(end);
-        double c = start.Dot(start) - act1.GetR() * act1.GetR();
+    //bool CollisionComponent::CircleToLine(const Actor::Actor& act1, const Actor::Actor& act2)
+    //{
+    //    Math::Vector4 start = act2.GetLMin() + act2.GetPosition() - act1.GetPosition();
+    //    Math::Vector4 end = act2.GetLMax() + act2.GetPosition() - act1.GetPosition();
+    //    double a = end.Dot(end);
+    //    double b = 2.0 * start.Dot(end);
+    //    double c = start.Dot(start) - act1.GetR() * act1.GetR();
 
-        double disc = b * b - 4.0f * a * c;
+    //    double disc = b * b - 4.0f * a * c;
 
-        if (disc < 0.0f)
-        {
-            return false;
-        }
-        else
-        {
-            disc = std::sqrt(disc);
+    //    if (disc < 0.0f)
+    //    {
+    //        return false;
+    //    }
+    //    else
+    //    {
+    //        disc = std::sqrt(disc);
 
-            double tMin = (-b - disc) / (2.0 * a);
-            double tMax = (-b + disc) / (2.0 * a);
-            if (tMin >= 0.0 && tMin <= 1.0)
-            {
-                //  outT = tMin;
-                return true;
-            }
-            else if (tMax >= 0.0 && tMax <= 1.0)
-            {
-                //  outT = tMax;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+    //        double tMin = (-b - disc) / (2.0 * a);
+    //        double tMax = (-b + disc) / (2.0 * a);
+    //        if (tMin >= 0.0 && tMin <= 1.0)
+    //        {
+    //           
+    //            return true;
+    //        }
+    //        else if (tMax >= 0.0 && tMax <= 1.0)
+    //        {
+    //           
+    //            return true;
+    //        }
+    //        else
+    //        {
+    //            return false;
+    //        }
+    //    }
 
-        return false;
-    }
+    //    return false;
+    //}
 
     bool CollisionComponent::CircleToLine(const Actor::Actor& act, const Math::Vector4 start, const Math::Vector4 end)
     {

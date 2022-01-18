@@ -1,10 +1,10 @@
-///
-/// @file    Player.cpp
-/// @brief   プレイヤー
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   Player.cpp
+ * @brief  プレイヤークラス
+ * 
+ * @author hikaru Goto
+ * @date   December 2021
+ *********************************************************************/
 #include "AppFrame.h"
 #include "Player.h"
 #include "../Enemy/EnemyBase.h"
@@ -13,6 +13,7 @@
 #include "../Model/ModelAnimComponent.h"
 #include "../Collision/CollisionComponent.h"
 #include "../Enemy/TackleEnemy.h"
+#include "../Gauge/GaugeBase.h"
 
 #include <numbers>
 
@@ -26,6 +27,7 @@ namespace MachineHuck::Player {
 		_isHit = false;
 		_searchRange = 60.0;
 		_huckingRange = 30.0;
+		_gaugeBase->Init();
 	}
 
 	//入力
@@ -37,7 +39,7 @@ namespace MachineHuck::Player {
 		lx = 0.0, ly = 0.0;
 
 
-		if (_status != STATUS::HUCKING && _status != STATUS::HUCKED)
+		if (_actorState != ActorState::Hucking && _actorState != ActorState::Hucked)
 		{   // 右移動と左移動
 			if (joypad.LHorison() != 0.0)
 			{
@@ -69,37 +71,37 @@ namespace MachineHuck::Player {
 
 		//***************//////////お試しで作ったハック用
 		//でもおそらく、ブレンドするから没になる
-		if (_huckcount <= 0)
+		if (_huckCount <= 0)
 		{
 
 			if (joypad.Button_RT())
 			{
-				//HUCKINGとHUCKEDで無かったら
-				if (_status != STATUS::HUCKING && _status != STATUS::HUCKED)
+				//HuckingとHuckedで無かったら
+				if (_actorState != ActorState::Hucking && _actorState != ActorState::Hucked)
 				{
-					_status = STATUS::HUCKING;
-					_huckcount = 200;
+					_actorState= ActorState::Hucking;
+					_huckCount = 200;
 				}
 
-				//if (_status == STATUS::HUCKED)//HUCKED中なら
+				//if (_actorState== ActorState::Hucked)//Hucked中なら
 				//{
-				//	_status = STATUS::WAIT;
-				//	_huckcount = 200;
+				//	_actorState= ActorState::Active;
+				//	_huckCount = 200;
 				//}
 			}
-			else if (_huckcount == 0 && _status != STATUS::HUCKED)
+			else if (_huckCount == 0 && _actorState != ActorState::Hucked)
 			{
-				_status = STATUS::WAIT;
+				_actorState= ActorState::Active;
 			}
 
-			if (joypad.Button_A() && _status == STATUS::HUCKED) {
-					_status = STATUS::WAIT;
-					_huckcount = 200;
+			if (joypad.Button_A() && _actorState == ActorState::Hucked) {
+					_actorState= ActorState::Active;
+					_huckCount = 200;
 			}
 
 		}
 
-		_huckcount--;
+		
 		/////********************//////////////////////////
 
 	  //if (_key.Button_C() != 0) 
@@ -123,20 +125,23 @@ namespace MachineHuck::Player {
 		Move();
 
 
+	
+
+
 
 		//// ステータスに合わせてアニメーションのアタッチ
 		//switch (_status) {
-		//case STATUS::WAIT:
+		//case ActorState::Active:
 		   // _model->ChangeAnime("Idle");
 		   // break;
-		//case STATUS::WALK:
+		//case ActorState::WALK:
 		   // _model->ChangeAnime("Run");
 		   // break;
 
-		//case STATUS::HUCKING:
+		//case ActorState::Hucking:
 		   // _model->ChangeAnime("Attack");
 
-		//case STATUS::HUCKED:
+		//case ActorState::Hucked:
 		   // _model->ChangeAnime("Idle");
 		//}
 
@@ -158,26 +163,21 @@ namespace MachineHuck::Player {
 
 		_state->Update();
 		
-		//if (_status != STATUS::HUCKED) {
+		//if (_actorState!= ActorState::Hucked) {
 
 			
 
-		//地面に触れているかどうか
-		if (!CollisionFloor(oldPos)) {
+		////地面のナビメッシュに触れているかどうか
+		//if (!CollisionFloor(oldPos)) {
 
-			Math::Vector4 zero = { 0.0, 0.0, 0.0 };
-			_camera->Update(zero);
-		}
-		else {
-			_camera->Update(_move);
-		}
-			
-
-
+		//	//ナビメッシュから出てしまう場合
+		//	Math::Vector4 zero = { 0.0, 0.0, 0.0 };
+		//	_camera->Update(zero);
 		//}
 		//else {
-		//	//ハッキング中は敵から移動量を取得
-		//	_camera->Update(_huckedMove);
+
+		//	//ナビメッシュに収まっている場合
+			_camera->Update(_move);
 		//}
 
 		for (auto i = GetActorServer().GetActors().begin(); i != GetActorServer().GetActors().end(); i++)
@@ -205,7 +205,7 @@ namespace MachineHuck::Player {
 				   // }
 				//}
 
-				//CircleとAABBの当たり判定を調べる
+				//Circleと扇形の当たり判定を調べる
 				if (_collision->CircleToFan(*this, **i))
 				{
 					_isHit = true;
@@ -219,6 +219,20 @@ namespace MachineHuck::Player {
 
 		}
 
+
+		_huckCount--;
+
+		if (_huckCount < 0) {
+
+			if (_actorState == ActorState::Hucking) {
+			
+				_actorState = ActorState::Active;
+			
+			}
+		
+
+		}
+
 	}
 
 	void Player::Draw() {
@@ -227,6 +241,7 @@ namespace MachineHuck::Player {
 #ifdef _DEBUG
 		_model->Draw(*this, _isHit, _searchRange, true);
 		_camera->Draw(_isHit);
+		_gaugeBase->Draw();
 #endif
 	}
 
@@ -293,16 +308,16 @@ namespace MachineHuck::Player {
 	}
 
 	/// 敵からの攻撃を確認
-	void Player::HitCheckFromEnemy() {
-		//auto& report = _collision->GetReport();
-		//if (report.id == CollisionComponent::ReportId::HitFromEnemy) {
-		//	_state->GoToState("KnockBack");
-		//	_game.GetSoundComponent().Play("damage");
+	//void Player::HitCheckFromEnemy() {
+	//	//auto& report = _collision->GetReport();
+	//	//if (report.id == CollisionComponent::ReportId::HitFromEnemy) {
+	//	//	_state->GoToState("KnockBack");
+	//	//	_game.GetSoundComponent().Play("damage");
 
-		//	auto backward = _position - report.position;
-		//	_backDelta = backward.Normalize() * 20;
-		//}
-	}
+	//	//	auto backward = _position - report.position;
+	//	//	_backDelta = backward.Normalize() * 20;
+	//	//}
+	//}
 
 	void Player::StateBase::Draw() {
 		_owner._model->Draw();
@@ -310,7 +325,7 @@ namespace MachineHuck::Player {
 	/// 待機
 	void Player::StateIdle::Enter() {
 		_owner._model->ChangeAnime("Idle", true);
-		//_status = STATUS::WAIT;
+		//_actorState= ActorState::Active;
 	}
 
 	void Player::StateIdle::Input(AppFrame::Input::InputComponent& input) {
@@ -332,14 +347,14 @@ namespace MachineHuck::Player {
 
 
 	void Player::StateIdle::Update() {
-		_owner.HitCheckFromEnemy();
+		//_owner.HitCheckFromEnemy();
 
 	}
 
 	/// 走り
 	void Player::StateRun::Enter() {
 		_owner._model->ChangeAnime("Run", true);
-		/*_status = STATUS::WALK;*/
+		/*_actorState= ActorState::WALK;*/
 	}
 
 
@@ -359,6 +374,7 @@ namespace MachineHuck::Player {
 
 	void Player::StateRun::Update() {
 		//_owner.HitCheckFromEnemy();
+		_owner.GetGaugeBase().Update(_owner);
 
 	}
 
@@ -428,13 +444,13 @@ namespace MachineHuck::Player {
 	void Player::StateHucking::Enter() {
 
 		_owner._model->ChangeAnime("Idle");
-		/*_status = STATUS::HUCKING;*/
+		/*_actorState= ActorState::Hucking;*/
 	}
 
 
 	void Player::StateHucking::Update() {
 
-		if (_owner._status != STATUS::HUCKING) {
+		if (_owner.GetActorState() != ActorState::Hucking) {
 			_owner._state->PopBack();
 			return;
 		}
@@ -472,7 +488,7 @@ namespace MachineHuck::Player {
 						////自分の中心が敵のハッキング範囲に入っているかどうか
 						if (_owner._collision->CircleToFan(**i, _owner, false)) {
 
-							if (_owner._status == STATUS::HUCKING)
+							if (_owner._actorState == ActorState::Hucking)
 							{
 
 								(*i)->SetActorState(ActorState::Hucking);
@@ -480,7 +496,7 @@ namespace MachineHuck::Player {
 								auto enem_pos = (*i)->GetPosition();
 
 								if (enem_pos.GetX() - 1 < _owner._position.GetX() && _owner._position.GetX() < enem_pos.GetX() + 1 && enem_pos.GetZ() - 1 < _owner._position.GetZ() && _owner._position.GetZ() < enem_pos.GetZ() + 1) {
-									_owner._status = STATUS::HUCKED;
+									_owner._actorState = ActorState::Hucked;
 									_owner._state->GoToState("Hucked");
 								}
 								else {
@@ -526,7 +542,7 @@ namespace MachineHuck::Player {
 							(*i)->SetIsHit(false);
 
 						}
-						//if (_status != STATUS::HUCKING && _status != STATUS::HUCKED)
+						//if (_actorState!= ActorState::Hucking && _actorState!= ActorState::Hucked)
 
 
 
@@ -546,6 +562,7 @@ namespace MachineHuck::Player {
 
 
 
+	
 		//if (freezeTime > 0) {
 		//	--freezeTime;
 		//}
@@ -560,7 +577,7 @@ namespace MachineHuck::Player {
 	void Player::StateHucked::Enter() {
 
 		_owner._model->ChangeAnime("Idle");
-		/*_status = STATUS::HUCKING;*/
+		/*_actorState= ActorState::Hucking;*/
 	}
 
 	void Player::StateHucked::Input(AppFrame::Input::InputComponent& input) {
@@ -587,33 +604,65 @@ namespace MachineHuck::Player {
 
 		for (auto i = _owner.GetActorServer().GetActors().begin(); i != _owner.GetActorServer().GetActors().end(); i++)
 		{
-				if ((*i)->GetActorState() != ActorState::Hucked)
+
+		//	if (!(*i)->IsDead()) {
+
+				if (!(*i)->IsHucked())
 				{
-					continue;
+
+					if ((*i)->GetGaugeBase().GetGauge() > 0) {
+						continue;
+					}
+					else {
+						_owner.SetActorState(ActorState::Active);
+						_owner._state->GoToState("Idle");
+					}
+
+					
 				}
 				else
 				{
 					//ハッキングした対象に追従
-				    _owner._position = (*i)->GetPosition();
+					_owner._position = (*i)->GetPosition();
 					_owner._rotation = (*i)->GetRotation();
-					//_owner._huckedMove = (*i)->GetHuckedMove();
-					_owner._move = (*i)->GetHuckedMove();
+					_owner._move     = (*i)->GetHuckedMove();
 				}
+		//	}
+			//else {
+
+			//	_owner._actorState= ActorState::Active;
+			//	_owner._state->GoToState("Idle");
+
+			//}
 		}
 
-		if (_owner._status != STATUS::HUCKED)
+		//プレイヤー側から解除した場合
+		if (_owner._actorState!= ActorState::Hucked)
 		{
 			for (auto i = _owner.GetActorServer().GetActors().begin(); i != _owner.GetActorServer().GetActors().end(); i++)
 			{
-				if ((*i)->GetActorState() != ActorState::Hucked)
-				{
-					continue;
-				}
-				else
-				{
-					(*i)->SetActorState(ActorState::Active);
-					_owner._state->GoToState("Idle");
-				}
+					//ハッキングされているか
+					if (!(*i)->IsHucked())
+					{
+						continue;
+					}
+					else {
+
+						auto enemyGauge = (*i)->GetGaugeBase().GetGauge();
+
+						//エネミーのゲージ量を加算
+						_owner.GetGaugeBase().PlusGauge(enemyGauge);
+
+						(*i)->SetActorState(ActorState::Active);
+						_owner._state->GoToState("Idle");
+
+					}
+				
+				
+
+					
+
+				
 
 			}
 

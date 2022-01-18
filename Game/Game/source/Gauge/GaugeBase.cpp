@@ -9,22 +9,76 @@
 #include "GaugeBase.h"
 #include <string>
 #include <DxLib.h>
+#include "../Actor/Actor.h"
 
-void GaugeBase::Init() {
+namespace MachineHuck::Gauge {
 
-    _gauge = 100;
+    GaugeBase::GaugeBase(Actor::Actor& act) : _actor{ act } {
+        _gaugeCount = 0;
+    }
 
-}
+    void GaugeBase::Init() {
+        _gauge = 100;
+        _gaugeCount = 0;
+    }
 
-void GaugeBase::Update() {
+    void GaugeBase::Update(Actor::Actor& act) {
 
+        if (_gaugeCount % 5 == 0) {
+            _gauge--;
+        }
+        _gaugeCount++;
+    }
 
+    void GaugeBase::DownGauge(const int gauge) {
+        _gauge -= gauge;
+    }
 
-}
-
-void GaugeBase::Draw() {
-
+    void GaugeBase::PlusGauge(const int gauge) {
     
-    DrawString(0, 0, );
+        _gauge += gauge;
 
+        //ç≈ëÂílÇí¥Ç¶ÇΩÇ©
+        if (_gauge > _gaugeMax) {
+        
+            _gauge = _gaugeMax;
+        }
+    
+    }
+
+#ifdef _DEBUG
+    void GaugeBase::Draw() {
+
+        auto gaugeStr = std::to_string(_gauge);
+        DrawString(10, 100, gaugeStr.c_str(), GetColor(255, 0, 0));
+       // DrawStringToZBuffer(10, 50, gaugeStr.c_str(), DX_ZWRITE_MASK);
+    }
+
+    void GaugeBase::Draw(Actor::Actor& act) {
+    
+        auto gaugeStr = std::to_string(_gauge);
+        DrawString(10, 200, gaugeStr.c_str(), GetColor(255, 0, 0));
+    
+    }
+
+#endif
+
+    bool GaugeBase::IsGaugeZero(Actor::Actor& act) {
+
+        //éÄñSèÛë‘Ç©Ç«Ç§Ç©
+        if (!act.IsDead()) {
+
+            //ÉQÅ[ÉWÇÃó Ç™0à»â∫Ç©
+            if (act.GetGaugeBase().GetGauge() <= 0) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        
+        }
+        return false;
+    }
 }
+
+

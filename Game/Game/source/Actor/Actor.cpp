@@ -12,12 +12,14 @@
 #include "../Model/ModelAnimComponent.h"
 #include "../State/StateComponent.h"
 #include "../Collision/CollisionComponent.h"
+#include "../Gauge/GaugeBase.h"
 
 namespace MachineHuck::Actor {
 
 	Actor::Actor(AppFrame::Game& game) : _game{ game }
 	{
 		_collision = std::make_unique<Collision::CollisionComponent>(*this);
+		_gaugeBase = std::make_unique<Gauge::GaugeBase>(*this);
 	}
 
 	Actor::~Actor() {
@@ -79,6 +81,7 @@ namespace MachineHuck::Actor {
 
 		}
 
+		return false;
 
 	}
 

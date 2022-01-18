@@ -1,10 +1,10 @@
-///
-/// @file    Player.h
-/// @brief   プレイヤー
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   Player.h
+ * @brief  プレイヤークラス
+ *
+ * @author hikaru Goto
+ * @date   December 2021
+ *********************************************************************/
 #pragma once
 #include "../Actor/Actor.h"
 #include "../State/StateComponent.h"
@@ -46,15 +46,15 @@ namespace MachineHuck::Player {
     protected:
         //float _angularSpeed{0};      //!< 旋回量
                   //!< 主人公の状態のクラス
-        enum class STATUS {
-            NONE,
-            WAIT,
-            WALK,
-            HUCKING,
-            HUCKED,
-            _EOT_
-        };
-        STATUS _status{ STATUS::WAIT };                  //!< 主人公の状態
+        //enum class STATUS {
+        //    NONE,
+        //    WAIT,
+        //    WALK,
+        //    HUCKING,
+        //    HUCKED,
+        //    _EOT_
+        //};
+        //STATUS _status{ STATUS::WAIT };                  //!< 主人公の状態
 
 
 
@@ -62,7 +62,7 @@ namespace MachineHuck::Player {
         /// 移動：向いてる方向に前進
         virtual void Move();
         /// 敵からの攻撃を確認
-        void HitCheckFromEnemy();
+        //void HitCheckFromEnemy();
 
         /////////////////////////////////////////////↓追加分
 
@@ -76,7 +76,7 @@ namespace MachineHuck::Player {
         double _analogMin{ 0.3 };        //!< アナログスティックの反応しない値
         double lx{ 0.0 }, ly{ 0.0 };                    //!< 左アナログスティックの傾き
 
-        int _huckcount{ 0 };
+        int _huckCount{ 0 };
 
         bool _isHit; //!< 扇形の確認(仮)
 

@@ -6,10 +6,11 @@
 /// @copyright (C) Amusement Media Academy All rights Resved.
 ///
 #pragma once
+#include <memory>
 #include <DxLib.h>
 #include "AppFrame.h"
 //#include "../Collision/CollisionBase.h"
-#include <memory>
+
 
 class Game;
 class ActorServer;
@@ -32,6 +33,10 @@ namespace MachineHuck::Camera {
 namespace MachineHuck::Collision {
     class CollisionComponent;
 }
+
+namespace MachineHuck::Gauge {
+    class GaugeBase;
+}
 //class CollisionBase;
 
 //namespace Camera = MachineHuck::Camera;
@@ -50,8 +55,6 @@ namespace MachineHuck::Actor {
                 Stage,
                 Gimmick
             };
-
-
 
             enum class ActorState {
                 Active,
@@ -196,6 +199,8 @@ namespace MachineHuck::Actor {
 
             Collision::CollisionComponent& GetCollision() { return *_collision; }
 
+            Gauge::GaugeBase& GetGaugeBase() { return *_gaugeBase; }
+
             void SetIsHit(bool isHit) { _isHit = isHit; };
 
         protected:
@@ -214,6 +219,7 @@ namespace MachineHuck::Actor {
             std::unique_ptr<Model::ModelAnimeComponent> _model;
             std::shared_ptr<Camera::CameraComponent> _camera;
             std::unique_ptr<Collision::CollisionComponent> _collision;
+            std::unique_ptr<Gauge::GaugeBase> _gaugeBase;              //!< ゲージベースクラスへのユニークポインタ
 
 
             //std::unique_ptr<CollisionBase> _collision;  //!< 当たり判定基底クラス用のポインタ

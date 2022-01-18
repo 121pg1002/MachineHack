@@ -1,17 +1,16 @@
-///
-/// @file    Enemy.cpp
-/// @brief  エネミー
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   TackleEnemy.h
+ * @brief  タックルする敵
+ *
+ * @author hikaru Goto
+ * @date   December 19 2021
+ *********************************************************************/
 #include "AppFrame.h"
 #include "TackleEnemy.h"
 #include "../Actor/ActorServer.h"
 #include "../Model/ModelAnimComponent.h"
-
 #include "../Collision/CollisionComponent.h"
-
+#include "../Gauge/GaugeBase.h"
 
 #include <cmath>
 #include <numbers>
@@ -32,6 +31,7 @@ namespace MachineHuck::Enemy {
 		_status = STATUS::WAIT;
 		_searchRange = 0.0;
 		_huckingRange = 0.0;
+		_gaugeBase->Init();
 	}
 
 	void TackleEnemy::LoadJson(const std::string& filepath)
@@ -106,6 +106,8 @@ namespace MachineHuck::Enemy {
 		_model->Draw(*this, _isHit, _searchRange, true);
 		_model->Draw(*this, _isHit, _huckingRange, false);
 		_model->Draw(*this, GetActorServer().GetPosition("Player"));
+
+		_gaugeBase->Draw(*this);
 #endif
 		_state->Draw();
 	}
@@ -170,7 +172,7 @@ namespace MachineHuck::Enemy {
 
 
 		}
-		else
+		else 
 		{
 			/// <summary>
 			///仮の動き(左右)
@@ -247,6 +249,9 @@ namespace MachineHuck::Enemy {
 
 		   Math::Vector4 rot = { 0.0, yRot, 0.0 };
 		   SetRotation(rot);
+
+		   //移動していたら減らす
+		   _gaugeBase->Update(*this);
 		}
 
 		//主人公のカメラに移動量を送る
@@ -513,6 +518,9 @@ namespace MachineHuck::Enemy {
 
 	void TackleEnemy::StateTackle::Enter() {
 
+		//ゲージ減少
+		_owner.GetGaugeBase().DownGauge(30);
+
 
 		_tackleTime = 60;
 
@@ -642,14 +650,35 @@ namespace MachineHuck::Enemy {
 	void TackleEnemy::StateTackleAfter::Update() {
 
 
-		if (_owner.GetStatus() == STATUS::ISHUCKING){
-			_owner._state->GoToState("IsHucking");
-			//_loseSightTime = 60;
+		if (_owner.GetGaugeBase().IsGaugeZero(_owner)) {
+			_owner._state->GoToState("Die");
+
+			for (auto&& actor : _owner.GetActorServer().GetActors()) {
+
+				if (actor->GetTypeId() != TypeId::Player) {
+					continue;
+				}
+				else {
+
+					actor->SetActorState(ActorState::Active);
+				}
+
+			}
+
 		}
-		else if (_owner.GetStatus() == STATUS::ISHUCKED) {
+		else {
 		
-			_owner._state->GoToState("IsHucked");
+			if (_owner.GetStatus() == STATUS::ISHUCKING) {
+				_owner._state->GoToState("IsHucking");
+				//_loseSightTime = 60;
+			}
+			else if (_owner.GetStatus() == STATUS::ISHUCKED) {
+				_owner._state->GoToState("IsHucked");
+			}
+		
 		}
+
+
 
 
 		if (_tackleAfterTime < 0) {
@@ -744,6 +773,8 @@ namespace MachineHuck::Enemy {
 		//	_owner._state->GoToState("Run");
 		//	_owner._status = STATUS::CHASE;
 		//}
+		 
+		
 		//移動時にフロアの壁との判定を取る
 		Math::Vector4 oldPos = _owner.GetPosition();
 		_owner.HuckedMove(_lx, _ly);
@@ -754,9 +785,33 @@ namespace MachineHuck::Enemy {
 			//主人公のカメラに移動量を送る
 			_owner.SetHuckedMove(zero);
 		}
+		else {
+		}
 
 
-		if (_owner.GetActorState() != ActorState::Hucked)
+
+		//ゲージが0かどうか
+		if (_owner.GetGaugeBase().IsGaugeZero(_owner)) {
+
+			_owner._state->GoToState("Die");
+			_owner._status = STATUS::DYING;
+
+			for (auto&& actor : _owner.GetActorServer().GetActors()) {
+			
+				if (actor->GetTypeId() != TypeId::Player) {
+					continue;
+				}
+				else {
+				
+					actor->SetActorState(ActorState::Active);
+				}
+			
+			}
+			
+		}
+
+		//ハッキングされているかどうか
+		if (!_owner.IsHucked())
 		{
 			_owner._state->GoToState("Die");
 			_owner._status = STATUS::DYING;

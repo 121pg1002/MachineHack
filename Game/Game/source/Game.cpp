@@ -29,12 +29,13 @@ bool AppFrame::Game::Initialize() {
   SetGraphMode(1920, 1080, 32);
   // ウィンドウモードに指定する
   ChangeWindowMode(true);
+
   // Dxライブラリ初期化
   if (DxLib_Init() == -1) {
     return false;
   }
                                                    //追加
-
+  
   // 画面の背景色を青に設定する
   SetBackgroundColor(100, 0, 255);
   // 描画先画面を裏にする

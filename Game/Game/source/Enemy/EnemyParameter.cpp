@@ -2,7 +2,7 @@
  * @file   EnemyParameter.cpp
  * @brief  エネミーのパラメーターをjsonから読み込む
  * 
- * @author hikaru  Goto
+ * @author hikaru Goto
  * @date   December 26 2021
  *********************************************************************/
 #include"../Enemy/EnemyParameter.h"

@@ -8,9 +8,10 @@
  *********************************************************************/
 
 #include <memory>
+#include <tuple>
 #include <DxLib.h>
 #include "AppFrame.h"
-#include <tuple>
+
 
 namespace Math = AppFrame::Math;
 
@@ -102,7 +103,7 @@ namespace MachineHuck::Collision {
 		 * @param  act2 ‘Šè
 		 * @return ¬”Û
 		 */
-		bool CircleToLine(const Actor::Actor& act1, const Actor::Actor& act2);
+		//bool CircleToLine(const Actor::Actor& act1, const Actor::Actor& act2);
 
 		/**
 		 * @brief  ‰~‚Æü•ª‚Ì“–‚½‚è”»’è‚ğs‚¤

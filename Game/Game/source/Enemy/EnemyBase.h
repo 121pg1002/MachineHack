@@ -1,10 +1,10 @@
-/**
+/*****************************************************************//**
  * @file   EnemyBase.h
  * @brief  エネミーの基底クラス
- *
- * @author Hikaru Goto
- * @date   2021/12/03
- */
+ * 
+ * @author hikaru Goto
+ * @date   December 19 2021
+ *********************************************************************/
 
 #pragma once
 #include "../Actor/Actor.h"

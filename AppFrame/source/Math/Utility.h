@@ -23,13 +23,13 @@ namespace AppFrame::Math
         *  @breif  角度からラジアンに変換
         *  @return ラジアン
         */
-        static double DegreeToRadian(float degree) {return degree * PI / DEGREES_180;}
+        static double DegreeToRadian(const double degree) {return degree * PI / DEGREES_180;}
 
         /*
         *  @breif  ラジアンから角度に変換
         *  @return 角度
         */
-        static double RadianToDegree(float radian) {return radian * DEGREES_180 / PI;}
+        static double RadianToDegree(const double radian) {return radian * DEGREES_180 / PI;}
 
         // 面の法線を求める
         static Vector4 Normal(const Vector4& point0, const Vector4& point1, const Vector4& point2);

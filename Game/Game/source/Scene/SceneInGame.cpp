@@ -102,6 +102,10 @@ namespace MachineHuck::Scene {
 
         //// アクターサーバーに登録※個別アクセス用
         auto& as = GetActorServer();
+
+        // ステージの生成と追加
+        auto stage = af.Create("Stage");
+        as.Add(std::move(stage));
         //for (int i = 0; i < 3; i++) 
         //{
         //    auto spawnTable = inGame[i];
@@ -124,9 +128,7 @@ namespace MachineHuck::Scene {
         //std::uniform_real_distribution<float> zPosition{1000, 2500};
         //std::uniform_real_distribution<float> forwardSpeed{3, 9};
 
-        // ステージの生成と追加
-        auto stage = af.Create("Stage");
-        as.Add(std::move(stage));
+
         Update();
     }
     /// 入力処理
