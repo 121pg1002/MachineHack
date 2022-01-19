@@ -10,7 +10,7 @@
 #include <DxLib.h>
 #include "AppFrame.h"
 #include "../Actor/Actor.h"
-#include <numbers>
+//#include <numbers>
 
 
 namespace MachineHuck::Model {
@@ -27,7 +27,7 @@ namespace MachineHuck::Model {
     void ModelAnimeComponent::Init() {
     }
     void ModelAnimeComponent::Register(std::string_view key, int animIndex) {
-        if (_registry.contains(key.data())) {
+        if (_registry.count(key.data()) != 0) {
             _registry.erase(key.data());
         }
         _registry.emplace(key, animIndex);
@@ -79,19 +79,19 @@ namespace MachineHuck::Model {
         auto rotY = -dir.GetY();
 
         //z軸を0度とするため
-        auto nine = std::numbers::pi / 180.0 * 90.0;
+        auto nine = DX_PI / 180.0 * 90.0;
 
-        auto nineReverse = std::numbers::pi / 180.0 * 270.0;
+        auto nineReverse = DX_PI / 180.0 * 270.0;
 
 
         //ハッキングのみ180度回転させる
-       /* auto reverse = std::numbers::pi / 180.0 * 180.0;*/
+       /* auto reverse = DX_PI / 180.0 * 180.0;*/
 
         ////円弧の方向ベクトル
         //double endAngle = 45.0;
         //double halfAngle = endAngle / 2.0;
-        //double Rad = std::numbers::pi / 180.0 * endAngle;
-        ////auto   halfRad = std::numbers::pi / 180.0 * halfAngle;
+        //double Rad = DX_PI / 180.0 * endAngle;
+        ////auto   halfRad = DX_PI / 180.0 * halfAngle;
 
         //Math::Vector4 _move = { std::cos(Rad), 0.0, std::sin(Rad) };
         //auto pos = owner.GetPosition();
@@ -112,7 +112,7 @@ namespace MachineHuck::Model {
         //{
         //    for (double i = 0.0; i < 720.0; i++)
         //    {
-        //        double radian = std::numbers::pi / 180.0 * i/2.0;
+        //        double radian = DX_PI / 180.0 * i/2.0;
         //        double x = owner.GetR() * std::cos(radian);
         //        double z = owner.GetR() * std::sin(radian);
         //        Math::Vector4 t = { x, 0.0, z };
@@ -126,7 +126,7 @@ namespace MachineHuck::Model {
         //{
         //    for (double i = 0.0; i < 720.0; i++)
         //    {
-        //        double radian = std::numbers::pi / 180.0 * i/2.0;
+        //        double radian = DX_PI / 180.0 * i/2.0;
         //        double x = owner.GetR() * std::cos(radian);
         //        double z = owner.GetR() * std::sin(radian);
         //        Math::Vector4 t = { x, 0.0, z };
@@ -141,7 +141,7 @@ namespace MachineHuck::Model {
             //円の描画(一つ目が索敵範囲, 二つ目がハッキング範囲)
         for (double i = 0.0; i < 720.0; i++)
         {
-            double radian = std::numbers::pi / 180.0 * i / 2.0;
+            double radian = DX_PI / 180.0 * i / 2.0;
             double x = owner.GetR() * std::cos(radian);
             double z = owner.GetR() * std::sin(radian);
             double huckX = owner.GetHuckR() * std::cos(radian);
@@ -166,7 +166,7 @@ namespace MachineHuck::Model {
             //角度
 
             auto angle = range;
-            auto rad = std::numbers::pi / 180.0 * angle;
+            auto rad = DX_PI / 180.0 * angle;
 
             auto sRad = 0.0; auto eRad = 0.0;
 
@@ -180,7 +180,7 @@ namespace MachineHuck::Model {
             }
 
             //double endAngle = 120.0;
-            //double Rad = std::numbers::pi / 180.0 * endAngle;
+            //double Rad = DX_PI / 180.0 * endAngle;
             //Rad = Rad + _rot_y;
             ////弧の左側の線
             Math::Vector4 move = { std::cos(eRad), 0.0, std::sin(eRad) };
@@ -197,7 +197,7 @@ namespace MachineHuck::Model {
             }
 
             //auto startAngle = 30.0;
-            //Rad = std::numbers::pi / 180.0 * startAngle;
+            //Rad = DX_PI / 180.0 * startAngle;
             //Rad = Rad + _rot_y;
             ////弧の右側の線
             move = { std::cos(sRad), 0.0, std::sin(sRad) };
@@ -210,11 +210,11 @@ namespace MachineHuck::Model {
                 DrawLine3D(ToDX(pos), ToDX(target), GetColor(0, 255, 255));
             }
 
-            // auto yAngle = 180.0 / std::numbers::pi * rotY;
+            // auto yAngle = 180.0 / DX_PI * rotY;
              //円弧
             //for(double i = yAngle; i < abs(yAngle + Angle); i++)
             //{
-            //        double radian = std::numbers::pi / 180.0 * i/2.0;
+            //        double radian = DX_PI / 180.0 * i/2.0;
             //        radian = radian + _rot_y;
             //        double x = owner.GetR() * std::cos(radian);
             //        double z = owner.GetR() * std::sin(radian);
@@ -225,7 +225,7 @@ namespace MachineHuck::Model {
 
             //for (double i = yAngle; i < abs(yAngle - Angle); i--)
             //{
-            //    double radian = std::numbers::pi / 180.0 * i / 2.0;
+            //    double radian = DX_PI / 180.0 * i / 2.0;
             //    radian = radian + _rot_y;
             //    double x = owner.GetR() * std::cos(radian);
             //    double z = owner.GetR() * std::sin(radian);
@@ -240,7 +240,7 @@ namespace MachineHuck::Model {
             //角度
 
             auto angle = range;
-            auto rad = std::numbers::pi / 180.0 * angle;
+            auto rad = DX_PI / 180.0 * angle;
 
             auto sRad = 0.0; auto eRad = 0.0;
 
@@ -255,7 +255,7 @@ namespace MachineHuck::Model {
             }
 
             //double endAngle = 120.0;
-            //double Rad = std::numbers::pi / 180.0 * endAngle;
+            //double Rad = DX_PI / 180.0 * endAngle;
             //Rad = Rad + _rot_y;
             ////弧の左側の線
             Math::Vector4 move = { std::cos(eRad), 0.0, std::sin(eRad) };
@@ -272,7 +272,7 @@ namespace MachineHuck::Model {
             }
 
             //auto startAngle = 30.0;
-            //Rad = std::numbers::pi / 180.0 * startAngle;
+            //Rad = DX_PI / 180.0 * startAngle;
             //Rad = Rad + _rot_y;
             ////弧の右側の線
             move = { std::cos(sRad), 0.0, std::sin(sRad) };
@@ -287,7 +287,7 @@ namespace MachineHuck::Model {
                 DrawLine3D(ToDX(pos), ToDX(target), GetColor(255, 0, 255));
             }
 
-            /*auto yAngle = 180.0 / std::numbers::pi * rotY;*/
+            /*auto yAngle = 180.0 / DX_PI * rotY;*/
             //for (double i = startAngle; i < endangle; (endAngle- startAngle/100)を1ずつ足す) 
             //{
             // //auto target = _pos + GetR() * std::cos(i);
@@ -319,7 +319,7 @@ namespace MachineHuck::Model {
         auto rotY = -dir.GetY();
 
         //z軸を0度とするため
-        auto nine = std::numbers::pi / 180.0 * 90.0;
+        auto nine = DX_PI / 180.0 * 90.0;
 
         auto rad = rotY + nine;
 

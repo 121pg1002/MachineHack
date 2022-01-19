@@ -7,6 +7,7 @@
  *********************************************************************/
 
 #include "ActorServer.h"
+#include <algorithm>
 #include "Actor.h"
 
 namespace MachineHuck::Actor {
@@ -55,8 +56,16 @@ namespace MachineHuck::Actor {
         // 保留中のアクターをクリアする
         _pendingActors.clear();
 
-        // 死んだアクターを削除する
-        erase_if(_actors, [](auto&& act) { return act->IsDead(); });
+        // アクターの中に死亡状態のアクターを削除
+        //erase_if(_actors, [](auto&& act) { return act->IsDead(); });
+       
+        auto isDead = [](auto&& act) {return act->IsDead(); };
+        auto it = std::remove_if(_actors.begin(), _actors.end(), isDead); // return act->IsDead();
+        //auto r = distance(it, _actors.end());
+        _actors.erase(it, _actors.end());
+        //return r;
+
+
     }
     /// 描画
     void ActorServer::Render() {
@@ -73,7 +82,9 @@ namespace MachineHuck::Actor {
     }
     /// アクターの登録
     void ActorServer::Register(std::string_view key, _pos_dir vec) {
-        if (_registry.contains(key.data())) {
+
+        //キーの数が0でないなら存在する
+        if (_registry.count(key.data()) != 0) {
             _registry[key.data()].first = vec.first;
             _registry[key.data()].second = vec.second;
         }
@@ -81,7 +92,8 @@ namespace MachineHuck::Actor {
     }
     /// アクターの一覧の取得
     Math::Vector4 ActorServer::GetPosition(std::string_view key) {
-        if (_registry.contains(key.data())) {
+        
+        if (_registry.count(key.data()) != 0) {
             return _registry[key.data()].first;
         }
         // 未登録
@@ -98,7 +110,7 @@ namespace MachineHuck::Actor {
 
     Math::Vector4 ActorServer::GetDir(std::string_view key)
     {
-        if (_registry.contains(key.data())) {
+        if (_registry.count(key.data()) != 0) {
             return _registry[key.data()].second;
         }
         // 未登録

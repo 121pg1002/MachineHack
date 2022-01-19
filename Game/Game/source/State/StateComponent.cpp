@@ -16,7 +16,9 @@ namespace MachineHuck::State {
     }
     /// 状態の登録
     void StateComponent::Register(std::string_view key, std::shared_ptr<StateBaseRoot> state) {
-        if (_registry.contains(key.data())) {
+        
+        //キーが存在するなら削除して構築
+        if (_registry.count(key.data()) != 0) {
             _registry.erase(key.data());
         }
         _registry.emplace(key, state);
@@ -24,8 +26,10 @@ namespace MachineHuck::State {
     }
     /// 状態のプッシュバック
     void StateComponent::PushBack(std::string_view key) {
-        if (!_registry.contains(key.data())) {
-            return;   // キーが未登録
+        
+        //キーが存在しないなら
+        if (_registry.count(key.data()) != 1) {
+            return;
         }
         auto pushScene = _registry[key.data()];
         pushScene->Enter();

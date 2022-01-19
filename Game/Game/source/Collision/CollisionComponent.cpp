@@ -8,7 +8,7 @@
 
 #include "CollisionComponent.h"
 #include <cmath>
-#include <numbers>
+//#include <numbers>
 #include "../Actor/Actor.h"
 #include "../Actor/ActorServer.h"
 #include "../Model/ModelAnimComponent.h"
@@ -224,7 +224,7 @@ namespace MachineHuck::Collision {
         auto rotY = -dir.GetY();
 
         //z軸を0度とするため
-        auto nine = std::numbers::pi / 180.0 * 90.0;
+        auto nine = DX_PI / 180.0 * 90.0;
         auto rad = rotY + nine;
 
         //回転による移動量
@@ -385,10 +385,10 @@ namespace MachineHuck::Collision {
         auto angle = act1.GetSearchRange();
 
         //0度をz軸に
-        auto nine = std::numbers::pi / 180.0 * 90.0;
+        auto nine = DX_PI / 180.0 * 90.0;
 
         //ラジアンに変換
-        auto rad = std::numbers::pi / 180.0 * angle;
+        auto rad = DX_PI / 180.0 * angle;
 
         //円弧の開始角度
         auto sRad = -rad + nine + rotY;
@@ -482,10 +482,10 @@ namespace MachineHuck::Collision {
 
 
         //0度をz軸に
-        auto nine = std::numbers::pi / 180.0 * 90.0;
+        auto nine = DX_PI / 180.0 * 90.0;
 
         //ラジアンに変換
-        auto rad = std::numbers::pi / 180.0 * angle;
+        auto rad = DX_PI / 180.0 * angle;
 
         auto sRad = 0.0; auto eRad = 0.0;
 
@@ -583,7 +583,7 @@ namespace MachineHuck::Collision {
         TestSidePlane(lMin.GetZ(), lMax.GetZ(), maxZ, tValues);
 
         Math::Vector4 point;
-        for (auto t : tValues) {
+        for (auto&& t : tValues) {
         
            // _interSection = PointOnSegment(lMin, lMax, t);
             return true;

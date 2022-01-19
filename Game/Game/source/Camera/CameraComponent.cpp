@@ -11,7 +11,7 @@
 #include <DxLib.h>
 #include <algorithm>
 #include <cmath>
-#include <numbers>
+//#include <numbers>
 
 namespace MachineHuck::Camera {
 

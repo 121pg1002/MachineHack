@@ -174,7 +174,7 @@ namespace MachineHuck::Enemy {
     {
 
         //ƒpƒ‰ƒ[ƒ^‚ª‚ ‚Á‚½‚ç•Ô‚·
-        if (_vDoubleMap[no].contains(paramName))
+        if (_vDoubleMap[no].count(paramName) != 0)
         {
             return _vDoubleMap[no].find(paramName)->second;
         }

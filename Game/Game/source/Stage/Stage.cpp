@@ -173,7 +173,7 @@ namespace MachineHuck::Stage {
 					//}
 
 					//描画するフロア番号で回す
-					for (auto no : _drawFloorV) {
+					for (auto&& no : _drawFloorV) {
 
 						if (no != 0 && no != 3) {
 
@@ -186,7 +186,7 @@ namespace MachineHuck::Stage {
 							//auto secret = _secretVMap[no];
 
 							////フロア内のブロックを描画
-							for (auto floor : value) {
+							for (auto&& floor : value) {
 
 								floor->Draw();
 							}
@@ -195,7 +195,7 @@ namespace MachineHuck::Stage {
 							//隠し扉用の機構(試し)
 							//for (auto i = 0; i != value.size(); i++) {
 							//
-							//	for (auto match : secret) {
+							//	for (auto&& match : secret) {
 							//	
 							//		if (i != match) {
 
@@ -460,7 +460,7 @@ namespace MachineHuck::Stage {
 
 				//std::vector<int> stageNo;
 
-				for (auto map : _stageFloor) {
+				for (auto&& map : _stageFloor) {
 
 					auto [floorNum, tuple] = map;
 					auto [min, max, stageNum] = tuple;

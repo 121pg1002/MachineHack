@@ -20,7 +20,7 @@ namespace MachineHuck::Gimmick {
 	{
 		if (actor.GetTypeId() != TypeId::Gimmick)
 		{
-			//for (auto gimmicks : actor.GetActorServer().GetGimmicks().
+			//for (auto&& gimmicks : actor.GetActorServer().GetGimmicks().
 			//{
 			//	
 			//

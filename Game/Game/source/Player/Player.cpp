@@ -17,7 +17,7 @@
 #include "../UI/UIComponent.h"
 
 
-#include <numbers>
+//#include <numbers>
 
 
 namespace MachineHuck::Player {
@@ -253,7 +253,7 @@ namespace MachineHuck::Player {
 		auto world = MGetScale(ToDX(_scale));
 		world = MMult(world, MGetRotZ(static_cast<float>(_rotation.GetZ())));
 		world = MMult(world, MGetRotX(static_cast<float>(_rotation.GetX())));
-		world = MMult(world, MGetRotY(static_cast<float>(_rotation.GetY()) + std::numbers::pi_v<float>));
+		world = MMult(world, MGetRotY(static_cast<float>(_rotation.GetY()) + DX_PI_F));
 		_worldTransform = MMult(world, MGetTranslate(ToDX(_position)));
 	}
 
@@ -311,7 +311,7 @@ namespace MachineHuck::Player {
 		auto yRot = atan2(_dir.GetX(), _dir.GetZ());
 		Math::Vector4 rot = { 0.0, yRot, 0.0 };
 		////z軸を0度とする
-		//auto nine = std::numbers::pi / 180.0 * 90.0;
+		//auto nine = DX_PI / 180.0 * 90.0;
 		//_y_rot += 90.0;
 		//angle.Set(0.0, _y_rot, 0.0);
 		//角度を更新

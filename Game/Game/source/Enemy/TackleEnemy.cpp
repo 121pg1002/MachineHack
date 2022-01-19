@@ -13,7 +13,7 @@
 #include "../Gauge/GaugeBase.h"
 
 #include <cmath>
-#include <numbers>
+//#include <numbers>
 #include <random>
 #include "EnemyParameter.h"
 
@@ -532,7 +532,7 @@ namespace MachineHuck::Enemy {
 			auto rot = _owner.GetRotation();
 			
 			//z²‚ğ0“x‚Æ‚·‚é
-			auto nine = std::numbers::pi * 90.0 / 180.0;
+			auto nine = DX_PI * 90.0 / 180.0;
 
 			//d—l‘‚æ‚è6m/s
 			auto length = 600.0;

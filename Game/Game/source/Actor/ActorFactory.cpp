@@ -27,7 +27,9 @@ namespace MachineHuck::Actor {
     }
     /// クリエイターの登録
     bool ActorFactory::Register(std::string_view type, std::unique_ptr<CreatorBase> creator) {
-        if (_creatorMap.contains(type.data())) {
+        
+        //キーの数が0でないなら存在する
+        if (_creatorMap.count(type.data()) != 0) {
             return false;
         }
         _creatorMap.emplace(type.data(), std::move(creator));
@@ -35,7 +37,9 @@ namespace MachineHuck::Actor {
     }
     /// アクターの生成
     std::unique_ptr<Actor> ActorFactory::Create(std::string_view type) {
-        if (!_creatorMap.contains(type.data())) {
+        
+        //キーの数が1でないなら存在しない
+        if (_creatorMap.count(type.data()) != 1) {
             return nullptr;
         }
         auto&& creator = _creatorMap[type.data()];

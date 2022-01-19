@@ -58,7 +58,7 @@ namespace MachineHuck::Actor {
 		/// 登録したアクターの前進方向を得る
 		/// @param[in] key 登録済みのキー
 		/// @return 登録したアクターの前進方向単位ベクトル
-		Math::Vector4 GetForward(std::string_view key);
+		//Math::Vector4 GetForward(std::string_view key);
 
 		Math::Vector4 GetDir(std::string_view key);
 
