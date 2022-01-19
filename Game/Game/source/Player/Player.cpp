@@ -18,7 +18,10 @@
 
 
 //#include <numbers>
+namespace {
 
+	double measuredDistance = 500.0;
+}
 
 namespace MachineHuck::Player {
 	//コンストラクタ
@@ -181,45 +184,61 @@ namespace MachineHuck::Player {
 		//	//ナビメッシュに収まっている場合
 			_camera->Update(_move);
 		//}
-					//エネルギー残量ゲージの設定
-			GetGame().GetUiComponent().UpdatePlayerHp(_hp, 100);
+		
+		    //エネルギー残量ゲージの設定
+			GetGame().GetUiComponent().UpdatePlayerHp(_gaugeBase->GetGauge(), _gaugeBase->GetGaugeMax());
 
 		for (auto i = GetActorServer().GetActors().begin(); i != GetActorServer().GetActors().end(); i++)
 		{
-			//!< プレイヤーではなかったら次へ
-			if ((*i)->GetTypeId() != TypeId::Enemy)
-			{
-				continue;
-			}
-			else
-			{   //円と円の当たり判定を調べる
+			auto targetPos = (*i)->GetPosition();
+			auto dif = _position - targetPos;
 
-				/// //////////////円と円の判定を行いたいならこっちを起動AABBToAABBなら下だけ起動
+			//測定距離内にいる場合
+			if (dif.Length_XZ() < measuredDistance) {
 
-				//if (GetCollision().CircleToCircle(_owner, **i))
-				//{
-				   // (*i)->SetPosition((*i)->GetOld());
-
-				   // auto _dif_vec = (*i)->GetPosition() - _position;
-				   // auto _length = _dif_vec.Length_XZ();
-				   // if (_length < GetR() + (*i)->GetR())
-				   // {
-					  //   auto _pos = (*i)->GetPosition() + _move;
-					  //   (*i)->SetPosition(_pos);
-				   // }
-				//}
-
-				//Circleと扇形の当たり判定を調べる
-				if (_collision->CircleToFan(*this, **i))
+				//!< エネミーではなかったら次へ
+				if ((*i)->GetTypeId() != TypeId::Enemy)
 				{
-					_isHit = true;
+					//!< ギミックではなかったら次へ
+					if ((*i)->GetTypeId() != TypeId::Gimmick) {
+						continue;
+					}
+					else {
+
+						//自分とギミック
+						if (_collision->CircleToCircle(*this, **i)) {
+
+							if (_noDamageTime < 0) {
+								_gaugeBase->DownGauge(10);
+								_noDamageTime = 60;
+							}
+						}
+						else {
+							_noDamageTime = 60;
+						}
+
+					}
 				}
 				else
 				{
-					_isHit = false;
-				}
 
+					//Circle(プレイヤー)と扇形(エネミー)の当たり判定を調べる
+					if (_collision->CircleToFan(*this, **i))
+					{
+						_isHit = true;
+					}
+					else
+					{
+						_isHit = false;
+					}
+
+				}
+			
+			
 			}
+
+
+
 
 		}
 
@@ -360,7 +379,10 @@ namespace MachineHuck::Player {
 
 	void Player::StateIdle::Update() {
 		//_owner.HitCheckFromEnemy();
-
+		//if (_owner.GetGaugeBase().GetGauge() < 0) {
+		//	_owner._state->GoToState("Die");
+		//}
+		
 	}
 
 	/// 走り
@@ -386,7 +408,17 @@ namespace MachineHuck::Player {
 
 	void Player::StateRun::Update() {
 		//_owner.HitCheckFromEnemy();
-		_owner.GetGaugeBase().Update(_owner);
+
+		if (_owner.GetGaugeBase().GetGauge() < 0) {
+
+			_owner._state->GoToState("Die");
+		}
+		else {
+		
+			_owner.GetGaugeBase().Update(_owner);
+		}
+
+		
 
 	}
 
@@ -644,7 +676,6 @@ namespace MachineHuck::Player {
 
 			//	_owner._actorState= ActorState::Active;
 			//	_owner._state->GoToState("Idle");
-
 			//}
 		}
 
@@ -679,6 +710,26 @@ namespace MachineHuck::Player {
 			}
 
 		}
+	}
+
+	void Player::StateDie::Enter() {
+
+		_owner._model->ChangeAnime("Attack");
+	}
+
+	void Player::StateDie::Update() {
+		auto cnt = _owner._model->GetRepeatedCount();
+		if (cnt > 0) {
+			_owner.SetActorState(ActorState::Dead);
+		}
+		auto handle = _owner._model->GetHandle();
+		auto progress = _owner._model->GetPlayProgress();
+		auto num = MV1GetMeshNum(handle);
+		for (auto i = 0; i < num; ++i) {
+			MV1SetMeshOpacityRate(handle, i, 1.f - progress);
+		}
+
+
 	}
 }
 

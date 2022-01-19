@@ -9,6 +9,7 @@
 #include "CollisionComponent.h"
 #include <cmath>
 //#include <numbers>
+#include <DxLib.h>
 #include "../Actor/Actor.h"
 #include "../Actor/ActorServer.h"
 #include "../Model/ModelAnimComponent.h"
@@ -591,6 +592,52 @@ namespace MachineHuck::Collision {
         
         return false;
     }
+
+    //bool CollisionComponent::CollisionFloor(const Actor::Actor& act) {
+
+
+    //    // 移動した先でコリジョン判定
+    //    MV1_COLL_RESULT_POLY hitPoly;
+
+    //    auto handle = act.GetAssetServer().GetModel("Dungeon");
+
+    //    for (auto i = GetActorServer().GetActors().begin(); i != GetActorServer().GetActors().end(); i++) {
+
+    //        if ((*i)->GetTypeId() != TypeId::Stage) {
+    //            continue;
+    //        }
+    //        else {
+
+    //            auto frameMapCollision = (*i)->GetCollision().GetMapCollision();
+
+    //            Math::Vector4 dif = { 0.0, 40.0, 0.0 };
+    //            Math::Vector4 under = { 0.0, -99999.0, 0.0 };
+    //            auto startPos = _position + dif;
+    //            auto endPos = _position + under;
+    //            // 主人公の腰位置から下方向への直線
+    //            hitPoly = MV1CollCheck_Line(handle.first, frameMapCollision, ToDX(startPos), ToDX(endPos));
+
+    //            if (hitPoly.HitFlag) {
+    //                // 当たった
+    //                // 当たったY位置をキャラ座標にする
+    //                _position = { _position.GetX(), hitPoly.HitPosition.y, _position.GetZ() };
+    //                return true;
+    //            }
+    //            else {
+    //                // 当たらなかった。元の座標に戻す
+    //                _position = oldPos;
+
+    //                return false;
+    //            }
+
+    //        }
+
+    //    }
+
+    //    return false;
+
+    //
+    //}
 
 
     //bool CollisionComponent::LineToAABB(const Actor::Actor& act, const Math::Vector2 min, const Math::Vector2 max) {

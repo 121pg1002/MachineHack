@@ -215,7 +215,6 @@ namespace MachineHuck::Enemy {
 	//ハッキングされたときの移動
 	void TackleEnemy::HuckedMove(double lx, double ly) {
 	
-
 		_move = { 0.0, 0.0, 0.0 };
 
 		//_oldPos = _position;
@@ -659,7 +658,6 @@ namespace MachineHuck::Enemy {
 					continue;
 				}
 				else {
-
 					actor->SetActorState(ActorState::Active);
 				}
 

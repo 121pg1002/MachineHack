@@ -81,6 +81,7 @@ namespace MachineHuck::Player {
         bool _isHit; //!< 扇形の確認(仮)
     private:
         float _hp{ 100 };//プレイヤーのエネルギー残量
+        int _noDamageTime{0};
 
     public:
         /// @class  StateBase
@@ -159,6 +160,20 @@ namespace MachineHuck::Player {
             void Update() override;
         private:
             //int _freezeTime{ 0 };
+        };
+
+
+
+        /**
+         * @class  StateDie
+         * @brief  死亡
+         */
+        class StateDie : public StateBase {
+        public:
+            StateDie(Player& owner) : StateBase{ owner } {};
+            void Enter() override;
+            void Update() override;
+        private:
         };
 
 

@@ -59,6 +59,12 @@ namespace MachineHuck::Gauge{
         int GetGauge() { return _gauge; }
 
         /**
+         * @brief  ゲージの最大値を取得
+         * @return _gaugeMax
+         */
+        int GetGaugeMax() { return _gaugeMax; }
+
+        /**
          * @brief ゲージの量を設定
          * @param gauge
          */

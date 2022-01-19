@@ -177,8 +177,6 @@ namespace MachineHuck::Stage {
 
 						if (no != 0 && no != 3) {
 
-
-
 							//ålŒö‚ÌG‚ê‚Ä‚¢‚éƒtƒƒA”Ô†‚Æˆê’v‚µ‚½ê‡
 		//					if (no == _stageNo) {
 

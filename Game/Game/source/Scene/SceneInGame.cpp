@@ -39,7 +39,8 @@ namespace MachineHuck::Scene {
         {"normalfloor",  "normalfloor.mv1"},
         {"normalwall",  "normalwall.mv1"},
         {"secretfloor", "secretfloor.mv1"},
-        {"secretwall", "secretwall.mv1"}
+        {"secretwall", "secretwall.mv1"},
+        {"damagefloor",  "target.mv1"}
         };
         // モデルの読み込み
         GetAssetServer().LoadModels(usedInGame);                                                         //追加
@@ -55,11 +56,14 @@ namespace MachineHuck::Scene {
     void SceneInGame::Enter() {
         // ファクトリの生成とクリエイターの登録
         auto& af = GetActorFactory();
-        af.Register("Player", std::make_unique<MachineHuck::Actor::PlayerCreator>());
-        af.Register("TackleEnemy", std::make_unique<MachineHuck::Actor::TackleEnemyCreator>());
+        af.Register("Player", std::make_unique<Actor::PlayerCreator>());
+        af.Register("TackleEnemy", std::make_unique<Actor::TackleEnemyCreator>());
         // af.Register("GrabEnemy", std::make_unique<GrabEnemyCreator>());
        //  af.Register("AlartEnemy", std::make_unique<AlartEnemyCreator>());
-        af.Register("Stage", std::make_unique<MachineHuck::Actor::StageCreator>());
+        af.Register("Stage", std::make_unique<Actor::StageCreator>());
+        af.Register("DamageFloor", std::make_unique<Actor::DamageFloorGimmickCreator>());
+
+
         //for (int i = 0; i < StageAll; i++) {
 
 
@@ -90,9 +94,9 @@ namespace MachineHuck::Scene {
           {0     , "TackleEnemy", {   0.f, 220.f, 500.0f}},
           {0     , "TackleEnemy", {-300.f, 210.f, 400.0f}},
 
-          //{60 * 5, "Enemy", { 1500.f, 2100.f, 400}},
-          //{0     , "Enemy", {    0.f, 2200.f, 400}},
-          //{0     , "Enemy", {-1500.f, 2000.f, 400}},
+          //{0     , "DamageFloor", { 500.f, 200.f, 0.0f}},
+          //{0     , "DamageFloor", {  0.f,  200.f, 100.0f}},
+          //{0     , "DamageFloor", {-500.f, 200.f, 200.0f}},
 
           //{60 * 10,"Enemy", { 1000.f, 2000.f, -4500}},
           //{0     , "Enemy", {    0.f, 2200.f, -4500}},
@@ -114,6 +118,12 @@ namespace MachineHuck::Scene {
         // ステージの生成と追加
         auto stage = af.Create("Stage");
         as.Add(std::move(stage));
+
+        ////ダメージ床ギミックの生成と追加
+        //auto damageFloorGimmick = af.Create("DamageFloor");
+        //as.Add(std::move(damageFloorGimmick));
+
+
         //for (int i = 0; i < 3; i++) 
         //{
         //    auto spawnTable = inGame[i];
@@ -137,8 +147,6 @@ namespace MachineHuck::Scene {
         //std::mt19937 engine{seed()};
         //std::uniform_real_distribution<float> zPosition{1000, 2500};
         //std::uniform_real_distribution<float> forwardSpeed{3, 9};
-
-
         Update();
     }
     /// 入力処理

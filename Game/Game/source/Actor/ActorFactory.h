@@ -77,7 +77,6 @@ namespace MachineHuck::Actor {
 
     /// @class CreatorBase
     /// @brief ActorFactoryに登録するクリエイターの基底クラス
-    ///        このクラスを継承してクリエイターを定義する
     class CreatorBase {
     public:
         virtual ~CreatorBase() = default;
@@ -87,7 +86,7 @@ namespace MachineHuck::Actor {
     /// @brief プレイヤー用のクリエイター
     class PlayerCreator : public CreatorBase {
         /// プレイヤーの生成
-        /// @param[i] game ゲームクラスへの参照
+        /// @param  game ゲームクラスへの参照
         /// @return プレイヤーのインスタンス
         virtual std::unique_ptr<Actor> Create(AppFrame::Game& game);
     };
@@ -95,12 +94,12 @@ namespace MachineHuck::Actor {
     /// @brief タックルエネミー用のクリエイター
     class TackleEnemyCreator : public CreatorBase {
         // 疑似乱数
-        std::random_device _seed;
-        std::mt19937 _engine{ _seed() };
-        std::uniform_real_distribution<float> _forwardSpeed{ 3, 9 };
+   //     std::random_device _seed;
+    //    std::mt19937 _engine{ _seed() };
+    //    std::uniform_real_distribution<float> _forwardSpeed{ 3, 9 };
         int _count{ 0 };
         /// エネミーの生成
-        /// @param[in] game ゲームクラスへの参照
+        /// @param  game ゲームクラスへの参照
         /// @return エネミーのインスタンス
         virtual std::unique_ptr<Actor> Create(AppFrame::Game& game);
     };
@@ -114,7 +113,7 @@ namespace MachineHuck::Actor {
         std::uniform_real_distribution<float> _forwardSpeed{ 3, 9 };
         int _count{ 0 };
         /// エネミーの生成
-        /// @param[in] game ゲームクラスへの参照
+        /// @param  game ゲームクラスへの参照
         /// @return エネミーのインスタンス
         virtual std::unique_ptr<Actor> Create(AppFrame::Game& game);
     };
@@ -131,13 +130,28 @@ namespace MachineHuck::Actor {
     //    virtual std::unique_ptr<Actor> Create(Game& game);
     //};
 
-    /// @class StageCreator
-    /// @brief ステージ用のクリエイター
+    /**
+     * @class StageCreator
+     * @brief ステージ用のクリエイター
+     */
     class StageCreator : public CreatorBase {
         /// ステージの生成
-        /// @param[in] game ゲームクラスへの参照
+        /// @param  game ゲームクラスへの参照
         /// @return ステージのインスタンス
         virtual std::unique_ptr<Actor> Create(AppFrame::Game& game);
     };
+
+    /**
+     * @class DamageFloorGimmickCreator
+     * @brief ダメージ床ギミック用のクリエイター
+     */
+    class DamageFloorGimmickCreator : public CreatorBase {
+        /// ダメージ床ギミックの生成
+        /// @param  game ゲームクラスへの参照
+        /// @return ダメージ床ギミックのインスタンス
+        virtual std::unique_ptr<Actor> Create(AppFrame::Game& game);
+
+    };
+
 }
 

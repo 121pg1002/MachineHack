@@ -148,6 +148,13 @@ namespace MachineHuck::Collision {
 		// */
 		//bool LineToAABB(const Actor::Actor& act1, const Math::Vector2 min, const Math::Vector2 max);
 
+		/**
+		 * @brief 床のナビメッシュとの当たり判定
+		 * @param act
+		 * @return true  当たっている
+		 *         false 当たっていない
+		 */
+		//bool CollisionFloor(const Actor::Actor& act);
 
 		/**
 		 * @brief  平面との交差テスト

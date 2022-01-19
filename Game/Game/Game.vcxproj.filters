@@ -56,7 +56,7 @@
     <ClCompile Include="source\Collision\CollisionComponent.cpp">
       <Filter>Collision</Filter>
     </ClCompile>
-    <ClCompile Include="source\Gimmick\Gimmick.cpp">
+    <ClCompile Include="source\Gimmick\DamageFloorGimmick.cpp">
       <Filter>Gimmick</Filter>
     </ClCompile>
     <ClCompile Include="source\Gimmick\GimmickBase.cpp">
@@ -234,7 +234,7 @@
     <ClInclude Include="source\Collision\CollisionComponent.h">
       <Filter>Collision</Filter>
     </ClInclude>
-    <ClInclude Include="source\Gimmick\Gimmick.h">
+    <ClInclude Include="source\Gimmick\DamageFloorGimmick.h">
       <Filter>Gimmick</Filter>
     </ClInclude>
     <ClInclude Include="source\Gimmick\GimmickBase.h">

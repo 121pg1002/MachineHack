@@ -24,7 +24,7 @@ namespace MachineHuck::Gauge {
 
     void GaugeBase::Update(Actor::Actor& act) {
 
-        if (_gaugeCount % 5 == 0) {
+        if (_gaugeCount % 10 == 0) {
             _gauge--;
         }
         _gaugeCount++;

@@ -45,7 +45,6 @@ namespace AppFrame::Math
          */
         static bool InsideTrianglePoint(const Vector4& trianglePoint0, const Vector4& trianglePoint1, const Vector4& trianglePoint2, const Vector4& point);
 
-
     private:
         Utility() = default;
     };

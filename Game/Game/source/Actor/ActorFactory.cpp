@@ -14,6 +14,7 @@
 #include "../Model/ModelAnimComponent.h"
 #include "../State/StateComponent.h"
 #include "../Camera/CameraComponent.h"
+#include "../Gimmick/DamageFloorGimmick.h"
 
 namespace Camera = MachineHuck::Camera;
 
@@ -125,6 +126,7 @@ namespace MachineHuck::Actor {
         //state->Register("KnockBack", std::make_shared<Player::StateKnockBack>(*player));
         state->Register("Hucking", std::make_shared<Player::Player::StateHucking>(*player));
         state->Register("Hucked", std::make_shared<Player::Player::StateHucked>(*player));
+        state->Register("Die", std::make_shared<Player::Player::StateDie>(*player));
         player->SetStateComponent(std::move(state));
 
         return player;
@@ -202,7 +204,6 @@ namespace MachineHuck::Actor {
 
         enemy->LoadJson("resource/json/grab.json");
 
-        // 速度は3～9でランダム
         enemy->SetForwardSpeed(1.0f);
 
         // モデルの読み込みと生成
@@ -245,8 +246,21 @@ namespace MachineHuck::Actor {
     /// ステージの生成
     std::unique_ptr<Actor> StageCreator::Create(AppFrame::Game& game) {
         /// ステージの生成
-        auto stage = std::make_unique<MachineHuck::Stage::Stage>(game);
+        auto stage = std::make_unique<Stage::Stage>(game);
         return stage;
+    }
+
+    //ダメージ床ギミックの生成
+    std::unique_ptr<Actor> DamageFloorGimmickCreator::Create(AppFrame::Game& game) {
+    
+        /// ダメージ床ギミックの生成
+        auto damageFloorGimmick = std::make_unique<Gimmick::DamageFloorGimmick>(game);
+
+        // モデルの読み込みと生成
+        auto model = std::make_unique<Model::ModelComponent>(*damageFloorGimmick);
+        model->SetModel("damagefloor");
+
+        return damageFloorGimmick;
     }
 }
 

@@ -11,15 +11,13 @@
 
 namespace MachineHuck::Gimmick {
 
-	GimmickBase::GimmickBase(AppFrame::Game& game) : Actor::Actor(game)
-	{
+	GimmickBase::GimmickBase(AppFrame::Game& game) : Actor::Actor(game){
 
 	}
 
-	bool GimmickBase::IsHitPlayer(Actor& actor)
-	{
-		if (actor.GetTypeId() != TypeId::Gimmick)
-		{
+	bool GimmickBase::IsHitPlayer(Actor& actor){
+
+		if (actor.GetTypeId() != TypeId::Gimmick){
 			//for (auto&& gimmicks : actor.GetActorServer().GetGimmicks().
 			//{
 			//	
