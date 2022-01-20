@@ -61,6 +61,7 @@ namespace MachineHuck::Scene {
         if (input.GetMouse().LeftClick()) {
             // ¶ƒNƒŠƒbƒN‚ÅInGame‚Ö‘JˆÚ
             GetSceneServer().GoToScene("InGame");
+            GetSoundComponent().Play("push");
             _alpha = 255;
         }
         if (input.GetJoypad().Button_A()) {

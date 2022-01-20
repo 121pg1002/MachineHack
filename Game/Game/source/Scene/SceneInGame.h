@@ -7,8 +7,10 @@
  *********************************************************************/
 
 #pragma once
-#include "AppFrame.h"
+
 #include <memory>
+#include "AppFrame.h"
+#include "../ShadowMap/Shadowmap.h"
 
 class CameraComponent;
 
@@ -36,7 +38,8 @@ namespace MachineHuck::Scene {
 		/// ПoМы
 		void Exit() override;
 	private:
-		
+		MachineHuck::ShadowMap::Shadowmap shadowmap;
+
 		
 	};
 }

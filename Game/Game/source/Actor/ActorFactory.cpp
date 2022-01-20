@@ -15,6 +15,7 @@
 #include "../State/StateComponent.h"
 #include "../Camera/CameraComponent.h"
 #include "../Gimmick/DamageFloorGimmick.h"
+#include "../Gimmick/BrokenWall.h"
 
 namespace Camera = MachineHuck::Camera;
 
@@ -103,7 +104,7 @@ namespace MachineHuck::Actor {
         auto camera = std::make_shared<Camera::CameraComponent>();
         camera->Init();
         camera->SetPosition({ 0, 800, -200 });
-        camera->SetTarget({ 0, 0, 0 });
+        camera->SetTarget({ 0, 100, 0 });
 
         // プレイヤーの生成
         auto player = std::make_unique<Player::Player>(game);
@@ -112,12 +113,13 @@ namespace MachineHuck::Actor {
         // モデルの読み込みと生成
         auto model = std::make_unique<Model::ModelAnimeComponent>(*player);
         model->SetModel("Player");
-        model->Register("Idle", 0);
+        model->Register("Attack", 0);
         model->Register("Run", 1);
-        model->Register("Attack", 2);
-        model->Register("JumpStart", 3);
-        model->Register("JumpLoop", 4);
-        model->Register("JumpEnd", 5);
+        model->Register("Idle", 2);
+        model->Register("Die", 3);
+        //model->Register("JumpStart", 3);
+        //model->Register("JumpLoop", 4);
+        //model->Register("JumpEnd", 5);
         player->SetModelComponent(std::move(model));
 
         auto state = std::make_unique<State::StateComponent>("Idle", std::make_shared <Player::Player::StateIdle>(*player));
@@ -156,21 +158,22 @@ namespace MachineHuck::Actor {
         // モデルの読み込みと生成
         auto model = std::make_unique<Model::ModelAnimeComponent>(*enemy);
         model->SetModel("Spider", 1000);
-        model->Register("Attack", 0);
+        model->Register("Hucking", 0);
         model->Register("Die", 1);
-        model->Register("Die2", 2);
+        model->Register("Idle", 2);
+        //model->Register("Die2", 2);
         model->Register("Fall", 3);
-        model->Register("Jump", 4);
-        model->Register("Normal", 5);
-        model->Register("RunAniBack", 6);
+        model->Register("Attack", 4);
+        //model->Register("Normal", 5);
+        //model->Register("RunAniBack", 6);
         model->Register("RunAniVor", 7);
-        model->Register("RunLeft", 8);
-        model->Register("RunRight", 9);
-        model->Register("WalkAniBack", 10);
-        model->Register("WalkAniBor", 11);
-        model->Register("WalkLeft", 12);
-        model->Register("WalkRight", 13);
-        model->Register("WartePose", 14);
+        //model->Register("RunLeft", 8);
+        //model->Register("RunRight", 9);
+        //model->Register("WalkAniBack", 10);
+        //model->Register("WalkAniBor", 11);
+        //model->Register("WalkLeft", 12);
+        //model->Register("WalkRight", 13);
+        //model->Register("WartePose", 14);
         enemy->SetModelComponent(std::move(model));
 
         auto state = std::make_unique<State::StateComponent>("Fall", std::make_shared <Enemy::TackleEnemy::StateFall>(*enemy));
@@ -257,10 +260,18 @@ namespace MachineHuck::Actor {
         auto damageFloorGimmick = std::make_unique<Gimmick::DamageFloorGimmick>(game);
 
         // モデルの読み込みと生成
-        auto model = std::make_unique<Model::ModelComponent>(*damageFloorGimmick);
-        model->SetModel("damagefloor");
-
+        //auto model = std::make_unique<Model::ModelComponent>(*damageFloorGimmick);
+        //model->SetModel("damagefloor", 1000);
         return damageFloorGimmick;
+    }
+
+    std::unique_ptr<Actor> BrokenWallCreator::Create(AppFrame::Game& game) {
+        /// 壊せる壁の生成
+        auto brokenWall = std::make_unique<Gimmick::BrokenWall>(game);
+        //// モデルの読み込みと生成
+        //auto model = std::make_unique<Model::ModelComponent>(*brokenWall);
+        //model->SetModel("brokenwall", 1000);
+        return brokenWall;
     }
 }
 

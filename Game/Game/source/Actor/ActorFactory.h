@@ -108,9 +108,9 @@ namespace MachineHuck::Actor {
     /// @brief グラブエネミー用のクリエイター
     class GrabEnemyCreator : public CreatorBase {
         // 疑似乱数
-        std::random_device _seed;
-        std::mt19937 _engine{ _seed() };
-        std::uniform_real_distribution<float> _forwardSpeed{ 3, 9 };
+        //std::random_device _seed;
+        //std::mt19937 _engine{ _seed() };
+        //std::uniform_real_distribution<float> _forwardSpeed{ 3, 9 };
         int _count{ 0 };
         /// エネミーの生成
         /// @param  game ゲームクラスへの参照
@@ -150,6 +150,15 @@ namespace MachineHuck::Actor {
         /// @param  game ゲームクラスへの参照
         /// @return ダメージ床ギミックのインスタンス
         virtual std::unique_ptr<Actor> Create(AppFrame::Game& game);
+
+    };
+
+    class BrokenWallCreator : public CreatorBase {
+        /// 壊せる壁の生成
+        /// @param  game ゲームクラスへの参照
+        /// @return 壊せる壁のインスタンス
+        virtual std::unique_ptr<Actor> Create(AppFrame::Game& game);
+
 
     };
 

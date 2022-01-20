@@ -6,9 +6,12 @@
  * @date   December 6 2021
  *********************************************************************/
 
-#include "AppFrame.h"
 #include "SceneEpilogue.h"
 #include <DxLib.h>
+#include "AppFrame.h"
+#include "../Actor/ActorServer.h"
+#include "../Actor/ActorFactory.h"
+#include "../ShadowMap/Shadowmap.h"
 
 namespace MachineHuck::Scene {
     /// コンストラクタ
@@ -39,7 +42,19 @@ namespace MachineHuck::Scene {
         auto& sc = GetSoundComponent();
         sc.PlayLoop("bgm1");
         sc.SetVolume("bgm1", 50);
-
+    }
+    ///
+    /// 出口処理
+    /// 
+    void SceneEpilogue::Exit() {
+        // アクターを削除
+        GetActorServer().Clear();
+        // デュプリケートしたモデルだけ削除
+        GetAssetServer().DeleteDuplicateModels();
+        // クリエイターを削除
+        GetActorFactory().Clear();
+        //シャドウマップの削除
+       // DeleteShadowMap(shadowmap.GetShadowmap());
     }
     ///
     /// 入口処理

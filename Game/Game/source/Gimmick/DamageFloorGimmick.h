@@ -7,8 +7,10 @@
  *********************************************************************/
 #pragma once
 
+#include <memory>
 #include "AppFrame.h"
 #include "GimmickBase.h"
+#include "../Model/ModelComponent.h"
 
 namespace MachineHuck::Gimmick {
 
@@ -16,16 +18,18 @@ namespace MachineHuck::Gimmick {
 	{
 	public:
 		DamageFloorGimmick(AppFrame::Game& game);
-		~DamageFloorGimmick() override = default;
+		~DamageFloorGimmick() override;
 
 		TypeId GetTypeId() const override { return TypeId::Gimmick; };
 
-
-		//void Update() override;
+		//void Enter();
+		void Update() override;
 		void Draw() override;
 
 	private:
 		//int _damageCount; //!< ダメージ受けるカウンタ
+		//std::vector<std::unique_ptr<Model::ModelComponent>> _damageFloorV; //!< ダメージ床の動的配列
+		std::unique_ptr<Model::ModelComponent>_damageFloor;
 
 	};
 }

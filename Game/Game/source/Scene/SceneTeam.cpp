@@ -38,8 +38,8 @@ namespace MachineHuck::Scene {
 
         // サウンドコンポーネントの取得
         auto& sc = GetSoundComponent();
-        sc.PlayLoop("bgm1");
-        sc.SetVolume("bgm1", 50);
+        /*  sc.PlayLoop("bgm1");
+          sc.SetVolume("bgm1", 50);*/
         //
         laser = std::make_unique<MachineHuck::Effect::EffectLaser>(VGet(0, 0, 0), 0, 0,0);
        // laser->LoadEffect("レーザー", "resource/Laser01.efkefc", 100.0f);

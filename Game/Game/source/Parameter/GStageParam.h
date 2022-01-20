@@ -5,3 +5,17 @@
  * @author hikaru Goto
  * @date   December 30 2021
  *********************************************************************/
+#include "StageParameterBase.h"
+
+namespace MachineHuck::Parameter {
+
+	class GStageParam : public StageParameterBase {
+	
+	public:
+		GStageParam();
+
+
+	};
+
+}
+

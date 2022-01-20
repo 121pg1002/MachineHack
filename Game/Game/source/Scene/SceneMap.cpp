@@ -1,26 +1,25 @@
-/*****************************************************************//**
- * @file   SceneAMG.cpp
- * @brief  AMGロゴ画面
- *
- * @author yamawaki kota
- * @date   December 6 2021
- *********************************************************************/
+///
+/// @file    SceneMap.cpp
+/// @brief   マップ画面
+/// @date    2021/01/19
+/// @author tagawa kyoga
+/// @copyright (C) Amusement Media Academy All rights Resved.
+///
 
-#include "AppFrame.h"
-#include "SceneAMG.h"
-#include <DxLib.h>
+#include "SceneMap.h"
+
 
 namespace MachineHuck::Scene {
     /// コンストラクタ
-    SceneAMG::SceneAMG(AppFrame::Game& game)
+    SceneMap::SceneMap(AppFrame::Game& game)
         :Scene{ game }
     {
     }
     /// 初期化
-    void SceneAMG::Init() {
+    void  SceneMap::Init() {
         // 使用する画像のテーブル
         const AppFrame::Asset::AssetServer::TextureMap textureToUsed{
-          {"AMGBg",          {"title/AMG.png",          1, 1, 1920, 1080}},
+          {"MapBg",    {"Texture/cloth_00146.png",          1, 1, 1920, 1080}},
           /*    {"GameTitleAMG",        {"GameTitle.png",        1, 1, 1553, 224}},
               {"LeftClickToStartAMG", {"LeftClickToStart.png", 1, 1, 1135, 107}},*/
         };
@@ -30,46 +29,47 @@ namespace MachineHuck::Scene {
         as.LoadTextures(textureToUsed);
 
         // 画像のハンドル取得
-        _amgBgHandle = as.GetTexture("AMGBg");
+        MapHandle = as.GetTexture("MapBg");
         /*  _gameTitleHandle = as.GetTexture("GameTitle");
           _leftClickToStart = as.GetTexture("LeftClickToStart");*/
 
           // サウンドコンポーネントの取得
         auto& sc = GetSoundComponent();
         sc.PlayLoop("bgm1");
-        sc.SetVolume("bgm1", 100);
+        sc.SetVolume("bgm1", 50);
     }
     ///
     /// 入口
     /// 
-    void SceneAMG::Enter() {
+    void  SceneMap::Enter() {
         _alpha = 0;
     }
     ///
     /// 入力
     ///
-    void SceneAMG::Input(AppFrame::Input::InputComponent& input) {
+    void  SceneMap::Input(AppFrame::Input::InputComponent& input) {
         if (input.GetMouse().LeftClick()) {
             // 左クリックでInGameへ遷移
             GetSceneServer().GoToScene("Team");
             _alpha = 255;
         }
+        if (input.GetJoypad().Button_X()) {
+            GetSceneServer().PopBack(1);
+            GetSceneServer().PushBack("InGame",1);
+            _alpha = 255;
+        }
+
     }
     /// 更新
-    void SceneAMG::Update() {
+    void  SceneMap::Update() {
         _alpha = (_alpha + 8) % 255;
-        if (_alpha > 200) {
-            // Teamへ遷移
-            GetSceneServer().GoToScene("Team");
-            _alpha = 255;
-            StopMusic();
-        }
+       
     }
     ///
     /// 描画
     ///
-    void SceneAMG::Render() {
-        DrawGraph(0, 0, _amgBgHandle, false);
+    void  SceneMap::Render() {
+        DrawGraph(0, 0, MapHandle, false);
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, _alpha);
         // DrawGraph(1920 / 2 - 1135 / 2, 700 - 107 / 2, _leftClickToStart, TRUE);
         SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);

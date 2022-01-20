@@ -104,9 +104,6 @@
     <ClCompile Include="source\Gauge\GaugeBase.cpp">
       <Filter>Gauge</Filter>
     </ClCompile>
-    <ClCompile Include="source\Shader\Shader.cpp">
-      <Filter>Shader</Filter>
-    </ClCompile>
     <ClCompile Include="source\Scene\ScenePrologue.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -121,6 +118,30 @@
     </ClCompile>
     <ClCompile Include="source\UI\UIComponent.cpp">
       <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Gimmick\BrokenWall.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Gimmick\GimmickParameter.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Motion\MotionBase.cpp">
+      <Filter>Motion</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Motion\MotionHuck.cpp">
+      <Filter>Motion</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Shader\Shader.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ShadowMap\Shadowmap.cpp">
+      <Filter>ShadowMap</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scene\SceneItem.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scene\SceneMap.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -175,8 +196,14 @@
     <Filter Include="UI">
       <UniqueIdentifier>{7405d2c9-317e-48be-b6e1-a11787072559}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Motion">
+      <UniqueIdentifier>{a28580a0-6be4-430f-9d4f-219e86166281}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Shader">
-      <UniqueIdentifier>{d540a2b7-2eb6-406b-ab45-73a05227037d}</UniqueIdentifier>
+      <UniqueIdentifier>{bebc18aa-32d0-4519-b180-fd024c06f004}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShadowMap">
+      <UniqueIdentifier>{f94efe2a-315c-4048-b537-22b00779386b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -288,9 +315,6 @@
     <ClInclude Include="source\State\StateBaseRoot.h">
       <Filter>State</Filter>
     </ClInclude>
-    <ClInclude Include="source\Shader\Shader.h">
-      <Filter>Shader</Filter>
-    </ClInclude>
     <ClInclude Include="source\Scene\ScenePrologue.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -305,6 +329,30 @@
     </ClInclude>
     <ClInclude Include="source\UI\UIComponent.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Gimmick\BrokenWall.h">
+      <Filter>Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Gimmick\GimmickParameter.h">
+      <Filter>Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Motion\MotionBase.h">
+      <Filter>Motion</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Motion\MotionHuck.h">
+      <Filter>Motion</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Shader\Shader.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ShadowMap\Shadowmap.h">
+      <Filter>ShadowMap</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Scene\SceneItem.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Scene\SceneMap.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

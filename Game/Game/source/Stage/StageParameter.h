@@ -37,7 +37,7 @@ namespace MachineHuck::Stage {
 		/**
 		* @brief  ステージの配置情報をjsonから読み込む
 		* @param  num ステージ番号
-		* @param  filePath
+		* @param  filePath ファイルパス
 		*/
 		void LoadStageParameter(const int num, const std::string& filePath);
 
