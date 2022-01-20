@@ -13,6 +13,8 @@
 #include "../source/Scene/ScenePrologue.h"
 #include "../source/Scene/SceneEpilogue.h"
 #include "../source/Scene/SceneAMG.h"
+#include "../source/Scene/SceneMap.h"
+#include "../source/Scene/SceneItem.h"
 #include "../source/Actor/ActorServer.h"
 #include "../source/Actor/ActorFactory.h"
 #include "../source/Stage/StageParameter.h"
@@ -118,6 +120,8 @@ bool AppFrame::Game::Initialize() {
   _sceneServer->Register("Title", std::make_shared<MachineHuck::Scene::SceneTitle>(*this));
   _sceneServer->Register("Prologue", std::make_shared<MachineHuck::Scene::ScenePrologue>(*this));
   _sceneServer->Register("Epilogue", std::make_shared<MachineHuck::Scene::SceneEpilogue>(*this));
+  _sceneServer->Register("Map", std::make_shared<MachineHuck::Scene::SceneMap>(*this));
+  _sceneServer->Register("Item", std::make_shared<MachineHuck::Scene::SceneItem>(*this));
 
   // ƒCƒ“ƒQ[ƒ€‚ğ¶¬‚µ‚ÄƒV[ƒ“‚Æ‚µ‚Ä“o˜^
   _sceneServer->Register("InGame", std::make_shared<MachineHuck::Scene::SceneInGame>(*this));

@@ -157,6 +157,16 @@ namespace MachineHuck::Scene {
             //GetSceneServer().GoToScene("Title");
             GetSceneServer().GoToScene("Epilogue");
         }
+        if (input.GetJoypad().Button_X()) {
+            // Xボタンでマップ画面へ
+            GetSceneServer().PopBack(1);
+            GetSceneServer().PushBack("Map",1);
+        }
+        if (input.GetJoypad().Button_Y()) {
+            // Yボタンでアイテム画面へ
+            GetSceneServer().PopBack(1);
+            GetSceneServer().PushBack("Item", 1);
+        }
         GetActorServer().Input(input);
     }
     /// 更新

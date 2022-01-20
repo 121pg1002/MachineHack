@@ -49,6 +49,8 @@
     <ClCompile Include="source\Scene\SceneAMG.cpp" />
     <ClCompile Include="source\Scene\SceneEpilogue.cpp" />
     <ClCompile Include="source\Scene\SceneInGame.cpp" />
+    <ClCompile Include="source\Scene\SceneItem.cpp" />
+    <ClCompile Include="source\Scene\SceneMap.cpp" />
     <ClCompile Include="source\Scene\ScenePrologue.cpp" />
     <ClCompile Include="source\Scene\SceneTeam.cpp" />
     <ClCompile Include="source\Scene\SceneTitle.cpp" />
@@ -92,6 +94,8 @@
     <ClInclude Include="source\Scene\SceneAMG.h" />
     <ClInclude Include="source\Scene\SceneEpilogue.h" />
     <ClInclude Include="source\Scene\SceneInGame.h" />
+    <ClInclude Include="source\Scene\SceneItem.h" />
+    <ClInclude Include="source\Scene\SceneMap.h" />
     <ClInclude Include="source\Scene\ScenePrologue.h" />
     <ClInclude Include="source\Scene\SceneTeam.h" />
     <ClInclude Include="source\Scene\SceneTitle.h" />
