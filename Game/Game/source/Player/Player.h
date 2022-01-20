@@ -43,6 +43,12 @@ namespace MachineHuck::Player {
         /// モデルのローカルZ座標が逆なのでここで180度回転させる
         void ComputeWorldTransform() override;
 
+        /**
+         * @brief  ハックカウントを取得
+         * @return _huckCount
+         */
+        int GetHuckCount() { return _huckCount; }
+
     protected:
         //float _angularSpeed{0};      //!< 旋回量
                   //!< 主人公の状態のクラス

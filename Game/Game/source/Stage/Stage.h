@@ -21,7 +21,10 @@ namespace MachineHuck::Stage {
 	using Floor = std::vector<std::shared_ptr<Model::ModelComponent>>;
 	using StageFloor = std::unordered_map<int, std::tuple<AppFrame::Math::Vector4, AppFrame::Math::Vector4, int>>;
 	
-
+	/**
+	 * @class ステージクラス
+	 * @brief ステージに関するクラス
+	 */
 	class Stage : public Actor::Actor {
 	public:
 		Stage(AppFrame::Game& game);
@@ -39,7 +42,8 @@ namespace MachineHuck::Stage {
 
 		/**
 		 * @brief  ポリゴンによるフロア作成
-		 * @return 成否
+		 * @return true  成功
+		 *         false 失敗
 		 */
 		bool CreateGround();
 #endif 
@@ -49,7 +53,8 @@ namespace MachineHuck::Stage {
 
 		/**
 		 * @brief ステージの配置を作る
-		 * @return 成功or失敗
+		 * @return true  成功
+		 *         false 失敗
 		 */
 		bool CreateStage(AppFrame::Game& game);
 
@@ -66,7 +71,7 @@ namespace MachineHuck::Stage {
 		const int GetMapCollision() const  { return _frameMapCollision; };
 
 	private:
-		std::unique_ptr<Model::ModelComponent> _skySphere;
+		//std::unique_ptr<Model::ModelComponent> _skySphere;
 		std::unique_ptr<Model::ModelComponent> _ground;
 		//static const int _boardW = 10;     //!< ボードの幅
 		//static const int _boardH = 10;     //!< ボードの高さ

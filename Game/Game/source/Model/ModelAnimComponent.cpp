@@ -414,6 +414,12 @@ namespace MachineHuck::Model {
 
     }
 
+    void ModelAnimeComponent::SpecificDraw() {
+
+       MV1SetFrameVisible(_handle, 23, false);
+        MV1DrawModel(_handle);
+    }
+
     /// アニメーションの変更
     void ModelAnimeComponent::ChangeAnime(std::string_view key, bool repeate) {
         auto newAnimIndex = _registry[key.data()];

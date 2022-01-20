@@ -25,6 +25,10 @@ namespace MachineHuck::Scene {
 		~SceneEpilogue() = default;
 		/// ‰Šú‰»
 		void Init() override;
+		/// 
+        /// oŒûˆ—
+        /// 
+        void Exit() override;
 		/// “üŒû
 		virtual void Enter() override;
 		/// “ü—Í

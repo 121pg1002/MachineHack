@@ -49,17 +49,17 @@ namespace MachineHuck::Stage {
 
 				Parameter::StageParam sP;
 
-				auto& fileName   = jsRoot["Stage"].at(i)["filename"];
+				const std::string& fileName   = jsRoot["Stage"].at(i)["filename"];
 				//auto& handleName = jsRoot["Stage"].at(i)["handlename"];
-				auto& tx = jsRoot["Stage"].at(i)["tx"];
-				auto& ty = jsRoot["Stage"].at(i)["ty"];
-				auto& tz = jsRoot["Stage"].at(i)["tz"];
-				auto& rx = jsRoot["Stage"].at(i)["rx"];
-				auto& ry = jsRoot["Stage"].at(i)["ry"];
-				auto& rz = jsRoot["Stage"].at(i)["rz"];
-				auto& sx = jsRoot["Stage"].at(i)["sx"];
-				auto& sy = jsRoot["Stage"].at(i)["sy"];
-				auto& sz = jsRoot["Stage"].at(i)["sz"];
+				const double& tx = jsRoot["Stage"].at(i)["tx"];
+				const double& ty = jsRoot["Stage"].at(i)["ty"];
+				const double& tz = jsRoot["Stage"].at(i)["tz"];
+				const double& rx = jsRoot["Stage"].at(i)["rx"];
+				const double& ry = jsRoot["Stage"].at(i)["ry"];
+				const double& rz = jsRoot["Stage"].at(i)["rz"];
+				const double& sx = jsRoot["Stage"].at(i)["sx"];
+				const double& sy = jsRoot["Stage"].at(i)["sy"];
+				const double& sz = jsRoot["Stage"].at(i)["sz"];
 
 				Math::Vector4 pos = { tx, ty, tz };
 				Math::Vector4 rot = { rx, ry, rz };

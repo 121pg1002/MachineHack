@@ -7,11 +7,10 @@
  *********************************************************************/
 
 #pragma once
-#include "AppFrame.h"
-#include "../Actor/Actor.h"
-
 //#include <vector>
 #include <string>
+#include "AppFrame.h"
+#include "../Actor/Actor.h"
 
 
 namespace MachineHuck::Gimmick {
@@ -21,7 +20,8 @@ namespace MachineHuck::Gimmick {
 		GimmickBase(AppFrame::Game& game);
 		virtual ~GimmickBase() override = default;
 
-		bool IsHitPlayer(Actor& actor);
+
+		//bool IsHitPlayer(Actor& actor);
 		//bool Create(std::string key, AppFrame::Math::Vector4 pos);
 		//bool Delete();
 

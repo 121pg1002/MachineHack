@@ -30,6 +30,10 @@ namespace MachineHuck::Enemy {
         TypeId GetTypeId() const override { return TypeId::Enemy; };
         Type GetType() const override { return Type::Tackle; };
 
+        /// ワールド行列の計算
+        /// モデルのローカルZ座標が逆なのでここで180度回転させる
+        void ComputeWorldTransform() override;
+
         void SetForwardSpeed(float forwardSpeed) { _forwardSpeed = forwardSpeed; }
 
 

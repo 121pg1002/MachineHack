@@ -48,6 +48,10 @@ namespace MachineHuck::Model {
 		//AABB用
 		void Draw(const Actor::Actor& owner, Math::Vector4 position);
 
+		/**
+		 * @brief  特定のフレームの描画         
+		 */
+		void SpecificDraw();
 		///
 		/// アニメーションの変更.
 		/// @param[in] newAnimIndex アニメインデックス

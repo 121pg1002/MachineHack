@@ -42,9 +42,13 @@ namespace MachineHuck::Stage {
 	class StageParameter;
 }
 
+namespace MachineHuck::Gimmick {
+	class GimmickParameter;
+}
+
 namespace AppFrame {
 	/// @class   Game
-/// @brief   ゲーム全体のフレームワーク
+    /// @brief   ゲーム全体のフレームワーク
 	class Game {
 	public:
 		///ゲームの状態
@@ -100,8 +104,9 @@ namespace AppFrame {
 		 * @brief ステージパラメーターの取得
 		 * @return ステージパラメーターの参照
 		 */
-		MachineHuck::Stage::StageParameter& GetStageParameter() const { return *_stageParam; };
+		MachineHuck::Stage::StageParameter& GetStageParameter() const { return *_stageParam; }
 
+		MachineHuck::Gimmick::GimmickParameter& GetGimmickParameter() const { return *_gParam; }
 
 	private:
 		/// 状態
@@ -125,7 +130,9 @@ namespace AppFrame {
 		std::unique_ptr<MachineHuck::UI::SpriteServer> _spriteServer;
 		/// UIコンポーネントのユニークポインタ
 		std::unique_ptr<MachineHuck::UI::UIComponent> _ui;
-		std::unique_ptr<MachineHuck::Stage::StageParameter> _stageParam;//!< 
+		std::unique_ptr<MachineHuck::Stage::StageParameter> _stageParam;//!< ステージパラメーターのユニークポインタ
+
+		std::unique_ptr<MachineHuck::Gimmick::GimmickParameter> _gParam; //!< ギミックパラメーターのユニークポインタ
 
 	};
 }

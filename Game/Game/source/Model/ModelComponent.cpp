@@ -29,14 +29,20 @@ namespace MachineHuck::Model {
 		MV1SetMatrix(_handle, _owner.GetWorldTransform());
 
 		// çsóÒégÇÌÇ»Ç¢èÍçá
-		//MV1SetPosition(_handle, _owner.GetPosition());
-		//MV1SetRotationXYZ(_handle, _owner.GetRotation());
+
+		//auto pos = _owner.GetPosition();
+		//auto rot = _owner.GetRotation();
+
+		//MV1SetPosition(_handle, ToDX(pos));
+		//MV1SetRotationXYZ(_handle, ToDX(rot));
 	}
 	/// ï`âÊ
 	void ModelComponent::Draw() {
 		SetUseLighting(_isLighting);
 		MV1DrawModel(_handle);
 	}
+
+
 
 	//void ModelComponent::Draw(Math::Vector4 pos, Math::Vector4 rot, Math::Vector4 scale) {
 	//
@@ -77,9 +83,9 @@ namespace MachineHuck::Model {
 	/// ägëÂó¶ÇÃê›íË
 	void ModelComponent::SetScale(VECTOR  scale) {
 
-		scale.x = scale.x * 800.0f;
-		scale.y = scale.y * 800.0f;
-		scale.z = scale.z * 800.0f;
+		scale.x = scale.x * 75.0f;
+		scale.y = scale.y * 75.0f;
+		scale.z = scale.z * 75.0f;
 
 		//scale.x = scale.x / 70.0;
 		//scale.y = scale.y / 70.0;

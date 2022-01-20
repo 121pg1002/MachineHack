@@ -32,6 +32,8 @@ namespace MachineHuck::Enemy {
 		_searchRange = 0.0;
 		_huckingRange = 0.0;
 		_gaugeBase->Init();
+
+
 	}
 
 	void TackleEnemy::LoadJson(const std::string& filepath)
@@ -41,16 +43,18 @@ namespace MachineHuck::Enemy {
 
 		//2つめの値がレベル
 		_r = eParam->GetEnemyParam("r", 0);
-		_r = 10.0;
+		_r = 150.0;
 		//_huckR = eParam->GetEnemyParam("r", 1);
-		_huckR = 50.0;
+		_huckR = 200.0;
 
 		_searchRange = eParam->GetEnemyParam("searchrange", 1);
 		_huckingRange = eParam->GetEnemyParam("searchrange", 0);////////←とりあえず、仮
 
+
 	}
 
 	void TackleEnemy::Update() {
+
 
 		if (_status != STATUS::DYING) {
 
@@ -77,15 +81,10 @@ namespace MachineHuck::Enemy {
 			Move();
 		}
 
-
 		_state->Update();
-
-
 
 		//// ワールド行列の計算
 		ComputeWorldTransform();
-
-
 
 		// モデルの更新
 		_model->Update();
@@ -110,6 +109,14 @@ namespace MachineHuck::Enemy {
 		_gaugeBase->Draw(*this);
 #endif
 		_state->Draw();
+	}
+
+	void TackleEnemy::ComputeWorldTransform() {
+		auto world = MGetScale(ToDX(_scale));
+		world = MMult(world, MGetRotZ(static_cast<float>(_rotation.GetZ())));
+		world = MMult(world, MGetRotX(static_cast<float>(_rotation.GetX())));
+		world = MMult(world, MGetRotY(static_cast<float>(_rotation.GetY()) + DX_PI_F));
+		_worldTransform = MMult(world, MGetTranslate(ToDX(_position)));
 	}
 
 	void TackleEnemy::Move() {
@@ -306,7 +313,13 @@ namespace MachineHuck::Enemy {
 
 
 	void TackleEnemy::StateBase::Draw() {
-		_owner._model->Draw();
+		
+		if (_owner.GetStatus() != STATUS::ISHUCKED) {
+			_owner._model->Draw();
+		}
+		else {
+			_owner._model->SpecificDraw();
+		}
 	}
 
 	// 待機
@@ -317,14 +330,12 @@ namespace MachineHuck::Enemy {
 	void TackleEnemy::StateFall::Update() {
 
 		//_owner.LockOn();
-		if (_owner._position.GetY() > 0)
-		{
+		if (_owner._position.GetY() > 0){
 			auto posY = _owner._position.GetY() - 5;
 			//Math::Vector4 _pos = { 0.0, _pos_y, 0.0 };
 			_owner._position = { _owner.GetPosition().GetX(), posY, _owner.GetPosition().GetZ() };
 		}
-		else
-		{
+		else{
 			Math::Vector4 pos = { _owner.GetPosition().GetX(), 0.0, _owner.GetPosition().GetZ() };
 			_owner._position = pos;
 			_owner._state->GoToState("Idle");
@@ -517,8 +528,7 @@ namespace MachineHuck::Enemy {
 
 	void TackleEnemy::StateTackle::Enter() {
 
-		//ゲージ減少
-		_owner.GetGaugeBase().DownGauge(30);
+
 
 
 		_tackleTime = 60;
@@ -526,6 +536,8 @@ namespace MachineHuck::Enemy {
 		//ハッキングされている場合
 		if (_owner.GetStatus() == STATUS::ISHUCKED) {
 
+		//ゲージ減少
+		_owner.GetGaugeBase().DownGauge(30);
 			//auto player = _owner.GetActorServer().GetDir("Player");
 			
 			auto rot = _owner.GetRotation();
@@ -693,7 +705,7 @@ namespace MachineHuck::Enemy {
 
 	void TackleEnemy::StateHucking::Enter()
 	{
-		_owner._model->ChangeAnime("Attack", true);
+		_owner._model->ChangeAnime("Hucking", false);
 	}
 
 	void TackleEnemy::StateHucking::Update()
@@ -706,7 +718,7 @@ namespace MachineHuck::Enemy {
 		{
 			auto player = _owner.GetActorServer().GetPosition("Player");
 
-			if (player.GetX() - 1 < _owner._position.GetX() && _owner._position.GetX() < player.GetX() + 1 && player.GetZ() - 1 < _owner._position.GetZ() && _owner._position.GetZ() < player.GetZ() + 1)
+			if (player.GetX() - 1 < _owner._position.GetX() && _owner._position.GetX() < player.GetX() + 1 && player.GetZ() - 1 < _owner._position.GetZ() && _owner._position.GetZ() < player.GetZ() + 1/* && player.GetY() - 1 < 200.0 && 200.0 < player.GetY() + 1*/)
 			{
 				_owner.SetActorState(ActorState::Hucked);
 				_owner._state->GoToState("IsHucked");
@@ -728,7 +740,7 @@ namespace MachineHuck::Enemy {
 		auto& key = input.GetKeyBoard();
 		_lx = 0.0, _ly = 0.0;
 
-		   // 右移動と左移動
+		    // 右移動と左移動
 			if (joypad.LHorison() != 0.0)
 			{
 				_lx = input.GetJoypad().LHorison() / 1000.0;

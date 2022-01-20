@@ -37,7 +37,7 @@ namespace MachineHuck::Scene {
           // サウンドコンポーネントの取得
         auto& sc = GetSoundComponent();
         sc.PlayLoop("bgm1");
-        sc.SetVolume("bgm1", 50);
+        sc.SetVolume("bgm1", 100);
     }
     ///
     /// 入口
@@ -62,6 +62,7 @@ namespace MachineHuck::Scene {
             // Teamへ遷移
             GetSceneServer().GoToScene("Team");
             _alpha = 255;
+            StopMusic();
         }
     }
     ///

@@ -6,3 +6,9 @@
  * @date   December 30 2021
  *********************************************************************/
 #include "GStageParam.h"
+
+namespace MachineHuck::Parameter {
+
+	GStageParam::GStageParam() {}
+
+}

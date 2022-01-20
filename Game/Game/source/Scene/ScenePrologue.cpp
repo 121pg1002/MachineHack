@@ -36,8 +36,8 @@ namespace MachineHuck::Scene {
 
         // サウンドコンポーネントの取得
         auto& sc = GetSoundComponent();
-        sc.PlayLoop("bgm1");
-        sc.SetVolume("bgm1", 50);
+        /*    sc.PlayLoop("bgm1");
+            sc.SetVolume("bgm1", 50);*/
 
     }
     ///
