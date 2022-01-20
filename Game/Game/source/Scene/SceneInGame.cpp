@@ -25,12 +25,10 @@ namespace MachineHuck::Scene {
     void SceneInGame::Init() {
         // 使用するモデル
         AppFrame::Asset::AssetServer::ModelMap usedInGame{
-       // {"Player",    "SDChar/SDChar.mv1"},
-          {"Player",    "Player/player.mv1"},
+        {"Player",    "SDChar/SDChar.mv1"},
         {"SkySphere", "skysphere.mv1"},
         {"Ground",    "ground.mv1"},
-        //{"Spider",    "Spider_3.mv1"},
-        {"Spider",    "tackle/takcle.mv1"},
+        {"Spider",    "Spider_3.mv1"},
         {"pCube",      "pCube.mv1"},
         {"floor",     "floor.mv1"},
         {"wall",      "wall.mv1"},
@@ -42,14 +40,11 @@ namespace MachineHuck::Scene {
         {"normalwall",  "normalwall.mv1"},
         {"secretfloor", "secretfloor.mv1"},
         {"secretwall", "secretwall.mv1"},
-        {"DamageFloor",  "gimmick/bazooka.mv1"}
+        {"damagefloor",  "target.mv1"}
         };
-
         // モデルの読み込み
         GetAssetServer().LoadModels(usedInGame);                                                         //追加
-        //シャドウマップの読み込み
-        shadowmap.SetShadowMap();
-        // 使用するテクスチャ
+            // 使用するテクスチャ
         AppFrame::Asset::AssetServer::TextureMap TexUsed{
           {"BarFrame", {"BarFrame.png", 1, 1, 340, 50}}
         };
@@ -67,7 +62,7 @@ namespace MachineHuck::Scene {
        //  af.Register("AlartEnemy", std::make_unique<AlartEnemyCreator>());
         af.Register("Stage", std::make_unique<Actor::StageCreator>());
         af.Register("DamageFloor", std::make_unique<Actor::DamageFloorGimmickCreator>());
-        af.Register("BrokenWall", std::make_unique<Actor::BrokenWallCreator>());
+
 
         //for (int i = 0; i < StageAll; i++) {
 
@@ -99,6 +94,9 @@ namespace MachineHuck::Scene {
           {0     , "TackleEnemy", {   0.f, 220.f, 500.0f}},
           {0     , "TackleEnemy", {-300.f, 210.f, 400.0f}},
 
+          //{0     , "DamageFloor", { 500.f, 200.f, 0.0f}},
+          //{0     , "DamageFloor", {  0.f,  200.f, 100.0f}},
+          //{0     , "DamageFloor", {-500.f, 200.f, 200.0f}},
 
           //{60 * 10,"Enemy", { 1000.f, 2000.f, -4500}},
           //{0     , "Enemy", {    0.f, 2200.f, -4500}},
@@ -162,7 +160,7 @@ namespace MachineHuck::Scene {
         if (input.GetJoypad().Button_X()) {
             // Xボタンでマップ画面へ
             GetSceneServer().PopBack(1);
-            GetSceneServer().PushBack("Map", 1);
+            GetSceneServer().PushBack("Map",1);
         }
         if (input.GetJoypad().Button_Y()) {
             // Yボタンでアイテム画面へ
@@ -180,19 +178,7 @@ namespace MachineHuck::Scene {
 
     /// 描画
     void SceneInGame::Render() {
-        //シャドウマップへの描画の準備を行う
-        ShadowMap_DrawSetup(shadowmap.GetShadowmap());
-        //シャドウマップに描画したい3Dモデルの描画
         GetActorServer().Render();
-        //シャドウマップへの描画を終了する
-        ShadowMap_DrawEnd();
-        //	描画で使用するシャドウマップを変更する
-        SetUseShadowMap(0, shadowmap.GetShadowmap());
-        //3Dモデルの描画
-        GetActorServer().Render();
-        //３Dモデルの描画で使用したシャドウマップの設定を解除する
-        SetUseShadowMap(0, -1);
-        //UIの描画
         GetUiComponent().Render();
     }
     /// 出口
@@ -203,8 +189,5 @@ namespace MachineHuck::Scene {
         GetAssetServer().DeleteDuplicateModels();
         // クリエイターを削除
         GetActorFactory().Clear();
-        //シャドウマップの削除
-        DeleteShadowMap(shadowmap.GetShadowmap());
-
     }
 }

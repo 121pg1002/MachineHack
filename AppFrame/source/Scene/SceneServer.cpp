@@ -38,7 +38,7 @@ namespace AppFrame::Scene {
         _scenes.push_back(pushScene);
     }
     //Enterを呼ばずにプッシュバック
-    void SceneServer::PushBack(std::string_view key, int menuflg) {
+    void SceneServer::PushBack(std::string_view key,int menuflg) {
         if (!_registry.contains(key.data())) {
             return;   // キーが未登録
         }
