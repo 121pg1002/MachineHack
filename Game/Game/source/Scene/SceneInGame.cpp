@@ -25,10 +25,12 @@ namespace MachineHuck::Scene {
     void SceneInGame::Init() {
         // 使用するモデル
         AppFrame::Asset::AssetServer::ModelMap usedInGame{
-        {"Player",    "SDChar/SDChar.mv1"},
+        //{"Player",    "SDChar/SDChar.mv1"},
+        {"Player",    "Player/player.mv1"},
         {"SkySphere", "skysphere.mv1"},
         {"Ground",    "ground.mv1"},
-        {"Spider",    "Spider_3.mv1"},
+        //{"Spider",    "Spider_3.mv1"},
+        {"Spider",    "tackle/takcle.mv1"},
         {"pCube",      "pCube.mv1"},
         {"floor",     "floor.mv1"},
         {"wall",      "wall.mv1"},
@@ -44,7 +46,9 @@ namespace MachineHuck::Scene {
         };
         // モデルの読み込み
         GetAssetServer().LoadModels(usedInGame);                                                         //追加
-            // 使用するテクスチャ
+        //シャドウマップの読み込み
+        shadowmap.SetShadowMap();
+        // 使用するテクスチャ
         AppFrame::Asset::AssetServer::TextureMap TexUsed{
           {"BarFrame", {"BarFrame.png", 1, 1, 340, 50}}
         };
@@ -62,6 +66,7 @@ namespace MachineHuck::Scene {
        //  af.Register("AlartEnemy", std::make_unique<AlartEnemyCreator>());
         af.Register("Stage", std::make_unique<Actor::StageCreator>());
         af.Register("DamageFloor", std::make_unique<Actor::DamageFloorGimmickCreator>());
+        af.Register("BrokenWall", std::make_unique<Actor::BrokenWallCreator>());
 
 
         //for (int i = 0; i < StageAll; i++) {
@@ -178,7 +183,19 @@ namespace MachineHuck::Scene {
 
     /// 描画
     void SceneInGame::Render() {
+        //シャドウマップへの描画の準備を行う
+        ShadowMap_DrawSetup(shadowmap.GetShadowmap());
+        //シャドウマップに描画したい3Dモデルの描画
         GetActorServer().Render();
+        //シャドウマップへの描画を終了する
+        ShadowMap_DrawEnd();
+        //	描画で使用するシャドウマップを変更する
+        SetUseShadowMap(0, shadowmap.GetShadowmap());
+        //3Dモデルの描画
+        GetActorServer().Render();
+        //３Dモデルの描画で使用したシャドウマップの設定を解除する
+        SetUseShadowMap(0, -1);
+        //UIの描画
         GetUiComponent().Render();
     }
     /// 出口
@@ -189,5 +206,8 @@ namespace MachineHuck::Scene {
         GetAssetServer().DeleteDuplicateModels();
         // クリエイターを削除
         GetActorFactory().Clear();
+        //シャドウマップの削除
+        DeleteShadowMap(shadowmap.GetShadowmap());
+
     }
 }

@@ -18,6 +18,7 @@
 #include "../source/Actor/ActorServer.h"
 #include "../source/Actor/ActorFactory.h"
 #include "../source/Stage/StageParameter.h"
+#include "../source/Gimmick/GimmickParameter.h"
 #include "../source/Effect/EffectServer.h"
 #include "../source/UI/UIComponent.h"
 #include "../source/UI/SpriteServer.h"
@@ -42,7 +43,7 @@ bool AppFrame::Game::Initialize() {
                                                    //追加
   
   // 画面の背景色を青に設定する
-  SetBackgroundColor(100, 0, 255);
+  SetBackgroundColor(10, 10, 10);
   // 描画先画面を裏にする
   SetDrawScreen(DX_SCREEN_BACK);
 
@@ -98,14 +99,18 @@ bool AppFrame::Game::Initialize() {
   // 使用する音のテーブル
   const AppFrame::Asset::AssetServer::SoundMap soundToUsed{
     {"damage", {"damage.wav", true}},
-    {"bgm1", {"sublight.wav", false}},
-    {"bgm2", {"stage1.mid", false}},
+    {"charging", {"se/ビーム砲チャージ.mp3", true}},
+    {"push", {"se/決定、ボタン押下33.mp3", true}},
+    {"bgm1", {"se/energy.mp3", false}},
+
+    // {"bgm2", {"stage1.mid", false}},
   };
   // 音の読み込み
   as.LoadSounds(soundToUsed);
   // サウンドコンポーネントの取得
   auto& sc = GetSoundComponent();
   sc.SetVolume("damage", 128);
+  sc.SetVolume("push", 128);
 #ifdef _DEBUG
   sc.SetMute(false);
 #else
@@ -127,6 +132,7 @@ bool AppFrame::Game::Initialize() {
   _sceneServer->Register("InGame", std::make_shared<MachineHuck::Scene::SceneInGame>(*this));
 
   _stageParam = std::make_unique<MachineHuck::Stage::StageParameter>();
+  _gParam = std::make_unique<MachineHuck::Gimmick::GimmickParameter>();
 
   return true;
 }

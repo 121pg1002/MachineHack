@@ -26,12 +26,12 @@ namespace {
 namespace MachineHuck::Player {
 	//コンストラクタ
 	Player::Player(AppFrame::Game& game) : Actor{ game } {
-		_r = 100.0;
+		_r = 150.0;
 		_minXZ = { -100, -100 };
 		_maxXZ = { 100, 100 };
 		_isHit = false;
 		_searchRange = 60.0;
-		_huckingRange = 30.0;
+		//_huckingRange = 30.0;
 		_gaugeBase->Init();
 	}
 
@@ -77,6 +77,7 @@ namespace MachineHuck::Player {
 				if (_actorState != ActorState::Hucking && _actorState != ActorState::Hucked){
 					_actorState= ActorState::Hucking;
 					_huckCount = 100;
+					lx = 0.0, ly = 0.0;
 				}
 
 				//if (_actorState== ActorState::Hucked)//Hucked中なら
@@ -346,14 +347,14 @@ namespace MachineHuck::Player {
 		//	_owner._state->PushBack("Attack");
 		//}
 
-		if (Math::Vector4 v{ 0.0, 0.0, 0.0 }; v.GetX() != _owner.GetMove().GetX() || v.GetZ() != _owner.GetMove().GetZ()) {
-			_owner._state->PushBack("Run");
-		}
+
 
 		if (input.GetJoypad().Button_RT()){
 			_owner._state->PushBack("Hucking");
 		}
-
+		else if (Math::Vector4 v{ 0.0, 0.0, 0.0 }; v.GetX() != _owner.GetMove().GetX() || v.GetZ() != _owner.GetMove().GetZ()) {
+			_owner._state->PushBack("Run");
+		}
 	}
 
 
@@ -378,7 +379,12 @@ namespace MachineHuck::Player {
 		//	_owner._state->PushBack("Attack");
 		//	return;
 		//}
-		if (Math::Vector4 v{ 0.0, 0.0, 0.0 }; v.GetX() != _owner.GetMove().GetX() || v.GetZ() != _owner.GetMove().GetZ()) {
+		if (input.GetJoypad().Button_RT()) {
+			_owner._state->PopBack();
+			_owner._state->PushBack("Hucking");
+			return;
+		}
+		else if (Math::Vector4 v{ 0.0, 0.0, 0.0 }; v.GetX() != _owner.GetMove().GetX() || v.GetZ() != _owner.GetMove().GetZ()) {
 			return;
 		}
 		_owner._state->PopBack();
@@ -524,31 +530,21 @@ namespace MachineHuck::Player {
 									_owner._state->GoToState("Hucked");
 								}
 								else {
-									//if (Math::Vector4 v{0.0, 0.0, 0.0}; _dif.GetX() == v.GetX() && _dif.GetZ() == v.GetZ())
-									//{
-									_dif = enem_pos - _owner._position;
+
+									//_dif = enem_pos - _owner._position;
 
 									////仮のy座標
-									//Math::Vector4 difY = { 0.0, 200.0, 0.0 };
-									//_dif = _dif + difY;
-									_length = _dif.Normalize();
-									//}
+									//_length = _dif.Normalize();
 
-									////横方向と縦方向の角度
-									//float rad = atan2(_dif.GetZ(), _dif.GetX());
 
-									////x軸方向の移動量
-									//auto _move_x = cos(rad) * _length;
-
-									////z軸方向の移動量
-									//auto _move_z = sin(rad) * _length;
-
-									//Math::Vector4 _move = { _move_x, 0.0f, _move_z };
 
 									// 移動
-									_owner._position = _owner._position + _length;
-									//std::pair<Math::Vector4, Math::Vector4> pos_dir = {_owner._position, _owner.GetActorServer().GetDir("Player")};
-									//_owner.GetActorServer().Register("Player", pos_dir);
+									//_owner._position = _owner._position + _length;
+
+									if (_owner.GetHuckCount() < 2) {
+										_owner._position = enem_pos;
+									}
+
 								}
 
 

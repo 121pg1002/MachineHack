@@ -508,9 +508,11 @@ namespace MachineHuck::Collision {
         }
 
 
+        Math::Vector2 act2XZ = { act2.GetPosition().GetX(), act2.GetPosition().GetZ() };
+        Math::Vector2 act1XZ = { act1.GetPosition().GetX(), act1.GetPosition().GetZ() };
 
         //主人公から敵へのベクトル
-        auto dis = act2.GetPosition() - act1.GetPosition();
+        auto dis = act2XZ - act1XZ;
         auto length = dis.Length();
 
 

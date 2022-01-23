@@ -21,7 +21,7 @@ namespace MachineHuck::Stage {
 	namespace {
 
 		constexpr int StageAll = 3;        //!< 読み込むstagejsonの数
-		constexpr double Differ   = 500.0; //!< 1フロアのサイズ
+		constexpr double Differ = 1000.0; //!< 1フロアのサイズ
 		constexpr double StartX   = -5.0 * Differ;
 		constexpr int BoardSize = 10;
 
@@ -107,8 +107,9 @@ namespace MachineHuck::Stage {
 		GetCollision().SetMapCollision(handle.first);
 
 
+#ifdef _DEBUG
 		CreateGround();
-
+#endif
 		//自分のいるフロアのみ描画
 		//_stageNo = 1;
 
@@ -138,7 +139,7 @@ namespace MachineHuck::Stage {
 
 	void Stage::Draw() {
 		//_skySphere->Draw();   // スカイスフィア
-		_ground->Draw();      // 地面
+		//_ground->Draw();      // 地面
 
 		//表示するステージ番号のみ表示
 		//キーの数を取得

@@ -74,6 +74,12 @@ namespace AppFrame::Math
 		*/
 		const double GetZ() const  { return _z; }
 
+       /*
+        *  @brief  ベクトルの長さの計算 
+        *  @return 長さ
+        */
+        const double Length() const;
+
 	private:
 		double _x, _z; //!< x成分, z成分
 

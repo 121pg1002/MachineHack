@@ -57,8 +57,10 @@ namespace MachineHuck::Gauge {
     void GaugeBase::Draw(Actor::Actor& act) {
     
         auto gaugeStr = std::to_string(_gauge);
-        DrawString(10, 200, gaugeStr.c_str(), GetColor(255, 0, 0));
-    
+        auto pos = act.GetPosition();
+        auto v = ConvWorldPosToScreenPos(ToDX(pos));
+        DrawString(static_cast<int>(v.x), static_cast<int>(v.y), gaugeStr.c_str(), GetColor(255, 0, 0));
+
     }
 
 #endif

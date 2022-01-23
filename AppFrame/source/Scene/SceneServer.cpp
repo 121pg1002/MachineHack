@@ -21,7 +21,7 @@ namespace AppFrame::Scene {
     }
     /// シーンの登録
     void SceneServer::Register(std::string_view key, std::shared_ptr<Scene> scene) {
-        if (_registry.contains(key.data())) {
+        if (_registry.count(key.data()) != 0) {
             _registry.erase(key.data());
         }
         _registry.emplace(key, scene);
@@ -30,7 +30,7 @@ namespace AppFrame::Scene {
     /// シーンのプッシュバック
     /// リストの一番後ろ(最前面)に追加
     void SceneServer::PushBack(std::string_view key) {
-        if (!_registry.contains(key.data())) {
+        if (_registry.count(key.data()) != 1) {
             return;   // キーが未登録
         }
         auto pushScene = _registry[key.data()];
@@ -39,7 +39,7 @@ namespace AppFrame::Scene {
     }
     //Enterを呼ばずにプッシュバック
     void SceneServer::PushBack(std::string_view key,int menuflg) {
-        if (!_registry.contains(key.data())) {
+        if (_registry.count(key.data()) != 1) {
             return;   // キーが未登録
         }
         auto pushScene = _registry[key.data()];
@@ -73,7 +73,7 @@ namespace AppFrame::Scene {
     }
     /// リストの一番後ろ(最前面)のシーンの真下に挿入
     void SceneServer::InsertBelowBack(std::string_view key) {
-        if (!_registry.contains(key.data())) {
+        if (_registry.count(key.data()) != 1) {
             return;   // キーが未登録
         }
         auto insertScene = _registry[key.data()];

@@ -26,7 +26,7 @@ void Asset::AssetServer::Clear() {
 }
 /// 画像の読み込み
 void Asset::AssetServer::LoadTexture(std::string_view key, const Texture& texture) {
-  if (_textures.contains(key.data())) {
+  if (_textures.count(key.data()) != 0) {
     // 登録済みの場合は画像を削除
     auto&& [texture, handles] = _textures[key.data()];  
     for (auto handle : handles) {
@@ -58,7 +58,7 @@ void Asset::AssetServer::ChangeCurrentPath(std::string_view path) {
 
 /// 画像ハンドルの取得
 int Asset::AssetServer::GetTexture(std::string_view key, int no) {
-  if (!_textures.contains(key.data())) {
+  if (_textures.count(key.data()) != 1) {
     return -1;
   }
   auto&& [divGraph, handles] = _textures[key.data()];
@@ -67,7 +67,7 @@ int Asset::AssetServer::GetTexture(std::string_view key, int no) {
 }
 
 bool Asset::AssetServer::GetTextures(std::string_view key, std::vector<int>& outHandles) {
-    if (!_textures.contains(key.data())) {
+    if (_textures.count(key.data()) != 1) {
         return false;
     }
     auto&& [divGraph, handles] = _textures[key.data()];
@@ -77,7 +77,7 @@ bool Asset::AssetServer::GetTextures(std::string_view key, std::vector<int>& out
 }
 /// 画像ハンドルの分割数の取得
 int Asset::AssetServer::GetTextureCount(std::string_view& key) {
-  if (!_textures.contains(key.data())) {
+  if (_textures.count(key.data()) != 1) {
     return -1;
   }
   auto&& [divGraph, handles] = _textures[key.data()];
@@ -86,7 +86,7 @@ int Asset::AssetServer::GetTextureCount(std::string_view& key) {
 }
 /// 画像情報の取得
 Asset::Texture Asset::AssetServer::GetTextureInfo(std::string_view& key) {
-  if (!_textures.contains(key.data())) {
+  if (_textures.count(key.data()) != 1) {
     return Texture();
   }
   auto&& [divGraph, handles] = _textures[key.data()];
@@ -106,7 +106,7 @@ void Asset::AssetServer::ClearTextures() {
 
 /// モデルの読み込み
 int Asset::AssetServer::LoadModel(std::string_view key, const std::string_view filename) {
-	if (_models.contains(key.data())) {
+	if (_models.count(key.data()) != 0) {
 		auto& [filename, handles] = _models[key.data()];
 		// 登録済みの場合はモデルを削除
 		for (auto handle : handles) {
@@ -139,7 +139,7 @@ void Asset::AssetServer::LoadModels(const ModelMap& modelMap) {
 }
 /// モデルのハンドルの取得
 std::pair<int, int> Asset::AssetServer::GetModel(std::string_view key, int no) {
-    if (!_models.contains(key.data())) {
+    if (_models.count(key.data()) != 1) {
         // キーが未登録
         return std::make_pair(-1, no);
     }
@@ -167,20 +167,23 @@ void Asset::AssetServer::ClearModels() {
 void Asset::AssetServer::DeleteDuplicateModels() {
   for (auto&& [key, model] : _models) {
     auto&& [filename, handles] = model;
+
     auto original = handles[0];
-    erase_if(handles, [original](auto handle) {
-      if (original != handle) {
-        MV1DeleteModel(handle);
-        return true;
-      }
-      return false;
-    });
+    auto isDead = [original](auto handle) {
+        if (original != handle) {
+            MV1DeleteModel(handle);
+            return true;
+        } 
+        return false; };
+    auto it = std::remove_if(handles.begin(), handles.end(), isDead);
+    handles.erase(it, handles.end());
+    
   }
 }
 
 /// 音ファイルの読み込み
 void Asset::AssetServer::LoadSound(std::string_view key, std::pair<std::string, bool> filename_isLoad) {
-    if (_sounds.contains(key.data())) {
+    if (_sounds.count(key.data()) != 0) {
         // キーがあった登録済み
         return;
     }
@@ -205,7 +208,7 @@ void Asset::AssetServer::LoadSounds(const SoundMap& soundMap) {
 
 /// 音ファイル情報の取得
 std::pair<std::string, int> Asset::AssetServer::GetSoundInfo(std::string_view key) {
-  if (!_sounds.contains(key.data())) {
+  if (_sounds.count(key.data()) != 1) {
     // キーが未登録
     return std::make_pair("", -1);
   }

@@ -136,6 +136,7 @@ namespace MachineHuck::Enemy {
 			if (_status != STATUS::ISHUCKED && _status != STATUS::ISHUCKING) {
 				auto player = GetActorServer().GetPosition("Player");
 				// プレイヤーに向かうベクトル
+				player = { player.GetX(), 0.0, player.GetZ() };
 				auto forward = player - _position;
 				// プレイヤーに向かう単位ベクトル
 				if (Math::Vector4 v{ 0.0, 0.0, 0.0 }; forward.GetX() != v.GetX() && forward.GetZ() != v.GetZ())
@@ -565,6 +566,7 @@ namespace MachineHuck::Enemy {
 
 			//追跡中
 			auto player = _owner.GetActorServer().GetPosition("Player");
+			player = { player.GetX(), 0.0, player.GetZ() };
 			auto dif = player - _owner.GetPosition();
 			auto length = dif.Length_XZ();
 
@@ -598,18 +600,18 @@ namespace MachineHuck::Enemy {
 			_owner._position = _owner.GetPosition() + _norm * _speed;
 
 
-			//地面と触れているかどうか
-			if (_owner.CollisionFloor(oldPos)) {
+			////地面と触れているかどうか
+			//if (_owner.CollisionFloor(oldPos)) {
 
 				//主人公のカメラに移動量を送る
 				_owner.SetHuckedMove(_norm * _speed);
-			}
-			else {
-			
-				Math::Vector4 zero = { 0.0, 0.0, 0.0 };
-				//主人公のカメラに移動量を送る
-				_owner.SetHuckedMove(zero);
-			}
+			//}
+			//else {
+			//
+			//	Math::Vector4 zero = { 0.0, 0.0, 0.0 };
+			//	//主人公のカメラに移動量を送る
+			//	_owner.SetHuckedMove(zero);
+			//}
 			
 
 			if (_owner.IsHucked()) {
@@ -789,14 +791,14 @@ namespace MachineHuck::Enemy {
 		Math::Vector4 oldPos = _owner.GetPosition();
 		_owner.HuckedMove(_lx, _ly);
 
-		//地面と触れているかどうか
-		if (!_owner.CollisionFloor(oldPos)) {
-			Math::Vector4 zero = { 0.0, 0.0, 0.0 };
-			//主人公のカメラに移動量を送る
-			_owner.SetHuckedMove(zero);
-		}
-		else {
-		}
+		////地面と触れているかどうか
+		//if (!_owner.CollisionFloor(oldPos)) {
+		//	Math::Vector4 zero = { 0.0, 0.0, 0.0 };
+		//	//主人公のカメラに移動量を送る
+		//	_owner.SetHuckedMove(zero);
+		//}
+		//else {
+		//}
 
 
 
