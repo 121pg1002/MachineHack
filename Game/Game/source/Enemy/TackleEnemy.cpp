@@ -33,11 +33,14 @@ namespace MachineHuck::Enemy {
 		_huckingRange = 0.0;
 		_gaugeBase->Init();
 
-
 	}
 
 	void TackleEnemy::LoadJson(const std::string& filepath)
 	{
+
+
+
+
 		auto eParam = std::make_unique<EnemyParameter>();
 		eParam->LoadEnemyParam(filepath);
 

@@ -34,9 +34,16 @@ namespace MachineHuck::Parameter {
 		 */
 		void SetLevel(int level) { _level = level; }
 
+		/**
+		 * @brief  ¶¬‰ñ”       
+		 * @return 
+		 */
+		int GetProgress() { _progress; }
+
 	private:
 
 		int _level; //!< “G‚ÌƒŒƒxƒ‹
+		int _progress{ 0 }; //!< ¶¬‰ñ”
 		std::string _type;
 	};
 }

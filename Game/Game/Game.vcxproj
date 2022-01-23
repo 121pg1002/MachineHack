@@ -67,6 +67,7 @@
     <ClCompile Include="source\UI\Sprite.cpp" />
     <ClCompile Include="source\UI\SpriteServer.cpp" />
     <ClCompile Include="source\UI\UIComponent.cpp" />
+    <ClCompile Include="SpawnTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Actor\Actor.h" />
@@ -118,6 +119,7 @@
     <ClInclude Include="source\UI\Sprite.h" />
     <ClInclude Include="source\UI\SpriteServer.h" />
     <ClInclude Include="source\UI\UIComponent.h" />
+    <ClInclude Include="SpawnTable.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

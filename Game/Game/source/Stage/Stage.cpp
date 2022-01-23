@@ -12,6 +12,7 @@
 #include "AppFrame.h"
 #include "../Model/ModelComponent.h"
 #include "../Actor/ActorServer.h"
+#include "../Actor/ActorFactory.h"
 #include "StageParameter.h"
 #include "../Collision/CollisionComponent.h"
 
@@ -176,7 +177,6 @@ namespace MachineHuck::Stage {
 					//描画するフロア番号で回す
 					for (auto&& no : _drawFloorV) {
 
-						if (no != 0 && no != 3) {
 
 							//主人公の触れているフロア番号と一致した場合
 		//					if (no == _stageNo) {
@@ -189,7 +189,8 @@ namespace MachineHuck::Stage {
 
 								floor->Draw();
 							}
-						}
+
+						
 
 							//隠し扉用の機構(試し)
 							//for (auto i = 0; i != value.size(); i++) {
@@ -339,6 +340,9 @@ namespace MachineHuck::Stage {
 
 		auto stageTableVector = game.GetStageParameter().GetStageTableVector();
 	
+		//ステージテーブルをアクターファクトリーに渡す
+		GetGame().GetActorFactory().SetStageTable(stageTableVector);
+		
 		auto startX = StartX;
 		auto startZ = 0.0;
 
@@ -352,7 +356,7 @@ namespace MachineHuck::Stage {
 			//1列分のフロア
 			for (auto j = 0; j < stageTableVector[i].size(); j++) {
 			
-				//1列分のj番目の数値
+				//左からj番目の数値
 				auto num = stageTableVector[i][j];
 
 				//最後の一番上の列だけ除く
@@ -372,6 +376,7 @@ namespace MachineHuck::Stage {
 				//_board[i * _boardH + j] = i * BoardSize + j;
 				//_boardStageNum.push_back(num);
 
+				//0は何もなし
 				if (num == 0) {
 				offsetX += Differ;
 
@@ -501,6 +506,10 @@ namespace MachineHuck::Stage {
 
 
 		_drawFloorV = stageNoV;
+
+		//アクターファクトリーに敵のリスポーン情報を送る
+		GetGame().GetActorFactory().SetStageNo(_drawFloorV);
+		
 		return stageNo;
 	}
 

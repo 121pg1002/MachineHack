@@ -15,6 +15,12 @@
 #include "../Enemy/EnemyParameter.h"
 #include "../UI/UIComponent.h"
 
+namespace {
+
+    constexpr int StageAll = 2; //!< 読み込むjsonの最大数
+
+}
+
 namespace MachineHuck::Scene {
     /// コンストラクタ
     SceneInGame::SceneInGame(AppFrame::Game& game)
@@ -94,25 +100,21 @@ namespace MachineHuck::Scene {
 
         //}
 
-        MachineHuck::Actor::ActorFactory::SpawnTable inGame{
-          {0     , "TackleEnemy", { 300.f, 200.f, 300.0f}},
-          {0     , "TackleEnemy", {   0.f, 220.f, 500.0f}},
-          {0     , "TackleEnemy", {-300.f, 210.f, 400.0f}},
+        //エネミーのステージ配置を一括で読み込む
+            for (int i = 0; i < StageAll; i++) {
 
-          //{0     , "DamageFloor", { 500.f, 200.f, 0.0f}},
-          //{0     , "DamageFloor", {  0.f,  200.f, 100.0f}},
-          //{0     , "DamageFloor", {-500.f, 200.f, 200.0f}},
+                //ステージ番号をstringに変換
+                auto no = std::to_string(i);
+                //下の二つを起動すればjsonが読み込める
+                //auto stageParameter = std::make_unique<StageParameter>();
+                GetGame().GetEnemyParameter().LoadStageEnemyParam(i, "resource/json/stageenemy" + no + ".json");
+            }
 
-          //{60 * 10,"Enemy", { 1000.f, 2000.f, -4500}},
-          //{0     , "Enemy", {    0.f, 2200.f, -4500}},
-          //{0     , "Enemy", {-1000.f, 2100.f, -4500}},
+        
+        //読み込んだエネミーのステージ配置をテーブルに入れる
+        auto inGame = GetGame().GetEnemyParameter().GetFloorEnemyMap();
 
-          //{60 * 15,"Enemy", { 1500.f, 2000.f, -4500}},
-          //{0     , "Enemy", {    0.f, 2200.f, -4500}},
-          //{0     , "Enemy", {-1500.f, 2100.f, -4500}},
-        };
-
-
+        //エネミーのスポーンテーブルの読み込み
         af.SetSpawnTable(inGame);
 
         //af.SetSpawnTable(EParam->GetStageEnemyParameter());
@@ -176,6 +178,7 @@ namespace MachineHuck::Scene {
     }
     /// 更新
     void SceneInGame::Update() {
+
         GetActorFactory().UpdateSpawn();
         GetActorServer().Update();
         GetUiComponent().Update();

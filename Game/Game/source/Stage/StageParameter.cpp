@@ -149,6 +149,7 @@ namespace MachineHuck::Stage {
 
 				_stageTableV.push_back(stageTable);
 				
+				
 				//auto& fileName = jsRoot["StageTable"].at(i)["filename"];
 				//auto& handleName = jsRoot["StageTable"].at(i)["handlename"];
 				//for (int j = 0; j < jsRoot["StageTable"].at(i).size(); j++) {

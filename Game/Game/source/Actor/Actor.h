@@ -93,6 +93,12 @@ namespace MachineHuck::Actor {
             bool IsHucked() const { return (_actorState == ActorState::Hucked); }
 
             /**
+             * @brief  ステージかどうか         
+             * @return TypeId::Stage
+             */
+            TypeId IsStage() const { return TypeId::Stage; }
+
+            /**
              * @brief ステージフロアとの当たり判定
              * @param oldPos 
              * @return 当たっているか当たっていないか
@@ -216,6 +222,7 @@ namespace MachineHuck::Actor {
 
             AppFrame::Game& _game;
             ActorState _actorState{ ActorState::Active };
+            TypeId _typeId{ TypeId::Actor };
             std::unique_ptr<State::StateComponent> _state;
             std::unique_ptr<Model::ModelAnimeComponent> _model;
             std::shared_ptr<Camera::CameraComponent> _camera;

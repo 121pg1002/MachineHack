@@ -70,6 +70,12 @@ namespace MachineHuck::Stage {
 		 */
 		const int GetMapCollision() const  { return _frameMapCollision; };
 
+		/**
+		 * @brief •`‰æƒtƒƒA‚ğæ“¾
+		 * @return _drawFloorV
+		 */
+		const std::vector<int> GetDrawFloorV() { return _drawFloorV; }
+
 	private:
 		//std::unique_ptr<Model::ModelComponent> _skySphere;
 		std::unique_ptr<Model::ModelComponent> _ground;

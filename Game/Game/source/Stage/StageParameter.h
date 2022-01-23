@@ -57,7 +57,7 @@ namespace MachineHuck::Stage {
 		  * @brief   ベクター配列を取得する
 		  * @return  _stageParamV
 		  */
-		std::vector<Parameter::StageParam> GetStageVector() { return _stageParamV; }
+		 SMV GetStageVector() { return _stageParamV; }
 
 		/**
 		 * @brief  フロア番号の情報を取得
