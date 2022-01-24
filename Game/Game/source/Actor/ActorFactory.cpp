@@ -167,14 +167,17 @@ namespace MachineHuck::Actor {
 
             
             }
-
                 
-
-            //}
 
         
         }
         
+    }
+
+    void ActorFactory::Delete() {
+    
+        
+    
     }
 
     /// ÉvÉåÉCÉÑÅ[ÇÃê∂ê¨

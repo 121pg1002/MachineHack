@@ -54,6 +54,11 @@ namespace MachineHuck::Actor {
 
         void Clear();
 
+        /**
+         * @breif 登録したインスタンスを削除
+         */
+        void Delete();
+
         //struct SpawnRecord {
         //    int _progress{ 0 };
         //    std::string _key;
@@ -159,6 +164,7 @@ namespace MachineHuck::Actor {
         /// @param  game ゲームクラスへの参照
         /// @return エネミーのインスタンス
         virtual std::unique_ptr<Actor> Create(AppFrame::Game& game);
+
     };
 
     /// @class GrabEnemyCreator

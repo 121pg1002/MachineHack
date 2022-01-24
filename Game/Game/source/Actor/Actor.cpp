@@ -40,14 +40,15 @@ namespace MachineHuck::Actor {
 		_worldTransform = MMult(world, MGetTranslate(ToDX(_position)));
 	}
 
-	bool Actor::CollisionFloor(AppFrame::Math::Vector4 oldPos) {
+	bool Actor::CollisionFloor(AppFrame::Math::Vector4 oldPos, std::string_view fileName) {
 
 		//Actor‚Ì•û‚ÉˆÚ“®‚µ‚½•û‚ª‚¢‚¢‚Ç‚Ì‚İ‚¿‘S•””»’è‚·‚é‚©‚ç
 
 		// ˆÚ“®‚µ‚½æ‚ÅƒRƒŠƒWƒ‡ƒ“”»’è
 		MV1_COLL_RESULT_POLY hitPoly;
 
-		auto handle = GetGame().GetAssetServer().GetModel("Dungeon");
+		//auto handle = GetGame().GetAssetServer().GetModel("Dungeon");
+		auto handle = GetGame().GetAssetServer().GetModel(fileName);
 
 		for (auto i = GetActorServer().GetActors().begin(); i != GetActorServer().GetActors().end(); i++) {
 

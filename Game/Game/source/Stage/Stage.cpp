@@ -80,6 +80,9 @@ namespace MachineHuck::Stage {
 		//_ground = std::make_unique<ModelComponent>(*this);
 		//_ground->SetModel("Ground");
 		//_ground->SetScale({10.f, 10.f, 10.f});
+		
+		//ステージのコリジョン情報を取得
+		_collisionFloorNameV = game.GetStageParameter().LoadStageCollision("resource / json / stagecollision.json");
 
 		//const auto& stageVector = game.GetStageParameter().GetStageVector();
 
@@ -100,12 +103,33 @@ namespace MachineHuck::Stage {
 
 		//	_floor.push_back(std::move(ground));
 		//}
-		
-		//フロアの名前を入れる
-		auto handle = game.GetAssetServer().GetModel("Dungeon");
 
-		//ナビメッシュのコリジョン情報を設定
-		GetCollision().SetMapCollision(handle.first);
+
+
+		//ステージ番号順にハンドル名とナビメッシュ名をベクターでいれたものが入っている
+		for (int i = 0; i < _collisionFloorNameV.size(); i++) {
+		
+			//フロアの名前を入れる
+			auto handle = game.GetAssetServer().GetModel(_collisionFloorNameV[i].first);
+
+			//メッシュの数を取得
+			int num = MV1GetMeshNum(handle.first);
+			
+			
+			for (int j = 0; j < num; j++) {
+
+				//メッシュの数回す
+				auto str = _collisionFloorNameV[i].second[j];
+
+				//ナビメッシュのコリジョン情報を設定
+				GetCollision().SetMapCollision(handle.first, str);
+
+			}
+
+			
+
+		}
+		
 
 
 #ifdef _DEBUG

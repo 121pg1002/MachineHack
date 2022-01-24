@@ -167,12 +167,12 @@ namespace MachineHuck::Scene {
         if (input.GetJoypad().Button_X()) {
             // Xボタンでマップ画面へ
             GetSceneServer().PopBack(1);
-            GetSceneServer().PushBack("Map",1);
+            GetSceneServer().PushBack("Map",true);
         }
         if (input.GetJoypad().Button_Y()) {
             // Yボタンでアイテム画面へ
             GetSceneServer().PopBack(1);
-            GetSceneServer().PushBack("Item", 1);
+            GetSceneServer().PushBack("Item", true);
         }
         GetActorServer().Input(input);
     }

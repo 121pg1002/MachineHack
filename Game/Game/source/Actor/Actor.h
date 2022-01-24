@@ -101,9 +101,10 @@ namespace MachineHuck::Actor {
             /**
              * @brief ステージフロアとの当たり判定
              * @param oldPos 
+             * @param fileName
              * @return 当たっているか当たっていないか
              */
-            bool CollisionFloor(AppFrame::Math::Vector4 oldPos);//←これはActorに持ってったほうがいい
+            bool CollisionFloor(AppFrame::Math::Vector4 oldPos, std::string_view fileName);//←これはActorに持ってったほうがいい
 
 
             /**

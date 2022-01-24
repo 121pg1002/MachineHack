@@ -37,14 +37,16 @@ namespace AppFrame::Scene {
         pushScene->Enter();
         _scenes.push_back(pushScene);
     }
+
     //Enterを呼ばずにプッシュバック
-    void SceneServer::PushBack(std::string_view key,int menuflg) {
+    void SceneServer::PushBack(std::string_view key,bool menuflg) {
         if (_registry.count(key.data()) != 1) {
             return;   // キーが未登録
         }
         auto pushScene = _registry[key.data()];
         _scenes.push_back(pushScene);
     }
+
     /// シーンのポップバック.
     /// リストの一番後ろ(最前面)を削除
     void SceneServer::PopBack() {
@@ -54,13 +56,15 @@ namespace AppFrame::Scene {
         _scenes.back()->Exit();
         _scenes.pop_back();
     }
+
     //Exitを呼ばずにポップバック
-    void SceneServer::PopBack(int menuflg) {
+    void SceneServer::PopBack(bool menuflg) {
         if (_scenes.empty()) {
             return;
         }
         _scenes.pop_back();
     }
+
     /// シーンの遷移
     /// ↑次のシーン
     /// ↑フェードイン
