@@ -40,7 +40,6 @@ namespace MachineHuck::Collision {
 
     CollisionComponent::CollisionComponent(Actor::Actor& owner) : _owner{ owner } {
         _frameMapCollision = 0;
-        _frameMapCollisions.clear();
         /*_report = std::make_unique<Report>();*/
     }
 
@@ -596,14 +595,6 @@ namespace MachineHuck::Collision {
         return false;
     }
 
-    const int CollisionComponent::GetMapCollision(std::string key) {
-        
-
-        
-    
-        return 0;
-    }
-
     //bool CollisionComponent::CollisionFloor(const Actor::Actor& act) {
 
 
@@ -709,13 +700,11 @@ namespace MachineHuck::Collision {
         return start + (end - start) * t;
     }
 
-    void CollisionComponent::SetMapCollision(int handle, std::string key) {
+    void CollisionComponent::SetMapCollision(int handle) {
 
 		//ナビメッシュの名前
-		//_frameMapCollision = MV1SearchFrame(handle, "dungeon_collision");
-        auto frameMapCollision = MV1SearchFrame(handle, key.c_str());
-		MV1SetupCollInfo(handle, frameMapCollision, 16, 16, 16);
-        _frameMapCollisions.push_back(frameMapCollision);
+		_frameMapCollision = MV1SearchFrame(handle, "dungeon_collision");
+		MV1SetupCollInfo(handle, _frameMapCollision, 16, 16, 16);
     
     }
 

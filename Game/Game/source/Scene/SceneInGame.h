@@ -14,6 +14,8 @@
 
 class CameraComponent;
 
+class Player;
+
 namespace MachineHuck::Scene {
 	/// @class   SceneInGame
 	/// @brief   インゲーム画面クラスの宣言
@@ -39,7 +41,7 @@ namespace MachineHuck::Scene {
 		void Exit() override;
 	private:
 		MachineHuck::ShadowMap::Shadowmap shadowmap;
-
+		
 		
 	};
 }

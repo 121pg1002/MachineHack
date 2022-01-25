@@ -43,7 +43,7 @@ namespace AppFrame::Scene {
 		/// @param[in] key  Sceneのインスタンスに関連付けるた任意の文字列
 		///
 		void PushBack(std::string_view key);
-		void PushBack(std::string_view key,bool menuflg);
+		void PushBack(std::string_view key,int menuflg);
 		///
 		/// 
 		/// シーンのポップバック
@@ -51,7 +51,7 @@ namespace AppFrame::Scene {
 		/// Sceneの出口処理Exitを実行する
 		///
 		void PopBack();
-		void PopBack(bool menuflg);
+		void PopBack(int menuflg);
 		///
 		/// シーンの遷移
 		/// PopBackしてPushBackする

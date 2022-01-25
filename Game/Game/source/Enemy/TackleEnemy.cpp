@@ -33,14 +33,11 @@ namespace MachineHuck::Enemy {
 		_huckingRange = 0.0;
 		_gaugeBase->Init();
 
+
 	}
 
 	void TackleEnemy::LoadJson(const std::string& filepath)
 	{
-
-
-
-
 		auto eParam = std::make_unique<EnemyParameter>();
 		eParam->LoadEnemyParam(filepath);
 
@@ -82,6 +79,14 @@ namespace MachineHuck::Enemy {
 
 		if (_status != STATUS::DYING && _status != STATUS::CHASE) {
 			Move();
+		}
+
+		if (_status == STATUS::ISHUCKED) {
+			SetShadowMapflg(TRUE);
+		}
+		else
+		{
+			SetShadowMapflg(FALSE);
 		}
 
 		_state->Update();
