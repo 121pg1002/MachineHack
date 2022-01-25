@@ -19,18 +19,6 @@
 
 namespace Camera = MachineHuck::Camera;
 
-namespace {
-
-    //constexpr int StageAll = 3;        //!< 読み込むstagejsonの数
-    constexpr double Differ = 1000.0; //!< 1フロアのサイズ
-    constexpr double StartX = -5.0 * Differ;
-    constexpr int BoardSize = 10;
-
-    //constexpr double HalfSize = 0.5 * Differ;
-    //constexpr int StartZ = -5.0 * Differ;
-
-}
-
 namespace MachineHuck::Actor {
     class CreatorBase;
 }
@@ -49,7 +37,6 @@ namespace MachineHuck::Actor {
         _creatorMap.emplace(type.data(), std::move(creator));
         return true;
     }
-
     /// アクターの生成
     std::unique_ptr<Actor> ActorFactory::Create(std::string_view type) {
         
@@ -65,120 +52,51 @@ namespace MachineHuck::Actor {
         _creatorMap.clear();
     }
 
-    //void ActorFactory::SetSpawnTable(SpawnTable spawnTable) {
-    //    _spawnProgress = 0;
-    //    _progress = 0;
-    //    _spawnTable = spawnTable;
-    //}
-
-    void ActorFactory::SetSpawnTable(std::unordered_map<int, ESMV> eStageParamVMap) {
+    void ActorFactory::SetSpawnTable(SpawnTable spawnTable) {
         _spawnProgress = 0;
         _progress = 0;
-        _eStageParamVMap = eStageParamVMap;
+        _spawnTable = spawnTable;
+    }
+
+    void ActorFactory::SetSpawnTable(std::vector<Parameter::EStageParam> vEStageParam) {
+        _spawnProgress = 0;
+        _progress = 0;
+        _eStageParamV = vEStageParam;
+    }
+
+    void ActorFactory::UpdateSpawn() {
+        while (_spawnTable.size() > _spawnProgress) {
+            auto& spawnRecord = _spawnTable[_spawnProgress];
+            if (spawnRecord._progress > _progress) {
+                break;
+            }
+            else {
+                auto&& actor = Create(spawnRecord._key);
+                actor->SetPosition(spawnRecord._position);
+                actor->SetRotation(spawnRecord._rotation);
+                _game.GetActorServer().Add(std::move(actor));
+                ++_spawnProgress;
+            }
+        }
+        ++_progress;
     }
 
     //void ActorFactory::UpdateSpawn() {
-    //    while (_spawnTable.size() > _spawnProgress) {
-    //        auto& spawnRecord = _spawnTable[_spawnProgress];
-    //        if (spawnRecord._progress > _progress) {
+    //    while (_eStageParamV.size() > _spawnProgress) {
+    //        auto& spawnRecord = _eStageParamV[_spawnProgress];
+    //        if (spawnRecord.GetProgress() > _progress) {
     //            break;
     //        }
     //        else {
-    //            auto&& actor = Create(spawnRecord._key);
-    //            actor->SetPosition(spawnRecord._position);
-    //            actor->SetRotation(spawnRecord._rotation);
+    //            auto&& actor = Create(spawnRecord.GetKey());
+    //            actor->SetPosition(spawnRecord.GetPosition());
+    //            actor->SetRotation(spawnRecord.GetRotation());
     //            _game.GetActorServer().Add(std::move(actor));
     //            ++_spawnProgress;
     //        }
     //    }
     //    ++_progress;
     //}
-
-    void ActorFactory::UpdateSpawn() {
-       
-        std::vector<int> num;
-
-
-        //現在いる番号配列と前のステージ番号配列が異なる場合
-        if (_oldStageNo != _currentStageNo) {
-        
-
-            //古い配列の中の新しい番号を取り出す
-            for (auto old : _oldStageNo) {
-
-                for (auto newNum : _currentStageNo) {
-
-                    //古い番号配列に新しい番号が無かった場合
-                    if (old != newNum) {
-                        
-                        //古い番号配列にあるか
-                        auto result = std::find(_oldStageNo.begin(), _oldStageNo.end(), newNum);
-                        
-                        //無かった場合
-                        if (result == _oldStageNo.end()) {
-                   
-                            //新しくエネミーを生み出す番号
-                            num.push_back(newNum);
-                        }
-                    }
-                    //else {
-                    //    continue;
-                    //}
-
-                }
-
-            }
-
-            ////前のステージ番号を更新
-            _oldStageNo = _currentStageNo;
-
-
-
-
-
-            ////描画するフロアのステージ番号で回す
-            //for (auto&& num : _currentStageNo) {
-
-            //空かどうか確認
-            if (!num.empty()) {
-
-                //新しい番号で回す
-                for (auto no : num) {
-
-                    auto& spawnFloor = _eStageParamVMap[no];
-
-                    //新しい描画フロアのエネミーをリスポーンさせる
-                    for (auto&& floor : spawnFloor) {
-
-                        auto&& actor = Create(floor.GetName());
-
-                        //auto pos = floor.GetPosition();
-                        //Math::Vector4 dif = {};
-
-                        actor->SetPosition(floor.GetPosition());
-                        actor->SetRotation(floor.GetRotation());
-                        actor->SetScale(floor.GetScale());
-                        _game.GetActorServer().Add(std::move(actor));
-
-                    }
-
-
-                }
-
-            
-            }
-                
-
-        
-        }
-        
-    }
-
-    void ActorFactory::Delete() {
-    
-        
-    
-    }
 
     /// プレイヤーの生成
     std::unique_ptr<Actor> PlayerCreator::Create(AppFrame::Game& game) {

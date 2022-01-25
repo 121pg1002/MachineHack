@@ -15,12 +15,6 @@
 #include "../Enemy/EnemyParameter.h"
 #include "../UI/UIComponent.h"
 
-namespace {
-
-    constexpr int StageAll = 2; //!< 読み込むjsonの最大数
-
-}
-
 namespace MachineHuck::Scene {
     /// コンストラクタ
     SceneInGame::SceneInGame(AppFrame::Game& game)
@@ -100,21 +94,25 @@ namespace MachineHuck::Scene {
 
         //}
 
-        //エネミーのステージ配置を一括で読み込む
-            for (int i = 0; i < StageAll; i++) {
+        MachineHuck::Actor::ActorFactory::SpawnTable inGame{
+          {0     , "TackleEnemy", { 300.f, 200.f, 300.0f}},
+          {0     , "TackleEnemy", {   0.f, 220.f, 500.0f}},
+          {0     , "TackleEnemy", {-300.f, 210.f, 400.0f}},
 
-                //ステージ番号をstringに変換
-                auto no = std::to_string(i);
-                //下の二つを起動すればjsonが読み込める
-                //auto stageParameter = std::make_unique<StageParameter>();
-                GetGame().GetEnemyParameter().LoadStageEnemyParam(i, "resource/json/stageenemy" + no + ".json");
-            }
+          //{0     , "DamageFloor", { 500.f, 200.f, 0.0f}},
+          //{0     , "DamageFloor", {  0.f,  200.f, 100.0f}},
+          //{0     , "DamageFloor", {-500.f, 200.f, 200.0f}},
 
-        
-        //読み込んだエネミーのステージ配置をテーブルに入れる
-        auto inGame = GetGame().GetEnemyParameter().GetFloorEnemyMap();
+          //{60 * 10,"Enemy", { 1000.f, 2000.f, -4500}},
+          //{0     , "Enemy", {    0.f, 2200.f, -4500}},
+          //{0     , "Enemy", {-1000.f, 2100.f, -4500}},
 
-        //エネミーのスポーンテーブルの読み込み
+          //{60 * 15,"Enemy", { 1500.f, 2000.f, -4500}},
+          //{0     , "Enemy", {    0.f, 2200.f, -4500}},
+          //{0     , "Enemy", {-1500.f, 2100.f, -4500}},
+        };
+
+
         af.SetSpawnTable(inGame);
 
         //af.SetSpawnTable(EParam->GetStageEnemyParameter());
@@ -125,7 +123,7 @@ namespace MachineHuck::Scene {
         // ステージの生成と追加
         auto stage = af.Create("Stage");
         as.Add(std::move(stage));
-
+        
         ////ダメージ床ギミックの生成と追加
         //auto damageFloorGimmick = af.Create("DamageFloor");
         //as.Add(std::move(damageFloorGimmick));
@@ -167,18 +165,17 @@ namespace MachineHuck::Scene {
         if (input.GetJoypad().Button_X()) {
             // Xボタンでマップ画面へ
             GetSceneServer().PopBack(1);
-            GetSceneServer().PushBack("Map",true);
+            GetSceneServer().PushBack("Map",1);
         }
         if (input.GetJoypad().Button_Y()) {
             // Yボタンでアイテム画面へ
             GetSceneServer().PopBack(1);
-            GetSceneServer().PushBack("Item", true);
+            GetSceneServer().PushBack("Item", 1);
         }
         GetActorServer().Input(input);
     }
     /// 更新
     void SceneInGame::Update() {
-
         GetActorFactory().UpdateSpawn();
         GetActorServer().Update();
         GetUiComponent().Update();
@@ -186,12 +183,16 @@ namespace MachineHuck::Scene {
 
     /// 描画
     void SceneInGame::Render() {
+        //シャドウマップへの描画のフラグをオンにする
+        GetActorServer().GetActors()[1]->SetShadowMapflg(true);
         //シャドウマップへの描画の準備を行う
         ShadowMap_DrawSetup(shadowmap.GetShadowmap());
         //シャドウマップに描画したい3Dモデルの描画
         GetActorServer().Render();
         //シャドウマップへの描画を終了する
         ShadowMap_DrawEnd();
+        //シャドウマップへの描画のフラグをオフにする。
+        GetActorServer().GetActors()[1]->SetShadowMapflg(false);
         //	描画で使用するシャドウマップを変更する
         SetUseShadowMap(0, shadowmap.GetShadowmap());
         //3Dモデルの描画

@@ -10,7 +10,6 @@
 #include <filesystem>
 #include <fstream> 
 #include "../../../../AppFrame/source/Asset/AssetServer.h"
-#include "../Parameter/EStageParam.h"
 
 
 using Json = nlohmann::json;
@@ -20,10 +19,8 @@ namespace MachineHuck::Enemy {
     //コンストラクタ
     EnemyParameter::EnemyParameter()
     {
-        _eStageParamV.clear();
-        _eStageNumMap.clear();
-       // _eType.clear();
-       // _eSMap.clear();
+        _eType.clear();
+        _eSMap.clear();
         /*_enemyStageParamMap.clear();*/
             //_enemyParamMap.clear();//EParam
             //_enemyParameterMap.clear();//double
@@ -32,23 +29,20 @@ namespace MachineHuck::Enemy {
     //デストラクタ
     EnemyParameter::~EnemyParameter()
     {
-        _eStageParamV.clear();
-        _eStageNumMap.clear();
-        //_eType.clear();
-        //_eSMap.clear();
+        _eType.clear();
+        _eSMap.clear();
         /*_enemyStageParamMap.clear();*/
         //_enemyParamMap.clear();
         //_enemyParameterMap.clear();
         _vDoubleMap.clear();
     }
     //エネミーのステージ配置情報をjsonから読み込む
-    void EnemyParameter::LoadStageEnemyParam(const int stageNo, const std::string& filePath)
+    void EnemyParameter::LoadStageEnemyParam(const std::string& filePath)
     {
         //// Jsonファイルの読み込み
         std::ifstream jsonFile(filePath);
         auto jsRoot = Json::parse(jsonFile);
-        auto j = jsRoot["StageEnemy"];
-        _eStageParamV.clear();
+        auto j = jsRoot["stageenemy"];
         //敵の種類で読み込むjsonを変える
         //if (filePath.find("tackle")) {
 
@@ -61,80 +55,38 @@ namespace MachineHuck::Enemy {
         //	printf("filepath is enemy name error");
         //	return;
         //}
-                //読み込めなかったとき
-        if (jsRoot["StageEnemy"].size() == 0) {
-
-            printf("jsRoot is not load");
-        }
-        else {
-
-
-            for (int i = 0; i < jsRoot["StageEnemy"].size(); i++) {
-
-                Parameter::EStageParam eSP;
-
-                const std::string& fileName = jsRoot["StageEnemy"].at(i)["filename"];
-                //auto& handleName = jsRoot["Stage"].at(i)["handlename"];
-                const double& tx = jsRoot["StageEnemy"].at(i)["tx"];
-                const double& ty = jsRoot["StageEnemy"].at(i)["ty"];
-                const double& tz = jsRoot["StageEnemy"].at(i)["tz"];
-                const double& rx = jsRoot["StageEnemy"].at(i)["rx"];
-                const double& ry = jsRoot["StageEnemy"].at(i)["ry"];
-                const double& rz = jsRoot["StageEnemy"].at(i)["rz"];
-                const double& sx = jsRoot["StageEnemy"].at(i)["sx"];
-                const double& sy = jsRoot["StageEnemy"].at(i)["sy"];
-                const double& sz = jsRoot["StageEnemy"].at(i)["sz"];
-
-                Math::Vector4 pos = { tx, ty, tz };
-                Math::Vector4 rot = { rx, ry, rz };
-                Math::Vector4 scale = { sx, sy, sz };
-
-
-                eSP.SetName(fileName);
-                eSP.SetPos(pos);
-                eSP.SetRot(rot);
-                eSP.SetScale(scale);
-
-                //ブロック一つ一つを格納
-                _eStageParamV.emplace_back(eSP);
-
-            }
-
-            //フロア番号で1フロア分を格納
-            _eStageNumMap.emplace(stageNo, _eStageParamV);
-        }
 
         //// パラメータをjsonから取得
         /// 
-        //for (int i = 0; i < j.size(); i++) {
-        //    const auto& stageNo = j.at(i)["stageNo"];
-        //    const auto& handleName = j.at(i)["handlename"];
-        //    const auto& type = j.at(i)["type"];
-        //    auto& tx = j.at(i)["tx"];
-        //    auto& ty = j.at(i)["ty"];
-        //    auto& tz = j.at(i)["tz"];
-        //    auto& rx = j.at(i)["rx"];
-        //    auto& ry = j.at(i)["ry"];
-        //    auto& rz = j.at(i)["rz"];
-        //    auto& sx = j.at(i)["sx"];
-        //    auto& sy = j.at(i)["sy"];
-        //    auto& sz = j.at(i)["sz"];
-        //    auto& level = j.at(i)["level"];
-        //    Math::Vector4 pos = { tx, ty, tz };
-        //    Math::Vector4 rot = { rx, ry, rz };
-        //    Math::Vector4 scale = { sx, sy, sz };
-        //    Parameter::EStageParam eSP;
-        //    //eSP.SetName(handleName);
-        //    eSP.SetPos(pos);
-        //    eSP.SetRot(rot);
-        //    eSP.SetScale(scale);
-        //    eSP.SetLevel(level);
-        //    std::unordered_map<std::string, Parameter::EStageParam>     enemyStageParamMap; //!< 敵のステージ配置を保存
-        //    std::unordered_map<std::string, Type>            eType;              //!< 敵の種類をキーとした要素を保存
-        //    enemyStageParamMap.emplace(handleName, eSP);
-        //    eType.emplace(type, enemyStageParamMap);
-        //    _eSMap.emplace(stageNo, eType);
-        //}
+        for (int i = 0; i < j.size(); i++) {
+            const auto& stageNo = j.at(i)["stageNo"];
+            const auto& handleName = j.at(i)["handlename"];
+            const auto& type = j.at(i)["type"];
+            auto& tx = j.at(i)["tx"];
+            auto& ty = j.at(i)["ty"];
+            auto& tz = j.at(i)["tz"];
+            auto& rx = j.at(i)["rx"];
+            auto& ry = j.at(i)["ry"];
+            auto& rz = j.at(i)["rz"];
+            auto& sx = j.at(i)["sx"];
+            auto& sy = j.at(i)["sy"];
+            auto& sz = j.at(i)["sz"];
+            auto& level = j.at(i)["level"];
+            Math::Vector4 pos = { tx, ty, tz };
+            Math::Vector4 rot = { rx, ry, rz };
+            Math::Vector4 scale = { sx, sy, sz };
+            Parameter::EStageParam eSP;
+            //eSP.SetName(handleName);
+            eSP.SetPos(pos);
+            eSP.SetRot(rot);
+            eSP.SetScale(scale);
+            eSP.SetLevel(level);
+            std::unordered_map<std::string, Parameter::EStageParam>     enemyStageParamMap; //!< 敵のステージ配置を保存
+            std::unordered_map<std::string, Type>            eType;              //!< 敵の種類をキーとした要素を保存
+            enemyStageParamMap.emplace(handleName, eSP);
+            eType.emplace(type, enemyStageParamMap);
+            _eSMap.emplace(stageNo, eType);
+        }
     }
 
     void EnemyParameter::LoadEnemyParam(const std::string& filePath)

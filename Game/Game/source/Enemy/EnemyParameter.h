@@ -17,11 +17,9 @@
 
 namespace MachineHuck::Enemy {
 
-	using ESMV = std::vector<Parameter::EStageParam>;
-	//using StageV = std::vector<int>;
 
-	//using Type = std::unordered_map<std::string, Parameter::EStageParam>;
-	//using StageMap = std::unordered_map<std::string, Type>;
+	using Type = std::unordered_map<std::string, Parameter::EStageParam>;
+	using StageMap = std::unordered_map<std::string, Type>;
 	using DoubleMap = std::unordered_map<std::string, double>;
 
 	class EnemyParameter
@@ -40,10 +38,9 @@ namespace MachineHuck::Enemy {
 
 		/**
 		 * @brief  エネミーのステージ配置情報をjsonから読み込む
-		 * @param  stageNo  ステージ番号
 		 * @param  filePath
 		 */
-		void LoadStageEnemyParam(const int stageNo, const std::string& filePath);
+		void LoadStageEnemyParam(const std::string& filePath);
 
 		/*
 		* @brief  jsonから敵の情報を読み込む
@@ -59,32 +56,22 @@ namespace MachineHuck::Enemy {
 		double GetEnemyParam(const std::string& paramName, int no);
 
 		/**
-		* @brief   ベクター配列を取得する
-		* @return  _eStageParamV
-		*/
-		ESMV GetStageVector() { return _eStageParamV; }
-
-		/**
 		 * @brief  ステージの敵配置マップを取得
 		 * @return _enemyStageParamMap
 		 */
-		//std::unordered_map<std::string, Parameter::EStageParam>GetStageEnemyParameter() { return _enemyStageParamMap; }
-		std::unordered_map<int, ESMV> GetFloorEnemyMap() { return _eStageNumMap; }
+		std::unordered_map<std::string, Parameter::EStageParam>GetStageEnemyParameter() { return _enemyStageParamMap; }
 
 	private:
-		//std::unordered_map<std::string, Parameter::EStageParam>     _enemyStageParamMap; //!< 敵のステージ配置を保存
-		//std::unordered_map<std::string, Type>            _eType;              //!< 敵の種類をキーとした要素を保存
-		//std::unordered_map<std::string, StageMap>        _eSMap;              //!< ステージ番号をキーとして要素を保存
+		std::unordered_map<std::string, Parameter::EStageParam>     _enemyStageParamMap; //!< 敵のステージ配置を保存
+		std::unordered_map<std::string, Type>            _eType;              //!< 敵の種類をキーとした要素を保存
+		std::unordered_map<std::string, StageMap>        _eSMap;              //!< ステージ番号をキーとして要素を保存
 
-		ESMV _eStageParamV; //!< 1フロアの敵配置情報を格納
-
-		std::unordered_map<int, ESMV> _eStageNumMap; //!< フロア番号ごとに格納
 
 	   // std::unordered_map<std::string, double> _enemyParamMap; //!< 敵のパラメーターを保存
 		//std::unordered_map<std::string, EnemyParameter> _enemyParamMap;
 
 		std::vector<DoubleMap> _vDoubleMap;
-		//std::unordered_map<std::string, Parameter::EParam> _enemyParamMap;//!< 敵のパラメーターを保存
+		std::unordered_map<std::string, Parameter::EParam> _enemyParamMap;//!< 敵のパラメーターを保存
 		//std::unordered_map<std::string, double> _enemyParameterMap;//!< 敵のパラメーターを保存
 
 	};

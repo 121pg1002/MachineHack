@@ -12,7 +12,6 @@
 #include "AppFrame.h"
 #include "../Model/ModelComponent.h"
 #include "../Actor/ActorServer.h"
-#include "../Actor/ActorFactory.h"
 #include "StageParameter.h"
 #include "../Collision/CollisionComponent.h"
 
@@ -80,9 +79,6 @@ namespace MachineHuck::Stage {
 		//_ground = std::make_unique<ModelComponent>(*this);
 		//_ground->SetModel("Ground");
 		//_ground->SetScale({10.f, 10.f, 10.f});
-		
-		//ステージのコリジョン情報を取得
-		_collisionFloorNameV = game.GetStageParameter().LoadStageCollision("resource / json / stagecollision.json");
 
 		//const auto& stageVector = game.GetStageParameter().GetStageVector();
 
@@ -103,33 +99,12 @@ namespace MachineHuck::Stage {
 
 		//	_floor.push_back(std::move(ground));
 		//}
-
-
-
-		//ステージ番号順にハンドル名とナビメッシュ名をベクターでいれたものが入っている
-		for (int i = 0; i < _collisionFloorNameV.size(); i++) {
 		
-			//フロアの名前を入れる
-			auto handle = game.GetAssetServer().GetModel(_collisionFloorNameV[i].first);
+		//フロアの名前を入れる
+		auto handle = game.GetAssetServer().GetModel("Dungeon");
 
-			//メッシュの数を取得
-			int num = MV1GetMeshNum(handle.first);
-			
-			
-			for (int j = 0; j < num; j++) {
-
-				//メッシュの数回す
-				auto str = _collisionFloorNameV[i].second[j];
-
-				//ナビメッシュのコリジョン情報を設定
-				GetCollision().SetMapCollision(handle.first, str);
-
-			}
-
-			
-
-		}
-		
+		//ナビメッシュのコリジョン情報を設定
+		GetCollision().SetMapCollision(handle.first);
 
 
 #ifdef _DEBUG
@@ -201,6 +176,7 @@ namespace MachineHuck::Stage {
 					//描画するフロア番号で回す
 					for (auto&& no : _drawFloorV) {
 
+						if (no != 0 && no != 3) {
 
 							//主人公の触れているフロア番号と一致した場合
 		//					if (no == _stageNo) {
@@ -213,8 +189,7 @@ namespace MachineHuck::Stage {
 
 								floor->Draw();
 							}
-
-						
+						}
 
 							//隠し扉用の機構(試し)
 							//for (auto i = 0; i != value.size(); i++) {
@@ -364,9 +339,6 @@ namespace MachineHuck::Stage {
 
 		auto stageTableVector = game.GetStageParameter().GetStageTableVector();
 	
-		//ステージテーブルをアクターファクトリーに渡す
-		GetGame().GetActorFactory().SetStageTable(stageTableVector);
-		
 		auto startX = StartX;
 		auto startZ = 0.0;
 
@@ -380,7 +352,7 @@ namespace MachineHuck::Stage {
 			//1列分のフロア
 			for (auto j = 0; j < stageTableVector[i].size(); j++) {
 			
-				//左からj番目の数値
+				//1列分のj番目の数値
 				auto num = stageTableVector[i][j];
 
 				//最後の一番上の列だけ除く
@@ -400,7 +372,6 @@ namespace MachineHuck::Stage {
 				//_board[i * _boardH + j] = i * BoardSize + j;
 				//_boardStageNum.push_back(num);
 
-				//0は何もなし
 				if (num == 0) {
 				offsetX += Differ;
 
@@ -530,10 +501,6 @@ namespace MachineHuck::Stage {
 
 
 		_drawFloorV = stageNoV;
-
-		//アクターファクトリーに敵のリスポーン情報を送る
-		GetGame().GetActorFactory().SetStageNo(_drawFloorV);
-		
 		return stageNo;
 	}
 

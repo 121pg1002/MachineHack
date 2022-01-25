@@ -32,12 +32,6 @@ namespace MachineHuck::Actor {
 		/// アクターの追加
 		/// @param actor 
 		void Add(std::unique_ptr<Actor> actor);
-
-		/**
-		 * @brief アクターの削除
-		 * @param actor
-		 */
-		void Del(std::unique_ptr<Actor> actor);
 		/// 入力
 		/// @param[in] input インプットコンポーネント
 		void Input(AppFrame::Input::InputComponent& input);

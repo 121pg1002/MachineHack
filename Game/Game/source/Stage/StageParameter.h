@@ -23,7 +23,6 @@ namespace MachineHuck::Stage {
 
 		using SMV = std::vector<Parameter::StageParam>;
 		using StageV = std::vector<int>;
-		using Collision = std::vector<std::pair<std::string, std::vector<std::string>>>;
 
 		/**
 		 * @brief 変数の初期化
@@ -47,13 +46,6 @@ namespace MachineHuck::Stage {
          * @param filePath
          */
 		void LoadStageTable(const std::string& filePath);
-		
-		/**
-		 * @brief  ステージのコリジョン情報をjsonから読み込む
-		 * @param  filePath
-		 * @return 
-		 */
-		Collision LoadStageCollision(const std::string& filePath);
 
 		/**
 		 * @brief   コンテナを取得する
@@ -65,7 +57,7 @@ namespace MachineHuck::Stage {
 		  * @brief   ベクター配列を取得する
 		  * @return  _stageParamV
 		  */
-		 SMV GetStageVector() { return _stageParamV; }
+		std::vector<Parameter::StageParam> GetStageVector() { return _stageParamV; }
 
 		/**
 		 * @brief  フロア番号の情報を取得

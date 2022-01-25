@@ -175,41 +175,25 @@ namespace MachineHuck::Collision {
 		 */
 		const Math::Vector4 PointOnSegment(const Math::Vector4 start, const Math::Vector4 end, const double t);
 
-		///**
-		// * @brief  マップコリジョン情報を取得       
-		// * @return _frameMapCollision
-		// */
-		//const int GetMapCollision() const  { return _frameMapCollision; };
-
-		/**
-		 * @brief  マップのコリジョン情報配列を取得
-		 * @return _frameMapCollisions
-		 */
-		const std::vector<int> GetMapCollision() const { return _frameMapCollisions; }
-
 		/**
 		 * @brief  マップコリジョン情報を取得       
-		 * @param key 
 		 * @return _frameMapCollision
 		 */
-		const int GetMapCollision(std::string key);
-
+		const int GetMapCollision() const  { return _frameMapCollision; };
 
 		/**
 		 * @brief  マップコリジョン情報の設定       
 		 * @param  handle
-		 * @param  key 
 		 */
-		void SetMapCollision(int handle, std::string key);
+		void SetMapCollision(int handle);
 
 	private:
 		Actor::Actor& _owner;
 		/*std::unique_ptr<Report> _report;*/
 		double _r1{ 0.0 }, _r2{ 0.0 }; //!< 円の半径
 
-		Math::Vector4 _interSection;          //!< 線分と回転した四角形との交点
-		int _frameMapCollision;               //!< マップのコリジョン情報
-		std::vector<int> _frameMapCollisions; //!< マップのコリジョン情報のベクター
+		Math::Vector4 _interSection;//!< 線分と回転した四角形との交点
+		int _frameMapCollision; //!< マップのコリジョン情報
 	};
 }
 

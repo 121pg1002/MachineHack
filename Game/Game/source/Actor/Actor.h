@@ -93,18 +93,11 @@ namespace MachineHuck::Actor {
             bool IsHucked() const { return (_actorState == ActorState::Hucked); }
 
             /**
-             * @brief  ステージかどうか         
-             * @return TypeId::Stage
-             */
-            TypeId IsStage() const { return TypeId::Stage; }
-
-            /**
              * @brief ステージフロアとの当たり判定
              * @param oldPos 
-             * @param fileName
              * @return 当たっているか当たっていないか
              */
-            bool CollisionFloor(AppFrame::Math::Vector4 oldPos, std::string_view fileName);//←これはActorに持ってったほうがいい
+            bool CollisionFloor(AppFrame::Math::Vector4 oldPos);//←これはActorに持ってったほうがいい
 
 
             /**
@@ -211,6 +204,10 @@ namespace MachineHuck::Actor {
 
             void SetIsHit(bool isHit) { _isHit = isHit; };
 
+            void SetShadowMapflg(bool flg) { _shadowmapflg = flg; }
+            bool  GetShadowMapflg() { return _shadowmapflg; }
+
+
         protected:
 
             ////*********************************///追加分 12/01
@@ -223,7 +220,6 @@ namespace MachineHuck::Actor {
 
             AppFrame::Game& _game;
             ActorState _actorState{ ActorState::Active };
-            TypeId _typeId{ TypeId::Actor };
             std::unique_ptr<State::StateComponent> _state;
             std::unique_ptr<Model::ModelAnimeComponent> _model;
             std::shared_ptr<Camera::CameraComponent> _camera;
@@ -260,6 +256,8 @@ namespace MachineHuck::Actor {
             double _huckingRange{ 0.0 };
 
             Math::Vector4 _huckedMove{0.0, 0.0, 0.0};
+
+            bool _shadowmapflg;//シャドウマップへの描画かどうか
         private:
 
         };

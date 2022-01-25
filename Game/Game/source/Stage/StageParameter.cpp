@@ -149,7 +149,6 @@ namespace MachineHuck::Stage {
 
 				_stageTableV.push_back(stageTable);
 				
-				
 				//auto& fileName = jsRoot["StageTable"].at(i)["filename"];
 				//auto& handleName = jsRoot["StageTable"].at(i)["handlename"];
 				//for (int j = 0; j < jsRoot["StageTable"].at(i).size(); j++) {
@@ -162,55 +161,5 @@ namespace MachineHuck::Stage {
 		}
 
 	}
-
-	std::vector<std::pair<std::string, std::string>> StageParameter::LoadStageCollision(const std::string& filePath) {
-	
-		//// Jsonファイルの読み込み
-		std::ifstream jsonFile(filePath);
-		auto jsRoot = Json::parse(jsonFile);
-
-		//読み込めなかったとき
-		if (jsRoot["StageCollision"].size() == 0) {
-
-			printf("jsRoot is not load");
-		}
-		else {
-			if (jsRoot["Stage"].size() == 0) {
-
-				printf("jsRoot is not load");
-			}
-			else {
-
-
-				for (int i = 0; i < jsRoot["StageCollision"].size(); i++) {
-
-					Parameter::StageParam sP;
-
-					const std::string& handleName = jsRoot["StageCollision"].at(i)["handlename"];
-					//auto& handleName = jsRoot["Stage"].at(i)["handlename"];
-					const std::string& collName = jsRoot["StageCollision"].at(i)["collname"];
-
-
-
-					const std::string& collWarpName = jsRoot["StageCollision"].at(i)["collwarpname"];
-
-
-					sP.SetName(fileName);
-					sP.SetPos(pos);
-					sP.SetRot(rot);
-					sP.SetScale(scale);
-
-					//ブロック一つ一つを格納
-					_stageParamV.emplace_back(sP);
-
-				}
-
-				//フロア番号で1フロア分を格納
-				_stageNumMap.emplace(num, _stageParamV);
-			}
-
-				return stageCollision;
-	}
-
 }
 

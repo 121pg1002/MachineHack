@@ -20,7 +20,6 @@ namespace MachineHuck::Stage {
 
 	using Floor = std::vector<std::shared_ptr<Model::ModelComponent>>;
 	using StageFloor = std::unordered_map<int, std::tuple<AppFrame::Math::Vector4, AppFrame::Math::Vector4, int>>;
-	using Collision = std::vector<std::pair<std::string, std::vector<std::string>>>;
 	
 	/**
 	 * @class ステージクラス
@@ -65,19 +64,11 @@ namespace MachineHuck::Stage {
 		 */
 		int PlayerOnStageNumber();
 
-		///**
-		// * @brief  マップコリジョン情報を取得       
-		// * @return _frameMapCollision
-		// */
-		//const int GetMapCollision() const  { return _frameMapCollision; };
-
-
-
 		/**
-		 * @brief 描画フロアを取得
-		 * @return _drawFloorV
+		 * @brief  マップコリジョン情報を取得       
+		 * @return _frameMapCollision
 		 */
-		const std::vector<int> GetDrawFloorV() { return _drawFloorV; }
+		const int GetMapCollision() const  { return _frameMapCollision; };
 
 	private:
 		//std::unique_ptr<Model::ModelComponent> _skySphere;
@@ -96,7 +87,7 @@ namespace MachineHuck::Stage {
 
 		std::unordered_map<int, std::vector<int>>  _secretVMap; //!< 隠しているフロア配列を部屋番号で格納するマップ      
 		std::vector<int>                    _secretV;          //!< 隠しているフロアの番号を格納
-		Collision _collisionFloorNameV;         //!< コリジョンの名前フレームの配列 (ハンドル名, コリジョンメッシュ名)
+
 		int _stageNo;  //!< 現在のフロア番号
 
 #ifdef _DEBUG
@@ -108,7 +99,7 @@ namespace MachineHuck::Stage {
 		std::vector<unsigned short> _groundIndex;
 
 #endif
-		//int _frameMapCollision; //!< マップのコリジョン情報
+		int _frameMapCollision; //!< マップのコリジョン情報
 		
 	};
 }

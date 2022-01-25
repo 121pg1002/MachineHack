@@ -17,7 +17,6 @@
 #include "../source/Scene/SceneItem.h"
 #include "../source/Actor/ActorServer.h"
 #include "../source/Actor/ActorFactory.h"
-#include "../source/Enemy/EnemyParameter.h"
 #include "../source/Stage/StageParameter.h"
 #include "../source/Gimmick/GimmickParameter.h"
 #include "../source/Effect/EffectServer.h"
@@ -132,7 +131,6 @@ bool AppFrame::Game::Initialize() {
   // ƒCƒ“ƒQ[ƒ€‚ð¶¬‚µ‚ÄƒV[ƒ“‚Æ‚µ‚Ä“o˜^
   _sceneServer->Register("InGame", std::make_shared<MachineHuck::Scene::SceneInGame>(*this));
 
-  _enemyParam = std::make_unique<MachineHuck::Enemy::EnemyParameter>();
   _stageParam = std::make_unique<MachineHuck::Stage::StageParameter>();
   _gParam = std::make_unique<MachineHuck::Gimmick::GimmickParameter>();
 

@@ -8,6 +8,7 @@
 #pragma once
 #include "../Actor/Actor.h"
 #include "../State/StateComponent.h"
+#include "../ShadowMap/Shadowmap.h"
 #include <memory>
 
 //namespace MachineHuck::Camera {
@@ -49,6 +50,7 @@ namespace MachineHuck::Player {
          */
         int GetHuckCount() { return _huckCount; }
 
+      
     protected:
         //float _angularSpeed{0};      //!< 旋回量
                   //!< 主人公の状態のクラス
@@ -85,10 +87,14 @@ namespace MachineHuck::Player {
         int _huckCount{ 0 };
 
         bool _isHit; //!< 扇形の確認(仮)
+
+
+
+      
     private:
         float _hp{ 100 };//プレイヤーのエネルギー残量
         int _noDamageTime{0};
-
+       
     public:
         /// @class  StateBase
         /// @brief  プレイヤー状態の基底
