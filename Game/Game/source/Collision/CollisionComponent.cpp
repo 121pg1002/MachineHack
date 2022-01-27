@@ -40,7 +40,20 @@ namespace MachineHuck::Collision {
 
     CollisionComponent::CollisionComponent(Actor::Actor& owner) : _owner{ owner } {
         _frameMapCollision = 0;
+        _frameMap.clear();
+        _warpNameMap.clear();
+        _warpMap.clear();
+        _floorNums.push_back(0);
+
+        // _frameMapCollisions.clear();
+
         /*_report = std::make_unique<Report>();*/
+    }
+
+    CollisionComponent::~CollisionComponent() {
+        _frameMap.clear();
+        _warpNameMap.clear();
+        _warpMap.clear();
     }
 
     //void CollisionComponent::EnemyFromPlayer() {
@@ -700,13 +713,202 @@ namespace MachineHuck::Collision {
         return start + (end - start) * t;
     }
 
+    //ハンドルでコリジョンメッシュを検索
+    const int CollisionComponent::GetMapCollision(int handle) {
+
+        auto collisionFrame = _frameMap[handle];
+
+        return collisionFrame;
+    }
+
+
+    //ハンドルとコリジョンメッシュ名で構築
+    void CollisionComponent::SetMapCollision(int handle, std::string key) {
+
+        auto frameMapCollision = MV1SearchFrame(handle, key.c_str());
+
+        //MV1SetPosition(handle, VGet(-500, 0, 500));
+        //ここに各ステージの配置場所を入れてみる
+        //auto zero = MV1GetPosition(handle);
+
+        MV1SetupCollInfo(handle, frameMapCollision, 32, 32, 32);
+
+        //auto zero = MV1GetPosition(handle);
+        //MV1RefreshCollInfo(handle, frameMapCollision);
+        _frameMap.emplace(handle, frameMapCollision);
+
+    }
+
+
+    //ハンドルとコリジョンメッシュ名で構築
     void CollisionComponent::SetMapCollision(int handle) {
 
-		//ナビメッシュの名前
-		_frameMapCollision = MV1SearchFrame(handle, "dungeon_collision");
-		MV1SetupCollInfo(handle, _frameMapCollision, 16, 16, 16);
-    
+        // auto frameMapCollision = MV1SearchFrame(handle, key.c_str());
+
+         //MV1SetPosition(handle, VGet(-500, 0, 500));
+         //ここに各ステージの配置場所を入れてみる
+         //auto zero = MV1GetPosition(handle);
+
+        MV1SetupCollInfo(handle, -1, 32, 32, 32);
+
+        auto zero = MV1GetPosition(handle);
+        //MV1RefreshCollInfo(handle, frameMapCollision);
+        _frameMap.emplace(handle, -1);
+
     }
+
+    //ワープメッシュ名で検索
+    const std::pair<std::pair<int, int>, int> CollisionComponent::GetWarpCollision(std::string key, int handle) {
+
+        auto collisionFrame = _warpMap[key];
+        return collisionFrame;
+
+    }
+
+    //ハンドルとワープメッシュ名で構築
+    void CollisionComponent::SetWarpCollision(int handle, std::string key) {
+
+        //対応するワープメッシュの名前
+        auto name = key.substr(0, 2);
+
+        //ワープメッシュ名にあるハイフンを飛ばした数字
+        auto x = key.substr(3, 2);
+
+        auto xStr = x;
+        xStr.substr(0, 1);
+
+        if (xStr != "0") {
+            x = x.substr(1, 1);
+        }
+
+        int xNum = std::atoi(x.c_str());
+
+        //ワープメッシュ名にあるハイフンを飛ばした数字
+        auto y = key.substr(6, 2);
+        auto yStr = y;
+        yStr.substr(0, 1);
+
+
+        if (yStr != "0") {
+            y = y.substr(1, 1);
+        }
+
+        int yNum = std::atoi(y.c_str());
+
+
+        //ステージテーブルのワープ先の座標位置
+        auto pos = std::make_pair(xNum, yNum);
+
+        //ナビメッシュの名前
+        auto warpMapCollision = MV1SearchFrame(handle, key.c_str());
+        MV1SetupCollInfo(handle, warpMapCollision, 32, 32, 32);
+
+        //VECTOR position = { 0.0, 0.0, 500 };
+        //MV1SetPosition(handle, position);
+        //auto size = MV1GetFrameNum(handle);
+
+        //for (auto i = 0; i < size; i++) {
+        MV1RefreshCollInfo(handle, warpMapCollision);
+        //}
+
+        //ワープの位置とコリジョン情報
+        auto warpPosCol = std::make_pair(pos, warpMapCollision);
+        _warpMap.emplace(key, warpPosCol);
+
+    }
+
+    const std::vector<std::string> CollisionComponent::GetWarpName(int handle) {
+        auto vecStr = _warpNameMap[handle];
+        return vecStr;
+    }
+
+    void CollisionComponent::SetWarpName(int handle, std::vector<std::string> keyV) {
+        _warpNameMap.emplace(handle, keyV);
+    }
+
+    //ワープ先の名前を取得
+    const std::string CollisionComponent::GetWarpNameFloor(int floorNum, std::string warpKey) {
+
+        //同じバリューのキーと要素のペアを取得
+        auto range = _warpNameFloor.equal_range(floorNum);
+
+        //頭文字2文字
+        auto key = warpKey.substr(0, 2);
+
+        std::string str;
+
+        for (auto i = range.first; i != range.second; i++) {
+
+            auto secondRange = i->second.equal_range(key);
+
+            for (auto k = secondRange.first; k != secondRange.second; k++) {
+
+                //同じ部屋にあるワープ位置の処理のため異なる文字を検索
+                if (k->second != warpKey) {
+
+                    str = k->second;
+                    return str;
+                }
+
+            }
+
+        }
+
+
+        return str;
+    }
+
+    void CollisionComponent::SetWarpNameFloor(int num, std::vector<std::string> keys) {
+
+        std::unordered_multimap<std::string, std::string> warps;
+        //  std::unordered_multimap<int, std::unordered_multimap<std::string, std::string>> warpFloors;
+
+        for (auto key : keys) {
+
+            //対応するワープメッシュの名前
+            auto name = key.substr(0, 2);
+
+            //ワープメッシュ名にあるハイフンを飛ばした数字
+            //auto x = key.substr(3, 2);
+
+            //auto xStr = x;
+            //xStr.substr(0, 1);
+
+            //if (xStr != "0") {
+            //    x = x.substr(1, 1);
+            //}
+
+            //int xNum = std::atoi(x.c_str());
+
+            ////ワープメッシュ名にあるハイフンを飛ばした数字
+            //auto y = key.substr(6, 2);
+            //auto yStr = y;
+            //yStr.substr(0, 1);
+
+
+            //if (yStr != "0") {
+            //    y = y.substr(1, 1);
+            //}
+
+            //int yNum = std::atoi(y.c_str());
+
+
+            ////フロア番号計算
+            //auto floorNum = yNum * 10 + xNum;
+
+            warps.emplace(name, key);
+
+
+        }
+
+        //ここにはいつやつ10ではなく0でないとだめ
+        _warpNameFloor.emplace(num, warps);
+
+
+
+        //_warpNameFloor.emplace(warpFloors);
+    }
+
 
 }
 

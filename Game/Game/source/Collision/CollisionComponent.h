@@ -29,6 +29,10 @@ namespace MachineHuck::Actor {
 	class Actor;
 }
 
+namespace MachineHuck::Model {
+	class ModelComponent;
+}
+
 namespace MachineHuck::Collision {
 	class CollisionComponent {
 	public:
@@ -44,9 +48,13 @@ namespace MachineHuck::Collision {
 		//  Math::Vector4 position{0, 0, 0};
 		//};
 		using AABB = std::tuple<double, double, double, double>;
+		using WarpMap = std::unordered_map<std::string, std::pair<std::pair<int, int>, int>>;
+		using WarpName = std::unordered_multimap<int, std::unordered_multimap<std::string, std::string>>;
+		using Floor = std::vector<std::shared_ptr<Model::ModelComponent>>;
 
 
 		CollisionComponent(Actor::Actor& owner);
+		~CollisionComponent();
 
 		//void EnemyFromPlayer();
 		//void PlayerFromEnemy();
@@ -175,25 +183,155 @@ namespace MachineHuck::Collision {
 		 */
 		const Math::Vector4 PointOnSegment(const Math::Vector4 start, const Math::Vector4 end, const double t);
 
+		///**
+		// * @brief  マップコリジョン情報を取得       
+		// * @return _frameMapCollision
+		// */
+		//const int GetMapCollision() const  { return _frameMapCollision; };
+
+		/**
+		 * @brief  マップのコリジョン情報配列を取得
+		 * @return _frameMapCollisions
+		 */
+		//const std::vector<int> GetMapCollision() const { return _frameMapCollisions; }
+
 		/**
 		 * @brief  マップコリジョン情報を取得       
 		 * @return _frameMapCollision
 		 */
-		const int GetMapCollision() const  { return _frameMapCollision; };
+		const int GetMapCollision(int handle);
+
 
 		/**
-		 * @brief  マップコリジョン情報の設定       
+		 * @brief  マップのナビメッシュ情報の設定
+		 * @param  handle
+		 * @param  key
+		 */
+		void SetMapCollision(int handle, std::string key);
+
+		/**
+		 * @brief  マップのナビメッシュ情報の全フレーム構築
 		 * @param  handle
 		 */
 		void SetMapCollision(int handle);
 
+
+		/**
+		 * @brief  ワープ位置情報を取得
+		 * @param  handle ハンドル
+		 * @return _frameMapCollision
+		 */
+		const std::pair<std::pair<int, int>, int> GetWarpCollision(std::string key, int handle);
+
+		/**
+		 * @brief  マップのワープ位置情報の設定
+		 * @param  handle
+		 * @param  key
+		 */
+		void SetWarpCollision(int handle, std::string key);
+
+		/**
+		 * @brief  ワープ位置の名前配列を取得
+		 * @param  handle ハンドル
+		 * @return _warpName
+		 */
+		const std::vector<std::string> GetWarpName(int handle);
+
+		/**
+		 * @brief  ワープ位置の名前配列を設定
+		 * @param  handle ハンドル
+		 * @param  keyV   キーの配列
+		 */
+		void SetWarpName(int handle, std::vector<std::string> keyV);
+
+		/**
+		 * @brief  ワープ先の名前を取得
+		 * @param  floorNum フロア番号
+		 * @param  warpKey  ワープ前のフレーム名
+		 * @return ワープ先の名前
+		 */
+		const std::string GetWarpNameFloor(int floorNum, std::string warpKey);
+
+		///**
+		// * @brief  ワープ位置の名前配列を設定      
+		// * @param  num         配置するフロア番号
+		// * @param  keys        ワープ位置の名前配列
+		// */
+		void SetWarpNameFloor(int num, std::vector<std::string> keys);
+
+		/**
+		 * @brief  主人公の触れているステージ番号配列を取得
+		 * @return _stageNums
+		 */
+		std::vector<int> GetCollStageNum() { return _stageNums; }
+
+		/**
+		 * @brief  主人公の触れているステージ番号配列を設定
+		 * @param  stageNums
+		 */
+		void SetCollStageNum(std::vector<int> stageNums) { _stageNums = stageNums; }
+
+		/**
+		 * @brief  主人公の触れているフロア番号配列を取得
+		 * @return _floorNums
+		 */
+		std::vector<int> GetFloorNum() { return _floorNums; }
+
+		/**
+		 * @brief  カメラに送るためのフロア番号によるステージの位置を取得
+		 * @param  floorNum
+		 * @return ステージ座標
+		 */
+		Math::Vector4 GetFloorPos(int floorNum) { return _floorPoses[floorNum]; }
+
+		/**
+		 * @brief  フロア番号によるステージ位置の設定
+		 * @param  floorPoses
+		 */
+		void SetFloorPos(std::unordered_map<int, Math::Vector4> floorPoses) { _floorPoses = floorPoses; }
+
+
+		/**
+		 * @brief  主人公の触れているフロア番号配列を設定
+		 * @param  floorNums
+		 */
+		void SetFloorNum(std::vector<int> floorNums) { _floorNums = floorNums; }
+
+		/**
+		 * @brief  フロア番号をキーとしてステージ番号を取得
+		 * @param  floorNum フロア番号
+		 * @return ステージ番号
+		 */
+		int GetFloorStageNum(int floorNum) { return _floorStageNum[floorNum]; }
+
+		/**
+		 * @brief  フロア番号をキーとして、要素をステージ番号とした連想配列を設定
+		 * @param  floorStage キー :　フロア番号,  要素 : ステージ番号
+		 */
+		void SetFloorStageNum(std::unordered_map<int, int> floorStage) { _floorStageNum = floorStage; }
+
+		std::unordered_map<int, Floor> GetAllFloorMap() { return _allFloorMap; }
+
+		void SetAllFloorMap(std::unordered_map<int, Floor> allFloorMap) { _allFloorMap = allFloorMap; }
 	private:
 		Actor::Actor& _owner;
 		/*std::unique_ptr<Report> _report;*/
 		double _r1{ 0.0 }, _r2{ 0.0 }; //!< 円の半径
 
-		Math::Vector4 _interSection;//!< 線分と回転した四角形との交点
-		int _frameMapCollision; //!< マップのコリジョン情報
+		Math::Vector4 _interSection;          //!< 線分と回転した四角形との交点
+		int _frameMapCollision;               //!< マップのコリジョン情報
+		//std::vector<int> _frameMapCollisions; //!< マップのコリジョン情報のベクター
+		std::unordered_map<int, int> _frameMap; //!< ハンドルをキーとしたコリジョン情報
+		std::unordered_map<int, std::vector<std::string>> _warpNameMap;   //!< ハンドルをキーとしたワープの名前配列
+		WarpMap _warpMap;                                                 //!< キーはワープコリジョンフレーム名で バリューは、ワープ先の位置情報とコリジョン情報
+		WarpName _warpNameFloor; //!< フロア番号頭をキーとした連想配列は、ワープ位置の頭文字2文字をキーとした ワープ名の名前をバリューとしてもつ
+		std::vector<int> _stageNums; //!< 主人公が触れているステージ番号配列
+		std::unordered_map<int, int> _floorStageNum; //フロア番号をキーとしてステージ番号を取得する連想配列
+		//std::unordered_map<int, int> _stageFloorNum; //ステージ番号をキーとしてフロア番号を取得する連想配列
+		std::vector<int> _floorNums;  // フロア番号配列
+		std::unordered_map<int, Floor> _allFloorMap; //全フロアマップの連想配列
+
+		std::unordered_map<int, Math::Vector4> _floorPoses; //!< フロア番号をキーとしたステージ位置座標
 	};
 }
 

@@ -20,7 +20,10 @@ namespace MachineHuck::Actor {
     class Actor;
     class CreatorBase;
 }
-class Game;
+
+namespace AppFrame {
+    class Game;
+}
 
 
 
@@ -28,6 +31,9 @@ class Game;
 namespace Math = AppFrame::Math;
 
 namespace MachineHuck::Actor {
+
+    using ESMV = std::vector<Parameter::EStageParam>;
+    using StageV = std::vector<int>;
     /// @class ActorFactory
     /// @brief アクターの生成を一元管理する
     ///        生成したいアクター用のクリエイターを登録して使用する
@@ -48,31 +54,87 @@ namespace MachineHuck::Actor {
 
         void Clear();
 
-        struct SpawnRecord {
-            int _progress{ 0 };
-            std::string _key;
-            Math::Vector4 _position{ 0, 0, 0 };
-            Math::Vector4 _rotation{ 0, 0, 0 };
-        };
+        /**
+         * @breif 登録したインスタンスを削除
+         */
+        void Delete();
 
-        using SpawnTable = std::vector<SpawnRecord>;
+        //struct SpawnRecord {
+        //    int _progress{ 0 };
+        //    std::string _key;
+        //    Math::Vector4 _position{ 0, 0, 0 };
+        //    Math::Vector4 _rotation{ 0, 0, 0 };
+        //};
 
-        void SetSpawnTable(SpawnTable spawnTable);
+     //   using SpawnTable = std::vector<SpawnRecord>;
 
 
-        void SetSpawnTable(std::vector<Parameter::EStageParam> vEStageParam);
 
+       // void SetSpawnTable(SpawnTable spawnTable);
+
+        /**
+         * @brief  スポーンテーブルの中身を生成
+         * @param  vEStageParamMap
+         */
+        void SetSpawnTable(std::unordered_map<int, ESMV> vEStageParamMap);
+
+        /**
+         *
+         * @brief 毎フレーム生成の確認
+         */
         void UpdateSpawn();
+
+        /**
+         * .
+         */
+        std::unordered_map<int, ESMV> GetSpawn() { return _eStageParamVMap; }
+
+        /**
+         * @brief  スポーンテーブルを設定
+         * @param  eStageParamV
+         */
+        void SetSpawn(const std::unordered_map<int, ESMV> eStageParamVMap) { _eStageParamVMap = eStageParamVMap; }
+
+
+        /**
+         * @brief  プレイヤーのいる現在のステージ番号を取得
+         * @return _currentStageNo
+         */
+        StageV GetStageNo() { return _currentStageNo; }
+
+        /**
+         * @brief  今のステージ番号を設定
+         * @param  currentStageNo
+         */
+        void SetStageNo(const StageV currentStageNo) { _currentStageNo = currentStageNo; }
+
+
+        /**
+         *
+         * @brief  ステージテーブルを取得
+         * @return _stageTableV
+         */
+        std::vector<StageV> GetStagetable() { return _stageTableV; }
+
+        /**
+         *
+         * @brief  ステージテーブルを保存
+         * @param  stageTable
+         */
+        void SetStageTable(const std::vector<StageV> stageTable) { _stageTableV = stageTable; }
 
     private:
         AppFrame::Game& _game;
         std::unordered_map<std::string, std::unique_ptr<CreatorBase>> _creatorMap;
-        std::vector<SpawnRecord> _spawnTable;
+        // std::vector<SpawnRecord> _spawnTable;
 
-        std::vector<Parameter::EStageParam> _eStageParamV;
+        std::unordered_map<int, ESMV> _eStageParamVMap;
 
         int _progress{ 0 };
         int _spawnProgress{ 0 };
+        StageV _oldStageNo{ 0 };
+        StageV _currentStageNo{ 0 };
+        std::vector<StageV> _stageTableV;
     };
 
     /// @class CreatorBase
@@ -102,6 +164,7 @@ namespace MachineHuck::Actor {
         /// @param  game ゲームクラスへの参照
         /// @return エネミーのインスタンス
         virtual std::unique_ptr<Actor> Create(AppFrame::Game& game);
+
     };
 
     /// @class GrabEnemyCreator

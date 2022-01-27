@@ -15,6 +15,12 @@
 #include "../Enemy/EnemyParameter.h"
 #include "../UI/UIComponent.h"
 
+namespace {
+
+    constexpr int StageAll = 1; //!< 読み込むjsonの最大数
+
+}
+
 namespace MachineHuck::Scene {
     /// コンストラクタ
     SceneInGame::SceneInGame(AppFrame::Game& game)
@@ -42,10 +48,29 @@ namespace MachineHuck::Scene {
         {"normalwall",  "normalwall.mv1"},
         {"secretfloor", "secretfloor.mv1"},
         {"secretwall", "secretwall.mv1"},
-        {"damagefloor",  "target.mv1"}
+        //  {"damagefloor",  "target.mv1"},
+          {"entrypoint", "entrypoint.mv1"},
+          {"test", "test.mv1"},
+          // {"Dungeon",   "Dungeon.mv1"},
+          // {"stage0",    "stage0.mv1"}
+
         };
+
+        AppFrame::Asset::AssetServer::StageMap stageHandles{
+            //{"Dunge0",   "Dungeon.mv1"}
+            {"stage0",    "StageFloor/stage0.mv1"},
+            {"stage1",    "StageFloor/stage1.mv1"},
+            {"Dunge2",   "StageFloor/Dunge2.mv1"}
+            //    {"Stage3",    "Stage3.mv1"}
+        };
+
+
         // モデルの読み込み
         GetAssetServer().LoadModels(usedInGame);                                                         //追加
+
+        //ステージ用のモデル読み込み
+        GetAssetServer().LoadMaps(stageHandles);
+        //追加
         //シャドウマップの読み込み
         shadowmap.SetShadowMap();
         // 使用するテクスチャ
@@ -94,24 +119,21 @@ namespace MachineHuck::Scene {
 
         //}
 
-        MachineHuck::Actor::ActorFactory::SpawnTable inGame{
-          {0     , "TackleEnemy", { 300.f, 200.f, 300.0f}},
-          {0     , "TackleEnemy", {   0.f, 220.f, 500.0f}},
-          {0     , "TackleEnemy", {-300.f, 210.f, 400.0f}},
+        //エネミーのステージ配置を一括で読み込む
+        for (int i = 0; i < StageAll; i++) {
 
-          //{0     , "DamageFloor", { 500.f, 200.f, 0.0f}},
-          //{0     , "DamageFloor", {  0.f,  200.f, 100.0f}},
-          //{0     , "DamageFloor", {-500.f, 200.f, 200.0f}},
+            //ステージ番号をstringに変換
+            auto no = std::to_string(i);
+            //下の二つを起動すればjsonが読み込める
+            //auto stageParameter = std::make_unique<StageParameter>();
+            GetGame().GetEnemyParameter().LoadStageEnemyParam(i, "resource/json/stageenemy" + no + ".json");
+        }
 
-          //{60 * 10,"Enemy", { 1000.f, 2000.f, -4500}},
-          //{0     , "Enemy", {    0.f, 2200.f, -4500}},
-          //{0     , "Enemy", {-1000.f, 2100.f, -4500}},
 
-          //{60 * 15,"Enemy", { 1500.f, 2000.f, -4500}},
-          //{0     , "Enemy", {    0.f, 2200.f, -4500}},
-          //{0     , "Enemy", {-1500.f, 2100.f, -4500}},
-        };
+        //読み込んだエネミーのステージ配置をテーブルに入れる
+        auto inGame = GetGame().GetEnemyParameter().GetFloorEnemyMap();
 
+        //エネミーのスポーンテーブルの読み込み
 
         af.SetSpawnTable(inGame);
 
@@ -183,6 +205,7 @@ namespace MachineHuck::Scene {
 
     /// 描画
     void SceneInGame::Render() {
+
         //シャドウマップへの描画のフラグをオンにする
         GetActorServer().GetActors()[1]->SetShadowMapflg(true);
         //シャドウマップへの描画の準備を行う
@@ -208,6 +231,10 @@ namespace MachineHuck::Scene {
         GetActorServer().Clear();
         // デュプリケートしたモデルだけ削除
         GetAssetServer().DeleteDuplicateModels();
+
+        // デュプリケートしたモデルだけ削除
+        GetAssetServer().DeleteDuplicateMaps();
+
         // クリエイターを削除
         GetActorFactory().Clear();
         //シャドウマップの削除

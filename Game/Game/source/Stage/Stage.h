@@ -20,7 +20,11 @@ namespace MachineHuck::Stage {
 
 	using Floor = std::vector<std::shared_ptr<Model::ModelComponent>>;
 	using StageFloor = std::unordered_map<int, std::tuple<AppFrame::Math::Vector4, AppFrame::Math::Vector4, int>>;
-	
+	//using Collision = std::vector<std::pair<std::string, std::vector<std::string>>>;
+
+	//                                       フロア番号      ハンドル名, コリジョンメッシュ名, ワープメッシュ名の配列,  フロア番号 
+	using CollisionMesh = std::unordered_map<int, std::tuple<std::string, std::string, std::vector<std::string>>>;
+
 	/**
 	 * @class ステージクラス
 	 * @brief ステージに関するクラス
@@ -36,7 +40,7 @@ namespace MachineHuck::Stage {
 #ifdef _DEBUG
 
 		/**
-		 * @brief  フロア位置を描画     
+		 * @brief  フロア位置を描画
 		 */
 		void DrawFloor();
 
@@ -59,16 +63,29 @@ namespace MachineHuck::Stage {
 		bool CreateStage(AppFrame::Game& game);
 
 		/**
-		 * @brief  プレイヤーのいるステージ番号を返す         
+		 * @brief  プレイヤーのいるステージ番号を返す
 		 * @return ステージ番号
 		 */
 		int PlayerOnStageNumber();
 
+		///**
+		// * @brief  マップコリジョン情報を取得       
+		// * @return _frameMapCollision
+		// */
+		//const int GetMapCollision() const  { return _frameMapCollision; };
+
 		/**
-		 * @brief  マップコリジョン情報を取得       
-		 * @return _frameMapCollision
+		 * @brief  マップコリジョンのコンテナを取得
+		 * @return _collsionFloorNameMap
 		 */
-		const int GetMapCollision() const  { return _frameMapCollision; };
+		CollisionMesh GetCollMap() const { return _collisionFloorNameMap; }
+
+
+		/**
+		 * @brief 描画フロアを取得
+		 * @return _drawFloorV
+		 */
+		const std::vector<int> GetDrawFloorV() { return _drawFloorV; }
 
 	private:
 		//std::unique_ptr<Model::ModelComponent> _skySphere;
@@ -86,8 +103,10 @@ namespace MachineHuck::Stage {
 		std::vector<int>                    _drawFloorV; //!< 描画するフロア番号を格納
 
 		std::unordered_map<int, std::vector<int>>  _secretVMap; //!< 隠しているフロア配列を部屋番号で格納するマップ      
-		std::vector<int>                    _secretV;          //!< 隠しているフロアの番号を格納
-
+		std::vector<int>                    _secretV;           //!< 隠しているフロアの番号を格納
+		CollisionMesh _collisionFloorNameMap;                   //!< コリジョンの名前フレームの配列 キー: ハンドル名 バリュー: コリジョンメッシュ名
+		std::unordered_map<int, int>        _floorStageNum; //!< フロア番号でステージ番号を格納
+		//std::vector<std::string> _handleV;                //ハンドル名の配列
 		int _stageNo;  //!< 現在のフロア番号
 
 #ifdef _DEBUG
@@ -99,8 +118,8 @@ namespace MachineHuck::Stage {
 		std::vector<unsigned short> _groundIndex;
 
 #endif
-		int _frameMapCollision; //!< マップのコリジョン情報
-		
+		//int _frameMapCollision; //!< マップのコリジョン情報
+
 	};
 }
 

@@ -328,6 +328,14 @@ namespace MachineHuck::Player {
 		_model->Draw(*this, _isHit, _searchRange, true);
 		_camera->Draw(_isHit);
 		_gaugeBase->Draw();
+
+		auto posXStr = std::to_string(_position.GetX());
+		auto posYStr = std::to_string(_position.GetY());
+		auto posZStr = std::to_string(_position.GetZ());
+		std::string posStr = posXStr + "," + posYStr + "," + posZStr;
+		auto pos = _position;
+		auto v = ConvWorldPosToScreenPos(ToDX(pos));
+		DrawString(static_cast<int>(v.x), static_cast<int>(v.y), posStr.c_str(), GetColor(255, 0, 0));
 #endif
 	}
 

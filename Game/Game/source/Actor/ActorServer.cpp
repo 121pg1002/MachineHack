@@ -21,6 +21,20 @@ namespace MachineHuck::Actor {
             _actors.emplace_back(std::move(actor));
         }
     }
+
+    void ActorServer::Del(std::unique_ptr<Actor> actor) {
+        if (_updating) {
+            // 更新中は_pendingActorsに追加する
+            _pendingActors.emplace_back(std::move(actor));
+        }
+        else {
+            auto isDead = [](auto&& act) {return act->IsDead(); };
+            auto it = std::remove_if(_actors.begin(), _actors.end(), isDead);
+            _actors.erase(it, _actors.end());
+        }
+
+    }
+
     /// 入力
     void ActorServer::Input(AppFrame::Input::InputComponent& input) {
         _updating = true;
@@ -30,9 +44,9 @@ namespace MachineHuck::Actor {
                 actor->Input(input);
             }
             else if (actor->IsHucked()) {
-            
+
                 actor->Input(input);
-            
+
             }
         }
         _updating = false;
@@ -57,14 +71,9 @@ namespace MachineHuck::Actor {
         _pendingActors.clear();
 
         // アクターの中に死亡状態のアクターを削除
-        //erase_if(_actors, [](auto&& act) { return act->IsDead(); });
-       
         auto isDead = [](auto&& act) {return act->IsDead(); };
-        auto it = std::remove_if(_actors.begin(), _actors.end(), isDead); // return act->IsDead();
-        //auto r = distance(it, _actors.end());
+        auto it = std::remove_if(_actors.begin(), _actors.end(), isDead);
         _actors.erase(it, _actors.end());
-        //return r;
-
 
     }
     /// 描画
@@ -92,13 +101,14 @@ namespace MachineHuck::Actor {
     }
     /// アクターの一覧の取得
     Math::Vector4 ActorServer::GetPosition(std::string_view key) {
-        
+
         if (_registry.count(key.data()) != 0) {
             return _registry[key.data()].first;
         }
         // 未登録
         return { 0, 0, 0 };
     }
+
     /// 登録したアクターの位置を得る
     //Math::Vector4 ActorServer::GetForward(std::string_view key) {
     //  if (_registry.contains(key.data())) {

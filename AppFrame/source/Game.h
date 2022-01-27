@@ -38,6 +38,10 @@ namespace MachineHuck::UI {
 	class SpriteServer;
 }
 
+namespace MachineHuck::Enemy {
+	class EnemyParameter;
+}
+
 namespace MachineHuck::Stage {
 	class StageParameter;
 }
@@ -99,6 +103,11 @@ namespace AppFrame {
 		/// UIコンポーネントの取得
         /// @return UIコンポーネントの参照
 		MachineHuck::UI::UIComponent& GetUiComponent() const { return *_ui; }
+		/**
+		 * @brief  エネミーパラメータークラスへのアクセス
+		 * @return エネミーパラメーターの参照
+		 */
+		MachineHuck::Enemy::EnemyParameter& GetEnemyParameter() const { return *_enemyParam; }
 
 		/**
 		 * @brief ステージパラメーターの取得
@@ -130,9 +139,11 @@ namespace AppFrame {
 		std::unique_ptr<MachineHuck::UI::SpriteServer> _spriteServer;
 		/// UIコンポーネントのユニークポインタ
 		std::unique_ptr<MachineHuck::UI::UIComponent> _ui;
-		std::unique_ptr<MachineHuck::Stage::StageParameter> _stageParam;//!< ステージパラメーターのユニークポインタ
+		std::unique_ptr<MachineHuck::Enemy::EnemyParameter> _enemyParam;
 
-		std::unique_ptr<MachineHuck::Gimmick::GimmickParameter> _gParam; //!< ギミックパラメーターのユニークポインタ
+		std::unique_ptr<MachineHuck::Stage::StageParameter> _stageParam;
+
+		std::unique_ptr<MachineHuck::Gimmick::GimmickParameter> _gParam;
 
 	};
 }

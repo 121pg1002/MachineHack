@@ -94,6 +94,8 @@ namespace MachineHuck::Player {
     private:
         float _hp{ 100 };//プレイヤーのエネルギー残量
         int _noDamageTime{0};
+        bool _warping{ false };
+        int _waitframe{ 0 };
        
     public:
         /// @class  StateBase

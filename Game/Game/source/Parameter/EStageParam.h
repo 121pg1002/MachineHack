@@ -2,7 +2,7 @@
 /*****************************************************************//**
  * @file   EStageParam.h
  * @brief  ステージの敵の情報クラス
- * 
+ *
  * @author hikaru Goto
  * @date   December 30 2021
  *********************************************************************/
@@ -34,9 +34,16 @@ namespace MachineHuck::Parameter {
 		 */
 		void SetLevel(int level) { _level = level; }
 
+		/**
+		 * @brief  生成回数
+		 * @return
+		 */
+		int GetProgress() { _progress; }
+
 	private:
 
 		int _level; //!< 敵のレベル
+		int _progress{ 0 }; //!< 生成回数
 		std::string _type;
 	};
 }
