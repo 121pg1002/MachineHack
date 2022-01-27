@@ -23,6 +23,7 @@ void Asset::AssetServer::Init() {
 void Asset::AssetServer::Clear() {
 	ClearTextures();
   ClearModels();
+  ClearMaps();
 }
 /// 画像の読み込み
 void Asset::AssetServer::LoadTexture(std::string_view key, const Texture& texture) {
@@ -117,14 +118,6 @@ int Asset::AssetServer::LoadModel(std::string_view key, const std::string_view f
 	}
 	auto handle = MV1LoadModel(filename.data());
 
-
-    ////////////ここにフロアの名前を入力 ↓↓にコリジョンメッシュを入力
-    //if (filename == "floor") {
-    //    _frameMapCollision = MV1SearchFrame(handle, "collisionname");
-    //}
-
-
-
 	std::vector<int> handles{handle};
 	_models.emplace(key, std::make_pair(filename.data(), handles));
 	return handle;
@@ -137,6 +130,53 @@ void Asset::AssetServer::LoadModels(const ModelMap& modelMap) {
       LoadModel(key, path);
   }
 }
+
+//ステージ用のモデル読み込み
+int Asset::AssetServer::LoadMap(std::string key, const std::string_view filename) {
+    
+    //数字が2桁の場合を後で考える
+    auto keyNum = key.substr(5, 1);
+    int num = std::stoi(keyNum);
+    //auto keyNum = key.substr(4, 2);
+
+    
+    if (_maps.count(num) != 0) {
+        auto&& [filename, handles] = _maps[num];
+        // 登録済みの場合はモデルを削除
+        for (auto handle : handles) {
+            MV1DeleteModel(handle);
+        }
+        handles.clear();
+        _maps.erase(num);
+    }
+
+    auto handle = MV1LoadModel(filename.data());
+
+    ////////////ここにフロアの名前を入力 ↓↓にコリジョンメッシュを入力
+    //if (filename == "floor") {
+    //    _frameMapCollision = MV1SearchFrame(handle, "collisionname");
+    //}
+    
+    //数字が2桁の場合を後で考える↑↑も込み
+    //keyは、Stage + numberで数字だけ取り出す
+
+    std::vector<int> handles{ handle };
+    _maps.emplace(num, std::make_pair(filename.data(), handles));
+    return handle;
+}
+
+//ステージ用のモデル一括読み込み
+void Asset::AssetServer::LoadMaps(const StageMap& stageMap) {
+
+    for (auto&& [key, fileName] : stageMap) {
+    
+        auto path = (_currentPath / fileName).generic_string();
+        LoadMap(key, path);
+    
+    }
+}
+
+
 /// モデルのハンドルの取得
 std::pair<int, int> Asset::AssetServer::GetModel(std::string_view key, int no) {
     if (_models.count(key.data()) != 1) {
@@ -152,6 +192,29 @@ std::pair<int, int> Asset::AssetServer::GetModel(std::string_view key, int no) {
   handles.push_back(handle);
   return std::make_pair(handle, static_cast<int>(handles.size()) - 1);
 }
+
+
+/// ステージモデルのハンドルの取得
+std::pair<int, int> Asset::AssetServer::GetMap(int keyNum, int no) {
+    if (_maps.count(keyNum) != 1) {
+        // キーが未登録
+        return std::make_pair(-1, no);
+    }
+    auto& [filename, handles] = _maps[keyNum];
+
+    if (no < handles.size()) {
+        return std::make_pair(handles[no], no); // 既存noの場合
+    }
+
+    // 新規noの場合は複製する
+    auto&& handle = MV1DuplicateModel(handles[0]);  /// handles[0]がオリジナル
+    handles.push_back(handle);
+    return std::make_pair(handle, static_cast<int>(handles.size()) - 1);
+       // return handle; 
+}
+
+
+
 /// 全てのモデルを削除してクリアする
 void Asset::AssetServer::ClearModels() {
 	for (auto&& [key, model] : _models) {
@@ -163,6 +226,21 @@ void Asset::AssetServer::ClearModels() {
 	}
 	_models.clear();
 }
+
+/// 全てのステージモデルを削除してクリアする
+void Asset::AssetServer::ClearMaps() {
+    for (auto&& [key, model] : _maps) {
+        auto&& [filename, handles] = model;
+        for (auto handle : handles) {
+            MV1DeleteModel(handle);
+        }
+        handles.clear();
+    }
+    _maps.clear();
+}
+
+
+
 /// Duplicateしたモデルだけ削除してクリアする
 void Asset::AssetServer::DeleteDuplicateModels() {
   for (auto&& [key, model] : _models) {
@@ -180,6 +258,25 @@ void Asset::AssetServer::DeleteDuplicateModels() {
     
   }
 }
+
+/// Duplicateしたモデルだけ削除してクリアする
+void Asset::AssetServer::DeleteDuplicateMaps() {
+    for (auto&& [key, model] : _maps) {
+        auto&& [filename, handles] = model;
+
+        auto original = handles[0];
+        auto isDead = [original](auto handle) {
+            if (original != handle) {
+                MV1DeleteModel(handle);
+                return true;
+            }
+            return false; };
+        auto it = std::remove_if(handles.begin(), handles.end(), isDead);
+        handles.erase(it, handles.end());
+
+    }
+}
+
 
 /// 音ファイルの読み込み
 void Asset::AssetServer::LoadSound(std::string_view key, std::pair<std::string, bool> filename_isLoad) {

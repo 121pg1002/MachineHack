@@ -103,12 +103,13 @@ namespace MachineHuck::Actor {
         // カメラの生成
         auto camera = std::make_shared<Camera::CameraComponent>();
         camera->Init();
-        camera->SetPosition({ 0, 800, -200 });
+        camera->SetPosition({ 0, 1500, -500 });
         camera->SetTarget({ 0, 100, 0 });
 
         // プレイヤーの生成
         auto player = std::make_unique<Player::Player>(game);
         player->SetCameraComponent(camera);
+        player->SetPosition({ -9000, 0, 500 });
 
         // モデルの読み込みと生成
         auto model = std::make_unique<Model::ModelAnimeComponent>(*player);

@@ -40,6 +40,9 @@ namespace AppFrame {
 			/// 任意の文字列をキーにしてモデルファイル名を管理
 			using ModelMap = std::unordered_map<std::string, std::string>;
 
+			//キー 名前 ヴァリュー ハンドル名
+			using StageMap = std::unordered_map<std::string, std::string>;
+
 			/// コンストラクタ
 			/// @param game Gameクラスへの参照
 			AssetServer(Game& game);
@@ -94,9 +97,26 @@ namespace AppFrame {
 			/// @return モデルのハンドル
 			virtual int LoadModel(std::string_view key, const std::string_view filename);
 
+
 			/// モデルの一括読み込み
 			/// @param modelMap モデルのテーブル
 			virtual void LoadModels(const ModelMap& modelMap);
+
+
+			/**
+			 * @brief  マップの読み込み       
+			 * @param  key      キーとなる文字列
+			 * @param  filename mv1　ファイル名
+			 * @return モデルのハンドル
+			 */
+			virtual int LoadMap(std::string key, const std::string_view filename);
+
+			/**
+			 * @brief  ステージ用のモデル読み込み       
+			 * @param  stageMap ステージ用のモデルテーブル
+			 */
+			virtual void LoadMaps(const StageMap& stageMap);
+
 
 			/// モデルのハンドルの取得
 			/// 既読の場合は複製する
@@ -105,10 +125,25 @@ namespace AppFrame {
 			/// @return モデルのハンドルと実施の登録番号
 			virtual std::pair<int, int> GetModel(std::string_view key, int no = 0);
 
+			/**
+			 * @brief  ステージモデルのハンドルを取得         
+			 * @param  keyNum ステージ番号
+			 * @return モデルのハンドルと実施の登録番号
+			 */
+			virtual std::pair<int, int> GetMap(int keyNum, int no = 0);
+
 			/// 全てのモデルを削除してクリアする
 			virtual void ClearModels();
+
+			/**
+			 * @brief 全てのマップも出るを削除         
+			 */
+			virtual void ClearMaps();
+
 			/// Duplicateしたモデルだけ削除してクリアする
 			virtual void DeleteDuplicateModels();
+
+			virtual void DeleteDuplicateMaps();
 
 			/// 音ファイルの読み込み
 		  /// @param[in] key キーとなる任意の文字列
@@ -137,6 +172,8 @@ namespace AppFrame {
 			std::unordered_map<std::string, std::pair<std::string, int>> _sounds;
 			/// 任意の文字列をキーにしてモデルファイル名とハンドルのペアを管理
 			std::unordered_map<std::string, std::pair<std::string, std::vector<int>>> _models;
+			// キー : ステージ番号  バリュー: モデルファイル名とハンドルを管理
+			std::unordered_map<int, std::pair<std::string, std::vector<int>>> _maps;
 
  
 		};

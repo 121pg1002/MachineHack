@@ -58,10 +58,43 @@ namespace MachineHuck::Model {
 		_handle = handle;
 		return actualNo;
 	}
+
+	//ステージモデルの設定
+	int ModelComponent::SetMap(std::string key, int no) {
+
+		auto keyNum = key.substr(5, 1);
+		int num = std::stoi(keyNum);
+
+		auto&& [handle, actualNo] = _owner.GetGame().GetAssetServer().GetMap(num, no);
+		_handle = handle;
+		return actualNo;
+	}
+
+
 	/// 座標の設定
 	void ModelComponent::SetPosition(VECTOR position) {
+
 		MV1SetPosition(_handle, position);
+
 	}
+
+	//void ModelComponent::SetPosition(VECTOR position) {
+
+	//	auto size = MV1GetFrameNum(_handle);
+
+	//	for (auto i = 0; i < size; i++) {
+	//		MV1SetupCollInfo(_handle, i, 16, 16, 16);
+	//	}
+
+	//	MV1SetPosition(_handle, position);
+
+	//	for (auto i = 0; i < size; i++) {
+	//		MV1RefreshCollInfo(_handle, i);
+	//	}
+
+	//}
+
+
 
 	void ModelComponent::SetPosition(VECTOR position, float diameter) {
 		position.x = position.x * diameter;
@@ -83,9 +116,9 @@ namespace MachineHuck::Model {
 	/// 拡大率の設定
 	void ModelComponent::SetScale(VECTOR  scale) {
 
-		scale.x = scale.x * 75.0f;
-		scale.y = scale.y * 75.0f;
-		scale.z = scale.z * 75.0f;
+		scale.x = scale.x;
+		scale.y = scale.y;
+		scale.z = scale.z;
 
 		//scale.x = scale.x / 70.0;
 		//scale.y = scale.y / 70.0;
