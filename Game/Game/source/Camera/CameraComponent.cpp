@@ -47,6 +47,15 @@ namespace MachineHuck::Camera {
 
 
 	}
+
+
+	void CameraComponent::FloorPos(Math::Vector4 pos) {
+	
+		_position = pos + _positionInitDif;
+		_target = pos + _targetInitDif;
+		SetCameraPositionAndTarget_UpVecY(ToDX(_position), ToDX(_target));
+	}
+
 	///
 	/// •`‰æ.
 	///
@@ -83,6 +92,16 @@ namespace MachineHuck::Camera {
 		//DrawLine3D(VAdd(v, VGet(0, -linelength, 0)), VAdd(v, VGet(0, linelength, 0)), GetColor(0, 255, 0));
 		//DrawLine3D(VAdd(v, VGet(0, 0, -linelength)), VAdd(v, VGet(0, 0, linelength)), GetColor(0, 0, 255));
 
+	}
+
+	void CameraComponent::SetRefleshPosition(Math::Vector4 position) {
+	
+		_position = position + _positionInitDif;
+	}
+
+	void CameraComponent::SetRefleshTarget(Math::Vector4 position) {
+
+		_target = position + _targetInitDif;
 	}
 
 

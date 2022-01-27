@@ -17,7 +17,7 @@
 
 namespace {
 
-    constexpr int StageAll = 2; //!< 読み込むjsonの最大数
+    constexpr int StageAll = 1; //!< 読み込むjsonの最大数
 
 }
 
@@ -40,7 +40,6 @@ namespace MachineHuck::Scene {
         {"pCube",      "pCube.mv1"},
         {"floor",     "floor.mv1"},
         {"wall",      "wall.mv1"},
-        {"Dungeon",   "Dungeon.mv1"},
         {"breakwall",  "breakwall.mv1"},
         {"enemy",      "enemy.mv1"},
         {"gate",       "gate.mv1"},
@@ -48,10 +47,29 @@ namespace MachineHuck::Scene {
         {"normalwall",  "normalwall.mv1"},
         {"secretfloor", "secretfloor.mv1"},
         {"secretwall", "secretwall.mv1"},
-        {"damagefloor",  "target.mv1"}
+      //  {"damagefloor",  "target.mv1"},
+        {"entrypoint", "entrypoint.mv1"},
+        {"test", "test.mv1"},
+       // {"Dungeon",   "Dungeon.mv1"},
+       // {"stage0",    "stage0.mv1"}
+
         };
+
+        AppFrame::Asset::AssetServer::StageMap stageHandles{
+        //{"Dunge0",   "Dungeon.mv1"}
+        {"stage0",    "StageFloor/stage0.mv1"},
+        {"stage1",    "StageFloor/stage1.mv1"},
+        {"Dunge2",   "StageFloor/Dunge2.mv1"}
+    //    {"Stage3",    "Stage3.mv1"}
+        };
+
+
         // モデルの読み込み
         GetAssetServer().LoadModels(usedInGame);                                                         //追加
+
+        //ステージ用のモデル読み込み
+        GetAssetServer().LoadMaps(stageHandles);
+
         //シャドウマップの読み込み
         shadowmap.SetShadowMap();
         // 使用するテクスチャ
@@ -207,6 +225,9 @@ namespace MachineHuck::Scene {
         GetActorServer().Clear();
         // デュプリケートしたモデルだけ削除
         GetAssetServer().DeleteDuplicateModels();
+
+        // デュプリケートしたモデルだけ削除
+        GetAssetServer().DeleteDuplicateMaps();
         // クリエイターを削除
         GetActorFactory().Clear();
         //シャドウマップの削除

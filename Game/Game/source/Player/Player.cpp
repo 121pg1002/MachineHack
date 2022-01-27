@@ -156,20 +156,90 @@ namespace MachineHuck::Player {
 		
 		//if (_actorState!= ActorState::Hucked) {
 
+		//_camera->Update(_move);
+
+			//ステージ番号をここにもってくる[1]の部分に当てはめる
+            //地面のナビメッシュに触れているかどうか
+			if (!CollisionFloor(oldPos)) {
+
+				////ナビメッシュから出てしまう場合
+				//Math::Vector4 zero = { 0.0, 0.0, 0.0 };
+				//_camera->Update(zero);
+			}
+			else {
+
+				//ナビメッシュに収まっている場合
+				//_camera->Update(_move);
+			}
+
+
+			//仮
+			//ステージの中にある連想配列にアクセス
+			for (auto&& i : GetActorServer().GetActors()) {
 			
+				if (i->GetTypeId() != TypeId::Stage) {
+					continue;
+				}
 
-		////地面のナビメッシュに触れているかどうか
-		//if (!CollisionFloor(oldPos)) {
+				auto floorNum = i->GetCollision().GetFloorNum();
 
-		//	//ナビメッシュから出てしまう場合
-		//	Math::Vector4 zero = { 0.0, 0.0, 0.0 };
-		//	_camera->Update(zero);
-		//}
-		//else {
+				auto pos = i->GetCollision().GetFloorPos(floorNum[0]);
+				_camera->FloorPos(pos);
+			
+			}
 
-		//	//ナビメッシュに収まっている場合
-			_camera->Update(_move);
-		//}
+
+			//_camera->FloorPos(_move);
+
+			//ワープ直後か
+			if (!_warping) {
+			
+				auto dxPos = WarpFloor();
+
+				//現在位置のステージ番号のワープナビメッシュに当たった場合
+				if (dxPos.x != 0.0f && dxPos.z != 0.0f) {
+
+
+					Math::Vector4 pos = { dxPos.x, dxPos.y, dxPos.z };
+
+					_position = pos;
+
+
+					_camera->SetRefleshPosition(_position);
+					_camera->SetRefleshTarget(_position);
+
+					if (!_warping) {
+
+						_warping = true;
+						_waitframe = 5;
+
+					}
+					//else {
+					//	_warping = false;
+					//}
+
+					//ここにフェードイン処理
+
+				}
+			
+			
+			}
+			else {
+
+				if (!WarpingFloor() && _waitframe < 0) {
+				
+					_warping = false;
+				
+				}
+			
+			
+			}
+
+			_waitframe--;
+
+		
+		
+		
 		
 		    //エネルギー残量ゲージの設定
 			GetGame().GetUiComponent().UpdatePlayerHp(_gaugeBase->GetGauge(), _gaugeBase->GetGaugeMax());

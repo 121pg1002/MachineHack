@@ -22,7 +22,7 @@ namespace MachineHuck::Stage {
 	namespace {
 
 		constexpr int StageAll = 3;        //!< 読み込むstagejsonの数
-		constexpr double Differ = 1000.0; //!< 1フロアのサイズ
+		constexpr double Differ = 2000.0; //!< 1フロアのサイズ
 		constexpr double StartX   = -5.0 * Differ;
 		constexpr int BoardSize = 10;
 
@@ -38,7 +38,9 @@ namespace MachineHuck::Stage {
 		//_skySphere->SetScale({ 80.f,  80.f, 80.f });
 		//// 地面のモデル
 		_ground = std::make_unique<Model::ModelComponent>(*this);
-		_ground->SetModel("Dungeon");
+	//	_ground->SetMap("Dunge0");
+		//VECTOR scale = { 1.0f, 0.1f, 1.0f };
+		//_ground->SetScale(scale);
 		//_ground->SetScale({1.f, 1.f, 1.f});
 
 		//for (int i = 0; i < _boardH; i++) {
@@ -80,9 +82,21 @@ namespace MachineHuck::Stage {
 		//_ground = std::make_unique<ModelComponent>(*this);
 		//_ground->SetModel("Ground");
 		//_ground->SetScale({10.f, 10.f, 10.f});
-		
+
+		// ステージ番号, ハンドル名(SceneInGameで登録した名前), コリジョンメッシュ名, ワープ位置名
+		CollisionMesh collMap {
+			//{"Player",    "SDChar/SDChar.mv1"},
+		//	{0,    {"Dunge0", "dungeon_collision", {"", ""}}},
+
+		//	{1,    {"teste0", "floor_collision", {"C0_01_02", ""}}},
+			{0,    {"stage0", "collision", {"A0_00_01"}}},
+			{1,    {"stage1", "collision", {"A0_00_00", "A1_00_03"}}},
+			{2,    {"Dunge2", "dungeon_collision", {"", ""}}}
+		};
+		 
 		//ステージのコリジョン情報を取得
-		_collisionFloorNameV = game.GetStageParameter().LoadStageCollision("resource / json / stagecollision.json");
+		//_collisionFloorNameMap = game.GetStageParameter().LoadStageCollision("resource / json / stagecollision.json");
+		_collisionFloorNameMap = collMap;
 
 		//const auto& stageVector = game.GetStageParameter().GetStageVector();
 
@@ -103,32 +117,13 @@ namespace MachineHuck::Stage {
 
 		//	_floor.push_back(std::move(ground));
 		//}
+		//GetCollision().SetAllFloorMap(_allFloorMap);
 
 
 
-		//ステージ番号順にハンドル名とナビメッシュ名をベクターでいれたものが入っている
-		for (int i = 0; i < _collisionFloorNameV.size(); i++) {
-		
-			//フロアの名前を入れる
-			auto handle = game.GetAssetServer().GetModel(_collisionFloorNameV[i].first);
 
-			//メッシュの数を取得
-			int num = MV1GetMeshNum(handle.first);
-			
-			
-			for (int j = 0; j < num; j++) {
 
-				//メッシュの数回す
-				auto str = _collisionFloorNameV[i].second[j];
 
-				//ナビメッシュのコリジョン情報を設定
-				GetCollision().SetMapCollision(handle.first, str);
-
-			}
-
-			
-
-		}
 		
 
 
@@ -139,6 +134,145 @@ namespace MachineHuck::Stage {
 		//_stageNo = 1;
 
 		CreateStage(game);
+
+
+
+
+		for (int i = 0; i < _allFloorMap.size(); i++) {
+
+			for (auto&& floor : _allFloorMap[i]) {
+
+				auto&& handle = floor->GetHandle();
+
+				//ナビメッシュのコリジョン情報を構築
+				GetCollision().SetMapCollision(handle);
+
+				auto stageNum = GetCollision().GetFloorStageNum(i);
+
+				auto [handleName, collName, warpName] = _collisionFloorNameMap[stageNum];
+
+				std::vector<std::string> vecStr;
+
+				for (int j = 0; j < warpName.size(); j++) {
+
+					//メッシュの数回す
+					auto str = warpName[j];
+
+					if (str != "") {
+
+						vecStr.push_back(str);
+						//ワープ位置のコリジョン情報を設定
+						GetCollision().SetWarpCollision(handle, str);
+
+					}
+
+
+				}
+				//同一ハンドルのワープの名前配列をハンドルで設定
+				GetCollision().SetWarpName(handle, vecStr);
+
+				auto stageTable = game.GetStageParameter().GetStageTableVector();
+
+				int floorNum = -1;
+
+				if (stageNum == 0) {
+					floorNum = 0;
+				}
+				else if (stageNum == 1) {
+				
+					floorNum  = 10;
+				}
+				else {
+					floorNum = 100;
+				
+				}
+
+				//番号をフロア番号にしなければいけない
+				//ワープ先の名前を設定
+				GetCollision().SetWarpNameFloor(floorNum, vecStr);
+
+
+			}
+
+
+
+		}
+
+
+
+		//for (int i = 0; i < _allFloorMap.size(); i++) {
+
+		//	for (auto&& floor : _allFloorMap[i]) {
+
+		//		auto&& handle = floor->GetHandle();
+
+		//		////ステージ番号順にハンドル名とナビメッシュ名をベクターでいれたものが入っている
+		//		for (int i = 0; i < _collisionFloorNameMap.size(); i++) {
+
+		//			auto [handleName, collName, warpName] = _collisionFloorNameMap[i];
+
+		//			//	auto number = 0;
+
+		//			//	//文字列のサイズが6以外
+		//			//	if (handleName.size() != 6) {
+		//			//		continue;
+		//			//	}
+		//			//	else if (handleName.size() == 7) {
+
+		//			//		auto num = handleName.substr(5, 2);
+		//			//		number = std::stoi(num);
+
+		//			//	}
+		//			//	else {
+
+		//			//		auto num = handleName.substr(5, 1);
+		//			//		number = std::stoi(num);
+
+		//			//	}
+
+
+		//			//	//フロアの名前を入れる
+		//			//	//auto&& [handle, num] = game.GetAssetServer().GetModel(handleName);
+		//			//	auto handle = game.GetAssetServer().GetMap(number);
+
+		//			//	//メッシュの数を取得
+		//			//	//int number = MV1GetMeshNum(handle);
+
+		//			//	//フレームの数を取得
+		//			//	//int number = MV1GetFrameNum(handle);
+
+		//			//	//ナビメッシュのコリジョン情報を構築
+		//			//	GetCollision().SetMapCollision(handle.first, collName);
+
+		//			std::vector<std::string> vecStr;
+
+		//			for (int j = 0; j < warpName.size(); j++) {
+
+		//				//メッシュの数回す
+		//				auto str = warpName[j];
+
+		//				if (str != "") {
+
+		//					vecStr.push_back(str);
+		//					//ワープ位置のコリジョン情報を設定
+		//					GetCollision().SetWarpCollision(handle, str);
+
+		//				}
+
+
+		//			}
+		//			//同一ハンドルのワープの名前配列をハンドルで設定
+		//			GetCollision().SetWarpName(handle, vecStr);
+
+		//			//ワープ先の名前を設定
+		//			GetCollision().SetWarpNameFloor(vecStr);
+
+		//		}
+		//	}
+		//}
+
+
+		GetCollision().SetAllFloorMap(_allFloorMap);
 
 		// フォグの設定
 		 //SetFogEnable(TRUE);
@@ -160,11 +294,30 @@ namespace MachineHuck::Stage {
 
 		_stageNo = PlayerOnStageNumber();
 
+		//触れているフロア番号で回す
+//		for (auto&& no : _drawFloorV) {
+//
+//
+//			//主人公の触れているフロア番号と一致した場合
+////					if (no == _stageNo) {
+//
+//			auto value = _allFloorMap[no];
+//			//auto secret = _secretVMap[no];
+//
+//			////フロア内のブロックを描画
+//			for (auto&& floor : value) {
+//
+//				floor->Update();
+//			}
+///**********************************ここでコリジョンの更新を試してみる
+//
+//		}
+
 	}
 
 	void Stage::Draw() {
 		//_skySphere->Draw();   // スカイスフィア
-		//_ground->Draw();      // 地面
+		_ground->Draw();      // 地面
 
 		//表示するステージ番号のみ表示
 		//キーの数を取得
@@ -197,7 +350,9 @@ namespace MachineHuck::Stage {
 					//		value[j]->Draw();
 					//	}
 					//}
-
+		
+		std::vector<int> nums;
+		std::vector<int> floorNums;
 					//描画するフロア番号で回す
 					for (auto&& no : _drawFloorV) {
 
@@ -207,14 +362,21 @@ namespace MachineHuck::Stage {
 
 							auto value = _allFloorMap[no];
 							//auto secret = _secretVMap[no];
-
+							
 							////フロア内のブロックを描画
 							for (auto&& floor : value) {
 
 								floor->Draw();
+
+								//MV1RefreshCollInfo(floor->GetHandle(), 2);
+
+								//現在位置のステージ番号を保存
+								nums.push_back(floor->GetStageNum());
+
+								
 							}
 
-						
+							floorNums.push_back(no);
 
 							//隠し扉用の機構(試し)
 							//for (auto i = 0; i != value.size(); i++) {
@@ -237,6 +399,9 @@ namespace MachineHuck::Stage {
 
 						
 					}
+
+					GetCollision().SetCollStageNum(nums);
+					GetCollision().SetFloorNum(floorNums);
 				
 #ifdef _DEBUG
 
@@ -373,6 +538,8 @@ namespace MachineHuck::Stage {
 		auto offsetX = startX;
 		auto offsetZ = startZ;
 
+		std::unordered_map<int, Math::Vector4> floorPoses;
+
 		//フロア数
 		for (auto i = 0; i < stageTableVector.size(); i++) {
 		
@@ -421,13 +588,19 @@ namespace MachineHuck::Stage {
 
 				Floor floor;
 				floor.clear();
+
+				//とりあえず、ここで数字を定義
+				int number = -1;
+
+
+				Math::Vector4 floorPos;
 				
 				//フロアの各ブロック
 				for (int k = 0; k < stageVector.size(); k++) {
 
 					auto sP = stageVector[k];
 					auto pos = sP.GetPosition();
-					Math::Vector4 dif = { offsetX, 0.0, offsetZ };
+					Math::Vector4 dif = { offsetX + Differ/2.0, 0.0, offsetZ + Differ / 2.0};
 
 					//位置にオフセット分足してずらす
 					pos = pos + dif;
@@ -435,21 +608,41 @@ namespace MachineHuck::Stage {
 					auto rot   = sP.GetRotation();
 					auto scale = sP.GetScale();
 					auto ground = std::make_unique<Model::ModelComponent>(*this);
-					ground->SetModel(sP.GetName(), 1000000);
+
+					//ground->SetModel(sP.GetName(), 1000);
+
+
+					ground->SetMap(sP.GetName(), 1000);
 
 					//とりあえず、仮で隠しの壁およびタイルを隠しようのベクターに登録
 					if (sP.GetName() == "secretwall" || sP.GetName() == "secretfloor") {
 						_secretV.push_back(k);
 					}
-					
 
+					//仮で数字を取り出す機構
+					auto numStr = sP.GetName().substr(5, 1);
+					number = std::stoi(numStr);
+					
+					ground->SetStageNum(number);
+
+					//VECTOR zero = { 0.0f, 0.0f, 0.0f };
 					ground->SetPosition(ToDX(pos));
+
+					floorPos = pos;
+
+					MV1SetupCollInfo(ground->GetHandle(), -1, 32, 32, 32);
+					//ground->SetPosition(zero);
+					//auto size = MV1GetFrameNum(ground->GetHandle());
+
+
 					ground->SetRotation(ToDX(rot));
 					ground->SetScale(ToDX(scale));
 
 					floor.push_back(std::move(ground));
 
 				}
+
+				floorPoses.emplace(i * BoardSize + j, floorPos);
 
 				//とりあえず、仮で隠しの壁およびタイルを隠しようのステージ番号に登録
 				_secretVMap.emplace(num, _secretV);
@@ -459,8 +652,13 @@ namespace MachineHuck::Stage {
 				//上は、ステージ番号で格納
 				//_allFloor.emplace(num, std::move(floor));
 
+				//フロア番号でステージ番号を格納
+				_floorStageNum.emplace(i * BoardSize + j, number);
+
 				//下は、フロア番号で格納
 				_allFloorMap.emplace(i * BoardSize + j, std::move(floor));
+
+				
 				//_board[i * _boardH + j] = i * 10 + j;
 				//_boardStageNum.push_back(num);
 			}
@@ -469,6 +667,12 @@ namespace MachineHuck::Stage {
 			
 
 		}
+
+		//フロア番号をキーとしたステージフロア座標を保存
+		GetCollision().SetFloorPos(floorPoses);
+
+		//ここに仮でフロア番号によるステージ番号の連想配列を外部から取得できるように設定
+		GetCollision().SetFloorStageNum(_floorStageNum);
 
 		return true;
 	}

@@ -47,8 +47,16 @@ namespace MachineHuck::Model {
 
 		/// モデルの設定
 		/// @param key AssetServerに登録済みのキー
-		/// @return 実際に登録し通し番号
+		/// @return 実際に登録した通し番号
 		virtual int SetModel(std::string_view key, int no = 0);
+
+		/**
+		 * @brief  ステージモデルの設定       
+		 * @param  key AssetServerに登録済みのキー
+		 * @return 実際に登録した通し番号
+		 */
+		int SetMap(std::string key, int no = 0);
+
 
 		/// 座標の設定.
 		/// @param[in] position 座標x,y,z
@@ -69,6 +77,18 @@ namespace MachineHuck::Model {
 		/// @param world 
 		virtual void SetMatrix(MATRIX& world);
 
+		/**
+		 * @brief  ステージ番号を取得       
+		 * @return _stageNum
+		 */
+		int GetStageNum() { return _stageNum; }
+
+		/**
+		 * @brief  ステージ番号を設定       
+		 * @param  num
+		 */
+		void SetStageNum(int num) { _stageNum = num; }
+
 		void SetHandle(int handle) { _handle = handle; }
 		int GetHandle() { return _handle; }
 		void SetColor(int index, float r, float g, float b);
@@ -77,6 +97,7 @@ namespace MachineHuck::Model {
 		Actor::Actor& _owner;
 		int _handle{ -1 };
 		bool _isLighting{ true };
+		int _stageNum{-1};
 	};
 }
 

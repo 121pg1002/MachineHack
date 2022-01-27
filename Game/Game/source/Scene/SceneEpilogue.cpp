@@ -51,6 +51,9 @@ namespace MachineHuck::Scene {
         GetActorServer().Clear();
         // デュプリケートしたモデルだけ削除
         GetAssetServer().DeleteDuplicateModels();
+        // デュプリケートしたモデルだけ削除
+        GetAssetServer().DeleteDuplicateMaps();
+
         // クリエイターを削除
         GetActorFactory().Clear();
         //シャドウマップの削除

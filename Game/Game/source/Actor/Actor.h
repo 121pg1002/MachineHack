@@ -100,11 +100,38 @@ namespace MachineHuck::Actor {
 
             /**
              * @brief ステージフロアとの当たり判定
-             * @param oldPos 
-             * @param fileName
+             * @param oldPos 前フレームの位置
+             * @param num    ステージ番号
              * @return 当たっているか当たっていないか
              */
-            bool CollisionFloor(AppFrame::Math::Vector4 oldPos, std::string_view fileName);//←これはActorに持ってったほうがいい
+            //bool CollisionFloor(AppFrame::Math::Vector4 oldPos, int num);
+
+            /**
+             * @brief ステージフロアとの当たり判定
+             * @param oldPos 前フレームの位置
+             * @return 当たっているか当たっていないか
+             */
+            bool CollisionFloor(AppFrame::Math::Vector4 oldPos);
+
+            /**
+             * @brief  ワープ位置との当たり判定       
+             * @param  num
+             * @return 当たっているか当たっていないか
+             */
+           // bool WarpFloor(int num);
+
+            /**
+             * @brief  ワープ位置との当たり判定      
+             * @return pos ワープ先の座標
+             *             
+             */
+            VECTOR WarpFloor();
+
+            /**
+             * @brief  ワープ中の当たり判定      
+             * @return 当たっているか当たっていないか
+             */
+            bool WarpingFloor();
 
 
             /**
