@@ -159,36 +159,42 @@ namespace MachineHuck::Player {
 
 		//_camera->Update(_move);
 
-		for (auto&& i : GetActorServer().GetActors()) {
-
-			if (i->GetTypeId() != TypeId::Stage) {
-				continue;
-			}
-
-			auto floorNum = i->GetCollision().GetFloorNum();
-
-			auto pos = i->GetCollision().GetFloorPos(floorNum[0]);
-			_camera->FloorPos(pos);
-
-		}
-
-
-		if (!IsHucked()) {
-
 			//ステージ番号をここにもってくる[1]の部分に当てはめる
-//地面のナビメッシュに触れているかどうか
-			CollisionFloor(oldPos);
+            //地面のナビメッシュに触れているかどうか
+			if (!CollisionFloor(oldPos)) {
+
+				////ナビメッシュから出てしまう場合
+				//Math::Vector4 zero = { 0.0, 0.0, 0.0 };
+				//_camera->Update(zero);
+			}
+			else {
+
+				//ナビメッシュに収まっている場合
+				//_camera->Update(_move);
+			}
 
 
 			//仮
 			//ステージの中にある連想配列にアクセス
+			for (auto&& i : GetActorServer().GetActors()) {
+			
+				if (i->GetTypeId() != TypeId::Stage) {
+					continue;
+				}
+
+				auto floorNum = i->GetCollision().GetFloorNum();
+
+				auto pos = i->GetCollision().GetFloorPos(floorNum[0]);
+				_camera->FloorPos(pos);
+			
+			}
 
 
 			//_camera->FloorPos(_move);
 
 			//ワープ直後か
 			if (!_warping) {
-
+			
 				auto dxPos = WarpFloor();
 
 				//フェード用に保存
@@ -201,8 +207,7 @@ namespace MachineHuck::Player {
 					//Math::Vector4 pos = { dxPos.x, dxPos.y, dxPos.z };
 
 					//_position = pos;
-
-					//_position = _fadePos;
+					_position = _fadePos;
 
 					//_camera->SetRefleshPosition(_position);
 					//_camera->SetRefleshTarget(_position);
@@ -222,32 +227,29 @@ namespace MachineHuck::Player {
 					//ここにフェードイン処理
 
 				}
-
-
+			
+			
 			}
 			else {
 
-				if (_waitframe == 4) {
+			
+
+				if (_waitframe == 3) {
 					Flag::FlagData::SetFadeInFlag(true);
-					_position = _fadePos;
+
 				}
-
+			
 				if (!WarpingFloor() && _waitframe < 0) {
-
+				
 					//_position = _fadePos;
 					_warping = false;
-
+					
 				}
-
-
+			
+			
 			}
 
 			_waitframe--;
-		
-		
-		}
-
-
 
 		
 		
@@ -340,9 +342,9 @@ namespace MachineHuck::Player {
 			}
 		}
 		//ハッキングされているときはシャドウマップへの描画を行わない
-		//if (!GetShadowMapflg()||IsHack==FALSE) {
+		if (!GetShadowMapflg()||IsHack==FALSE) {
 			_state->Draw();
-		//}
+		}
 #ifdef _DEBUG
 		_model->Draw(*this, _isHit, _searchRange, true);
 		_camera->Draw(_isHit);
@@ -751,7 +753,7 @@ namespace MachineHuck::Player {
 				}
 				else {
 					//ハッキングした対象に追従
-					Math::Vector4 difY = { 0.0, 180.0, 0.0 };
+					Math::Vector4 difY = { 0.0, 190.0, 0.0 };
 					_owner._position = (*i)->GetPosition() + difY;
 					_owner._rotation = (*i)->GetRotation();
 					_owner._move = (*i)->GetHuckedMove();

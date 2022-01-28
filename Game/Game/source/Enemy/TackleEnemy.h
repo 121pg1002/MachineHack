@@ -154,8 +154,6 @@ namespace MachineHuck::Enemy {
             void Update() override;
         private:
             double _lx, _ly;
-            bool _warping;
-            int _waitFrame;
 
         };
     };

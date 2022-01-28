@@ -249,9 +249,9 @@ namespace MachineHuck::Scene {
         GetUiComponent().Render();
 
         if (Flag::FlagData::GetBlackOutFlag()) {
-                DrawGraph(0, 0, _grHandle, true);
+            DrawGraph(0, 0, _grHandle, true);
+            //Flag::FlagData::SetBlackOutFlag(false);
         }
-
     }
     /// ПoМы
     void SceneInGame::Exit() {

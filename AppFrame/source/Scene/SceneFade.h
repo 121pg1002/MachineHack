@@ -50,7 +50,5 @@ namespace AppFrame::Scene {
 		~SceneFadeOut();
 		void Enter() override;
 		void Update() override;
-
-	private:
 	};
 }
