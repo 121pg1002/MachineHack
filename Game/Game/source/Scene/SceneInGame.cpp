@@ -27,6 +27,7 @@ namespace MachineHuck::Scene {
     SceneInGame::SceneInGame(AppFrame::Game& game)
         :Scene{ game }
     {
+        shadowmap = std::make_unique<ShadowMap::Shadowmap>(game);
     }
     /// 初期化
     void SceneInGame::Init() {
@@ -73,7 +74,7 @@ namespace MachineHuck::Scene {
         GetAssetServer().LoadMaps(stageHandles);
         //追加
         //シャドウマップの読み込み
-        shadowmap.SetShadowMap();
+        shadowmap->SetShadowMap();
         // 使用するテクスチャ
         AppFrame::Asset::AssetServer::TextureMap TexUsed{
           {"BarFrame", {"BarFrame.png", 1, 1, 340, 50}},
@@ -229,17 +230,17 @@ namespace MachineHuck::Scene {
 
 
         //シャドウマップへの描画のフラグをオンにする
-       // GetActorServer().GetActors()[1]->SetShadowMapflg(true);
+        shadowmap->SetPlayerShadowMapflg(TRUE);
         //シャドウマップへの描画の準備を行う
-        ShadowMap_DrawSetup(shadowmap.GetShadowmap());
+        ShadowMap_DrawSetup(shadowmap->GetShadowmap());
         //シャドウマップに描画したい3Dモデルの描画
         GetActorServer().Render();
         //シャドウマップへの描画を終了する
         ShadowMap_DrawEnd();
         //シャドウマップへの描画のフラグをオフにする。
-        //GetActorServer().GetActors()[1]->SetShadowMapflg(false);
+        shadowmap->SetPlayerShadowMapflg(FALSE);
         //	描画で使用するシャドウマップを変更する
-        SetUseShadowMap(0, shadowmap.GetShadowmap());
+        SetUseShadowMap(0, shadowmap->GetShadowmap());
         //3Dモデルの描画
         GetActorServer().Render();
         //３Dモデルの描画で使用したシャドウマップの設定を解除する
@@ -265,7 +266,7 @@ namespace MachineHuck::Scene {
         // クリエイターを削除
         GetActorFactory().Clear();
         //シャドウマップの削除
-        DeleteShadowMap(shadowmap.GetShadowmap());
+        DeleteShadowMap(shadowmap->GetShadowmap());
 
     }
 }
