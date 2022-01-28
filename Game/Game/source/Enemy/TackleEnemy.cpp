@@ -16,6 +16,7 @@
 //#include <numbers>
 #include <random>
 #include "EnemyParameter.h"
+#include "../Flag/FlagData.h"
 
 //namespace Math = AppFrame::Math;
 
@@ -224,7 +225,7 @@ namespace MachineHuck::Enemy {
 
 		}
 
-		//CollisionFloor(_oldPos);
+		CollisionFloor(_oldPos);
 
 	}
 
@@ -609,10 +610,10 @@ namespace MachineHuck::Enemy {
 
 
 			////地面と触れているかどうか
-			//if (_owner.CollisionFloor(oldPos)) {
+			_owner.CollisionFloor(oldPos);
 
 				//主人公のカメラに移動量を送る
-				_owner.SetHuckedMove(_norm * _speed);
+				//_owner.SetHuckedMove(_norm * _speed);
 			//}
 			//else {
 			//
@@ -792,7 +793,16 @@ namespace MachineHuck::Enemy {
 		//{
 		//	_owner._state->GoToState("Run");
 		//	_owner._status = STATUS::CHASE;
-		//}
+		//}			//ステージ番号をここにもってくる[1]の部分に当てはめる
+            //地面のナビメッシュに触れているかどうか
+		//_owner.CollisionFloor(_owner.oldPos);
+
+
+
+
+		//_camera->FloorPos(_move);
+
+
 		 
 		
 		//移動時にフロアの壁との判定を取る
@@ -800,13 +810,89 @@ namespace MachineHuck::Enemy {
 		_owner.HuckedMove(_lx, _ly);
 
 		////地面と触れているかどうか
-		//if (!_owner.CollisionFloor(oldPos)) {
+		_owner.CollisionFloor(oldPos);
 		//	Math::Vector4 zero = { 0.0, 0.0, 0.0 };
 		//	//主人公のカメラに移動量を送る
 		//	_owner.SetHuckedMove(zero);
 		//}
 		//else {
 		//}
+
+				//仮
+		//ステージの中にある連想配列にアクセス
+		//for (auto&& i : _owner.GetActorServer().GetActors()) {
+
+		//	if (i->GetTypeId() != TypeId::Stage) {
+		//		continue;
+		//	}
+
+		//	auto floorNum = i->GetCollision().GetFloorNum();
+
+		//	auto pos = i->GetCollision().GetFloorPos(floorNum[0]);
+
+
+
+		//	_camera->FloorPos(pos);
+
+		//}
+
+				//ワープ直後か
+		if (!_warping) {
+
+			auto dxPos = _owner.WarpFloor();
+
+			//フェード用に保存
+			//_fadePos = { dxPos.x, dxPos.y, dxPos.z };
+
+			//現在位置のステージ番号のワープナビメッシュに当たった場合
+			if (dxPos.x != 0.0f && dxPos.z != 0.0f) {
+
+				Flag::FlagData::SetFadeOutFlag(true);
+				Math::Vector4 pos = { dxPos.x, dxPos.y, dxPos.z };
+
+				//_position = pos;
+				_owner._position = pos;
+
+				//_camera->SetRefleshPosition(_position);
+				//_camera->SetRefleshTarget(_position);
+
+				if (!_warping) {
+
+					_warping = true;
+					_waitFrame = 5;
+
+					//_fadeflag = true;
+
+				}
+				//else {
+				//	_warping = false;
+				//}
+
+				//ここにフェードイン処理
+
+			}
+
+
+		}
+		else {
+
+
+
+			if (_waitFrame == 3) {
+				Flag::FlagData::SetFadeInFlag(true);
+			}
+
+			if (!_owner.WarpingFloor() && _waitFrame < 0) {
+
+				//_position = _fadePos;
+				_warping = false;
+
+			}
+
+
+		}
+
+		_waitFrame--;
 
 
 

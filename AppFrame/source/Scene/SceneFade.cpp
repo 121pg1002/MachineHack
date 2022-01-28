@@ -42,6 +42,7 @@ namespace AppFrame::Scene {
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(_alpha));
         DrawBox(0, 0, _width, _height, _color, TRUE);
         SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
     }
 
 
@@ -81,19 +82,23 @@ namespace AppFrame::Scene {
         _alpha += _deltaAlpha;
         if (_alpha >= ALPHA_MAX) {
             _alpha = ALPHA_MAX;
-            GetSceneServer().PopBack(); // FadeOut自身をポップバック
 
-            //インゲーム内のフェードフラグがオンのとき
-            if (MachineHuck::Flag::FlagData::GetFadeOutFlag()) {
+            
+                GetSceneServer().PopBack(); // FadeOut自身をポップバック
 
-                //InGameのExitを通らないように
-                GetSceneServer().PopBack(false); // FadeOut下のシーンも一緒にポップバック
-                MachineHuck::Flag::FlagData::SetFadeOutFlag(false);
-                MachineHuck::Flag::FlagData::SetBlackOutFlag(true);
-            }
-            else {
-                GetSceneServer().PopBack(); // FadeOut下のシーンも一緒にポップバック
-            }
+                //インゲーム内のフェードフラグがオンのとき
+                if (MachineHuck::Flag::FlagData::GetFadeOutFlag()) {
+
+                    //InGameのExitを通らないように
+                    GetSceneServer().PopBack(false); // FadeOut下のシーンも一緒にポップバック
+                    MachineHuck::Flag::FlagData::SetFadeOutFlag(false);
+                    MachineHuck::Flag::FlagData::SetBlackOutFlag(true);
+                }
+                else {
+                    GetSceneServer().PopBack(); // FadeOut下のシーンも一緒にポップバック
+                }
+            
+            
         }
     }
 }

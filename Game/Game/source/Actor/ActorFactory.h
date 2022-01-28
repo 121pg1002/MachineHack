@@ -132,7 +132,7 @@ namespace MachineHuck::Actor {
 
         int _progress{ 0 };
         int _spawnProgress{ 0 };
-        StageV _oldStageNo{ 0 };
+        StageV _oldStageNo{ -1 };
         StageV _currentStageNo{ 0 };
         std::vector<StageV> _stageTableV;
     };
