@@ -54,7 +54,8 @@ namespace MachineHuck::Actor {
             Player,
             Enemy,
             Stage,
-            Gimmick
+            Gimmick,
+            ShadowMap
         };
 
         enum class ActorState {
@@ -238,7 +239,15 @@ namespace MachineHuck::Actor {
 
         void SetIsHit(bool isHit) { _isHit = isHit; };
 
+        /**
+           * @brief シャドウマップへの描画のフラグをセット
+           * * @param flg
+           */
         void SetShadowMapflg(bool flg) { _shadowmapflg = flg; }
+
+        /**
+        * @brief シャドウマップへの描画のフラグを取得
+        */
         bool  GetShadowMapflg() { return _shadowmapflg; }
 
 
@@ -292,7 +301,7 @@ namespace MachineHuck::Actor {
 
         Math::Vector4 _huckedMove{ 0.0, 0.0, 0.0 };
 
-        bool _shadowmapflg;//シャドウマップへの描画かどうか
+        bool _shadowmapflg;  //シャドウマップへの描画をするかどうかのフラグ
 
     private:
 

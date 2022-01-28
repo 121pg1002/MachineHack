@@ -40,7 +40,7 @@ namespace MachineHuck::Scene {
 		/// ПoМы
 		void Exit() override;
 	private:
-		MachineHuck::ShadowMap::Shadowmap shadowmap;
+		std::unique_ptr<ShadowMap::Shadowmap> shadowmap;
 		int _grHandle;
 		
 		
