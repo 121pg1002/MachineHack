@@ -16,16 +16,16 @@ namespace MachineHuck::ShadowMap {
     }
 
     void Shadowmap::SetShadowMap() {
-        ShadowMaphandle = MakeShadowMap(1024, 1024);
-        SetShadowMapLightDirection(ShadowMaphandle, VGet(0.0f, -0.5f, 0.0f));
-        SetShadowMapDrawArea(ShadowMaphandle, VGet(-1000.0f, -1.0f, -1000.0f), VGet(1000.0f, 1000.0f, 1000.0f));
+        ShadowMaphandle = MakeShadowMap(8192, 8192);
+        SetShadowMapLightDirection(ShadowMaphandle, VGet(0.01f, -0.5f, 0.0f));
+        SetShadowMapDrawArea(ShadowMaphandle, VGet(-15000.0f, 0.0f, -15000.0f), VGet(3000.0f, 100.0f, 3000.0f));
 
     };
 
     void Shadowmap::SetPlayerShadowMapflg(bool flg) {
         for (auto&& actors : GetActorServer().GetActors()) {
             if (actors->GetTypeId() == TypeId::Player) {
-                actors->SetShadowMapflg(true);
+                actors->SetShadowMapflg(flg);
                 break;
             }
         }
