@@ -334,17 +334,21 @@ namespace MachineHuck::Player {
 
 	void Player::Draw() {
 		//ハッキングされた状態のアクターがあるか
-		bool IsHack;
+		bool IsHack=FALSE;
 		for (auto&& actors : GetActorServer().GetActors()) {
-			IsHack=actors->IsHucked();
+		
+		    IsHack = actors->IsHucked();
 			if (IsHack) {
-				break;
+			   break;
+			
 			}
+			
 		}
 		//ハッキングされているときはシャドウマップへの描画を行わない
 		if (!GetShadowMapflg()||IsHack==FALSE) {
 			_state->Draw();
 		}
+		_state->Draw();
 #ifdef _DEBUG
 		_model->Draw(*this, _isHit, _searchRange, true);
 		_camera->Draw(_isHit);
