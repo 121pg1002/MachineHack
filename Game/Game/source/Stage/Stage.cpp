@@ -22,7 +22,7 @@ namespace MachineHuck::Stage {
 	namespace {
 
 		constexpr int StageAll = 3;        //!< 読み込むstagejsonの数
-		constexpr double Differ = 2000.0; //!< 1フロアのサイズ
+		constexpr double Differ = 3000.0; //!< 1フロアのサイズ
 		constexpr double StartX = -5.0 * Differ;
 		constexpr int BoardSize = 10;
 

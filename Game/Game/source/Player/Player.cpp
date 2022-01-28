@@ -15,6 +15,7 @@
 #include "../Enemy/TackleEnemy.h"
 #include "../Gauge/GaugeBase.h"
 #include "../UI/UIComponent.h"
+#include "../Flag/FlagData.h"
 
 
 //#include <numbers>
@@ -196,22 +197,27 @@ namespace MachineHuck::Player {
 			
 				auto dxPos = WarpFloor();
 
+				//フェード用に保存
+				_fadePos = { dxPos.x, dxPos.y, dxPos.z };
+
 				//現在位置のステージ番号のワープナビメッシュに当たった場合
 				if (dxPos.x != 0.0f && dxPos.z != 0.0f) {
 
+					Flag::FlagData::SetFadeOutFlag(true);
+					//Math::Vector4 pos = { dxPos.x, dxPos.y, dxPos.z };
 
-					Math::Vector4 pos = { dxPos.x, dxPos.y, dxPos.z };
+					//_position = pos;
+					_position = _fadePos;
 
-					_position = pos;
-
-
-					_camera->SetRefleshPosition(_position);
-					_camera->SetRefleshTarget(_position);
+					//_camera->SetRefleshPosition(_position);
+					//_camera->SetRefleshTarget(_position);
 
 					if (!_warping) {
 
 						_warping = true;
 						_waitframe = 5;
+
+						//_fadeflag = true;
 
 					}
 					//else {
@@ -226,10 +232,18 @@ namespace MachineHuck::Player {
 			}
 			else {
 
+			
+
+				if (_waitframe == 3) {
+					Flag::FlagData::SetFadeInFlag(true);
+
+				}
+			
 				if (!WarpingFloor() && _waitframe < 0) {
 				
+					//_position = _fadePos;
 					_warping = false;
-				
+					
 				}
 			
 			
@@ -308,6 +322,13 @@ namespace MachineHuck::Player {
 		
 
 		}
+
+		//if (_fadeflag) {
+
+		//	_game.GetSceneServer().PopBack(1);
+		//	_game.GetSceneServer().PushBack("Item", 1);
+		//
+		//}
 
 	}
 

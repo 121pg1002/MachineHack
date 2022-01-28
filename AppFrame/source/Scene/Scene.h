@@ -86,6 +86,8 @@ namespace AppFrame::Scene {
 		/// @return UIコンポーネントの参照
 		MachineHuck::UI::UIComponent& GetUiComponent();
 
+
+
 	private:
 		/// ゲームクラスの参照
 		Game& _game;

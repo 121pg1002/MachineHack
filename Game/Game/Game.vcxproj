@@ -31,6 +31,7 @@
     <ClCompile Include="source\Enemy\TackleEnemy.cpp" />
     <ClCompile Include="source\Enemy\EnemyBase.cpp" />
     <ClCompile Include="source\Enemy\EnemyParameter.cpp" />
+    <ClCompile Include="source\Flag\FlagData.cpp" />
     <ClCompile Include="source\Game.cpp" />
     <ClCompile Include="source\Gauge\GaugeBase.cpp" />
     <ClCompile Include="source\Gimmick\BrokenWall.cpp" />
@@ -54,6 +55,7 @@
     <ClCompile Include="source\Scene\SceneEpilogue.cpp" />
     <ClCompile Include="source\Scene\SceneInGame.cpp" />
     <ClCompile Include="source\Scene\SceneItem.cpp" />
+    <ClCompile Include="source\Scene\SceneLoading.cpp" />
     <ClCompile Include="source\Scene\SceneMap.cpp" />
     <ClCompile Include="source\Scene\ScenePrologue.cpp" />
     <ClCompile Include="source\Scene\SceneTeam.cpp" />
@@ -81,6 +83,7 @@
     <ClInclude Include="source\Enemy\TackleEnemy.h" />
     <ClInclude Include="source\Enemy\EnemyBase.h" />
     <ClInclude Include="source\Enemy\EnemyParameter.h" />
+    <ClInclude Include="source\Flag\FlagData.h" />
     <ClInclude Include="source\Gauge\GaugeBase.h" />
     <ClInclude Include="source\Gimmick\BrokenWall.h" />
     <ClInclude Include="source\Gimmick\DamageFloorGimmick.h" />
@@ -104,6 +107,7 @@
     <ClInclude Include="source\Scene\SceneEpilogue.h" />
     <ClInclude Include="source\Scene\SceneInGame.h" />
     <ClInclude Include="source\Scene\SceneItem.h" />
+    <ClInclude Include="source\Scene\SceneLoading.h" />
     <ClInclude Include="source\Scene\SceneMap.h" />
     <ClInclude Include="source\Scene\ScenePrologue.h" />
     <ClInclude Include="source\Scene\SceneTeam.h" />

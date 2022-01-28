@@ -11,6 +11,7 @@
 #include <DxLib.h>
 #include <algorithm>
 #include <cmath>
+#include "../Flag/FlagData.h"
 //#include <numbers>
 
 namespace MachineHuck::Camera {
@@ -54,6 +55,9 @@ namespace MachineHuck::Camera {
 		_position = pos + _positionInitDif;
 		_target = pos + _targetInitDif;
 		SetCameraPositionAndTarget_UpVecY(ToDX(_position), ToDX(_target));
+
+		Flag::FlagData::SetCameraPos(ToDX(pos));
+
 	}
 
 	///

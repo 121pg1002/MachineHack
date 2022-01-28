@@ -38,7 +38,7 @@ namespace AppFrame::Scene {
         _scenes.push_back(pushScene);
     }
     //Enterを呼ばずにプッシュバック
-    void SceneServer::PushBack(std::string_view key,int menuflg) {
+    void SceneServer::PushBack(std::string_view key,bool menuflg) {
         if (_registry.count(key.data()) != 1) {
             return;   // キーが未登録
         }
@@ -55,7 +55,7 @@ namespace AppFrame::Scene {
         _scenes.pop_back();
     }
     //Exitを呼ばずにポップバック
-    void SceneServer::PopBack(int menuflg) {
+    void SceneServer::PopBack(bool menuflg) {
         if (_scenes.empty()) {
             return;
         }
@@ -71,6 +71,20 @@ namespace AppFrame::Scene {
         InsertBelowBack("FadeIn");    // フェードインを挿入
         PushBack("FadeOut");          // フェードアウトをプッシュバック
     }
+
+
+    void SceneServer::GoToScene(std::string_view key, std::string_view sceneNext, bool flag) {
+        
+        if (key != "") {
+            InsertBelowBack(key.data(), flag);  // 次のシーンを挿入
+        }
+        //InsertBelowBack("FadeIn", flag);    // フェードインを挿入
+        if (sceneNext != "") {
+            PushBack(sceneNext);          // フェードアウトをプッシュバック
+        }
+    }
+
+
     /// リストの一番後ろ(最前面)のシーンの真下に挿入
     void SceneServer::InsertBelowBack(std::string_view key) {
         if (_registry.count(key.data()) != 1) {
@@ -80,6 +94,21 @@ namespace AppFrame::Scene {
         insertScene->Enter();
         _scenes.insert(std::prev(_scenes.end()), insertScene);
     }
+
+    /// リストの一番後ろ(最前面)のシーンの真下に挿入
+    void SceneServer::InsertBelowBack(std::string_view key, bool flag) {
+        if (_registry.count(key.data()) != 1) {
+            return;   // キーが未登録
+        }
+        auto insertScene = _registry[key.data()];
+
+        if (flag) {
+            insertScene->Enter();
+        }
+        _scenes.insert(std::prev(_scenes.end()), insertScene);
+    }
+
+
 
     ///
     /// 入力処理.

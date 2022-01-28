@@ -43,7 +43,7 @@ namespace AppFrame::Scene {
 		/// @param[in] key  Sceneのインスタンスに関連付けるた任意の文字列
 		///
 		void PushBack(std::string_view key);
-		void PushBack(std::string_view key,int menuflg);
+		void PushBack(std::string_view key, bool menuflg);
 		///
 		/// 
 		/// シーンのポップバック
@@ -51,19 +51,35 @@ namespace AppFrame::Scene {
 		/// Sceneの出口処理Exitを実行する
 		///
 		void PopBack();
-		void PopBack(int menuflg);
+		void PopBack(bool menuflg);
 		///
 		/// シーンの遷移
 		/// PopBackしてPushBackする
 		/// @param[in] key  Sceneのインスタンスに関連付けるた任意の文字列
 		///
 		void GoToScene(std::string_view key);
+	
+		/// シーンの遷移
+		/// PopBackしてPushBackする
+		/// @param[in] key  Sceneのインスタンスに関連付けるた任意の文字列
+		/// @param  sceneNext 次のシーン
+		/// @param  flag Enterを行うかどうか
 		///
+		void GoToScene(std::string_view key, std::string_view sceneNext, bool flag);
+		 
+		
 		/// リストの一番後ろ(生前面)のシーンの真下に挿入する
 		/// @param[in] key  Sceneのインスタンスに関連付けるた任意の文字列
 		/// Sceneの入口処理Enterを実行する
 		///
 		void InsertBelowBack(std::string_view key);
+
+		/**
+		 * @brief  リストの最後部のシーンに挿入する       
+		 * @param  key   Seeneのインスタンスに関連付ける任意の文字列
+		 * @param  flag　Enterを通すかどうか
+		 */
+		void InsertBelowBack(std::string_view key, bool flag);
 
 		/// 入力
 		/// リストの一番後ろ(最前面)のシーンだけ処理する

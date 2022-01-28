@@ -87,6 +87,7 @@ namespace MachineHuck::Player {
         int _huckCount{ 0 };
 
         bool _isHit; //!< 扇形の確認(仮)
+        Math::Vector4 _fadePos; //!< ワープ中の座標保存用
 
 
 

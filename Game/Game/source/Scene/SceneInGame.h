@@ -41,6 +41,7 @@ namespace MachineHuck::Scene {
 		void Exit() override;
 	private:
 		MachineHuck::ShadowMap::Shadowmap shadowmap;
+		int _grHandle;
 		
 		
 	};

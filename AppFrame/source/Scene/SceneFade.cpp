@@ -7,8 +7,9 @@
 *********************************************************************/
 
 #include "SceneFade.h"
-#include "SceneServer.h"
 #include <DxLib.h>
+#include "SceneServer.h"
+#include "../../../Game/Game/source/Flag/FlagData.h"
 
 namespace AppFrame::Scene {
     namespace {
@@ -54,11 +55,14 @@ namespace AppFrame::Scene {
         _deltaAlpha = -ALPHA_DELTA;
     }
     void SceneFadeIn::Update() {
+        MachineHuck::Flag::FlagData::SetBlackOutFlag(false);
+
         _alpha += _deltaAlpha;
         if (_alpha <= ALPHA_MIN) {
-            _alpha = ALPHA_MIN;
+            _alpha = ALPHA_MIN;   
             GetSceneServer().PopBack(); // FadeIn自身をポップバック
         }
+
     }
 
     SceneFadeOut::SceneFadeOut(Game& game) : SceneFade{ game } {
@@ -72,11 +76,24 @@ namespace AppFrame::Scene {
         _deltaAlpha = ALPHA_DELTA;
     }
     void SceneFadeOut::Update() {
+
+        
         _alpha += _deltaAlpha;
         if (_alpha >= ALPHA_MAX) {
             _alpha = ALPHA_MAX;
             GetSceneServer().PopBack(); // FadeOut自身をポップバック
-            GetSceneServer().PopBack(); // FadeOut下のシーンも一緒にポップバック
+
+            //インゲーム内のフェードフラグがオンのとき
+            if (MachineHuck::Flag::FlagData::GetFadeOutFlag()) {
+
+                //InGameのExitを通らないように
+                GetSceneServer().PopBack(false); // FadeOut下のシーンも一緒にポップバック
+                MachineHuck::Flag::FlagData::SetFadeOutFlag(false);
+                MachineHuck::Flag::FlagData::SetBlackOutFlag(true);
+            }
+            else {
+                GetSceneServer().PopBack(); // FadeOut下のシーンも一緒にポップバック
+            }
         }
     }
 }

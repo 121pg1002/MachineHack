@@ -22,7 +22,7 @@ namespace Camera = MachineHuck::Camera;
 namespace {
 
     //constexpr int StageAll = 3;        //!< 読み込むstagejsonの数
-    constexpr double Differ = 1000.0; //!< 1フロアのサイズ
+    constexpr double Differ = 3000.0; //!< 1フロアのサイズ
     constexpr double StartX = -5.0 * Differ;
     constexpr int BoardSize = 10;
 
@@ -191,7 +191,7 @@ namespace MachineHuck::Actor {
         // プレイヤーの生成
         auto player = std::make_unique<Player::Player>(game);
         player->SetCameraComponent(camera);
-        player->SetPosition({ -9000, 0, 500 });
+        player->SetPosition({ -Differ * 5.0 + Differ* 0.5, 0, Differ * 0.5 });
 
         // モデルの読み込みと生成
         auto model = std::make_unique<Model::ModelAnimeComponent>(*player);

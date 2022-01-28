@@ -14,6 +14,7 @@
 #include "../Actor/ActorFactory.h"
 #include "../Enemy/EnemyParameter.h"
 #include "../UI/UIComponent.h"
+#include "../Flag/FlagData.h"
 
 namespace {
 
@@ -75,10 +76,13 @@ namespace MachineHuck::Scene {
         shadowmap.SetShadowMap();
         // 使用するテクスチャ
         AppFrame::Asset::AssetServer::TextureMap TexUsed{
-          {"BarFrame", {"BarFrame.png", 1, 1, 340, 50}}
+          {"BarFrame", {"BarFrame.png", 1, 1, 340, 50}},
+          {"black", {"BlackColor.png", 1, 1, 1920, 1080}},
         };
         // テクスチャの読み込み
         GetAssetServer().LoadTextures(TexUsed);
+
+        _grHandle = GetAssetServer().GetTexture("black");
 
     }
     /// 入口
@@ -186,13 +190,13 @@ namespace MachineHuck::Scene {
         }
         if (input.GetJoypad().Button_X()) {
             // Xボタンでマップ画面へ
-            GetSceneServer().PopBack(1);
-            GetSceneServer().PushBack("Map",1);
+            GetSceneServer().PopBack(true);
+            GetSceneServer().PushBack("Map",true);
         }
         if (input.GetJoypad().Button_Y()) {
             // Yボタンでアイテム画面へ
-            GetSceneServer().PopBack(1);
-            GetSceneServer().PushBack("Item", 1);
+            GetSceneServer().PopBack(true);
+            GetSceneServer().PushBack("Item", true);
         }
         GetActorServer().Input(input);
     }
@@ -201,13 +205,31 @@ namespace MachineHuck::Scene {
         GetActorFactory().UpdateSpawn();
         GetActorServer().Update();
         GetUiComponent().Update();
+
+
+        if (Flag::FlagData::GetFadeOutFlag()) {
+            //GetSceneServer().PopBack(true);
+            //GetSceneServer().PushBack("FadeOut");
+            GetSceneServer().GoToScene("Loading", "FadeOut", false);
+
+            //Flag::FlagData::SetFadeOutFlag(false);
+            //フェードアウトの方でPopBackしていないのだと思う
+        }
+
+        if (Flag::FlagData::GetFadeInFlag()) {
+            GetSceneServer().GoToScene("Loading", "FadeIn", false);
+
+            Flag::FlagData::SetFadeInFlag(false);
+        }
+
     }
 
     /// 描画
     void SceneInGame::Render() {
 
+
         //シャドウマップへの描画のフラグをオンにする
-        GetActorServer().GetActors()[1]->SetShadowMapflg(true);
+       // GetActorServer().GetActors()[1]->SetShadowMapflg(true);
         //シャドウマップへの描画の準備を行う
         ShadowMap_DrawSetup(shadowmap.GetShadowmap());
         //シャドウマップに描画したい3Dモデルの描画
@@ -215,7 +237,7 @@ namespace MachineHuck::Scene {
         //シャドウマップへの描画を終了する
         ShadowMap_DrawEnd();
         //シャドウマップへの描画のフラグをオフにする。
-        GetActorServer().GetActors()[1]->SetShadowMapflg(false);
+        //GetActorServer().GetActors()[1]->SetShadowMapflg(false);
         //	描画で使用するシャドウマップを変更する
         SetUseShadowMap(0, shadowmap.GetShadowmap());
         //3Dモデルの描画
@@ -224,6 +246,11 @@ namespace MachineHuck::Scene {
         SetUseShadowMap(0, -1);
         //UIの描画
         GetUiComponent().Render();
+
+        if (Flag::FlagData::GetBlackOutFlag()) {
+            DrawGraph(0, 0, _grHandle, true);
+            //Flag::FlagData::SetBlackOutFlag(false);
+        }
     }
     /// 出口
     void SceneInGame::Exit() {

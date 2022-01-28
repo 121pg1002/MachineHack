@@ -143,6 +143,12 @@
     <ClCompile Include="source\Scene\SceneMap.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="source\Flag\FlagData.cpp">
+      <Filter>Flag</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scene\SceneLoading.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Enemy">
@@ -204,6 +210,9 @@
     </Filter>
     <Filter Include="ShadowMap">
       <UniqueIdentifier>{f94efe2a-315c-4048-b537-22b00779386b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Flag">
+      <UniqueIdentifier>{ade52994-b96d-4bb0-9a85-8c02979ce85b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -352,6 +361,12 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="source\Scene\SceneMap.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Flag\FlagData.h">
+      <Filter>Flag</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Scene\SceneLoading.h">
       <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
