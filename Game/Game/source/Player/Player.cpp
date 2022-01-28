@@ -159,42 +159,36 @@ namespace MachineHuck::Player {
 
 		//_camera->Update(_move);
 
+		for (auto&& i : GetActorServer().GetActors()) {
+
+			if (i->GetTypeId() != TypeId::Stage) {
+				continue;
+			}
+
+			auto floorNum = i->GetCollision().GetFloorNum();
+
+			auto pos = i->GetCollision().GetFloorPos(floorNum[0]);
+			_camera->FloorPos(pos);
+
+		}
+
 			//ステージ番号をここにもってくる[1]の部分に当てはめる
-            //地面のナビメッシュに触れているかどうか
-			if (!CollisionFloor(oldPos)) {
+             //地面のナビメッシュに触れているかどうか
 
-				////ナビメッシュから出てしまう場合
-				//Math::Vector4 zero = { 0.0, 0.0, 0.0 };
-				//_camera->Update(zero);
-			}
-			else {
-
-				//ナビメッシュに収まっている場合
-				//_camera->Update(_move);
-			}
+		if (!IsHucked()) {
+			CollisionFloor(oldPos);
 
 
 			//仮
 			//ステージの中にある連想配列にアクセス
-			for (auto&& i : GetActorServer().GetActors()) {
-			
-				if (i->GetTypeId() != TypeId::Stage) {
-					continue;
-				}
 
-				auto floorNum = i->GetCollision().GetFloorNum();
-
-				auto pos = i->GetCollision().GetFloorPos(floorNum[0]);
-				_camera->FloorPos(pos);
-			
-			}
 
 
 			//_camera->FloorPos(_move);
 
 			//ワープ直後か
 			if (!_warping) {
-			
+
 				auto dxPos = WarpFloor();
 
 				//フェード用に保存
@@ -207,7 +201,7 @@ namespace MachineHuck::Player {
 					//Math::Vector4 pos = { dxPos.x, dxPos.y, dxPos.z };
 
 					//_position = pos;
-					_position = _fadePos;
+					//_position = _fadePos;
 
 					//_camera->SetRefleshPosition(_position);
 					//_camera->SetRefleshTarget(_position);
@@ -227,29 +221,35 @@ namespace MachineHuck::Player {
 					//ここにフェードイン処理
 
 				}
-			
-			
+
+
 			}
 			else {
 
-			
+				//描画を1フレーム回す
+				if (_waitframe == 4) {
+					_position = _fadePos;
+				}
 
-				if (_waitframe == 3) {
+				if (_waitframe == 0) {
 					Flag::FlagData::SetFadeInFlag(true);
 
 				}
-			
+
 				if (!WarpingFloor() && _waitframe < 0) {
-				
+
 					//_position = _fadePos;
 					_warping = false;
-					
+
 				}
-			
-			
+
+
 			}
 
 			_waitframe--;
+		
+		}
+
 
 		
 		
@@ -757,7 +757,7 @@ namespace MachineHuck::Player {
 				}
 				else {
 					//ハッキングした対象に追従
-					Math::Vector4 difY = { 0.0, 190.0, 0.0 };
+					Math::Vector4 difY = { 0.0, 150.0, 0.0 };
 					_owner._position = (*i)->GetPosition() + difY;
 					_owner._rotation = (*i)->GetRotation();
 					_owner._move = (*i)->GetHuckedMove();
