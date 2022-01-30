@@ -129,6 +129,29 @@ namespace MachineHuck::Actor {
 
             }
 
+            //前のフロアのエネミーを削除する
+            for (auto i = _game.GetActorServer().GetActors().begin(); i < _game.GetActorServer().GetActors().end(); i++) {
+            
+                //エネミーかどうか
+                if ((*i)->GetTypeId() == (*i)->IsEnemy()) {
+                
+                    //ハッキング中かどうか
+                    if ((*i)->IsHucked()) {
+                    
+                        continue;
+                    }
+
+                    (*i)->SetDead();
+                    
+                }
+            
+            }
+
+
+
+
+            
+
             ////前のステージ番号を更新
             _oldStageNo = _currentStageNo;
 
@@ -148,19 +171,21 @@ namespace MachineHuck::Actor {
                     auto& spawnFloor = _eStageParamVMap[no];
 
                     //新しい描画フロアのエネミーをリスポーンさせる
-                    for (auto&& floor : spawnFloor) {
+                    for (auto&& floorEnemy : spawnFloor) {
 
-                        auto&& actor = Create(floor.GetName());
+                        auto&& actor = Create(floorEnemy.GetName());
 
                         //auto pos = floor.GetPosition();
                         //Math::Vector4 dif = {};
 
-                        actor->SetPosition(floor.GetPosition());
-                        actor->SetRotation(floor.GetRotation());
-                        actor->SetScale(floor.GetScale());
+                        actor->SetPosition(floorEnemy.GetPosition());
+                        actor->SetRotation(floorEnemy.GetRotation());
+                        actor->SetScale(floorEnemy.GetScale());
                         _game.GetActorServer().Add(std::move(actor));
 
                     }
+
+
 
 
                 }

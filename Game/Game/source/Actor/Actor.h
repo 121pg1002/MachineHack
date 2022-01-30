@@ -99,6 +99,19 @@ namespace MachineHuck::Actor {
          */
         TypeId IsStage() const { return TypeId::Stage; }
 
+
+        /**
+         * @brief   エネミーかどうか      
+         * @return  TypeId::Enemy
+         */
+        TypeId IsEnemy() const { return TypeId::Enemy; }
+
+        /**
+         * 
+         * @brief 死亡状態に変更       
+         */
+        void SetDead()  { _actorState = ActorState::Dead; }
+
         /**
          * @brief ステージフロアとの当たり判定
          * @param oldPos 前フレームの位置
