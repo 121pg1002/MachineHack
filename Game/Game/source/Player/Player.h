@@ -72,6 +72,20 @@ namespace MachineHuck::Player {
          */
         void SetHuckFailureFlag(int flag) { _huckFailureFlag = flag; }
 
+        /**
+         * 
+         * @brief  ñ≥ìGÇ©Ç«Ç§Ç©       
+         * @return _invincible
+         */
+        //bool GetInvincible() { return _invincible; }
+
+        ///**
+        // * 
+        // * @brief  ñ≥ìGÇê›íË       
+        // * @param  invincible
+        // */
+        //void SetInvincible(bool invincible) { _invincible = invincible; }
+
 
       
     protected:
@@ -121,6 +135,7 @@ namespace MachineHuck::Player {
         int _noDamageTime{0};
         bool _warping{ false };
         int _waitframe{ 0 };
+      //  bool _invincible{ false }; //!< ñ≥ìGÉtÉâÉO
        
     public:
         /// @class  StateBase
@@ -131,7 +146,7 @@ namespace MachineHuck::Player {
             void Draw() override;
         protected:
             Player& _owner;
-
+            static int _noDamageTime;
 
         };
         /// @class  StateIdle
@@ -161,7 +176,9 @@ namespace MachineHuck::Player {
             StateDamage(Player& owner) : StateBase{ owner } {};
             void Enter() override;
             void Update() override;
+        private:
         };
+
 
         /// @class  StateAttack
         /// @brief  çUåÇ

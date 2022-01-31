@@ -36,16 +36,30 @@ namespace MachineHuck::Flag {
 		static void SetBlackOutFlag(bool flag) { _blackOutFlag = flag; }
 
 		/**
-		 * @brief  プレイヤーの無敵時間を取得
+		 * @brief  プレイヤーの無敵フラグを取得
 		 * @return _noDamageTime
 		 */
-		static bool GetNoDamageTime() { return _noDamageTime; }
+		static bool GetNoDamageFlag() { return _noDamageFlag; }
 
 		/**
-		 * @brief プレイヤーの無敵時間を設定
+		 * @brief プレイヤーの無敵フラグを設定
 		 * @param time
 		 */
-		static void SetNoDamageTime(bool time) { _noDamageTime = time; }
+		static void SetNoDamageFlag(bool flag) { _noDamageFlag = flag; }
+
+		/**
+		 *
+		 * @brief  プレイヤーのダメージフラグを取得       
+		 * @return _damageFlag
+		 */
+		static int GetDamageFlag() { return _damageFlag; }
+
+		/**
+		 * 
+		 * @brief  プレイヤーのダメージフラグを設定       
+		 * @param  flag
+		 */
+		static void SetDamageFlag(bool flag) { _damageFlag = flag; }
 
 		/**
 		 * @brief  カメラ位置を取得
@@ -65,7 +79,8 @@ namespace MachineHuck::Flag {
 		static bool _fadeInFlag;
 		static bool _blackOutFlag;
 		static VECTOR _cameraPos;
-		static int _noDamageTime;
+		static bool _noDamageFlag;
+		static bool _damageFlag;
 	};
 
 }

@@ -622,8 +622,8 @@ namespace MachineHuck::Enemy {
 			////地面と触れているかどうか
 			_owner.CollisionFloor(oldPos);
 
-				//主人公のカメラに移動量を送る
-				_owner.SetHuckedMove(_norm * _speed);
+			//主人公のカメラに移動量を送る
+			_owner.SetHuckedMove(_norm * _speed);
 			//}
 			//else {
 			//
@@ -631,7 +631,7 @@ namespace MachineHuck::Enemy {
 			//	//主人公のカメラに移動量を送る
 			//	_owner.SetHuckedMove(zero);
 			//}
-			
+
 			////ハッキングされているか(追跡時のタックルを省く)
 			if (_owner.IsHucked()) {
 
@@ -642,7 +642,7 @@ namespace MachineHuck::Enemy {
 
 						continue;
 
-						
+
 						//if (_invincibleTime < 0) {
 						//	continue;
 						//}
@@ -670,7 +670,7 @@ namespace MachineHuck::Enemy {
 						//	}
 						//}
 
-					
+
 					}
 					else {
 
@@ -693,47 +693,55 @@ namespace MachineHuck::Enemy {
 
 					}
 				}
-			
-				
+
+
 			}
 			else {
-			
-				for (auto i = _owner.GetActorServer().GetActors().begin(); i != _owner.GetActorServer().GetActors().end(); i++) {
 
-					//無敵時間中
-					if (_invincibleTime != false) {
-						break;
-					}
+				//無敵時間中とダメージフラグがオンのときは、通さない
+				if (Flag::FlagData::GetNoDamageFlag() == false && Flag::FlagData::GetDamageFlag() == false) {
 
-					//プレイヤーではなかったら次へ
-					if ((*i)->GetTypeId() != TypeId::Player) {
-						continue;
-					}
-					else {
+					for (auto i = _owner.GetActorServer().GetActors().begin(); i != _owner.GetActorServer().GetActors().end(); i++) {
+
+
+
+						//プレイヤーではなかったら次へ
+						if ((*i)->GetTypeId() != TypeId::Player) {
+							continue;
+						}
+						else {
+
 
 							//プレイヤーが円で敵のAABBとの当たり判定
 							if (_owner._collision->CircleToOrientedAABB(**i, _owner)) {
-							
+
 								//プレイヤーのゲージを減少させる
 								(*i)->GetGaugeBase().DownGauge(15);
 
-								//
-								_invincibleTime = true;
+								//プレイヤーを無敵時間にする
+								//_invincibleTime = true;
 
-								//スタティックでプレイヤーに共有
-								Flag::FlagData::SetNoDamageTime(_invincibleTime);
+								//プレイヤーのダメージフラグを設定
+								Flag::FlagData::SetDamageFlag(true);
 
-								//プレイヤーをダメージ状態に変更
+								////プレイヤーをダメージ状態に変更
 								(*i)->GetState().GoToState("Damage");
-							
+
 							}
 
 						}
 
 					}
+
 				}
-			
+
+
+
 			}
+
+
+
+		}
 
 			_tackleTime--;
 		
@@ -774,9 +782,9 @@ namespace MachineHuck::Enemy {
 		
 		}
 
-		_invincibleTime = false;
-		//プレイヤーの無敵時間をリセット
-		Flag::FlagData::SetNoDamageTime(_invincibleTime);
+		//_invincibleTime = false;
+		////プレイヤーの無敵時間をリセット
+		//Flag::FlagData::SetNoDamageTime(_invincibleTime);
 
 		if (_tackleAfterTime < 0) {
 

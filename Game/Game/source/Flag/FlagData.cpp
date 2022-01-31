@@ -14,7 +14,8 @@ namespace MachineHuck::Flag {
  bool FlagData::_fadeOutFlag = false;
  bool FlagData::_blackOutFlag = false;
  VECTOR FlagData::_cameraPos = VGet(0.f, 0.f, 0.f);
- int FlagData::_noDamageTime = -1;
+ bool FlagData::_noDamageFlag = false;
+ bool FlagData::_damageFlag = false;
 
 }
 

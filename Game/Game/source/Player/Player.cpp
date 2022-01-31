@@ -25,6 +25,10 @@ namespace {
 }
 
 namespace MachineHuck::Player {
+
+	//静的なメンバ―変数を実体化させる
+	int Player::StateBase::_noDamageTime;
+
 	//コンストラクタ
 	Player::Player(AppFrame::Game& game) : Actor{ game } {
 		_r = 150.0;
@@ -139,12 +143,22 @@ namespace MachineHuck::Player {
 		//動かないときの処理に使用
 		//auto oldMove = _move;
 
+		////ダメージフラグが経っているかつ無敵時間が0未満なら
+		//if (Flag::FlagData::GetDamageFlag() && Flag::FlagData::GetNoDamageTime() < 0) {
+		//	_noDamageTime = 30;
+		//}
+
+	/*_noDamageTime*/ 
+
 
 		Math::Vector4 oldPos = _position;
 
 		//無敵時間が終了したとき
-		if (Flag::FlagData::GetNoDamageTime() != false) {
+		if (Flag::FlagData::GetDamageFlag() == false) {
 			Move();
+		}
+		else {
+			_move = { 0.0, 0.0, 0.0 };
 		}
 		//else {
 		//	int x = 0;
@@ -165,6 +179,8 @@ namespace MachineHuck::Player {
 		//case ActorState::Hucked:
 		   // _model->ChangeAnime("Idle");
 		//}
+
+	
 
 
 		// モデルの更新
@@ -472,6 +488,11 @@ namespace MachineHuck::Player {
 	/// 待機
 	void Player::StateIdle::Enter() {
 		_owner._model->ChangeAnime("Idle", true);
+
+		////無敵フラグがオンなら120フレーム無敵時間を作る
+		//if (Flag::FlagData::GetNoDamageFlag()) {
+		//	_noDamageTime = 120;
+		//}
 		//_actorState= ActorState::Active;
 	}
 
@@ -497,10 +518,27 @@ namespace MachineHuck::Player {
 		//if (_owner.GetGaugeBase().GetGauge() < 0) {
 		//	_owner._state->GoToState("Die");
 		//}
+		if (Flag::FlagData::GetDamageFlag()) {
+
+			//ダメージフラグをオフに
+			Flag::FlagData::SetDamageFlag(false);
+
+			//無敵フラグをオンに
+			Flag::FlagData::SetNoDamageFlag(true);
+
+			_noDamageTime = 120;
+
+		}
 
 		//if (Flag::FlagData::GetNoDamageTime() > 0) {
 		//	_owner._state->GoToState("Damage");
 		//}
+		_noDamageTime--;
+
+		//無敵時間が終わったら元に戻す
+		if (_noDamageTime < 0 && Flag::FlagData::GetNoDamageFlag()) {
+			Flag::FlagData::SetNoDamageFlag(false);
+		}
 		
 	}
 
@@ -517,15 +555,22 @@ namespace MachineHuck::Player {
 		//	_owner._state->PushBack("Attack");
 		//	return;
 		//}
-		if (input.GetJoypad().Button_RT()) {
+		
+
+		    //無敵時間中は移動のみ可能
+			if (input.GetJoypad().Button_RT() && !Flag::FlagData::GetNoDamageFlag()) {
+				_owner._state->PopBack();
+				_owner._state->PushBack("Hucking");
+				return;
+			}
+			else if (Math::Vector4 v{ 0.0, 0.0, 0.0 }; v.GetX() != _owner.GetMove().GetX() || v.GetZ() != _owner.GetMove().GetZ()) {
+				return;
+			}
 			_owner._state->PopBack();
-			_owner._state->PushBack("Hucking");
-			return;
-		}
-		else if (Math::Vector4 v{ 0.0, 0.0, 0.0 }; v.GetX() != _owner.GetMove().GetX() || v.GetZ() != _owner.GetMove().GetZ()) {
-			return;
-		}
-		_owner._state->PopBack();
+		
+		
+		
+		
 	}
 
 
@@ -548,7 +593,12 @@ namespace MachineHuck::Player {
 			_owner.GetGaugeBase().Update(_owner);
 		}
 
-		
+		if (_noDamageTime < 0 && Flag::FlagData::GetNoDamageFlag()) {
+
+			Flag::FlagData::SetNoDamageFlag(false);
+		}
+
+		_noDamageTime--;
 
 	}
 
@@ -560,14 +610,18 @@ namespace MachineHuck::Player {
 
 	//ダメージ
 	void Player::StateDamage::Update() {
-	
-		auto noDamageTime = Flag::FlagData::GetNoDamageTime();
 
-		if (noDamageTime != true) {
-		
-			_owner._state->GoToState("Idle");
+		if (_owner._model->GetRepeatedCount() > 0) {
+
+			_owner._state->PopBack();
+
+			//プレイヤーを移動可能にする
+			//Flag::FlagData::SetDamageFlag(false);
+
 		}
+		
 	}
+
 
 
 
