@@ -23,7 +23,7 @@ namespace MachineHuck::Stage {
 	//using Collision = std::vector<std::pair<std::string, std::vector<std::string>>>;
 
 	//                                       フロア番号      ハンドル名, コリジョンメッシュ名, ワープメッシュ名の配列,  フロア番号 
-	using CollisionMesh = std::unordered_map<int, std::tuple<std::string, std::string, std::vector<std::string>>>;
+	using CollisionMesh = std::unordered_map<int, std::tuple<std::string, std::string, std::vector<std::string>, int>>;
 
 	/**
 	 * @class ステージクラス

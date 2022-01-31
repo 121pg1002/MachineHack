@@ -20,7 +20,7 @@
 
 namespace MachineHuck::Player {
     /// @class   Player
-/// @brief   プレイヤー
+    /// @brief   プレイヤー
     class Player : public Actor::Actor {
     public:
         /// コンストラクタ
@@ -49,6 +49,29 @@ namespace MachineHuck::Player {
          * @return _huckCount
          */
         int GetHuckCount() { return _huckCount; }
+
+        /**
+         * @brief ハックカウンタを設定
+         * @param count
+         */
+        void SetHuckCount(int count) { _huckCount = count; }
+        
+        /**
+         * @brief  ハック失敗フラグを取得
+         * @return _huckFailureFlag 0 が失敗 
+         *                          1 が成功 
+         *                          2が判定中
+         */
+        int GetHuckFailureFlag() { return _huckFailureFlag; }
+
+        /**
+         * @brief ハック成功失敗フラグを設定
+         * @param flag 0が失敗
+         *             1が成功 
+         *             2が判定中
+         */
+        void SetHuckFailureFlag(int flag) { _huckFailureFlag = flag; }
+
 
       
     protected:
@@ -85,6 +108,7 @@ namespace MachineHuck::Player {
         double lx{ 0.0 }, ly{ 0.0 };                    //!< 左アナログスティックの傾き
 
         int _huckCount{ 0 };
+        int _huckFailureFlag{2};        //!< ハッキングに失敗したかどうか 失敗 0 成功 1　判定中 2
 
         bool _isHit; //!< 扇形の確認(仮)
         Math::Vector4 _fadePos; //!< ワープ中の座標保存用
@@ -129,6 +153,16 @@ namespace MachineHuck::Player {
             void Input(AppFrame::Input::InputComponent& input) override;
             void Update() override;
         };
+
+        /// @class  StateDamage
+        /// @brief  ダメージ
+        class StateDamage : public StateBase {
+        public:
+            StateDamage(Player& owner) : StateBase{ owner } {};
+            void Enter() override;
+            void Update() override;
+        };
+
         /// @class  StateAttack
         /// @brief  攻撃
         class StateAttack : public StateBase {
@@ -163,6 +197,8 @@ namespace MachineHuck::Player {
         private:
             Math::Vector4 _dif{ 0.0, 0.0, 0.0 };
             Math::Vector4 _length;
+            int _huckingTime{0};
+            bool _huckFlag{false};
         };
 
         /// @class  StateHucking

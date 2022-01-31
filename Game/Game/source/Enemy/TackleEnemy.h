@@ -66,6 +66,7 @@ namespace MachineHuck::Enemy {
             void Draw() override;
         protected:
             TackleEnemy& _owner;
+            bool _invincibleTime{ false };
         };
 
         class StateIdle : public StateBase {
@@ -109,6 +110,13 @@ namespace MachineHuck::Enemy {
         class StateDie : public StateBase {
         public:
             StateDie(TackleEnemy& owner) : StateBase{ owner } {};
+            void Enter() override;
+            void Update() override;
+        };
+
+        class StateDamage : public StateBase {
+        public:
+            StateDamage(TackleEnemy& owner) : StateBase{ owner } {};
             void Enter() override;
             void Update() override;
         };

@@ -237,6 +237,7 @@ namespace MachineHuck::Actor {
         state->Register("Hucking", std::make_shared<Player::Player::StateHucking>(*player));
         state->Register("Hucked", std::make_shared<Player::Player::StateHucked>(*player));
         state->Register("Die", std::make_shared<Player::Player::StateDie>(*player));
+        state->Register("Damage", std::make_unique<Player::Player::StateDamage>(*player));
         player->SetStateComponent(std::move(state));
 
         return player;

@@ -487,6 +487,16 @@ namespace MachineHuck::Enemy {
 		}
 	}
 
+	//ダメージ
+	void TackleEnemy::StateDamage::Enter() {
+		_owner._model->ChangeAnime("Damage");
+	}
+
+	void TackleEnemy::StateDamage::Update() {
+	
+	
+	}
+
 	////攻撃
 	//void Enemy::StateAttack::Enter() {
 	//	_owner._model->ChangeAnime("Attack");
@@ -622,25 +632,56 @@ namespace MachineHuck::Enemy {
 			//	_owner.SetHuckedMove(zero);
 			//}
 			
-
+			////ハッキングされているか(追跡時のタックルを省く)
 			if (_owner.IsHucked()) {
 
 				for (auto i = _owner.GetActorServer().GetActors().begin(); i != _owner.GetActorServer().GetActors().end(); i++) {
 
 					//!< 敵ではなかったら次へ
 					if ((*i)->GetTypeId() != TypeId::Enemy) {
+
 						continue;
+
+						
+						//if (_invincibleTime < 0) {
+						//	continue;
+						//}
+
+						////プレイヤーではなかったら次へ
+						//if ((*i)->GetTypeId() != TypeId::Player) {
+						//	continue;
+						//}
+						//else {
+
+						//
+						//	//プレイヤーが円で敵のAABBとの当たり判定
+						//	if (_owner._collision->CircleToOrientedAABB(**i, _owner)) {
+						//	
+						//		//プレイヤーのゲージを減少させる
+						//		(*i)->GetGaugeBase().DownGauge(15);
+						//		_invincibleTime = 15;
+
+						//		//スタティックでプレイヤーに共有
+						//		Flag::FlagData::SetNoDamageTime(_invincibleTime);
+
+						//		//プレイヤーをダメージ状態に変更
+						//		(*i)->GetState().GoToState("Damage");
+						//	
+						//	}
+						//}
+
+					
 					}
 					else {
+
 						//ハッキングされていたら次へ	
 						if ((*i)->IsHucked()) {
-
 							continue;
 						}
 						else {
 
-							//相手の円と自分のAABB
-							if (_owner._collision->CicrleToOrientedAABB(**i, _owner)) {
+							//相手エネミーの円と自分のAABB
+							if (_owner._collision->CircleToOrientedAABB(**i, _owner)) {
 
 								//int x = 0;
 								(*i)->SetActorState(ActorState::Dead);
@@ -650,18 +691,52 @@ namespace MachineHuck::Enemy {
 
 						}
 
+					}
+				}
+			
+				
+			}
+			else {
+			
+				for (auto i = _owner.GetActorServer().GetActors().begin(); i != _owner.GetActorServer().GetActors().end(); i++) {
 
+					//無敵時間中
+					if (_invincibleTime != false) {
+						break;
+					}
+
+					//プレイヤーではなかったら次へ
+					if ((*i)->GetTypeId() != TypeId::Player) {
+						continue;
+					}
+					else {
+
+							//プレイヤーが円で敵のAABBとの当たり判定
+							if (_owner._collision->CircleToOrientedAABB(**i, _owner)) {
+							
+								//プレイヤーのゲージを減少させる
+								(*i)->GetGaugeBase().DownGauge(15);
+
+								//
+								_invincibleTime = true;
+
+								//スタティックでプレイヤーに共有
+								Flag::FlagData::SetNoDamageTime(_invincibleTime);
+
+								//プレイヤーをダメージ状態に変更
+								(*i)->GetState().GoToState("Damage");
+							
+							}
+
+						}
 
 					}
 				}
 			
-
 			}
 
-
-
 			_tackleTime--;
-		}
+		
 	}
 
 	void TackleEnemy::StateTackleAfter::Enter() {
@@ -699,8 +774,9 @@ namespace MachineHuck::Enemy {
 		
 		}
 
-
-
+		_invincibleTime = false;
+		//プレイヤーの無敵時間をリセット
+		Flag::FlagData::SetNoDamageTime(_invincibleTime);
 
 		if (_tackleAfterTime < 0) {
 

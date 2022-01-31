@@ -230,7 +230,7 @@ namespace MachineHuck::Collision {
 
 
 
-    bool CollisionComponent::CicrleToOrientedAABB(const Actor::Actor& act1, const Actor::Actor& act2) {
+    bool CollisionComponent::CircleToOrientedAABB(const Actor::Actor& act1, const Actor::Actor& act2) {
 
         auto dir = act2.GetRotation();
 

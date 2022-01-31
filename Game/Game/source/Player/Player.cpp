@@ -70,14 +70,23 @@ namespace MachineHuck::Player {
 		}
 
 		//***************//////////お試しで作ったハック用
-		//でもおそらく、ブレンドするから没になる
+		//ハッキングカウンタが0未満か
 		if (_huckCount <= 0){
 
+			//判定中に変更
+			_huckFailureFlag = 2;
+
 			if (joypad.Button_RT()){
+
 				//HuckingとHuckedで無かったら
 				if (_actorState != ActorState::Hucking && _actorState != ActorState::Hucked){
+
+					//状態をハッキング中に変更
 					_actorState= ActorState::Hucking;
+					
+
 					_huckCount = 100;
+
 					lx = 0.0, ly = 0.0;
 				}
 
@@ -86,17 +95,31 @@ namespace MachineHuck::Player {
 				//	_actorState= ActorState::Active;
 				//	_huckCount = 200;
 				//}
-			}
+
+			}//ハッキングカウンタが0かつハッキング状態ではない
 			else if (_huckCount == 0 && _actorState != ActorState::Hucked){
 				_actorState= ActorState::Active;
 			}
 
+			//ハッキングの解除
 			if (joypad.Button_A() && _actorState == ActorState::Hucked) {
 					_actorState= ActorState::Active;
 					_huckCount = 200;
 			}
 
+
 		}
+
+		//ハッキング成功していない
+		if (_huckFailureFlag != 1) {
+
+			//ハックカウンタが10フレーム経過したか
+			if (_huckCount < 90) {
+				_huckFailureFlag = 0;
+			}
+		
+		}
+
 
 		
 		/////********************//////////////////////////
@@ -119,7 +142,13 @@ namespace MachineHuck::Player {
 
 		Math::Vector4 oldPos = _position;
 
-		Move();
+		//無敵時間が終了したとき
+		if (Flag::FlagData::GetNoDamageTime() != false) {
+			Move();
+		}
+		//else {
+		//	int x = 0;
+		//}
 
 		//// ステータスに合わせてアニメーションのアタッチ
 		//switch (_status) {
@@ -233,7 +262,6 @@ namespace MachineHuck::Player {
 
 				if (_waitframe == 0) {
 					Flag::FlagData::SetFadeInFlag(true);
-
 				}
 
 				if (!WarpingFloor() && _waitframe < 0) {
@@ -243,18 +271,12 @@ namespace MachineHuck::Player {
 
 				}
 
-
 			}
 
 			_waitframe--;
 		
 		}
 
-
-		
-		
-		
-		
 		    //エネルギー残量ゲージの設定
 			GetGame().GetUiComponent().UpdatePlayerHp(_gaugeBase->GetGauge(), _gaugeBase->GetGaugeMax());
 
@@ -268,24 +290,24 @@ namespace MachineHuck::Player {
 				//!< エネミーではなかったら次へ
 				if ((*i)->GetTypeId() != TypeId::Enemy){
 					//!< ギミックではなかったら次へ
-					if ((*i)->GetTypeId() != TypeId::Gimmick) {
-						continue;
-					}
-					else {
+					//if ((*i)->GetTypeId() != TypeId::Gimmick) {
+					//	continue;
+					//}
+					//else {
 
-						//自分とギミック
-						if (_collision->CircleToCircle(*this, **i)) {
+					//	////自分とギミック
+					//	//if (_collision->CircleToCircle(*this, **i)) {
 
-							if (_noDamageTime < 0) {
-								_gaugeBase->DownGauge(10);
-								_noDamageTime = 60;
-							}
-						}
-						else {
-							_noDamageTime = 60;
-						}
+					//	//	if (_noDamageTime < 0) {
+					//	//		_gaugeBase->DownGauge(10);
+					//	//		_noDamageTime = 60;
+					//	//	}
+					//	//}
+					//	//else {
+					//	//	_noDamageTime = 60;
+					//	//}
 
-					}
+					//}
 				}
 				else{
 
@@ -302,16 +324,15 @@ namespace MachineHuck::Player {
 			
 			}
 
-
-
-
 		}
 
 		//if (_actorState != ActorState::Hucking) {
+		    //毎フレームハッキングカウンタを減らす
 			_huckCount--;
 		//}
 	
 
+		//ハッキングカウンタが0未満か
 		if (_huckCount < 0) {
 
 			if (_actorState == ActorState::Hucking) {
@@ -387,7 +408,7 @@ namespace MachineHuck::Player {
 			_hp++;
 		}
 		else {
-			length = 5.0;
+			length = 10.0;
 			_hp -= 0.1f;//エネルギー現象
 		}
 		if (_hp < 0) {
@@ -476,6 +497,10 @@ namespace MachineHuck::Player {
 		//if (_owner.GetGaugeBase().GetGauge() < 0) {
 		//	_owner._state->GoToState("Die");
 		//}
+
+		//if (Flag::FlagData::GetNoDamageTime() > 0) {
+		//	_owner._state->GoToState("Damage");
+		//}
 		
 	}
 
@@ -508,10 +533,16 @@ namespace MachineHuck::Player {
 	void Player::StateRun::Update() {
 		//_owner.HitCheckFromEnemy();
 
+
 		if (_owner.GetGaugeBase().GetGauge() < 0) {
 
 			_owner._state->GoToState("Die");
 		}
+		//else if (Flag::FlagData::GetNoDamageTime() > 0) {
+
+		//	_owner._state->GoToState("Damage");
+
+		//}
 		else {
 		
 			_owner.GetGaugeBase().Update(_owner);
@@ -520,6 +551,25 @@ namespace MachineHuck::Player {
 		
 
 	}
+
+	//ダメージ状態
+	void Player::StateDamage::Enter() {
+
+		_owner._model->ChangeAnime("Damage", true);
+	}
+
+	//ダメージ
+	void Player::StateDamage::Update() {
+	
+		auto noDamageTime = Flag::FlagData::GetNoDamageTime();
+
+		if (noDamageTime != true) {
+		
+			_owner._state->GoToState("Idle");
+		}
+	}
+
+
 
 	/// 攻撃
 	void Player::StateAttack::Enter() {
@@ -587,6 +637,7 @@ namespace MachineHuck::Player {
 	void Player::StateHucking::Enter() {
 
 		_owner._model->ChangeAnime("Attack");
+		_huckingTime = 10;
 		/*_actorState= ActorState::Hucking;*/
 	}
 
@@ -599,99 +650,105 @@ namespace MachineHuck::Player {
 		}
 		else
 		{
-			for (auto i = _owner.GetActorServer().GetActors().begin(); i != _owner.GetActorServer().GetActors().end(); i++)
-			{
-				//!< プレイヤーではなかったら次へ
-				if ((*i)->GetTypeId() != TypeId::Enemy)
+			//ハッキング失敗フラグか立っているかどうか
+			if (_owner.GetHuckFailureFlag() != 0) {
+			
+				for (auto i = _owner.GetActorServer().GetActors().begin(); i != _owner.GetActorServer().GetActors().end(); i++)
 				{
-					continue;
-				}
-				else
-				{   //円と円の当たり判定を調べる
+					//!< プレイヤーではなかったら次へ
+					if ((*i)->GetTypeId() != TypeId::Enemy)
+					{
+						continue;
+					}
+					else
+					{   //円と円の当たり判定を調べる
 
-					/// //////////////円と円の判定を行いたいならこっちを起動AABBToAABBなら下だけ起動
+						/// //////////////円と円の判定を行いたいならこっちを起動AABBToAABBなら下だけ起動
 
-					//if (GetCollision().CircleToCircle(_owner, **i))
-					//{
-					   // (*i)->SetPosition((*i)->GetOld());
+						//if (GetCollision().CircleToCircle(_owner, **i))
+						//{
+						   // (*i)->SetPosition((*i)->GetOld());
 
-					   // auto _dif_vec = (*i)->GetPosition() - _position;
-					   // auto _length = _dif_vec.Length_XZ();
-					   // if (_length < GetR() + (*i)->GetR())
-					   // {
-						  //   auto _pos = (*i)->GetPosition() + _move;
-						  //   (*i)->SetPosition(_pos);
-					   // }
-					//}
+						   // auto _dif_vec = (*i)->GetPosition() - _position;
+						   // auto _length = _dif_vec.Length_XZ();
+						   // if (_length < GetR() + (*i)->GetR())
+						   // {
+							  //   auto _pos = (*i)->GetPosition() + _move;
+							  //   (*i)->SetPosition(_pos);
+						   // }
+						//}
 
-					//CircleとAABBの当たり判定を調べる
-					//敵の中心が入っているかどうか
-					if (_owner._collision->CircleToFan(_owner, **i, true)) {
+						//CircleとAABBの当たり判定を調べる
+						//敵の中心が入っているかどうか
+						if (_owner._collision->CircleToFan(_owner, **i, true)) {
 
-						////自分の中心が敵のハッキング範囲に入っているかどうか
-						if (_owner._collision->CircleToFan(**i, _owner, false)) {
+							////自分の中心が敵のハッキング範囲に入っているかどうか
+							if (_owner._collision->CircleToFan(**i, _owner, false)) {
 
-							if (_owner._actorState == ActorState::Hucking)
-							{
+								if (_owner._actorState == ActorState::Hucking)
+								{
 
-								(*i)->SetActorState(ActorState::Hucking);
+									(*i)->SetActorState(ActorState::Hucking);
 
-								auto enem_pos = (*i)->GetPosition();
+									//成功した
+									_owner.SetHuckFailureFlag(1);
 
-								if (enem_pos.GetX() - 1 < _owner._position.GetX() && _owner._position.GetX() < enem_pos.GetX() + 1 && enem_pos.GetZ() - 1 < _owner._position.GetZ() && _owner._position.GetZ() < enem_pos.GetZ() + 1/* && _owner._position.GetY() - 1 < 200.0 && 200.0 < _owner._position.GetY() + 1*/) {
-									_owner._actorState = ActorState::Hucked;
-									_owner._state->GoToState("Hucked");
-								}
-								else {
+									auto enem_pos = (*i)->GetPosition();
 
-									//_dif = enem_pos - _owner._position;
+									if (enem_pos.GetX() - 1 < _owner._position.GetX() && _owner._position.GetX() < enem_pos.GetX() + 1 && enem_pos.GetZ() - 1 < _owner._position.GetZ() && _owner._position.GetZ() < enem_pos.GetZ() + 1/* && _owner._position.GetY() - 1 < 200.0 && 200.0 < _owner._position.GetY() + 1*/) {
+										_owner._actorState = ActorState::Hucked;
+										_owner._state->GoToState("Hucked");
+									}
+									else {
 
-									////仮のy座標
-									//_length = _dif.Normalize();
+										//_dif = enem_pos - _owner._position;
 
+										////仮のy座標
+										//_length = _dif.Normalize();
 
+										// 移動
+										//_owner._position = _owner._position + _length;
 
-									// 移動
-									//_owner._position = _owner._position + _length;
+										if (_owner.GetHuckCount() < 2) {
+											_owner._position = enem_pos;
+										}
 
-									if (_owner.GetHuckCount() < 2) {
-										_owner._position = enem_pos;
 									}
 
+
+
+
+
+
+									//auto enemy = GetActorServer().GetPosition("Tackle");
+									//Math::Vector4 v = { 1.0, 0.0, 0.0 };
+									//_position = enemy + v;
 								}
+								_owner._isHit = true;
+								(*i)->SetIsHit(true);
 
-
-
-
-
-
-								//auto enemy = GetActorServer().GetPosition("Tackle");
-								//Math::Vector4 v = { 1.0, 0.0, 0.0 };
-								//_position = enemy + v;
 							}
-							_owner._isHit = true;
-							(*i)->SetIsHit(true);
+							else {
+
+								_owner._isHit = false;
+								(*i)->SetIsHit(false);
+
+							}
+							//if (_actorState!= ActorState::Hucking && _actorState!= ActorState::Hucked)
+
+
 
 						}
 						else {
-
 							_owner._isHit = false;
 							(*i)->SetIsHit(false);
 
 						}
-						//if (_actorState!= ActorState::Hucking && _actorState!= ActorState::Hucked)
-
-
-
-					}
-					else{
-						_owner._isHit = false;
-						(*i)->SetIsHit(false);
 
 					}
 
 				}
-
+			
 			}
 
 		}
@@ -765,7 +822,6 @@ namespace MachineHuck::Player {
 			
 			}
 			else {
-			
 				continue;
 			}
 		    //	}
@@ -788,6 +844,7 @@ namespace MachineHuck::Player {
 
 						auto enemyGauge = (*i)->GetGaugeBase().GetGauge();
 
+						//エネミーのゲージが0以上なら
 						if (enemyGauge > 0) {
 
 							//エネミーのゲージ量を加算

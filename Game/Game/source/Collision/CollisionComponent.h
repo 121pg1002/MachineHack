@@ -103,7 +103,7 @@ namespace MachineHuck::Collision {
 		 * @param  act2 ‘Šè(‰ñ“]‚µ‚½‹éŒ`)
 		 * @return
 		 */
-		bool CicrleToOrientedAABB(const Actor::Actor& act1, const Actor::Actor& act2);
+		bool CircleToOrientedAABB(const Actor::Actor& act1, const Actor::Actor& act2);
 
 		/**
 		 * @brief  ‰~‚Æü•ª‚Ì“–‚½‚è”»’è‚ğs‚¤

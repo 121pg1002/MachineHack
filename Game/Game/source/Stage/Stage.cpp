@@ -83,15 +83,15 @@ namespace MachineHuck::Stage {
 		//_ground->SetModel("Ground");
 		//_ground->SetScale({10.f, 10.f, 10.f});
 
-		// ステージ番号, ハンドル名(SceneInGameで登録した名前), コリジョンメッシュ名, ワープ位置名
+		// ステージ番号, ハンドル名(SceneInGameで登録した名前), コリジョンメッシュ名, ワープ位置名, 表示するフロア番号
 		CollisionMesh collMap{
 			//{"Player",    "SDChar/SDChar.mv1"},
 		//	{0,    {"Dunge0", "dungeon_collision", {"", ""}}},
 
 		//	{1,    {"teste0", "floor_collision", {"C0_01_02", ""}}},
-			{0,    {"stage0", "collision", {"A0_00_01"}}},
-			{1,    {"stage1", "collision", {"A0_00_00", "A1_00_03"}}},
-			{2,    {"Dunge2", "dungeon_collision", {"", ""}}}
+			{0,    {"stage0", "collision", {"A0_00_01"}, 0}},
+			{1,    {"stage1", "collision", {"A0_00_00", "A1_00_03"}, 10}},
+			{2,    {"Dunge2", "dungeon_collision", {"", ""}, 100}}
 		};
 
 		//ステージのコリジョン情報を取得
@@ -149,7 +149,7 @@ namespace MachineHuck::Stage {
 
 				auto stageNum = GetCollision().GetFloorStageNum(i);
 
-				auto [handleName, collName, warpName] = _collisionFloorNameMap[stageNum];
+				auto [handleName, collName, warpName, floorNum] = _collisionFloorNameMap[stageNum];
 
 				std::vector<std::string> vecStr;
 
@@ -173,19 +173,19 @@ namespace MachineHuck::Stage {
 
 				auto stageTable = game.GetStageParameter().GetStageTableVector();
 
-				int floorNum = -1;
+				//int floorNum = -1;
 
-				if (stageNum == 0) {
-					floorNum = 0;
-				}
-				else if (stageNum == 1) {
+				//if (stageNum == 0) {
+				//	floorNum = 0;
+				//}
+				//else if (stageNum == 1) {
 
-					floorNum = 10;
-				}
-				else {
-					floorNum = 100;
+				//	floorNum = 10;
+				//}
+				//else {
+				//	floorNum = 100;
 
-				}
+				//}
 
 				//番号をフロア番号にしなければいけない
 				//ワープ先の名前を設定
