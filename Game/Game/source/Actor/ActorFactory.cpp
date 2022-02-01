@@ -267,6 +267,24 @@ namespace MachineHuck::Actor {
         // モデルの読み込みと生成
         auto model = std::make_unique<Model::ModelAnimeComponent>(*enemy);
         model->SetModel("Spider", 1000);
+        //model->Register("Hucking", 0);
+        //model->Register("Die", 1);
+        //model->Register("Idle", 2);
+        //model->Register("Fall", 3);
+        //model->Register("Attack", 4);
+        /*
+        No.0 attackmae
+        No.1 kaiten:頭が取れる
+        No,2 walk　歩く
+        No.3 attack 攻撃モーション 静止
+        No.4 idle  待機
+        */
+        model->Register("Hucking", 3);
+        model->Register("Die", 1);
+        model->Register("Idle", 4);
+        model->Register("Fall", 2);
+        model->Register("Attack", 0);
+
         model->Register("Hucking", 0);
         model->Register("Die", 1);
         model->Register("Idle", 2);

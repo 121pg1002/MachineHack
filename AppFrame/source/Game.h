@@ -50,6 +50,7 @@ namespace MachineHuck::Gimmick {
 	class GimmickParameter;
 }
 
+
 namespace AppFrame {
 	/// @class   Game
     /// @brief   ゲーム全体のフレームワーク

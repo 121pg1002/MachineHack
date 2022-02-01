@@ -50,8 +50,8 @@ void Input::JoypadState::Update() {
 
 void Input::KeyBoardState::Update() {
 
-    int _oldkey[5]{0};
-    for (int i = 0; i < 5; i++) 
+    int _oldkey[6]{0};
+    for (int i = 0; i < 6; i++) 
     {
         _oldkey[i] = _fresh[i];
     }
@@ -76,15 +76,19 @@ void Input::KeyBoardState::Update() {
     {
         _fresh[4] = CheckHitKey(KEY_INPUT_RETURN);
     }
-    else 
+    else if (CheckHitKey(KEY_INPUT_LSHIFT))
     {
-        for (int i = 0; i < 5; i++)
-        {
-            _fresh[i] = 0;
-        }
+      _fresh[5] = CheckHitKey(KEY_INPUT_LSHIFT);
+    }
+    else
+    {
+      for (int i = 0; i < 6; i++)
+      {
+        _fresh[i] = 0;
+      }
     }
 
-    for (int i = 0; i < 5; i++) 
+    for (int i = 0; i < 6; i++) 
     {
         _trg[i] = (_oldkey[i] ^ _fresh[i]) & _fresh[i];
     }

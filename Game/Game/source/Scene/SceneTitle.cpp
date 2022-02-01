@@ -19,9 +19,9 @@ namespace MachineHuck::Scene {
     void SceneTitle::Init() {
         // 使用する画像のテーブル
         const AppFrame::Asset::AssetServer::TextureMap textureToUsed{
-          {"TitleBg",          {"TitleBg.png",          1, 1, 1920, 1080}},
-          {"GameTitle",        {"GameTitle.png",        1, 1, 1553, 224}},
-          {"LeftClickToStart", {"LeftClickToStart.png", 1, 1, 1135, 107}},
+          {"TitleBg",          {"title/TitleBg.png",          1, 1, 1920, 1080}},
+          {"GameTitle",        {"title/GameTitle.png",        1, 1, 1553, 224}},
+          {"LeftClickToStart", {"title/LeftClickToStart.png", 1, 1, 1135, 107}},
         };
         // アセットサーバーの取得
         auto& as = GetAssetServer();

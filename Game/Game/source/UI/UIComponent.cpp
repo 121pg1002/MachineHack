@@ -63,12 +63,12 @@ namespace MachineHuck::UI {
     }
     /// 描画
     void UIComponent::barGauge::Draw() {
-        // バーの描画
-        auto [r, g, b, a] = _barColor;
-        SetDrawBlendMode(DX_BLENDMODE_ALPHA, a);
-        DrawBoxAA(_bar.left, _bar.top, _bar.right, _bar.bottom, GetColor(r, g, b), TRUE);
-        SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-        // フレーム画像の描画
-        DrawGraph(_x, _y, _handle, TRUE);
+        //// バーの描画
+        //auto [r, g, b, a] = _barColor;
+        //SetDrawBlendMode(DX_BLENDMODE_ALPHA, a);
+        //DrawBoxAA(_bar.left, _bar.top, _bar.right, _bar.bottom, GetColor(r, g, b), TRUE);
+        //SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+        //// フレーム画像の描画
+        //DrawGraph(_x, _y, _handle, TRUE);
     }
 }

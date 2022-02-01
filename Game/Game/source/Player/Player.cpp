@@ -14,6 +14,7 @@
 #include "../Collision/CollisionComponent.h"
 #include "../Enemy/TackleEnemy.h"
 #include "../Gauge/GaugeBase.h"
+#include "../Gauge/GaugePlayer.h"
 #include "../UI/UIComponent.h"
 #include "../Flag/FlagData.h"
 
@@ -38,6 +39,7 @@ namespace MachineHuck::Player {
 		_searchRange = 60.0;
 		//_huckingRange = 30.0;
 		_gaugeBase->Init();
+		_gaugePlayer->Init(*this);
 	}
 
 	//入力
@@ -80,7 +82,7 @@ namespace MachineHuck::Player {
 			//判定中に変更
 			_huckFailureFlag = 2;
 
-			if (joypad.Button_RT()){
+			if (joypad.Button_RT()||key.Button_Space()) {
 
 				//HuckingとHuckedで無かったら
 				if (_actorState != ActorState::Hucking && _actorState != ActorState::Hucked){
@@ -110,8 +112,10 @@ namespace MachineHuck::Player {
 					_actorState= ActorState::Active;
 					_huckCount = 200;
 			}
-
-
+			if (key.Button_LShift() && _actorState == ActorState::Hucked) {
+				_actorState = ActorState::Active;
+				_huckCount = 200;
+			}
 		}
 
 		//ハッキング成功していない
@@ -140,6 +144,9 @@ namespace MachineHuck::Player {
 	}
 
 	void Player::Update() {
+		//ゲージ
+		_gaugePlayer->Update();
+
 		//動かないときの処理に使用
 		//auto oldMove = _move;
 
@@ -295,6 +302,7 @@ namespace MachineHuck::Player {
 
 		    //エネルギー残量ゲージの設定
 			GetGame().GetUiComponent().UpdatePlayerHp(_gaugeBase->GetGauge(), _gaugeBase->GetGaugeMax());
+		//	GetGame().GetUiComponent().UpdatePlayerHp(_gaugePlayer->GetGauge(), _gaugePlayer->GetGaugeMax());
 
 		for (auto i = GetActorServer().GetActors().begin(); i != GetActorServer().GetActors().end(); i++){
 			auto targetPos = (*i)->GetPosition();
@@ -384,6 +392,10 @@ namespace MachineHuck::Player {
 		//ハッキングされているときはシャドウマップへの描画を行わない
 		if (!GetShadowMapflg()||IsHack==FALSE) {
 			_state->Draw();
+		}
+		//エネルギーゲージのシャドウマップへの描画を行わない
+		if (!GetShadowMapflg() == TRUE) {
+			_gaugePlayer->Draw(*this);
 		}
 		_state->Draw();
 #ifdef _DEBUG
@@ -504,7 +516,7 @@ namespace MachineHuck::Player {
 
 
 
-		if (input.GetJoypad().Button_RT()){
+		if (input.GetJoypad().Button_RT()||input.GetKeyBoard().Button_Space()) {
 			_owner._state->PushBack("Hucking");
 		}
 		else if (Math::Vector4 v{ 0.0, 0.0, 0.0 }; v.GetX() != _owner.GetMove().GetX() || v.GetZ() != _owner.GetMove().GetZ()) {
@@ -558,7 +570,7 @@ namespace MachineHuck::Player {
 		
 
 		    //無敵時間中は移動のみ可能
-			if (input.GetJoypad().Button_RT() && !Flag::FlagData::GetNoDamageFlag()) {
+			if ((input.GetJoypad().Button_RT() || input.GetKeyBoard().Button_Space()) && !Flag::FlagData::GetNoDamageFlag()) {
 				_owner._state->PopBack();
 				_owner._state->PushBack("Hucking");
 				return;
@@ -583,6 +595,9 @@ namespace MachineHuck::Player {
 
 			_owner._state->GoToState("Die");
 		}
+		if (_owner.GetGaugePlayer().GetGauge() < 0) {
+			_owner._state->GoToState("Die");
+		}
 		//else if (Flag::FlagData::GetNoDamageTime() > 0) {
 
 		//	_owner._state->GoToState("Damage");
@@ -591,6 +606,7 @@ namespace MachineHuck::Player {
 		else {
 		
 			_owner.GetGaugeBase().Update(_owner);
+			_owner.GetGaugePlayer().Update(_owner);
 		}
 
 		if (_noDamageTime < 0 && Flag::FlagData::GetNoDamageFlag()) {
@@ -859,6 +875,9 @@ namespace MachineHuck::Player {
 					if ((*i)->GetGaugeBase().GetGauge() > 0) {
 						continue;
 					}
+					if ((*i)->GetGaugePlayer().GetGauge() > 0) {
+						continue;
+					}
 					else {
 						_owner.SetActorState(ActorState::Active);
 						_owner._state->GoToState("Idle");
@@ -903,6 +922,11 @@ namespace MachineHuck::Player {
 
 							//エネミーのゲージ量を加算
 							_owner.GetGaugeBase().PlusGauge(enemyGauge);
+						}
+						auto enemyGaugePlayer = (*i)->GetGaugePlayer().GetGauge();
+						if (enemyGaugePlayer > 0) {
+							//エネミーのゲージ量を加算
+							_owner.GetGaugePlayer().PlusGauge(enemyGauge);
 						}
 						_owner._position = { _owner.GetPosition().GetX(), 0.0, _owner.GetPosition().GetZ() };
 						(*i)->SetActorState(ActorState::Active);

@@ -14,6 +14,8 @@
 #include "../State/StateComponent.h"
 #include "../Collision/CollisionComponent.h"
 #include "../Gauge/GaugeBase.h"
+#include "../Gauge/GaugeEnemy.h"
+#include "../Gauge/GaugePlayer.h"
 
 namespace MachineHuck::Actor {
 
@@ -21,6 +23,9 @@ namespace MachineHuck::Actor {
 	{
 		_collision = std::make_unique<Collision::CollisionComponent>(*this);
 		_gaugeBase = std::make_unique<Gauge::GaugeBase>(*this);
+		_gaugeEnemy = std::make_unique<Gauge::GaugeEnemy>(*this);
+		_gaugePlayer = std::make_unique<Gauge::GaugePlayer>(*this);
+	
 	}
 
 	Actor::~Actor() {
