@@ -37,6 +37,8 @@ namespace MachineHuck::Collision {
 
 namespace MachineHuck::Gauge {
     class GaugeBase;
+    class GaugeEnemy;
+    class GaugePlayer;
 }
 //class CollisionBase;
 
@@ -249,6 +251,8 @@ namespace MachineHuck::Actor {
         Collision::CollisionComponent& GetCollision() { return *_collision; }
 
         Gauge::GaugeBase& GetGaugeBase() { return *_gaugeBase; }
+        Gauge::GaugeEnemy& GetGaugeEnemy() { return *_gaugeEnemy; }
+        Gauge::GaugePlayer& GetGaugePlayer() { return *_gaugePlayer; }
 
         void SetIsHit(bool isHit) { _isHit = isHit; };
 
@@ -282,7 +286,8 @@ namespace MachineHuck::Actor {
         std::shared_ptr<Camera::CameraComponent> _camera;
         std::unique_ptr<Collision::CollisionComponent> _collision;
         std::unique_ptr<Gauge::GaugeBase> _gaugeBase;              //!< ゲージベースクラスへのユニークポインタ
-
+        std::unique_ptr<Gauge::GaugeEnemy> _gaugeEnemy;
+        std::unique_ptr<Gauge::GaugePlayer>_gaugePlayer;
 
         //std::unique_ptr<CollisionBase> _collision;  //!< 当たり判定基底クラス用のポインタ
 

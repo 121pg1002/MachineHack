@@ -35,21 +35,20 @@ namespace MachineHuck::Scene {
         AppFrame::Asset::AssetServer::ModelMap usedInGame{
         //{"Player",    "SDChar/SDChar.mv1"},
         {"Player",    "Player/player.mv1"},
-        {"SkySphere", "skysphere.mv1"},
-        {"Ground",    "ground.mv1"},
-        //{"Spider",    "Spider_3.mv1"},
+        {"SkySphere", "model/skysphere.mv1"},
+        {"Ground",    "model/ground.mv1"},
         {"Spider",    "tackle/takcle.mv1"},
-        {"pCube",      "pCube.mv1"},
-        {"floor",     "floor.mv1"},
-        {"wall",      "wall.mv1"},
-        {"Dungeon",   "Dungeon.mv1"},
-        {"breakwall",  "breakwall.mv1"},
-        {"enemy",      "enemy.mv1"},
-        {"gate",       "gate.mv1"},
-        {"normalfloor",  "normalfloor.mv1"},
-        {"normalwall",  "normalwall.mv1"},
-        {"secretfloor", "secretfloor.mv1"},
-        {"secretwall", "secretwall.mv1"},
+        {"pCube",      "model/pCube.mv1"},
+        {"floor",     "model/floor.mv1"},
+        {"wall",      "model/wall.mv1"},
+        {"Dungeon",   "model/Dungeon.mv1"},
+        {"breakwall",  "model/breakwall.mv1"},
+        {"enemy",      "model/enemy.mv1"},
+        {"gate",       "model/gate.mv1"},
+        {"normalfloor",  "model/normalfloor.mv1"},
+        {"normalwall",  "model/normalwall.mv1"},
+        {"secretfloor", "model/secretfloor.mv1"},
+        {"secretwall", "model/secretwall.mv1"},
         //  {"damagefloor",  "target.mv1"},
           {"entrypoint", "entrypoint.mv1"},
           {"test", "test.mv1"},
@@ -80,6 +79,7 @@ namespace MachineHuck::Scene {
         AppFrame::Asset::AssetServer::TextureMap TexUsed{
           {"BarFrame", {"BarFrame.png", 1, 1, 340, 50}},
           {"black", {"BlackColor.png", 1, 1, 1920, 1080}},
+          {"Energy0", {"energy/Energy0.png", 1, 1, 85, 85}}
         };
         // テクスチャの読み込み
         GetAssetServer().LoadTextures(TexUsed);

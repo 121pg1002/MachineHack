@@ -149,8 +149,11 @@
     <ClCompile Include="source\Scene\SceneLoading.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="source\Enemy\CatchEnemy.cpp">
-      <Filter>Enemy</Filter>
+    <ClCompile Include="source\Gauge\GaugeEnemy.cpp">
+      <Filter>Gauge</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Gauge\GaugePlayer.cpp">
+      <Filter>Gauge</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -372,8 +375,11 @@
     <ClInclude Include="source\Scene\SceneLoading.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="source\Enemy\CatchEnemy.h">
-      <Filter>Enemy</Filter>
+    <ClInclude Include="source\Gauge\GaugeEnemy.h">
+      <Filter>Gauge</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Gauge\GaugePlayer.h">
+      <Filter>Gauge</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

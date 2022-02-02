@@ -11,6 +11,7 @@
 #include "../Model/ModelAnimComponent.h"
 #include "../Collision/CollisionComponent.h"
 #include "../Gauge/GaugeBase.h"
+#include "../Gauge/GaugeEnemy.h"
 #include "../Flag/FlagData.h"
 
 #include <cmath>
@@ -37,7 +38,7 @@ namespace MachineHuck::Enemy {
 		_searchRange = 0.0;
 		_huckingRange = 0.0;
 		_gaugeBase->Init();
-
+		_gaugeEnemy->Init(*this);//エネミーのエネルギーゲージの初期化
 
 	}
 
@@ -59,7 +60,8 @@ namespace MachineHuck::Enemy {
 	}
 
 	void TackleEnemy::Update() {
-
+		//ゲージ
+		_gaugeEnemy->Update();
 
 		if (_status != STATUS::DYING) {
 
@@ -122,6 +124,9 @@ namespace MachineHuck::Enemy {
 		_gaugeBase->Draw(*this);
 #endif
 		_state->Draw();
+		//if (!GetShadowMapflg() == TRUE) {
+		_gaugeEnemy->Draw(*this);
+//	}
 	}
 
 	void TackleEnemy::ComputeWorldTransform() {
@@ -262,10 +267,9 @@ namespace MachineHuck::Enemy {
 	//	// 移動
 	//	_position = _position + _move;
 
-	//	if (_move.Length() > 0.0)
-	//	{
-	//	   auto dir = _move;
-	//	   auto yRot = std::atan2(dir.GetX(), dir.GetZ());
+		   //移動していたら減らす
+		   _gaugeBase->Update(*this);
+		}
 
 	//	   Math::Vector4 rot = { 0.0, yRot, 0.0 };
 	//	   SetRotation(rot);
@@ -523,8 +527,8 @@ namespace MachineHuck::Enemy {
 		//ハッキングされている場合
 		if (_owner.GetStatus() == STATUS::ISHUCKED) {
 
-		    //ゲージ減少
-		    _owner.GetGaugeBase().DownGauge(30);
+		//ゲージ減少
+		_owner.GetGaugeBase().DownGauge(30);
 			//auto player = _owner.GetActorServer().GetDir("Player");
 			
 			auto rot = _owner.GetRotation();
@@ -880,7 +884,7 @@ namespace MachineHuck::Enemy {
 				_ly = -1.0;
 			}
 		
-		if (input.GetJoypad().Button_RT()) {
+		if (input.GetJoypad().Button_RT() || input.GetKeyBoard().Button_Space()) {
 			
 			_owner._state->GoToState("Tackle");
 		}

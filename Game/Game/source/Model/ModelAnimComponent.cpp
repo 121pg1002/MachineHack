@@ -482,6 +482,7 @@ namespace MachineHuck::Model {
     void ModelAnimeComponent::SpecificDraw() {
 
        MV1SetFrameVisible(_handle, 23, false);
+       //MV1SetFrameVisible(_handle, 1, false);
         MV1DrawModel(_handle);
     }
 

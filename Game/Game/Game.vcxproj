@@ -35,6 +35,8 @@
     <ClCompile Include="source\Flag\FlagData.cpp" />
     <ClCompile Include="source\Game.cpp" />
     <ClCompile Include="source\Gauge\GaugeBase.cpp" />
+    <ClCompile Include="source\Gauge\GaugeEnemy.cpp" />
+    <ClCompile Include="source\Gauge\GaugePlayer.cpp" />
     <ClCompile Include="source\Gimmick\BrokenWall.cpp" />
     <ClCompile Include="source\Gimmick\DamageFloorGimmick.cpp" />
     <ClCompile Include="source\Gimmick\GimmickBase.cpp" />
@@ -87,6 +89,8 @@
     <ClInclude Include="source\Enemy\EnemyParameter.h" />
     <ClInclude Include="source\Flag\FlagData.h" />
     <ClInclude Include="source\Gauge\GaugeBase.h" />
+    <ClInclude Include="source\Gauge\GaugeEnemy.h" />
+    <ClInclude Include="source\Gauge\GaugePlayer.h" />
     <ClInclude Include="source\Gimmick\BrokenWall.h" />
     <ClInclude Include="source\Gimmick\DamageFloorGimmick.h" />
     <ClInclude Include="source\Gimmick\GimmickBase.h" />

@@ -79,10 +79,16 @@ namespace AppFrame {
       *@return Enterキー
       */
       int Button_Enter() { return _trg[4]; }
+      /*
+      *@brief  左シフトキー
+      *@return 左シフトrキー
+      */
+      int Button_LShift() { return _trg[5]; }
+
 
     private:
-      int _fresh[5]{ 0 };        //!< キーの状態
-      int _trg[5]{ 0 };          //!< トリガの状態
+      int _fresh[6]{ 0 };        //!< キーの状態
+      int _trg[6]{ 0 };          //!< トリガの状態
     };
   }
 }
