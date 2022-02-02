@@ -486,6 +486,14 @@ namespace MachineHuck::Model {
         MV1DrawModel(_handle);
     }
 
+    VECTOR ModelAnimeComponent::GetHeadPos(std::string frameName) {
+
+        auto num = MV1SearchFrame(_handle, frameName.c_str());
+
+       return  MV1GetFramePosition(_handle, num); //!< 頭のフレーム
+
+    }
+
     /// アニメーションの変更
     void ModelAnimeComponent::ChangeAnime(std::string_view key, bool repeate) {
         auto newAnimIndex = _registry[key.data()];

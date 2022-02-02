@@ -57,6 +57,15 @@ namespace MachineHuck::Model {
 		 * @brief  特定のフレームの描画         
 		 */
 		void SpecificDraw();
+
+		/**
+		 * 
+		 * @brief  頭の位置座標を取得         
+		 * @param  frameName 取得したいフレーム名
+		 * @return 座標
+		 */
+		VECTOR GetHeadPos(std::string frameName);
+
 		///
 		/// アニメーションの変更.
 		/// @param[in] newAnimIndex アニメインデックス

@@ -28,10 +28,10 @@ namespace MachineHuck::Enemy {
 	//// プレイヤーに向かって移動
 	//_position = _position + delta;
 
-	_oldPos = _position;
+	  _oldPos = _position;
 
-	//索敵中ではない
-	if (_status != STATUS::SEARCH) {
+	  //索敵中ではない
+	  if (_status != STATUS::SEARCH) {
 
 		//ハッキングされたまたはハッキング中ではない
 		if (_status != STATUS::ISHUCKED && _status != STATUS::ISHUCKING) {
@@ -40,8 +40,7 @@ namespace MachineHuck::Enemy {
 			player = { player.GetX(), 0.0, player.GetZ() };
 			auto forward = player - _position;
 			// プレイヤーに向かう単位ベクトル
-			if (Math::Vector4 v{ 0.0, 0.0, 0.0 }; forward.GetX() != v.GetX() && forward.GetZ() != v.GetZ())
-			{
+			if (Math::Vector4 v{ 0.0, 0.0, 0.0 }; forward.GetX() != v.GetX() && forward.GetZ() != v.GetZ()){
 				forward = forward.Normalize();
 			}
 			// プレイヤーに向かう移動量ベクトル
@@ -80,9 +79,8 @@ namespace MachineHuck::Enemy {
 
 
 
-	}
-	else 
-	{
+	  }
+	  else {
 		/// <summary>
 		///仮の動き(左右)
 		/// </summary>
@@ -115,13 +113,13 @@ namespace MachineHuck::Enemy {
 		//	_numberTimes++;
 		//}
 
-	}
+	  }
 
-	if (CollisionFloor(_oldPos)) {
-	
-		int x = 0;
-	}
-	CollisionFloor(_oldPos);
+	    //if (CollisionFloor(_oldPos)) {
+	    //
+	    //	int x = 0;
+	    //}
+	    CollisionFloor(_oldPos, GetR());
     
     }
     //ハックした

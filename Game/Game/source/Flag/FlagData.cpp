@@ -18,6 +18,7 @@ namespace MachineHuck::Flag {
  bool FlagData::_damageFlag = false;
  bool FlagData::_huckNoDamageFlag = false;
  bool FlagData::_huckDamageFlag = false;
+ VECTOR FlagData::_headPos = VGet(0.f, 0.f, 0.f);
 
 
 }

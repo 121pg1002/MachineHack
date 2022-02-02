@@ -125,9 +125,10 @@ namespace MachineHuck::Actor {
          /**
           * @brief ステージフロアとの当たり判定
           * @param oldPos 前フレームの位置
+          * @param r      半径
           * @return 当たっているか当たっていないか
           */
-        bool CollisionFloor(AppFrame::Math::Vector4 oldPos);
+        bool CollisionFloor(AppFrame::Math::Vector4 oldPos, double r);
 
         /**
          * @brief  ワープ位置との当たり判定

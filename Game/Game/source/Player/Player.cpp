@@ -228,7 +228,7 @@ namespace MachineHuck::Player {
              //地面のナビメッシュに触れているかどうか
 
 		if (!IsHucked()) {
-			CollisionFloor(oldPos);
+			CollisionFloor(oldPos, _r);
 
 
 			//仮
@@ -888,9 +888,14 @@ namespace MachineHuck::Player {
 				}
 				else {
 					//ハッキングした対象に追従
-					Math::Vector4 difY = { 0.0, 150.0, 0.0 };
+					//Math::Vector4 difY = { 0.0, 150.0, 0.0 };
 					//Math::Vector4 difRot = { 0.2, 0.0, 0.0 };
-					_owner._position = (*i)->GetPosition() + difY;
+					auto headPos = Flag::FlagData::GetHeadPos();
+
+					Math::Vector4 headPosition = { headPos.x, headPos.y, headPos.z };
+
+					//_owner._position = (*i)->GetPosition() + headPosition;
+					_owner._position = headPosition;
 					_owner._rotation = (*i)->GetRotation();
 					_owner._move = (*i)->GetHuckedMove();
 				}

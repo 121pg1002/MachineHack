@@ -104,6 +104,18 @@ namespace MachineHuck::Flag {
 		 */
 		static void SetCameraPos(VECTOR pos) { _cameraPos = pos; }
 
+		/**
+		 * @brief  ハッキング中の敵の頭の位置を取得      
+		 * @return _headPos
+		 */
+		static VECTOR GetHeadPos() { return _headPos; }
+
+		/**
+		 * @brief  敵の頭の位置を設定         
+		 * @param  pos
+		 */
+		static void SetHeadPos(VECTOR pos) { _headPos = pos; }
+
 	private:
 
 		static bool _fadeOutFlag;
@@ -114,6 +126,7 @@ namespace MachineHuck::Flag {
 		static bool _damageFlag;
 		static bool _huckNoDamageFlag;
 		static bool _huckDamageFlag;
+		static VECTOR _headPos;
 
 
 	};

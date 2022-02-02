@@ -594,7 +594,7 @@ namespace MachineHuck::Enemy {
 
 
 			////地面と触れているかどうか
-			_owner.CollisionFloor(oldPos);
+			_owner.CollisionFloor(oldPos, _owner.GetR());
 
 			//主人公のカメラに移動量を送る
 			_owner.SetHuckedMove(_norm * _speed);
@@ -769,6 +769,8 @@ namespace MachineHuck::Enemy {
 
 		}
 
+		auto headPos = _owner._model->GetHeadPos("Character1_Head");
+		Flag::FlagData::SetHeadPos(headPos);
 			_tackleTime--;
 		
 	}
@@ -843,6 +845,9 @@ namespace MachineHuck::Enemy {
 			{
 				_owner.SetActorState(ActorState::Hucked);
 				_owner._state->GoToState("IsHucked");
+
+				auto headPos = _owner._model->GetHeadPos("Character1_Head");
+				Flag::FlagData::SetHeadPos(headPos);
 			}
 		}
 
@@ -904,6 +909,8 @@ namespace MachineHuck::Enemy {
 		//	_owner._state->GoToState("Run");
 		//	_owner._status = STATUS::CHASE;
 		//}
+		auto headPos = _owner._model->GetHeadPos("Character1_Head");
+		Flag::FlagData::SetHeadPos(headPos);
 
 		if (Flag::FlagData::GetHuckDamageFlag()) {
 
@@ -934,7 +941,7 @@ namespace MachineHuck::Enemy {
 
 
 		////地面と触れているかどうか
-		_owner.CollisionFloor(oldPos);
+		_owner.CollisionFloor(oldPos, _owner.GetR());
 		//	Math::Vector4 zero = { 0.0, 0.0, 0.0 };
 		//	//主人公のカメラに移動量を送る
 		//	_owner.SetHuckedMove(zero);

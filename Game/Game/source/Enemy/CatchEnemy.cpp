@@ -606,6 +606,9 @@ namespace MachineHuck::Enemy {
 			{
 				_owner.SetActorState(ActorState::Hucked);
 				_owner._state->GoToState("IsHucked");
+
+				auto headPos = _owner._model->GetHeadPos("Character1_Head"); //!< 本当のキャッチの頭のフレームを入れる(仮)
+				Flag::FlagData::SetHeadPos(headPos);
 			}
 		}
 
@@ -667,6 +670,9 @@ namespace MachineHuck::Enemy {
 		//	_owner._state->GoToState("Run");
 		//	_owner._status = STATUS::CHASE;
 		//}
+
+		auto headPos = _owner._model->GetHeadPos("Character1_Head"); //!< 本当のキャッチの頭のフレームを入れる(仮)
+		Flag::FlagData::SetHeadPos(headPos);
 
 		if (Flag::FlagData::GetHuckDamageFlag()) {
 

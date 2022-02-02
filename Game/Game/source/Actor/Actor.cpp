@@ -216,12 +216,14 @@ namespace MachineHuck::Actor {
 	//	return false;
 	//}
 
-	bool Actor::CollisionFloor(AppFrame::Math::Vector4 oldPos) {
+	bool Actor::CollisionFloor(AppFrame::Math::Vector4 oldPos, double r) {
 
 
 		// 移動した先でコリジョン判定
 		MV1_COLL_RESULT_POLY hitPoly;
 
+		//MV1_COLL_RESULT_POLY hitPolyX;
+		//MV1_COLL_RESULT_POLY hitPolyZ;
 		//auto handle = GetGame().GetAssetServer().GetModel("Dungeon");
 
 		//AssetServerの方に数字でハンドルを取得できるようにする
@@ -260,13 +262,14 @@ namespace MachineHuck::Actor {
 						auto frameMapCollision = (*i)->GetCollision().GetMapCollision(handle);
 						//auto frameMapCollision = (*i)->GetCollision().GetMapCollision(handle.first);
 
-						Math::Vector4 dif = { 0.0, 50.0, 0.0 };
+						Math::Vector4 up = { 0.0, 99.0, 0.0 };
 						Math::Vector4 under = { 0.0, -99999.0, 0.0 };
-						auto startPos = _position + dif;
+						auto startPos = _position + up;
 						auto endPos = _position + under;
 						// 主人公の腰位置から下方向への直線
-
 						hitPoly = MV1CollCheck_Line(handle, frameMapCollision, ToDX(startPos), ToDX(endPos));
+
+
 
 						if (hitPoly.HitFlag) {
 							// 当たった
@@ -276,7 +279,8 @@ namespace MachineHuck::Actor {
 							return true;
 						}
 						else {
-							// 当たらなかった。元の座標に戻す
+
+							//// 当たらなかった。元の座標に戻す
 							_position = oldPos;
 
 
