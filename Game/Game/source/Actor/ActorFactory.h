@@ -27,7 +27,6 @@ namespace AppFrame {
 
 
 
-
 namespace Math = AppFrame::Math;
 
 namespace MachineHuck::Actor {
@@ -57,7 +56,7 @@ namespace MachineHuck::Actor {
         /**
          * @breif 登録したインスタンスを削除
          */
-        void Delete();
+        //void Delete();
 
         //struct SpawnRecord {
         //    int _progress{ 0 };
@@ -167,9 +166,9 @@ namespace MachineHuck::Actor {
 
     };
 
-    /// @class GrabEnemyCreator
-    /// @brief グラブエネミー用のクリエイター
-    class GrabEnemyCreator : public CreatorBase {
+    /// @class CatchEnemyCreator
+    /// @brief キャッチエネミー用のクリエイター
+    class CatchEnemyCreator : public CreatorBase {
         // 疑似乱数
         //std::random_device _seed;
         //std::mt19937 _engine{ _seed() };

@@ -58,6 +58,7 @@ namespace MachineHuck::Scene {
 
         };
 
+        //ステージ用
         AppFrame::Asset::AssetServer::StageMap stageHandles{
             //{"Dunge0",   "Dungeon.mv1"}
             {"stage0",    "StageFloor/stage0.mv1"},
@@ -92,7 +93,7 @@ namespace MachineHuck::Scene {
         auto& af = GetActorFactory();
         af.Register("Player", std::make_unique<Actor::PlayerCreator>());
         af.Register("TackleEnemy", std::make_unique<Actor::TackleEnemyCreator>());
-        // af.Register("GrabEnemy", std::make_unique<GrabEnemyCreator>());
+        af.Register("CatchEnemy", std::make_unique<Actor::CatchEnemyCreator>());
        //  af.Register("AlartEnemy", std::make_unique<AlartEnemyCreator>());
         af.Register("Stage", std::make_unique<Actor::StageCreator>());
         af.Register("DamageFloor", std::make_unique<Actor::DamageFloorGimmickCreator>());

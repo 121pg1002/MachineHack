@@ -145,20 +145,30 @@ namespace MachineHuck::Enemy {
         std::ifstream jsonFile(filePath);
         auto jsRoot = Json::parse(jsonFile);
 
-        auto str = "";
+        std::string fileName = filePath;
+
+        //../resource/json/catch.json
+        fileName = fileName.substr(14, 6);
+
+        //最後の文字がドットかどうか
+        if (fileName.find_last_of(".") != -1) {
+            fileName = fileName.substr(0, 5);
+        }
+
+        //std::string str = "";
 
         //敵の種類で読み込むjsonを変える
-        if (filePath.find("tackle")) {
+        //if (filePath.find("tackle")) {
 
-            str = "tackle";
-        }
-        else if (filePath.find("grab")) {
-            str = "grab";
-        }
-        else {
-            printf("filepath is enemy name error");
-            return;
-        }
+        //    str = "tackle";
+        //}
+        //else if (filePath.find("catch")) {
+        //    str = "catch";
+        //}
+        //else {
+        //    printf("filepath is enemy name error");
+        //    return;
+        //}
 
         ////// パラメータをjsonから取得	
         /*const auto&  type = jsRoot["enemy"]["type"];*/
@@ -167,9 +177,9 @@ namespace MachineHuck::Enemy {
 
         //at()の中は、レベル-1を入れる
 
-        for (int i = 0; i < jsRoot[str].size(); i++) {
+        for (int i = 0; i < jsRoot[fileName].size(); i++) {
 
-            const auto& energy = jsRoot[str].at(i)["energy"];
+            const auto& energy = jsRoot[fileName].at(i)["energy"];
 
 #ifdef _DEBUG
 
@@ -182,7 +192,7 @@ namespace MachineHuck::Enemy {
 
 #endif
 
-            const auto& searchRange = jsRoot[str].at(i)["searchrange"];
+            const auto& searchRange = jsRoot[fileName].at(i)["searchrange"];
 
 #ifdef _DEBUG
             if (searchRange > 90)
@@ -192,8 +202,8 @@ namespace MachineHuck::Enemy {
             }
 #endif
 
-            const auto& r = jsRoot[str].at(i)["r"];
-            const auto& speed = jsRoot[str].at(i)["speed"];
+            const auto& r = jsRoot[fileName].at(i)["r"];
+            const auto& speed = jsRoot[fileName].at(i)["speed"];
 
             //EParam eParam;
 

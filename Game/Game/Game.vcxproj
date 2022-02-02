@@ -28,6 +28,7 @@
     <ClCompile Include="source\Effect\EffectLaser.cpp" />
     <ClCompile Include="source\Effect\EffectServer.cpp" />
     <ClCompile Include="source\Effect\EffectWind.cpp" />
+    <ClCompile Include="source\Enemy\CatchEnemy.cpp" />
     <ClCompile Include="source\Enemy\TackleEnemy.cpp" />
     <ClCompile Include="source\Enemy\EnemyBase.cpp" />
     <ClCompile Include="source\Enemy\EnemyParameter.cpp" />
@@ -80,6 +81,7 @@
     <ClInclude Include="source\Effect\EffectLaser.h" />
     <ClInclude Include="source\Effect\EffectServer.h" />
     <ClInclude Include="source\Effect\EffectWind.h" />
+    <ClInclude Include="source\Enemy\CatchEnemy.h" />
     <ClInclude Include="source\Enemy\TackleEnemy.h" />
     <ClInclude Include="source\Enemy\EnemyBase.h" />
     <ClInclude Include="source\Enemy\EnemyParameter.h" />

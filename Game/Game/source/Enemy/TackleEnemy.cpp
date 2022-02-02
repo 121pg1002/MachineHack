@@ -21,6 +21,10 @@
 //namespace Math = AppFrame::Math;
 
 namespace MachineHuck::Enemy {
+
+	//静的なメンバ―変数を実体化させる
+	int TackleEnemy::StateBase::_huckNoDamageTime;
+
 	TackleEnemy::TackleEnemy(AppFrame::Game& game) : EnemyBase{ game } {
 
 		_r = 0.0;
@@ -37,10 +41,10 @@ namespace MachineHuck::Enemy {
 
 	}
 
-	void TackleEnemy::LoadJson(const std::string& filepath)
+	void TackleEnemy::LoadJson(const std::string& filePath)
 	{
 		auto eParam = std::make_unique<EnemyParameter>();
-		eParam->LoadEnemyParam(filepath);
+		eParam->LoadEnemyParam(filePath);
 
 		//2つめの値がレベル
 		_r = eParam->GetEnemyParam("r", 0);
@@ -79,7 +83,7 @@ namespace MachineHuck::Enemy {
 		}
 
 		if (_status != STATUS::DYING && _status != STATUS::CHASE) {
-			Move();
+			Move("TackleEnemy");
 		}
 
 		if (_status == STATUS::ISHUCKED) {
@@ -128,167 +132,167 @@ namespace MachineHuck::Enemy {
 		_worldTransform = MMult(world, MGetTranslate(ToDX(_position)));
 	}
 
-	void TackleEnemy::Move() {
-		//// プレイヤーに向かう単位ベクトル
-		//auto forward = GetForward();
-		//// プレイヤーに向かう移動量ベクトル
-		//auto delta = forward * _forwardSpeed;
-		//// プレイヤーに向かって移動
-		//_position = _position + delta;
+	//void TackleEnemy::Move() {
+	//	//// プレイヤーに向かう単位ベクトル
+	//	//auto forward = GetForward();
+	//	//// プレイヤーに向かう移動量ベクトル
+	//	//auto delta = forward * _forwardSpeed;
+	//	//// プレイヤーに向かって移動
+	//	//_position = _position + delta;
 
-		_oldPos = _position;
+	//	_oldPos = _position;
 
-		//索敵中ではない
-		if (_status != STATUS::SEARCH) {
+	//	//索敵中ではない
+	//	if (_status != STATUS::SEARCH) {
 
-			//ハッキングされたまたはハッキング中ではない
-			if (_status != STATUS::ISHUCKED && _status != STATUS::ISHUCKING) {
-				auto player = GetActorServer().GetPosition("Player");
-				// プレイヤーに向かうベクトル
-				player = { player.GetX(), 0.0, player.GetZ() };
-				auto forward = player - _position;
-				// プレイヤーに向かう単位ベクトル
-				if (Math::Vector4 v{ 0.0, 0.0, 0.0 }; forward.GetX() != v.GetX() && forward.GetZ() != v.GetZ())
-				{
-					forward = forward.Normalize();
-				}
-				// プレイヤーに向かう移動量ベクトル
-				auto delta = forward * _forwardSpeed;
-				// プレイヤーに向かって移動
-				_position = _position + delta;
+	//		//ハッキングされたまたはハッキング中ではない
+	//		if (_status != STATUS::ISHUCKED && _status != STATUS::ISHUCKING) {
+	//			auto player = GetActorServer().GetPosition("Player");
+	//			// プレイヤーに向かうベクトル
+	//			player = { player.GetX(), 0.0, player.GetZ() };
+	//			auto forward = player - _position;
+	//			// プレイヤーに向かう単位ベクトル
+	//			if (Math::Vector4 v{ 0.0, 0.0, 0.0 }; forward.GetX() != v.GetX() && forward.GetZ() != v.GetZ())
+	//			{
+	//				forward = forward.Normalize();
+	//			}
+	//			// プレイヤーに向かう移動量ベクトル
+	//			auto delta = forward * _forwardSpeed;
+	//			// プレイヤーに向かって移動
+	//			_position = _position + delta;
 
-				// Y軸の回転角度を求める※時計回りz⇔x
-				auto rotY = std::atan2(forward.GetX(), forward.GetZ());
-				Math::Vector4 rot = { 0.0, rotY, 0.0 };
-				SetRotation(rot);
+	//			// Y軸の回転角度を求める※時計回りz⇔x
+	//			auto rotY = std::atan2(forward.GetX(), forward.GetZ());
+	//			Math::Vector4 rot = { 0.0, rotY, 0.0 };
+	//			SetRotation(rot);
 
-				// アクターサーバーに位置を通知
-				std::pair<Math::Vector4, Math::Vector4> posDir = { _position, rot };
-				GetActorServer().Register("TackleEnemy", posDir);
-
-
-				// ワールド行列の計算
-				//ComputeWorldTransform();
-			} //ハッキング中ではない
-			else if (_status != STATUS::ISHUCKING) {
-				//auto playermove = GetActorServer().GetPosition("Player");
-				//_position = playermove;
-				//// Y軸の回転角度を求める※時計回りz⇔x
-				//auto dir = GetActorServer().GetDir("Player");
-				//auto rotY = std::atan2(dir.GetX(), dir.GetZ());
-				//Math::Vector4 rot = { 0.0, rotY, 0.0 };
-				//SetRotation(rot);
-				//LockOn();
-				
+	//			// アクターサーバーに位置を通知
+	//			std::pair<Math::Vector4, Math::Vector4> posDir = { _position, rot };
+	//			GetActorServer().Register("TackleEnemy", posDir);
 
 
-				
-				//ComputeWorldTransform();
-			}
+	//			// ワールド行列の計算
+	//			//ComputeWorldTransform();
+	//		} //ハッキング中ではない
+	//		else if (_status != STATUS::ISHUCKING) {
+	//			//auto playermove = GetActorServer().GetPosition("Player");
+	//			//_position = playermove;
+	//			//// Y軸の回転角度を求める※時計回りz⇔x
+	//			//auto dir = GetActorServer().GetDir("Player");
+	//			//auto rotY = std::atan2(dir.GetX(), dir.GetZ());
+	//			//Math::Vector4 rot = { 0.0, rotY, 0.0 };
+	//			//SetRotation(rot);
+	//			//LockOn();
+	//			
+
+
+	//			
+	//			//ComputeWorldTransform();
+	//		}
 
 
 
-		}
-		else 
-		{
-			/// <summary>
-			///仮の動き(左右)
-			/// </summary>
-			if (_numberTimes < 100)
-			{
-				Math::Vector4 move = { 2.0, 0.0, 0.0 };
-				_position = _position + move;
-				// Y軸の回転角度を求める※時計回りz⇔x
-				auto rotY = std::atan2(move.GetX(), move.GetZ());
-				Math::Vector4 rot = { 0.0, rotY, 0.0 };
-				SetRotation(rot);
+	//	}
+	//	else 
+	//	{
+	//		/// <summary>
+	//		///仮の動き(左右)
+	//		/// </summary>
+	//		if (_numberTimes < 100)
+	//		{
+	//			Math::Vector4 move = { 2.0, 0.0, 0.0 };
+	//			_position = _position + move;
+	//			// Y軸の回転角度を求める※時計回りz⇔x
+	//			auto rotY = std::atan2(move.GetX(), move.GetZ());
+	//			Math::Vector4 rot = { 0.0, rotY, 0.0 };
+	//			SetRotation(rot);
 
-			}
-			else
-			{
-				Math::Vector4 move = { -2.0, 0.0, 0.0 };
-				_position = _position + move;
-				// Y軸の回転角度を求める※時計回りz⇔x
-				auto rotY = std::atan2(move.GetX(), move.GetZ());
-				Math::Vector4 rot = { 0.0, rotY, 0.0 };
-				SetRotation(rot);
-			}
+	//		}
+	//		else
+	//		{
+	//			Math::Vector4 move = { -2.0, 0.0, 0.0 };
+	//			_position = _position + move;
+	//			// Y軸の回転角度を求める※時計回りz⇔x
+	//			auto rotY = std::atan2(move.GetX(), move.GetZ());
+	//			Math::Vector4 rot = { 0.0, rotY, 0.0 };
+	//			SetRotation(rot);
+	//		}
 
-			if (_numberTimes > 200)
-			{
-				_numberTimes = 0;
-			}
-			else
-			{
-				_numberTimes++;
-			}
+	//		if (_numberTimes > 200)
+	//		{
+	//			_numberTimes = 0;
+	//		}
+	//		else
+	//		{
+	//			_numberTimes++;
+	//		}
 
-		}
+	//	}
 
-		CollisionFloor(_oldPos);
+	//	CollisionFloor(_oldPos);
 
-	}
+	//}
 
 	//ハッキングされたときの移動
-	void TackleEnemy::HuckedMove(double lx, double ly) {
-	
-		_move = { 0.0, 0.0, 0.0 };
+	//void TackleEnemy::HuckedMove(double lx, double ly) {
+	//
+	//	_move = { 0.0, 0.0, 0.0 };
 
-		//_oldPos = _position;
-		//横方向の傾きと縦方向の傾きの大きさ
-		double length = sqrt(lx * lx + ly * ly);
-		if (length < 0.3) {
-			// 入力が小さかったら動かなかったことにする
-			length = 0.0;
-		}
-		else {
-			length = 5.0;
-		}
+	//	//_oldPos = _position;
+	//	//横方向の傾きと縦方向の傾きの大きさ
+	//	double length = sqrt(lx * lx + ly * ly);
+	//	if (length < 0.3) {
+	//		// 入力が小さかったら動かなかったことにする
+	//		length = 0.0;
+	//	}
+	//	else {
+	//		length = 5.0;
+	//	}
 
-		//横方向と縦方向の角度
-		double rad = atan2(ly, lx);
+	//	//横方向と縦方向の角度
+	//	double rad = atan2(ly, lx);
 
-		//x軸方向の移動量
-		auto moveX = cos(rad) * length;
+	//	//x軸方向の移動量
+	//	auto moveX = cos(rad) * length;
 
-		//z軸方向の移動量
-		auto moveZ = sin(rad) * length;
+	//	//z軸方向の移動量
+	//	auto moveZ = sin(rad) * length;
 
-		_move = { moveX, 0.0, moveZ };
-		// 移動
-		_position = _position + _move;
+	//	_move = { moveX, 0.0, moveZ };
+	//	// 移動
+	//	_position = _position + _move;
 
-		if (_move.Length() > 0.0)
-		{
-		   auto dir = _move;
-		   auto yRot = std::atan2(dir.GetX(), dir.GetZ());
+	//	if (_move.Length() > 0.0)
+	//	{
+	//	   auto dir = _move;
+	//	   auto yRot = std::atan2(dir.GetX(), dir.GetZ());
 
-		   Math::Vector4 rot = { 0.0, yRot, 0.0 };
-		   SetRotation(rot);
+	//	   Math::Vector4 rot = { 0.0, yRot, 0.0 };
+	//	   SetRotation(rot);
 
-		   //移動していたら減らす
-		   _gaugeBase->Update(*this);
-		}
+	//	   //移動していたら減らす
+	//	   _gaugeBase->Update(*this);
+	//	}
 
-		//主人公のカメラに移動量を送る
-		SetHuckedMove(_move);
-
-
-
-		// ワールド行列の更新
-		//ComputeWorldTransform();
-
-		// Y軸の回転角度を求める※時計回りz⇔x
-		//auto dir = GetActorServer().GetDir("Player");
-		
-		//Math::Vector4 rot = { 0.0, rad, 0.0 };
-			
-		//rot.Set(0.0, rad, 0.0);
-		//SetRotation(rot);
-		//LockOn();
+	//	//主人公のカメラに移動量を送る
+	//	SetHuckedMove(_move);
 
 
-	}
+
+	//	// ワールド行列の更新
+	//	//ComputeWorldTransform();
+
+	//	// Y軸の回転角度を求める※時計回りz⇔x
+	//	//auto dir = GetActorServer().GetDir("Player");
+	//	
+	//	//Math::Vector4 rot = { 0.0, rad, 0.0 };
+	//		
+	//	//rot.Set(0.0, rad, 0.0);
+	//	//SetRotation(rot);
+	//	//LockOn();
+
+
+	//}
 
 	void TackleEnemy::LockOn() {
 		auto player = GetActorServer().GetPosition("Player");
@@ -373,12 +377,12 @@ namespace MachineHuck::Enemy {
 			}
 			else {
 
-				//if (_owner._collision->CircleToFan(_owner, **i)){
+				//if (_owner._collision->FanToPoint(_owner, **i)){
 				//	_owner._state->GoToState("Run");
 				//	_owner._status = STATUS::CHASE;
 				//}
 
-				if (_owner._collision->CircleToFan(_owner, **i, true)) {
+				if (_owner._collision->FanToPoint(_owner, **i, true)) {
 					_owner._state->GoToState("Run");
 					_owner._status = STATUS::CHASE;
 				}
@@ -410,7 +414,7 @@ namespace MachineHuck::Enemy {
 		//}
 		/*_owner.LockOn();*/
 		Math::Vector4 oldPos = _owner.GetPosition();
-		_owner.Move();
+		_owner.Move("TackleEnemy");
 
 		
 		//追跡状態か
@@ -435,7 +439,7 @@ namespace MachineHuck::Enemy {
 			//	_loseSightTime = 60;
 			//}
 
-			//タックル準備時間が0
+			//タックル準備時間が0およびタックル距離内
 			if (_tacklePreTime < 0 && _dif.Length_XZ() < 600.0) {
 
 				_owner._state->GoToState("Tackle");
@@ -487,59 +491,22 @@ namespace MachineHuck::Enemy {
 		}
 	}
 
-	//ダメージ
+	//ハッキング中のダメージ
 	void TackleEnemy::StateDamage::Enter() {
-		_owner._model->ChangeAnime("Damage");
+		_owner._model->ChangeAnime("Damage", true);
+
 	}
 
 	void TackleEnemy::StateDamage::Update() {
 	
+		if (_owner._model->GetRepeatedCount() > 0) {
+		
+			_owner._state->PopBack();
+		
+		}
 	
 	}
 
-	////攻撃
-	//void Enemy::StateAttack::Enter() {
-	//	_owner._model->ChangeAnime("Attack");
-	//}
-	//void Enemy::StateAttack::Update() {
-	//	// 攻撃を受けたか確認
-	//	_owner.HitCheckFrom();
-	//
-	//	// 攻撃モーションの終了確認
-	//	auto cnt = _owner._model->GetRepeatedCount();
-	//	if (cnt > 0) {
-	//		_owner._state->PopBack();
-	//		return;
-	//	}
-	//	// 攻撃モーションの15～20の間、攻撃判定あり
-	//	auto playTime = _owner._model->GetPlayTime();
-	//	if (playTime < 15.f || playTime > 20.f) {
-	//		//　攻撃判定なし
-	//		return;
-	//	}
-	//
-	//	_owner._collision->PlayerFromEnemy();
-	//
-	//}
-	
-	//void Enemy::StateAttack::Draw() {
-	//	_owner._model->Draw();
-	//#ifdef _DEBUG
-	//	//// 攻撃モーションの15～20の間、攻撃判定あり
-	//	auto playTime = _owner._model->GetPlayTime();
-	//	if (playTime < 15.f || playTime > 20.f) {
-	//	  //　攻撃判定なし
-	//	  return;
-	//	}
-	//	auto handle = _owner._model->GetHandle();
-	//	auto mat = MV1GetFrameLocalWorldMatrix(handle, 28);
-	//	auto pos = VTransform({0, 0, 0}, mat);
-	//	DrawSphere3D(pos, 20, 16, GetColor(255, 0, 0), GetColor(0, 0, 0), TRUE);
-	//
-	//
-	//
-	//#endif
-	//}
 	TackleEnemy::StateTackle::StateTackle(TackleEnemy& owner) :StateBase{ owner } {
 
 		_tackleTime = 60;
@@ -556,8 +523,8 @@ namespace MachineHuck::Enemy {
 		//ハッキングされている場合
 		if (_owner.GetStatus() == STATUS::ISHUCKED) {
 
-		//ゲージ減少
-		_owner.GetGaugeBase().DownGauge(30);
+		    //ゲージ減少
+		    _owner.GetGaugeBase().DownGauge(30);
 			//auto player = _owner.GetActorServer().GetDir("Player");
 			
 			auto rot = _owner.GetRotation();
@@ -698,40 +665,90 @@ namespace MachineHuck::Enemy {
 			}
 			else {
 
-				//無敵時間中とダメージフラグがオンのときは、通さない
+				//プレイヤー無敵時間中とプレイヤーダメージフラグがオンのときは、通さない
 				if (Flag::FlagData::GetNoDamageFlag() == false && Flag::FlagData::GetDamageFlag() == false) {
 
-					for (auto i = _owner.GetActorServer().GetActors().begin(); i != _owner.GetActorServer().GetActors().end(); i++) {
+					//ハッキング中の無敵時間中とハッキングダメージフラグがオンのときは、通さない
+					if (Flag::FlagData::GetHuckDamageFlag() == false && Flag::FlagData::GetHuckNoDamageFlag() == false) {
+
+						for (auto i = _owner.GetActorServer().GetActors().begin(); i != _owner.GetActorServer().GetActors().end(); i++) {
+
+							//エネミーではなかったら次へ
+							if ((*i)->GetTypeId() != TypeId::Enemy) {
+
+								//プレイヤーではなかったら次へ
+								if ((*i)->GetTypeId() != TypeId::Player) {
+									continue;
+								}
+								else {
+
+									if ((*i)->IsHucked()) {
+									
+										continue;
+									
+									}
+									else {
+
+										//プレイヤーが円で敵のAABBとの当たり判定
+										if (_owner._collision->CircleToOrientedAABB(**i, _owner)) {
+
+											//プレイヤーのゲージを減少させる
+											(*i)->GetGaugeBase().DownGauge(15);
+
+											//プレイヤーを無敵時間にする
+											//_invincibleTime = true;
+
+											//プレイヤーのダメージフラグを設定
+											Flag::FlagData::SetDamageFlag(true);
+
+											//プレイヤーをダメージ状態に変更
+											(*i)->GetState().GoToState("Damage");
+
+										}
+									
+									}
+
+
+								}
+
+							}
+							else {
+
+
+									//ハッキングされているか
+									if ((*i)->IsHucked()) {
+
+										//ハッキングされている敵が円で敵のAABBとの当たり判定
+										if (_owner._collision->CircleToOrientedAABB(**i, _owner)) {
+
+											//ハッキングされている敵のゲージを減少させる
+											(*i)->GetGaugeBase().DownGauge(15);
+
+											//ハッキングされている敵をダメージ状態に変更
+											(*i)->GetState().PushBack("Damage");
+
+											Flag::FlagData::SetHuckDamageFlag(true);
+										}
+
+
+									}
+									else {
+										continue;
+									}
 
 
 
-						//プレイヤーではなかったら次へ
-						if ((*i)->GetTypeId() != TypeId::Player) {
-							continue;
-						}
-						else {
 
 
-							//プレイヤーが円で敵のAABBとの当たり判定
-							if (_owner._collision->CircleToOrientedAABB(**i, _owner)) {
 
-								//プレイヤーのゲージを減少させる
-								(*i)->GetGaugeBase().DownGauge(15);
-
-								//プレイヤーを無敵時間にする
-								//_invincibleTime = true;
-
-								//プレイヤーのダメージフラグを設定
-								Flag::FlagData::SetDamageFlag(true);
-
-								////プレイヤーをダメージ状態に変更
-								(*i)->GetState().GoToState("Damage");
 
 							}
 
-						}
 
+						}
+					
 					}
+
 
 				}
 
@@ -878,11 +895,34 @@ namespace MachineHuck::Enemy {
 		//	_owner._state->GoToState("Run");
 		//	_owner._status = STATUS::CHASE;
 		//}
+
+		if (Flag::FlagData::GetHuckDamageFlag()) {
+
+			//ダメージフラグをオフに
+			Flag::FlagData::SetHuckDamageFlag(false);
+
+			//無敵フラグをオンに
+			Flag::FlagData::SetHuckNoDamageFlag(true);
+
+			_huckNoDamageTime = 120;
+
+		}
+
+		_huckNoDamageTime--;
+
+		//無敵時間が終わったら元に戻す
+		if (_huckNoDamageTime < 0 && Flag::FlagData::GetHuckNoDamageFlag()) {
+			Flag::FlagData::SetHuckNoDamageFlag(false);
+		}
 		 
 		
 		//移動時にフロアの壁との判定を取る
 		Math::Vector4 oldPos = _owner.GetPosition();
+
+
 		_owner.HuckedMove(_lx, _ly);
+
+
 
 		////地面と触れているかどうか
 		_owner.CollisionFloor(oldPos);
@@ -959,6 +999,9 @@ namespace MachineHuck::Enemy {
 
 			_owner._state->GoToState("Die");
 			_owner._status = STATUS::DYING;
+
+			Flag::FlagData::SetHuckDamageFlag(false);
+			Flag::FlagData::SetHuckNoDamageFlag(false);
 
 			for (auto&& actor : _owner.GetActorServer().GetActors()) {
 			

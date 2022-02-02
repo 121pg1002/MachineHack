@@ -16,6 +16,9 @@ namespace MachineHuck::Flag {
  VECTOR FlagData::_cameraPos = VGet(0.f, 0.f, 0.f);
  bool FlagData::_noDamageFlag = false;
  bool FlagData::_damageFlag = false;
+ bool FlagData::_huckNoDamageFlag = false;
+ bool FlagData::_huckDamageFlag = false;
+
 
 }
 

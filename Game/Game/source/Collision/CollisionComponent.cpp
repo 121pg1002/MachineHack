@@ -387,7 +387,7 @@ namespace MachineHuck::Collision {
         return false;
     }
 
-    bool CollisionComponent::CircleToFan(const Actor::Actor& act1, const Actor::Actor& act2)
+    bool CollisionComponent::FanToPoint(const Actor::Actor& act1, const Actor::Actor& act2)
     {
 
         auto dir = act1.GetRotation();
@@ -409,10 +409,16 @@ namespace MachineHuck::Collision {
         //円弧の終了角度
         auto eRad = rad + nine + rotY;
 
+        Math::Vector2 act2XZ = { act2.GetPosition().GetX(), act2.GetPosition().GetZ() };
+        Math::Vector2 act1XZ = { act1.GetPosition().GetX(), act1.GetPosition().GetZ() };
 
         //主人公から敵へのベクトル
-        auto dis = act2.GetPosition() - act1.GetPosition();
+        auto dis = act2XZ - act1XZ;
         auto length = dis.Length();
+
+        ////主人公から敵へのベクトル
+        //auto dis = act2.GetPosition() - act1.GetPosition();
+        //auto length = dis.Length();
 
 
         Math::Vector4 startPos = { std::cos(sRad) , 0.0,std::sin(sRad) };
@@ -466,7 +472,7 @@ namespace MachineHuck::Collision {
     }
 
 
-    bool CollisionComponent::CircleToFan(const Actor::Actor& act1, const Actor::Actor& act2, bool select)
+    bool CollisionComponent::FanToPoint(const Actor::Actor& act1, const Actor::Actor& act2, bool select)
     {
         auto range = 0.0;
 
@@ -477,6 +483,7 @@ namespace MachineHuck::Collision {
         else {
             range = act1.GetHuckR();
         }
+
 
 
         auto dir = act1.GetRotation();
@@ -577,6 +584,91 @@ namespace MachineHuck::Collision {
         }
 
         return false;
+    }
+
+    bool CollisionComponent::FanToPoint(const Actor::Actor& act1, const Actor::Actor& act2, double r, double range) {
+    
+        auto dir = act1.GetRotation();
+
+        //y軸回転の向きが時計回りにセットされているため逆回りにする
+        auto rotY = -dir.GetY();
+
+        //範囲
+        auto angle = range;
+
+        //0度をz軸に
+        auto nine = DX_PI / 180.0 * 90.0;
+
+        //ラジアンに変換
+        auto rad = DX_PI / 180.0 * angle;
+
+        //円弧の開始角度
+        auto sRad = -rad + nine + rotY;
+        //円弧の終了角度
+        auto eRad = rad + nine + rotY;
+
+
+        Math::Vector2 act2XZ = { act2.GetPosition().GetX(), act2.GetPosition().GetZ() };
+        Math::Vector2 act1XZ = { act1.GetPosition().GetX(), act1.GetPosition().GetZ() };
+
+        //相手から自分へのベクトル
+        auto dis = act2XZ - act1XZ;
+        auto length = dis.Length();
+
+        ////相手から自分へのベクトル
+        //auto dis = act2.GetPosition() - act1.GetPosition();
+        //auto length = dis.Length();
+
+
+        Math::Vector4 startPos = { std::cos(sRad) , 0.0,std::sin(sRad) };
+        Math::Vector4 endPos = { std::cos(eRad) , 0.0,std::sin(eRad) };
+
+        auto cross180 = startPos.GetX() * endPos.GetZ() - endPos.GetX() * startPos.GetZ();
+        auto crossStart = startPos.GetX() * dis.GetZ() - dis.GetX() * startPos.GetZ();
+        auto crossEnd = endPos.GetX() * dis.GetZ() - dis.GetX() * endPos.GetZ();
+
+        //円の内外判定
+        if (length < r)
+        {
+            //扇形の角度が180度を超えているか
+            if (cross180 > 0)
+            {
+                //開始角に対して左にあるか//////////////////←個々の中に入っていない
+                if (crossStart < 0)
+                {
+                    return false;
+                }//終了角に対して右にあるか
+
+                if (crossEnd > 0)
+                {
+                    return false;
+                }
+
+                //扇の内部にある
+                return true;
+
+
+            }
+            else
+            {   //開始角に対して左にあるか
+                if (crossStart <= 0)
+                {
+                    return true;
+                }//終了角に対して右にあるか
+
+                if (crossEnd >= 0)
+                {
+                    return true;
+                }
+
+                //扇の外部にある
+                return false;
+            }
+
+        }
+
+        return false;
+    
     }
 
     bool CollisionComponent::LineToAABB(const Actor::Actor& act1, const Actor::Actor& act2, const AABB box) {

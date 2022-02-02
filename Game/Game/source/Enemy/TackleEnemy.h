@@ -21,7 +21,7 @@ namespace MachineHuck::Enemy {
         virtual ~TackleEnemy() override = default;
         //void Init() override;
         //virtual void Input(InputComponent& input) override;
-        void LoadJson(const std::string& filepath);
+        void LoadJson(const std::string& filePath);
 
         virtual void Update() override;
         void Input(AppFrame::Input::InputComponent& input) override;
@@ -34,7 +34,7 @@ namespace MachineHuck::Enemy {
         /// モデルのローカルZ座標が逆なのでここで180度回転させる
         void ComputeWorldTransform() override;
 
-        void SetForwardSpeed(float forwardSpeed) { _forwardSpeed = forwardSpeed; }
+      
 
 
     protected:
@@ -45,14 +45,14 @@ namespace MachineHuck::Enemy {
         //int _waitTime{0};
         //std::unique_ptr<ModelAnimeComponent> _model;
 
-        virtual void Move();
+        //virtual void Move();
 
         /**
          * @brief  ハッキングされたときの移動         
          * @param  lx 横方向の傾き
          * @param  ly 縦方向の傾き
          */
-        void HuckedMove(double lx, double ly);
+        //void HuckedMove(double lx, double ly);
 
         virtual void LockOn();
         void Tackle(Math::Vector4 target);
@@ -67,6 +67,7 @@ namespace MachineHuck::Enemy {
         protected:
             TackleEnemy& _owner;
             bool _invincibleTime{ false };
+            static int _huckNoDamageTime;
         };
 
         class StateIdle : public StateBase {

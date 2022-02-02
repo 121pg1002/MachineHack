@@ -128,7 +128,7 @@ namespace MachineHuck::Collision {
 		/*
 		*@brief 円と扇形の当たり判定を行う
 		*/
-		bool CircleToFan(const Actor::Actor& act1, const Actor::Actor& act2);
+		bool FanToPoint(const Actor::Actor& act1, const Actor::Actor& act2);
 
 		/**
 		 * @brief  円と扇形の当たり判定を行う
@@ -137,7 +137,24 @@ namespace MachineHuck::Collision {
 		 * @param  select trueは索敵範囲 falseはハッキング範囲の判定
 		 * @return 成否
 		 */
-		bool CircleToFan(const Actor::Actor& act1, const Actor::Actor& act2, bool select);
+		bool FanToPoint(const Actor::Actor& act1, const Actor::Actor& act2, bool select);
+
+
+		
+		/**
+		 * 
+		 * @brief  キャッチエネミー用の当たり判定         
+		 * @param  act1         自分
+		 * @param  act2　　　　 相手
+		 * @param  catchR       半径
+		 * @param  catchRange   範囲角度
+		 * @return true  当たった
+		 *         false 当たっていない
+		 */
+		bool FanToPoint(const Actor::Actor& act1, const Actor::Actor& act2, double r, double range);
+
+
+		
 
 		/**
 		 * @brief  線分とAABBの当たり判定を行う

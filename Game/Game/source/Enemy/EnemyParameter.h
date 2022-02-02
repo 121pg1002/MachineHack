@@ -83,7 +83,8 @@ namespace MachineHuck::Enemy {
 	   // std::unordered_map<std::string, double> _enemyParamMap; //!< 敵のパラメーターを保存
 		//std::unordered_map<std::string, EnemyParameter> _enemyParamMap;
 
-		std::vector<DoubleMap> _vDoubleMap;
+		std::vector<DoubleMap> _vDoubleMap; //!< double型を格納するコンテナ
+
 		//std::unordered_map<std::string, Parameter::EParam> _enemyParamMap;//!< 敵のパラメーターを保存
 		//std::unordered_map<std::string, double> _enemyParameterMap;//!< 敵のパラメーターを保存
 

@@ -2,7 +2,7 @@
  * @file   ActorFactory.cpp
  * @brief  アクターファクトリー
  *
- * @author yamawaki kota
+ * @author yamawaki kota, hikaru Goto
  * @date   December 6 2021
  *********************************************************************/
 
@@ -10,6 +10,7 @@
 #include "ActorServer.h"
 #include "../Player/Player.h"
 #include "../Enemy/TackleEnemy.h"
+#include "../Enemy/CatchEnemy.h"
 #include "../Stage/Stage.h"
 #include "../Model/ModelAnimComponent.h"
 #include "../State/StateComponent.h"
@@ -147,11 +148,6 @@ namespace MachineHuck::Actor {
             
             }
 
-
-
-
-            
-
             ////前のステージ番号を更新
             _oldStageNo = _currentStageNo;
 
@@ -199,11 +195,11 @@ namespace MachineHuck::Actor {
 
     }
 
-    void ActorFactory::Delete() {
+    //void ActorFactory::Delete() {
 
 
 
-    }
+    //}
 
     /// プレイヤーの生成
     std::unique_ptr<Actor> PlayerCreator::Create(AppFrame::Game& game) {
@@ -302,10 +298,10 @@ namespace MachineHuck::Actor {
         return enemy;
     }
 
-    /// タックルエネミーの生成
-    std::unique_ptr<Actor> GrabEnemyCreator::Create(AppFrame::Game& game) {
+    /// キャッチエネミーの生成
+    std::unique_ptr<Actor> CatchEnemyCreator::Create(AppFrame::Game& game) {
         // タックルエネミーの生成
-        auto enemy = std::make_unique<Enemy::TackleEnemy>(game);
+        auto enemy = std::make_unique<Enemy::CatchEnemy>(game);
 
         //std::vector<std::string> type = { "Tackle", "Grab", "Alart" };
 
@@ -314,37 +310,41 @@ namespace MachineHuck::Actor {
         //auto i = game.GetStageParameter().GetStageMap().find();
         //for(int i =0; i < )
 
-        enemy->LoadJson("resource/json/grab.json");
+        enemy->LoadJson("resource/json/catch.json");
 
         enemy->SetForwardSpeed(1.0f);
 
         // モデルの読み込みと生成
         auto model = std::make_unique<Model::ModelAnimeComponent>(*enemy);
         model->SetModel("Spider", 1000);
-        model->Register("Attack", 0);
+        model->Register("Hucking", 0);
         model->Register("Die", 1);
-        model->Register("Die2", 2);
+        model->Register("Idle", 2);
+        //model->Register("Die2", 2);
         model->Register("Fall", 3);
-        model->Register("Jump", 4);
-        model->Register("Normal", 5);
-        model->Register("RunAniBack", 6);
+        model->Register("Catch", 4);
+        //model->Register("Normal", 5);
+        //model->Register("RunAniBack", 6);
         model->Register("RunAniVor", 7);
-        model->Register("RunLeft", 8);
-        model->Register("RunRight", 9);
-        model->Register("WalkAniBack", 10);
-        model->Register("WalkAniBor", 11);
-        model->Register("WalkLeft", 12);
-        model->Register("WalkRight", 13);
-        model->Register("WartePose", 14);
+        //model->Register("RunLeft", 8);
+        //model->Register("RunRight", 9);
+        //model->Register("WalkAniBack", 10);
+        //model->Register("WalkAniBor", 11);
+        //model->Register("WalkLeft", 12);
+        //model->Register("WalkRight", 13);
+        //model->Register("WartePose", 14);
         enemy->SetModelComponent(std::move(model));
 
-        auto state = std::make_unique<State::StateComponent>("Fall", std::make_shared <Enemy::TackleEnemy::StateFall>(*enemy));
-        state->Register("Idle", std::make_shared<Enemy::TackleEnemy::StateIdle>(*enemy));
-        state->Register("Run", std::make_shared<Enemy::TackleEnemy::StateRun>(*enemy));
-        state->Register("Die", std::make_shared<Enemy::TackleEnemy::StateDie>(*enemy));
-        //state->Register("Attack", std::make_shared<Enemy::StateAttack>(*enemy));
-        state->Register("IsHucking", std::make_shared<Enemy::TackleEnemy::StateHucking>(*enemy));
-        state->Register("IsHucked", std::make_shared<Enemy::TackleEnemy::StateHucked>(*enemy));
+        auto state = std::make_unique<State::StateComponent>("Fall", std::make_shared <Enemy::CatchEnemy::StateFall>(*enemy));
+        state->Register("Idle", std::make_shared<Enemy::CatchEnemy::StateIdle>(*enemy));
+        //state->Register("Run", std::make_shared<Enemy::CatchEnemy::StateRun>(*enemy));
+        state->Register("Die", std::make_shared<Enemy::CatchEnemy::StateDie>(*enemy));
+        state->Register("Catch", std::make_shared<Enemy::CatchEnemy::StateCatch>(*enemy));
+        state->Register("CatchAfter", std::make_shared<Enemy::CatchEnemy::StateCatchAfter>(*enemy));
+        state->Register("CatchPre", std::make_shared<Enemy::CatchEnemy::StateCatchPre>(*enemy));
+       // state->Register("Attack", std::make_shared<Enemy::CatchEnemy::StateAttack>(*enemy));
+        state->Register("IsHucking", std::make_shared<Enemy::CatchEnemy::StateHucking>(*enemy));
+        state->Register("IsHucked", std::make_shared<Enemy::CatchEnemy::StateHucked>(*enemy));
         enemy->SetStateComponent(std::move(state));
 
 

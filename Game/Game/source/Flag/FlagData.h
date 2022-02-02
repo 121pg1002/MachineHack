@@ -61,6 +61,37 @@ namespace MachineHuck::Flag {
 		 */
 		static void SetDamageFlag(bool flag) { _damageFlag = flag; }
 
+
+		/**
+		 * @brief  ハッキング状態の無敵フラグを取得
+		 * @return _huckNoDamageTime
+		 */
+		static bool GetHuckNoDamageFlag() { return _huckNoDamageFlag; }
+
+		/**
+		 * @brief ハッキング状態の無敵フラグを設定
+		 * @param flag
+		 */
+		static void SetHuckNoDamageFlag(bool flag) { _huckNoDamageFlag = flag; }
+
+		/**
+		 *
+		 * @brief  ハッキング状態のダメージフラグを取得       
+		 * @return _huckDamageFlag
+		 */
+		static int GetHuckDamageFlag() { return _huckDamageFlag; }
+
+		/**
+		 * 
+		 * @brief  ハッキング状態のダメージフラグを設定       
+		 * @param  flag
+		 */
+		static void SetHuckDamageFlag(bool flag) { _huckDamageFlag = flag; }
+
+
+
+
+
 		/**
 		 * @brief  カメラ位置を取得
 		 * @return _cameraPos
@@ -81,6 +112,10 @@ namespace MachineHuck::Flag {
 		static VECTOR _cameraPos;
 		static bool _noDamageFlag;
 		static bool _damageFlag;
+		static bool _huckNoDamageFlag;
+		static bool _huckDamageFlag;
+
+
 	};
 
 }

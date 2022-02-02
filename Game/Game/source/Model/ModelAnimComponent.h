@@ -42,12 +42,17 @@ namespace MachineHuck::Model {
 		/// 描画
 		void Draw() override;
 
+#ifdef _DEBUG
 		/// 描画扇型判定用
 		void Draw(const Actor::Actor& owner, bool isHit, double range, bool select);
 
 		//AABB用
 		void Draw(const Actor::Actor& owner, Math::Vector4 position);
 
+		//キャッチ用
+		void Draw(const Actor::Actor& owner, double r, double range);
+
+#endif
 		/**
 		 * @brief  特定のフレームの描画         
 		 */
