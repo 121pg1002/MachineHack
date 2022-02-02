@@ -55,13 +55,14 @@ namespace MachineHuck::Enemy {
 
 	void CatchEnemy::Update() {
 
-
+		//Ž€–S’†‚Å‚Í‚È‚¢
 		if (_status != STATUS::DYING) {
 
+			
 			if (GetActorState() == ActorState::Hucking) {
 				_status = STATUS::ISHUCKING;
 			}
-			else if (GetActorState() == ActorState::Hucked) {
+			else if (IsHucked()) {
 				_status = STATUS::ISHUCKED;
 			}
 			else if (GetActorState() == ActorState::Active) {
@@ -128,7 +129,7 @@ namespace MachineHuck::Enemy {
 		
 			auto yRot = std::atan2(direction.GetX(), direction.GetZ());
 
-			Math::Vector4 rot = { 0.0, yRot, 0.0 };
+			Math::Vector4 rot = { 0.1, yRot, 0.0 };
 			SetRotation(rot);
 
 			//ˆÚ“®‚µ‚Ä‚¢‚½‚çŒ¸‚ç‚·
@@ -170,7 +171,7 @@ namespace MachineHuck::Enemy {
 			_owner._model->Draw();
 		}
 		else {
-			_owner._model->SpecificDraw();
+			_owner._model->SpecificDraw(); //!<	ƒnƒbƒLƒ“ƒO’†‚Ì“ª‚ð•`‰æ’âŽ~‚·‚é
 		}
 	}
 
@@ -258,7 +259,7 @@ namespace MachineHuck::Enemy {
 			auto dif = player - _owner.GetPosition();
 
 			auto rotY = std::atan2(dif.GetX(), dif.GetZ());
-			Math::Vector4 rot = { 0.0, rotY, 0.0 };
+			Math::Vector4 rot = { 0.5, rotY, 0.0 };
 			_owner.SetRotation(rot);
 
 			auto length = dif.Length_XZ();

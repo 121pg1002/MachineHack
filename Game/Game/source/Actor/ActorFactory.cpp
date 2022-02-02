@@ -213,6 +213,7 @@ namespace MachineHuck::Actor {
         auto player = std::make_unique<Player::Player>(game);
         player->SetCameraComponent(camera);
         player->SetPosition({ -Differ * 5.0 + Differ* 0.5, 0, Differ * 0.5 });
+        player->SetRotation({ 0.5, 0.0, 0.0 });
 
         // ƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ‚Æ¶¬
         auto model = std::make_unique<Model::ModelAnimeComponent>(*player);

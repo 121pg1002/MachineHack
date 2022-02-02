@@ -29,7 +29,6 @@ namespace MachineHuck::Enemy {
         void Draw() override;
 
         /**
-         * 
          * @brief  ハッキング中の向きを指定         
          * @param  lx
          * @param  ly

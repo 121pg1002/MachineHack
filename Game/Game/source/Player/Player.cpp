@@ -472,7 +472,7 @@ namespace MachineHuck::Player {
 
 		//y軸回転を出す
 		auto yRot = atan2(_dir.GetX(), _dir.GetZ());
-		Math::Vector4 rot = { 0.0, yRot, 0.0 };
+		Math::Vector4 rot = { 0.5, yRot, 0.0 };
 		////z軸を0度とする
 		//auto nine = DX_PI / 180.0 * 90.0;
 		//_y_rot += 90.0;
@@ -889,6 +889,7 @@ namespace MachineHuck::Player {
 				else {
 					//ハッキングした対象に追従
 					Math::Vector4 difY = { 0.0, 150.0, 0.0 };
+					//Math::Vector4 difRot = { 0.2, 0.0, 0.0 };
 					_owner._position = (*i)->GetPosition() + difY;
 					_owner._rotation = (*i)->GetRotation();
 					_owner._move = (*i)->GetHuckedMove();

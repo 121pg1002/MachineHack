@@ -17,6 +17,14 @@ using Json = nlohmann::json;
 namespace Math = AppFrame::Math;
 
 namespace MachineHuck::Enemy {
+
+    namespace{
+        constexpr double Differ = 3000.0; //!< 1フロアのサイズ
+        constexpr double StartX = -5.0 * Differ; 
+        constexpr int BoardSize = 10;
+    }
+
+
     //コンストラクタ
     EnemyParameter::EnemyParameter()
     {
@@ -52,6 +60,78 @@ namespace MachineHuck::Enemy {
         //敵の種類で読み込むjsonを変える
         //if (filePath.find("tackle")) {
 
+        int numX = 0;
+        int numZ = 0;
+
+        if (0 <= stageNo && stageNo <= 9) {
+        
+            numX = stageNo;
+            numZ = 0;
+        }
+        else {
+
+            numX = stageNo % 10; //!< 一桁目
+            numZ = stageNo / 10; //!< 二桁目
+        
+        }
+
+        auto startX = StartX;
+        auto startZ = 0.0;
+
+        auto offsetX = startX;
+        auto offsetZ = startZ;
+
+
+
+                //読み込めなかったとき
+                if (jsRoot["StageEnemy"].size() == 0) {
+
+                    printf("jsRoot is not load");
+                }
+                else {
+
+
+                    for (int i = 0; i < jsRoot["StageEnemy"].size(); i++) {
+
+                        Parameter::EStageParam eSP;
+
+                        const std::string& fileName = jsRoot["StageEnemy"].at(i)["filename"];
+                        //auto& handleName = jsRoot["Stage"].at(i)["handlename"];
+                        const double& tx = jsRoot["StageEnemy"].at(i)["tx"];
+                        const double& ty = jsRoot["StageEnemy"].at(i)["ty"];
+                        const double& tz = jsRoot["StageEnemy"].at(i)["tz"];
+                        const double& rx = jsRoot["StageEnemy"].at(i)["rx"];
+                        const double& ry = jsRoot["StageEnemy"].at(i)["ry"];
+                        const double& rz = jsRoot["StageEnemy"].at(i)["rz"];
+                        const double& sx = jsRoot["StageEnemy"].at(i)["sx"];
+                        const double& sy = jsRoot["StageEnemy"].at(i)["sy"];
+                        const double& sz = jsRoot["StageEnemy"].at(i)["sz"];
+
+                        Math::Vector4 pos = { tx, ty, tz };
+                        Math::Vector4 rot = { rx, ry, rz };
+                        Math::Vector4 scale = { sx, sy, sz };
+
+                        Math::Vector4 dif = { offsetX + Differ / 2.0 + Differ * numX, 0.0, offsetZ + Differ / 2.0 + Differ * numZ };
+
+                        pos = pos + dif;
+
+                        eSP.SetName(fileName);
+                        eSP.SetPos(pos);
+                        eSP.SetRot(rot);
+                        eSP.SetScale(scale);
+
+                        //ブロック一つ一つを格納
+                        _eStageParamV.emplace_back(eSP);
+
+                    }
+
+                    //フロア番号で1フロア分を格納
+                    _eStageNumMap.emplace(stageNo, _eStageParamV);
+                }
+                //    auto sP = stageVector[k];
+                //    auto pos = sP.GetPosition();
+                //    Math::Vector4 dif = { offsetX + Differ / 2.0, 0.0, offsetZ + Differ / 2.0 };
+
         //	str = "tackle";
         //}
         //else if (filePath.find("grab")) {
@@ -61,48 +141,7 @@ namespace MachineHuck::Enemy {
         //	printf("filepath is enemy name error");
         //	return;
         //}
-                //読み込めなかったとき
-        if (jsRoot["StageEnemy"].size() == 0) {
 
-            printf("jsRoot is not load");
-        }
-        else {
-
-
-            for (int i = 0; i < jsRoot["StageEnemy"].size(); i++) {
-
-                Parameter::EStageParam eSP;
-
-                const std::string& fileName = jsRoot["StageEnemy"].at(i)["filename"];
-                //auto& handleName = jsRoot["Stage"].at(i)["handlename"];
-                const double& tx = jsRoot["StageEnemy"].at(i)["tx"];
-                const double& ty = jsRoot["StageEnemy"].at(i)["ty"];
-                const double& tz = jsRoot["StageEnemy"].at(i)["tz"];
-                const double& rx = jsRoot["StageEnemy"].at(i)["rx"];
-                const double& ry = jsRoot["StageEnemy"].at(i)["ry"];
-                const double& rz = jsRoot["StageEnemy"].at(i)["rz"];
-                const double& sx = jsRoot["StageEnemy"].at(i)["sx"];
-                const double& sy = jsRoot["StageEnemy"].at(i)["sy"];
-                const double& sz = jsRoot["StageEnemy"].at(i)["sz"];
-
-                Math::Vector4 pos = { tx, ty, tz };
-                Math::Vector4 rot = { rx, ry, rz };
-                Math::Vector4 scale = { sx, sy, sz };
-
-
-                eSP.SetName(fileName);
-                eSP.SetPos(pos);
-                eSP.SetRot(rot);
-                eSP.SetScale(scale);
-
-                //ブロック一つ一つを格納
-                _eStageParamV.emplace_back(eSP);
-
-            }
-
-            //フロア番号で1フロア分を格納
-            _eStageNumMap.emplace(stageNo, _eStageParamV);
-        }
 
         //// パラメータをjsonから取得
         /// 

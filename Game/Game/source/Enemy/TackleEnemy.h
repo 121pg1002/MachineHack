@@ -54,10 +54,10 @@ namespace MachineHuck::Enemy {
          */
         //void HuckedMove(double lx, double ly);
 
-        virtual void LockOn();
-        void Tackle(Math::Vector4 target);
+        //virtual void LockOn();
+        //void Tackle(Math::Vector4 target);
 
-        void HitCheckFrom();
+        //void HitCheckFrom();
 
     public:
         class StateBase : public State::StateBaseRoot {

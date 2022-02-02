@@ -300,35 +300,35 @@ namespace MachineHuck::Enemy {
 
 	//}
 
-	void TackleEnemy::LockOn() {
-		auto player = GetActorServer().GetPosition("Player");
-		// プレイヤーに向かうベクトル
-		auto forward = player - _position;
-		// プレイヤーに向かう単位ベクトル
-		forward = forward.Normalize();
-		// Y軸の回転角度を求める※時計回りz⇔x
-		auto rotY = std::atan2(forward.GetX(), forward.GetZ());
-		Math::Vector4 rot = { 0.0, rotY, 0.0 };
-		SetRotation(rot);
-	}
+	//void TackleEnemy::LockOn() {
+	//	auto player = GetActorServer().GetPosition("Player");
+	//	// プレイヤーに向かうベクトル
+	//	auto forward = player - _position;
+	//	// プレイヤーに向かう単位ベクトル
+	//	forward = forward.Normalize();
+	//	// Y軸の回転角度を求める※時計回りz⇔x
+	//	auto rotY = std::atan2(forward.GetX(), forward.GetZ());
+	//	Math::Vector4 rot = { 0.0, rotY, 0.0 };
+	//	SetRotation(rot);
+	//}
 
-	void TackleEnemy::Tackle(Math::Vector4 target) {
+	//void TackleEnemy::Tackle(Math::Vector4 target) {
 
-		//すでに決まった道筋までタックルする機構を書く
+	//	//すでに決まった道筋までタックルする機構を書く
 
-	}
+	//}
 
-	void TackleEnemy::HitCheckFrom() {
-		//auto& report = _collision->GetReport();
-		//if (report.id == CollisionComponent::ReportId::HitFromPlayer) {
-		//	_state->GoToState("Die");
-		//	GetGame().GetSoundComponent().Play("damage");
-		//}
-		//else if (report.id == CollisionComponent::ReportId::HuckedFromPlayer) 
-		//{
-		//	_state->GoToState("Idle");
-		//}
-	}
+	//void TackleEnemy::HitCheckFrom() {
+	//	//auto& report = _collision->GetReport();
+	//	//if (report.id == CollisionComponent::ReportId::HitFromPlayer) {
+	//	//	_state->GoToState("Die");
+	//	//	GetGame().GetSoundComponent().Play("damage");
+	//	//}
+	//	//else if (report.id == CollisionComponent::ReportId::HuckedFromPlayer) 
+	//	//{
+	//	//	_state->GoToState("Idle");
+	//	//}
+	//}
 
 
 
@@ -564,7 +564,7 @@ namespace MachineHuck::Enemy {
 			auto length = dif.Length_XZ();
 
 			auto rotY = std::atan2(dif.GetX(), dif.GetZ());
-			Math::Vector4 rot = { 0.0, rotY, 0.0 };
+			Math::Vector4 rot = { 0.1, rotY, 0.0 };
 			_owner.SetRotation(rot);
 
 			if (length < 600.0) {
