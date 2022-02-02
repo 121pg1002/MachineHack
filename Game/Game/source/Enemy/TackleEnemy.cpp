@@ -12,6 +12,7 @@
 #include "../Collision/CollisionComponent.h"
 #include "../Gauge/GaugeBase.h"
 #include "../Gauge/GaugeEnemy.h"
+#include "../Gauge/GaugePlayer.h"
 #include "../Flag/FlagData.h"
 
 #include <cmath>
@@ -268,8 +269,9 @@ namespace MachineHuck::Enemy {
 	//	_position = _position + _move;
 
 		   //移動していたら減らす
-		   _gaugeBase->Update(*this);
-		}
+		//   _gaugeBase->Update(*this);
+
+		//}
 
 	//	   Math::Vector4 rot = { 0.0, yRot, 0.0 };
 	//	   SetRotation(rot);
@@ -529,6 +531,7 @@ namespace MachineHuck::Enemy {
 
 		//ゲージ減少
 		_owner.GetGaugeBase().DownGauge(30);
+		_owner.GetGaugeEnemy().DownGauge(30);
 			//auto player = _owner.GetActorServer().GetDir("Player");
 			
 			auto rot = _owner.GetRotation();
@@ -698,6 +701,7 @@ namespace MachineHuck::Enemy {
 
 											//プレイヤーのゲージを減少させる
 											(*i)->GetGaugeBase().DownGauge(15);
+											(*i)->GetGaugePlayer().DownGauge(15);
 
 											//プレイヤーを無敵時間にする
 											//_invincibleTime = true;
@@ -727,6 +731,7 @@ namespace MachineHuck::Enemy {
 
 											//ハッキングされている敵のゲージを減少させる
 											(*i)->GetGaugeBase().DownGauge(15);
+											(*i)->GetGaugeEnemy().DownGauge(15);
 
 											//ハッキングされている敵をダメージ状態に変更
 											(*i)->GetState().PushBack("Damage");

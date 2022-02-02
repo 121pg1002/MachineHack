@@ -155,6 +155,9 @@
     <ClCompile Include="source\Gauge\GaugePlayer.cpp">
       <Filter>Gauge</Filter>
     </ClCompile>
+    <ClCompile Include="source\Enemy\CatchEnemy.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Enemy">
@@ -380,6 +383,9 @@
     </ClInclude>
     <ClInclude Include="source\Gauge\GaugePlayer.h">
       <Filter>Gauge</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Enemy\CatchEnemy.h">
+      <Filter>Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

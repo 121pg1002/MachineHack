@@ -302,7 +302,7 @@ namespace MachineHuck::Player {
 
 		    //エネルギー残量ゲージの設定
 			GetGame().GetUiComponent().UpdatePlayerHp(_gaugeBase->GetGauge(), _gaugeBase->GetGaugeMax());
-		//	GetGame().GetUiComponent().UpdatePlayerHp(_gaugePlayer->GetGauge(), _gaugePlayer->GetGaugeMax());
+		//	GetGame().GetUiComponent().UpdatePlayerHp(_gauge->GetGauge(), _gauge->GetGaugeMax());
 
 		for (auto i = GetActorServer().GetActors().begin(); i != GetActorServer().GetActors().end(); i++){
 			auto targetPos = (*i)->GetPosition();

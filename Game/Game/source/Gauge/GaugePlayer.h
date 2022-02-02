@@ -56,7 +56,7 @@ namespace MachineHuck::Gauge {
        * @brief  ゲージの量を取得
        * @return _gauge
        */
-        int GetGauge() { return _gaugePlayer; }
+        int GetGauge() { return _gauge; }
 
         /**
          * @brief  ゲージの最大値を取得
@@ -68,7 +68,7 @@ namespace MachineHuck::Gauge {
          * @brief ゲージの量を設定
          * @param gauge
          */
-        void SetGauge(const int gauge) { _gaugePlayer = gauge; }
+        void SetGauge(const int gauge) { _gauge = gauge; }
 
         /**
          * @brief ゲージ量を減少
@@ -96,8 +96,8 @@ namespace MachineHuck::Gauge {
         void SetGaugeMax(int gaugeMax) { _gaugeMax = gaugeMax; }
     private:
 
-        int _gaugePlayer{ 100 };    //!< エネルギーゲージの量
-        int _gaugeMax{ 100 }; //!< エネルギーゲージの最大値
+        //int _gauge{ 100 };    //!< エネルギーゲージの量
+        //int _gaugeMax{ 100 }; //!< エネルギーゲージの最大値
         int _gaugeCount;      //!< ゲージを減らすカウンタ
         int _gaugeTimer{ 0 };
         int _handlePl;          //エネルギーゲージ満タン

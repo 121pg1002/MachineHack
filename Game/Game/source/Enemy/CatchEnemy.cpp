@@ -4,6 +4,8 @@
 #include "../Model/ModelAnimComponent.h"
 #include "../Collision/CollisionComponent.h"
 #include "../Gauge/GaugeBase.h"
+#include "../Gauge/GaugePlayer.h"
+#include "../Gauge/GaugeEnemy.h"
 #include "../Flag/FlagData.h"
 #include "EnemyParameter.h"
 
@@ -27,6 +29,7 @@ namespace MachineHuck::Enemy {
 		_huckingRange = 0.0;
 		_catchRange = 0.0;
 		_gaugeBase->Init();
+		//_gaugeEnemy->Init(*this);
 
 
 	}
@@ -130,6 +133,7 @@ namespace MachineHuck::Enemy {
 
 			//移動していたら減らす
 			GetGaugeBase().Update(*this);
+			GetGaugeEnemy().Update(*this);
 		
 		}
 
@@ -156,6 +160,8 @@ namespace MachineHuck::Enemy {
 		_gaugeBase->Draw(*this);
 #endif
 		_state->Draw();
+
+		_gaugeEnemy->Draw(*this);
 	}
 
 	void CatchEnemy::StateBase::Draw() {
@@ -307,6 +313,7 @@ namespace MachineHuck::Enemy {
 
 			//ゲージ減少
 			_owner.GetGaugeBase().DownGauge(20);
+			_owner.GetGaugeEnemy().DownGauge(20);
 			//auto player = _owner.GetActorServer().GetDir("Player");
 
 			//auto rot = _owner.GetRotation();
@@ -419,6 +426,7 @@ namespace MachineHuck::Enemy {
 
 											//プレイヤーのゲージを減少させる
 											(*i)->GetGaugeBase().DownGauge(15);
+											(*i)->GetGaugePlayer().DownGauge(15);
 
 											//プレイヤーを無敵時間にする
 											//_invincibleTime = true;
@@ -449,6 +457,7 @@ namespace MachineHuck::Enemy {
 
 											//ハッキングされている敵のゲージを減少させる
 											(*i)->GetGaugeBase().DownGauge(15);
+											(*i)->GetGaugeEnemy().DownGauge(15);
 
 											//ハッキングされている敵をダメージ状態に変更
 											(*i)->GetState().PushBack("Damage");

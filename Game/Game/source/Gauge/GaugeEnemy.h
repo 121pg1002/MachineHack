@@ -52,10 +52,14 @@ namespace MachineHuck::Gauge {
      * @param act
      */
     void Draw(Actor::Actor& act);
+
+
+
+
   private:
 
-    int _gauge{ 100 };    //!< エネルギーゲージの量
-    int _gaugeMax{ 100 }; //!< エネルギーゲージの最大値
+    //int _gauge{ 100 };    //!< エネルギーゲージの量
+    //int _gaugeMax{ 100 }; //!< エネルギーゲージの最大値
     int _gaugeCount;      //!< ゲージを減らすカウンタ
 
    // Actor::Actor& _actor; //!< アクタークラスの参照

@@ -88,13 +88,13 @@ namespace MachineHuck::Gauge {
         _handlePl5[3] = as.GetTexture("EnergyPl54");
         _handlePl5[4] = as.GetTexture("EnergyPl55");
         _handlePl0 = act.GetGame().GetAssetServer().GetTexture("Energy0");
-        _gaugePlayer = 100;
+        _gauge = 100;
         _gaugeCount = 0;
         _gaugeTimer = 0;
     }
     void GaugePlayer::Update() {
-        if (_gaugePlayer > 100) {
-            _gaugePlayer = 100;
+        if (_gauge > 100) {
+            _gauge = 100;
        }
       _gaugeTimer++;
     }
@@ -102,47 +102,47 @@ namespace MachineHuck::Gauge {
     void GaugePlayer::Update(Actor::Actor& act) {
 
         if (_gaugeCount % 15 == 0) {
-            _gaugePlayer--;
+            _gauge--;
         }
 
         _gaugeCount++;
     }
     void GaugePlayer::DownGauge(const int gauge) {
-        _gaugePlayer -= gauge;
+        _gauge -= gauge;
     }
     void GaugePlayer::PlusGauge(const int gauge) {
-        _gaugePlayer += gauge;
+        _gauge += gauge;
     }
 
     void GaugePlayer::Draw(Actor::Actor& act) {
    
         //  GaugeBase::Draw(act);
-        auto gaugeStr = std::to_string(_gaugePlayer);
+        auto gaugeStr = std::to_string(_gauge);
         auto pos = act.GetPosition();
         auto v = ConvWorldPosToScreenPos(ToDX(pos));
         DrawString(static_cast<int>(v.x), static_cast<int>(v.y) - 250, gaugeStr.c_str(), GetColor(0, 255, 0));
         //DrawString(1000,  200, gaugeStr.c_str(), GetColor(0, 255, 0));
        // DrawGraph(static_cast<int>(v.x), static_cast<int>(v.y), _handlePl, TRUE);
 
-        if (_gaugePlayer < 1) {
+        if (_gauge < 1) {
         DrawGraph(static_cast<int>(v.x) - _cgXPosition , static_cast<int>(v.y) - _cgYPosition, _handlePl0, TRUE);
         }
-        else if (_gaugePlayer > 0 && _gaugePlayer < 21) {
+        else if (_gauge > 0 && _gauge < 21) {
         DrawGraph(static_cast<int>(v.x)-_cgXPosition, static_cast<int>(v.y) - _cgYPosition, _handlePl1[(_gaugeTimer / _aniSpeed) % _cgNum], TRUE);
         }
-        else if (_gaugePlayer > 20 && _gaugePlayer < 41) {
+        else if (_gauge > 20 && _gauge < 41) {
           DrawGraph(static_cast<int>(v.x) - _cgXPosition , static_cast<int>(v.y) - _cgYPosition, _handlePl2[(_gaugeTimer / _aniSpeed) % _cgNum], TRUE);
         }
-        else if (_gaugePlayer > 40 && _gaugePlayer < 61) {
+        else if (_gauge > 40 && _gauge < 61) {
           DrawGraph(static_cast<int>(v.x) - _cgXPosition , static_cast<int>(v.y) - _cgYPosition, _handlePl3[(_gaugeTimer / _aniSpeed) % _cgNum], TRUE);
         }
-        else if (_gaugePlayer > 60 && _gaugePlayer < 81) {
+        else if (_gauge > 60 && _gauge < 81) {
           DrawGraph(static_cast<int>(v.x) - _cgXPosition , static_cast<int>(v.y) - _cgYPosition, _handlePl4[(_gaugeTimer / _aniSpeed) % _cgNum], TRUE);
         }
-        else if (_gaugePlayer > 80 && _gaugePlayer < 100) {
+        else if (_gauge > 80 && _gauge < 100) {
           DrawGraph(static_cast<int>(v.x) - _cgXPosition , static_cast<int>(v.y) - _cgYPosition, _handlePl5[(_gaugeTimer /_aniSpeed) % _cgNum], TRUE);
         }
-        else if (_gaugePlayer > 99) {
+        else if (_gauge > 99) {
             DrawGraph(static_cast<int>(v.x) - _cgXPosition , static_cast<int>(v.y) - _cgYPosition, _handlePl, TRUE);
         }
     }

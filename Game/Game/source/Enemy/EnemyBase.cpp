@@ -9,6 +9,7 @@
 #include "EnemyBase.h"
 #include "../Actor/ActorServer.h"
 #include "../Gauge/GaugeBase.h"
+#include "../Gauge/GaugeEnemy.h"
 
 namespace MachineHuck::Enemy {
     //コンストラクタ
@@ -190,6 +191,7 @@ namespace MachineHuck::Enemy {
 
 			//移動していたら減らす
 			GetGaugeBase().Update(*this);
+			GetGaugeEnemy().Update(*this);
 		}
 
 		//主人公のカメラに移動量を送る

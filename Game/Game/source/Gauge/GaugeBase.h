@@ -95,7 +95,7 @@ namespace MachineHuck::Gauge{
          */
         void SetGaugeMax(int gaugeMax) { _gaugeMax = gaugeMax; }
 
-    private:
+    protected:
 
         int _gauge{ 100 };    //!< エネルギーゲージの量
         int _gaugeMax{ 100 }; //!< エネルギーゲージの最大値
