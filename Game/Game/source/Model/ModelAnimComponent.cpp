@@ -410,9 +410,74 @@ namespace MachineHuck::Model {
         DrawLine3D(ToDX(leftDown), ToDX(rightDown), GetColor(255, 255, 0));
         DrawLine3D(ToDX(rightUp), ToDX(leftUp), GetColor(255, 255, 0));
         DrawLine3D(ToDX(rightDown), ToDX(rightUp), GetColor(255, 255, 0));
-#endif
+
 
     }
+
+    void ModelAnimeComponent::Draw(const Actor::Actor& owner, double r, double range) {
+    
+        //Math::Vector4 lmax = owner.GetLMax() + owner.GetPosition();
+        //Math::Vector4 lmin = owner.GetLMin() + owner.GetPosition();
+
+        //DrawLine3D(ToDX(lmin), ToDX(lmax), GetColor(255, 0, 0));
+
+        auto pos = owner.GetPosition();
+
+        auto dir = owner.GetRotation();
+
+        //atan2は、時計回りを正として実装しているため、向きが逆となるため符号をマイナスにしている
+        auto rotY = -dir.GetY();
+
+        //z軸を0度とするため
+        auto nine = DX_PI / 180.0 * 90.0;
+
+
+
+        //円の描画
+        for (double i = 0.0; i < 720.0; i++)
+        {
+            double radian = DX_PI / 180.0 * i / 2.0;
+            double x = r * std::cos(radian);
+            double z = r * std::sin(radian);
+
+            Math::Vector4 move = { x, 0.0, z };
+
+            Math::Vector4 newpos = owner.GetPosition() + move;
+            DrawPixel3D(ToDX(newpos), GetColor(0, 255, 0));
+
+        }
+
+
+
+            //角度
+            auto angle = range;
+            auto rad = DX_PI / 180.0 * angle;
+
+            auto sRad = 0.0; auto eRad = 0.0;
+
+            sRad = -rad + rotY + nine;
+            eRad = rad + rotY + nine;
+
+            ////弧の左側の線
+            Math::Vector4 move = { std::cos(eRad), 0.0, std::sin(eRad) };
+
+            Math::Vector4 target;
+            //索敵範囲は赤色
+            target = owner.GetPosition() + move * r;
+            DrawLine3D(ToDX(pos), ToDX(target), GetColor(0, 0, 255));
+
+
+            ////弧の右側の線
+            move = { std::cos(sRad), 0.0, std::sin(sRad) };
+            target = owner.GetPosition() + move * r;
+            //索敵範囲は赤色
+            DrawLine3D(ToDX(pos), ToDX(target), GetColor(0, 0, 255));
+
+        
+    
+    }
+
+#endif
 
     void ModelAnimeComponent::SpecificDraw() {
 

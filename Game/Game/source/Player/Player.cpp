@@ -336,7 +336,7 @@ namespace MachineHuck::Player {
 				else{
 
 					//Circle(プレイヤー)と扇形(エネミー)の当たり判定を調べる
-					if (_collision->CircleToFan(*this, **i))	{
+					if (_collision->FanToPoint(*this, **i))	{
 						_isHit = true;
 					}
 					else{
@@ -627,9 +627,10 @@ namespace MachineHuck::Player {
 	//ダメージ
 	void Player::StateDamage::Update() {
 
+		
 		if (_owner._model->GetRepeatedCount() > 0) {
 
-			_owner._state->PopBack();
+			_owner._state->GoToState("Idle");
 
 			//プレイヤーを移動可能にする
 			//Flag::FlagData::SetDamageFlag(false);
@@ -750,10 +751,10 @@ namespace MachineHuck::Player {
 
 						//CircleとAABBの当たり判定を調べる
 						//敵の中心が入っているかどうか
-						if (_owner._collision->CircleToFan(_owner, **i, true)) {
+						if (_owner._collision->FanToPoint(_owner, **i, true)) {
 
 							////自分の中心が敵のハッキング範囲に入っているかどうか
-							if (_owner._collision->CircleToFan(**i, _owner, false)) {
+							if (_owner._collision->FanToPoint(**i, _owner, false)) {
 
 								if (_owner._actorState == ActorState::Hucking)
 								{

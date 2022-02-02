@@ -8,6 +8,7 @@
 
 #pragma once
 #include "../Actor/Actor.h"
+#include <string_view>
 
 namespace MachineHuck::Enemy {
 	class EnemyBase : public Actor::Actor
@@ -22,7 +23,7 @@ namespace MachineHuck::Enemy {
 		{
 			Base = 0,
 			Tackle,
-			Grab,
+			Catch,
 		};
 
 		enum class STATUS
@@ -43,10 +44,26 @@ namespace MachineHuck::Enemy {
 
 		virtual TypeId GetTypeId() const override = 0;
 
+		/**
+		 * @brief  ハッキングされていないときの移動       
+		 * @param  enemyName
+		 */
+		virtual void Move(std::string_view enemyName);
+		
+		/**
+         * @brief  ハッキングされたときの移動  
+         * @param  lx 横方向の傾き
+         * @param  ly 縦方向の傾き
+         */
+		const void HuckedMove(const double lx, const double ly);
+
+		void SetForwardSpeed(float forwardSpeed) { _forwardSpeed = forwardSpeed; }
+
 	protected:
 
 
 		STATUS _status{ STATUS::WAIT };
+		double _forwardSpeed;
 
 	};
 }
