@@ -57,6 +57,7 @@ namespace MachineHuck::Enemy {
         auto jsRoot = Json::parse(jsonFile);
         auto j = jsRoot["StageEnemy"];
         _eStageParamV.clear();
+        _vLevelRoutine.clear();
         //敵の種類で読み込むjsonを変える
         //if (filePath.find("tackle")) {
 
@@ -97,15 +98,17 @@ namespace MachineHuck::Enemy {
 
                         const std::string& fileName = jsRoot["StageEnemy"].at(i)["filename"];
                         //auto& handleName = jsRoot["Stage"].at(i)["handlename"];
-                        const double& tx = jsRoot["StageEnemy"].at(i)["tx"];
-                        const double& ty = jsRoot["StageEnemy"].at(i)["ty"];
-                        const double& tz = jsRoot["StageEnemy"].at(i)["tz"];
-                        const double& rx = jsRoot["StageEnemy"].at(i)["rx"];
-                        const double& ry = jsRoot["StageEnemy"].at(i)["ry"];
-                        const double& rz = jsRoot["StageEnemy"].at(i)["rz"];
-                        const double& sx = jsRoot["StageEnemy"].at(i)["sx"];
-                        const double& sy = jsRoot["StageEnemy"].at(i)["sy"];
-                        const double& sz = jsRoot["StageEnemy"].at(i)["sz"];
+                        const double& tx   = jsRoot["StageEnemy"].at(i)["tx"];
+                        const double& ty   = jsRoot["StageEnemy"].at(i)["ty"];
+                        const double& tz   = jsRoot["StageEnemy"].at(i)["tz"];
+                        const double& rx   = jsRoot["StageEnemy"].at(i)["rx"];
+                        const double& ry   = jsRoot["StageEnemy"].at(i)["ry"];
+                        const double& rz   = jsRoot["StageEnemy"].at(i)["rz"];
+                        const double& sx   = jsRoot["StageEnemy"].at(i)["sx"];
+                        const double& sy   = jsRoot["StageEnemy"].at(i)["sy"];
+                        const double& sz   = jsRoot["StageEnemy"].at(i)["sz"];
+                        const int& level   = jsRoot["StageEnemy"].at(i)["level"];  //!< レベル
+                        const int& routine = jsRoot["StageEnemy"].at(i)["routine"];//!< 思考ルーチン
 
                         Math::Vector4 pos = { tx, ty, tz };
                         Math::Vector4 rot = { rx, ry, rz };
@@ -120,6 +123,11 @@ namespace MachineHuck::Enemy {
                         eSP.SetRot(rot);
                         eSP.SetScale(scale);
 
+
+                        
+                        _vLevelRoutine.emplace_back(std::make_pair(level, routine));
+
+
                         //ブロック一つ一つを格納
                         _eStageParamV.emplace_back(eSP);
 
@@ -127,6 +135,11 @@ namespace MachineHuck::Enemy {
 
                     //フロア番号で1フロア分を格納
                     _eStageNumMap.emplace(stageNo, _eStageParamV);
+
+                    //フロア番号で1フロア分を格納
+                    _vLevelRoutineMap.emplace(stageNo, _vLevelRoutine);
+
+
                 }
                 //    auto sP = stageVector[k];
                 //    auto pos = sP.GetPosition();

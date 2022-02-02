@@ -12,6 +12,30 @@ namespace MachineHuck::Parameter{
 	class EParam {
 	public:
 
+
+		/**
+		 * @brief  敵のレベルを取得する
+		 * @return _level
+		 */
+		int GetLevel() { return _level; }
+
+		/**
+		 * @brief  敵のレベルを保存
+		 * @param  level
+		 */
+		void SetLevel(int level) { _level = level; }
+
+		/** 
+		 * @brief  敵の思考ルーチン番号を取得      
+		 * @return _routine
+		 */
+		int GetRoutine() { return _routine; }
+
+		/**
+		 * @brief  思考ルーチン番号を保存       
+		 * @param  routine
+		 */
+		void SetRoutine(int num) { _routine = num; }
 		/**
 		 * @brief  敵の種類を保存
 		 * @param  type
@@ -49,6 +73,9 @@ namespace MachineHuck::Parameter{
 		void SetSpeed(double speed) { _speed = speed; }
 
 	private:
+
+		int _level; //!< 敵のレベル
+		int _routine; //!< 思考ルーチン
 
 		//std::string _type{ "" };    //!< 種類
 		//int    _level{0};              //!< レベル

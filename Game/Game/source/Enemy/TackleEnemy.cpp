@@ -43,10 +43,17 @@ namespace MachineHuck::Enemy {
 
 	}
 
-	void TackleEnemy::LoadJson(const std::string& filePath)
-	{
+	void TackleEnemy::LoadJson(const std::string& filePath){
+
 		auto eParam = std::make_unique<EnemyParameter>();
 		eParam->LoadEnemyParam(filePath);
+
+		//レベルと思考ルーチンを読み込む
+		if (!LoadLevelRoutine()) {
+			printfDx("タックルにおけるレベルおよび思考ルーチン読み込み失敗");
+			return;
+		}
+
 
 		//2つめの値がレベル
 		_r = eParam->GetEnemyParam("r", 0);
@@ -58,6 +65,14 @@ namespace MachineHuck::Enemy {
 		_huckingRange = eParam->GetEnemyParam("searchrange", 0);////////←とりあえず、仮
 
 
+	}
+
+	bool TackleEnemy::LoadLevelRoutine() {
+
+
+
+		return false;
+	
 	}
 
 	void TackleEnemy::Update() {

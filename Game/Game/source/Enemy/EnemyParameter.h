@@ -24,6 +24,8 @@ namespace MachineHuck::Enemy {
 	//using StageMap = std::unordered_map<std::string, Type>;
 	using DoubleMap = std::unordered_map<std::string, double>;
 
+	using LevelRoutine = std::vector<std::pair<int, int>>; //!< レベルと思考ルーチン番号を保存
+
 	class EnemyParameter
 	{
 	public:
@@ -71,6 +73,13 @@ namespace MachineHuck::Enemy {
 		 //std::unordered_map<std::string, Parameter::EStageParam>GetStageEnemyParameter() { return _enemyStageParamMap; }
 		std::unordered_map<int, ESMV> GetFloorEnemyMap() { return _eStageNumMap; }
 
+
+		/**
+		 * @brief  フロア番号をキーとしたレベルと思考ルーチン番号のコンテナを取得        
+		 * @return _vLevelRoutineMap
+		 */
+		std::unordered_map<int, LevelRoutine> GetLevelRoutineMap() { return _vLevelRoutineMap; }
+
 	private:
 		//std::unordered_map<std::string, Parameter::EStageParam>     _enemyStageParamMap; //!< 敵のステージ配置を保存
 		//std::unordered_map<std::string, Type>            _eType;              //!< 敵の種類をキーとした要素を保存
@@ -85,6 +94,9 @@ namespace MachineHuck::Enemy {
 
 		std::vector<DoubleMap> _vDoubleMap; //!< double型を格納するコンテナ
 
+		LevelRoutine _vLevelRoutine; //!< レベルと思考ルーチン番号を保存
+
+		std::unordered_map<int, LevelRoutine> _vLevelRoutineMap; //!< フロア番号ごとに保存
 		//std::unordered_map<std::string, Parameter::EParam> _enemyParamMap;//!< 敵のパラメーターを保存
 		//std::unordered_map<std::string, double> _enemyParameterMap;//!< 敵のパラメーターを保存
 

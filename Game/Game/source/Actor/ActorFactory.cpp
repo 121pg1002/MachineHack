@@ -7,10 +7,12 @@
  *********************************************************************/
 
 #include "ActorFactory.h"
+#include <algorithm>
 #include "ActorServer.h"
 #include "../Player/Player.h"
 #include "../Enemy/TackleEnemy.h"
 #include "../Enemy/CatchEnemy.h"
+#include "../Enemy/EnemyParameter.h"
 #include "../Stage/Stage.h"
 #include "../Model/ModelAnimComponent.h"
 #include "../State/StateComponent.h"
@@ -177,6 +179,26 @@ namespace MachineHuck::Actor {
                         actor->SetPosition(floorEnemy.GetPosition());
                         actor->SetRotation(floorEnemy.GetRotation());
                         actor->SetScale(floorEnemy.GetScale());
+
+                       //auto levelRoutineMap = actor->GetGame().GetEnemyParameter().GetLevelRoutineMap();
+
+                       ////vectorのイテレータを取得
+                       ////auto iter = std::find(spawnFloor.begin(), spawnFloor.end(), floorEnemy);
+
+                       //////インデックス番号を取得
+                       ////auto num = std::distance(spawnFloor.begin(), iter);
+                       //// 
+                       //auto vLevelRoutine = levelRoutineMap[no];
+
+                       //////対応する番号の要素を取得
+                       //auto&& [level, routine] = vLevelRoutine[num];
+
+
+                       //actor->SetLevel(level);
+                       //actor->SetRoutine(routine);
+                       
+                        
+
                         _game.GetActorServer().Add(std::move(actor));
 
                     }
@@ -253,6 +275,8 @@ namespace MachineHuck::Actor {
         //for(int i =0; i < )
 
         enemy->LoadJson("resource/json/tackle.json");
+
+
 
         //↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓は、他の生成するときに同じ敵の種類のものを書く
         //enemy->LoadJson("resource/json/Grab.json");
