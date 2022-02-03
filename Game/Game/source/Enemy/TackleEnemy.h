@@ -23,8 +23,6 @@ namespace MachineHuck::Enemy {
         //virtual void Input(InputComponent& input) override;
         void LoadJson(const std::string& filePath);
 
-        bool LoadLevelRoutine();
-
         virtual void Update() override;
         void Input(AppFrame::Input::InputComponent& input) override;
         void Draw() override;

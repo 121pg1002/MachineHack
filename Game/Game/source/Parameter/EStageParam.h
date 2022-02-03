@@ -22,6 +22,17 @@ namespace MachineHuck::Parameter {
 		std::string GetType() { return  _type; };
 
 
+		/**
+		 * @brief  “G‚ÌƒŒƒxƒ‹‚ğæ“¾‚·‚é
+		 * @return _level
+		 */
+		int GetLevel() { return _level; }
+
+		/**
+		 * @brief  “G‚ÌƒŒƒxƒ‹‚ğ•Û‘¶
+		 * @param  level
+		 */
+		void SetLevel(int level) { _level = level; }
 
 		/**
 		 * @brief  ¶¬‰ñ”
@@ -31,6 +42,7 @@ namespace MachineHuck::Parameter {
 
 	private:
 
+		int _level; //!< “G‚ÌƒŒƒxƒ‹
 		int _progress{ 0 }; //!< ¶¬‰ñ”
 		std::string _type;
 	};

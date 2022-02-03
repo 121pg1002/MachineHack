@@ -175,13 +175,6 @@ namespace MachineHuck::Actor {
         void SetScale(const Math::Vector4& scale) { _scale = scale; }
         Math::Vector4 GetScale() const { return _scale; }
 
-        
-        void SetLevel(const int& level) { _level = level; }
-        int GetLevel() const { return _level; }
-        void SetRoutine(const int& routine) { _routine = routine; }
-        int GetRoutine() const { return _routine; }
-
-
         void SetMove(const Math::Vector4& move) { _move = move; }
         Math::Vector4 GetMove() const { return _move; }
 
@@ -328,9 +321,6 @@ namespace MachineHuck::Actor {
         Math::Vector4 _huckedMove{ 0.0, 0.0, 0.0 };
 
         bool _shadowmapflg;  //シャドウマップへの描画をするかどうかのフラグ
-
-        int _level;   //!< レベル
-        int _routine; //!< 思考ルーチン番号
 
     private:
 
