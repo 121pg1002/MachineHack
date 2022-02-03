@@ -76,7 +76,7 @@ namespace MachineHuck::Enemy {
 
 		STATUS _status{ STATUS::WAIT };
 		double _forwardSpeed;
-		int _numberTimes{200};
+		int _numberTimes{-1};
 
 	};
 }
