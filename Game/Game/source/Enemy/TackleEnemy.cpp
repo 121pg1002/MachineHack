@@ -101,7 +101,7 @@ namespace MachineHuck::Enemy {
 		}
 
 		if (_status != STATUS::DYING && _status != STATUS::CHASE) {
-			Move("TackleEnemy", 1);
+			Move("TackleEnemy");
 		}
 
 		if (_status == STATUS::ISHUCKED) {
@@ -435,7 +435,7 @@ namespace MachineHuck::Enemy {
 		//}
 		/*_owner.LockOn();*/
 		Math::Vector4 oldPos = _owner.GetPosition();
-		_owner.Move("TackleEnemy", 1);
+		_owner.Move("TackleEnemy");
 
 		
 		//í«ê’èÛë‘Ç©

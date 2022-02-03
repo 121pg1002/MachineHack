@@ -48,7 +48,7 @@ namespace MachineHuck::Enemy {
 		 * @brief  ハッキングされていないときの移動       
 		 * @param  enemyName
 		 */
-		virtual void Move(std::string_view enemyName, int num);
+		virtual void Move(std::string_view enemyName);
 		
 		/**
          * @brief  ハッキングされたときの移動  
@@ -57,18 +57,6 @@ namespace MachineHuck::Enemy {
          */
 		const void HuckedMove(const double lx, const double ly);
 
-		/**
-		 * @brief 索敵中の移動ルーチン
-		 * @param num      ルーチン番号
-		 * @param speed    移動スピード
-		 * @param numRange 回数範囲
-		 */
-		void RoutineMove(int num, double speed, int numRange = 100);
-
-		/**
-		 * @brief 前方向への速度
-		 * @param forwardSpeed
-		 */
 		void SetForwardSpeed(float forwardSpeed) { _forwardSpeed = forwardSpeed; }
 
 	protected:
@@ -76,7 +64,6 @@ namespace MachineHuck::Enemy {
 
 		STATUS _status{ STATUS::WAIT };
 		double _forwardSpeed;
-		int _numberTimes{200};
 
 	};
 }
