@@ -22,11 +22,11 @@ namespace MachineHuck::Enemy {
 	void EnemyBase::Move(std::string_view enemyName, int num) {
 
 		//// プレイヤーに向かう単位ベクトル
-        //auto forward = GetForward();
-        //// プレイヤーに向かう移動量ベクトル
-        //auto delta = forward * _forwardSpeed;
-        //// プレイヤーに向かって移動
-        //_position = _position + delta;
+//auto forward = GetForward();
+//// プレイヤーに向かう移動量ベクトル
+//auto delta = forward * _forwardSpeed;
+//// プレイヤーに向かって移動
+//_position = _position + delta;
 
 		_oldPos = _position;
 
@@ -84,7 +84,7 @@ namespace MachineHuck::Enemy {
 
 
 			//索敵中の移動ルーチン
-			//RoutineMove(num, 2.0);
+			RoutineMove(num, 2.0);
 
 		}
 
@@ -194,11 +194,11 @@ namespace MachineHuck::Enemy {
 		if (num == 1) {
 
 			if (_numberTimes < numRange/2) {
-				 move = { speed, 0.0, 0.0 };
+				Math::Vector4 move = { speed, 0.0, 0.0 };
 
 			}
 			else {
-				 move = { -speed, 0.0, 0.0 };
+				Math::Vector4 move = { -speed, 0.0, 0.0 };
 
 
 			}
@@ -208,10 +208,10 @@ namespace MachineHuck::Enemy {
 		else if (num == 2) {
 
 			if (_numberTimes < numRange/2) {
-				 move = { 0.0, 0.0, speed };
+				Math::Vector4 move = { 0.0, 0.0, speed };
 			}
 			else {
-				 move = { 0.0, 0.0, -speed };
+				Math::Vector4 move = { 0.0, 0.0, -speed };
 			}
 
 
@@ -221,21 +221,21 @@ namespace MachineHuck::Enemy {
 
 			if (_numberTimes < numRange/4) {
 				
-				 move = { 0.0, 0.0, speed };
+				Math::Vector4 move = { 0.0, 0.0, speed };
 
 			}
 			else if (numRange / 4 <= _numberTimes && _numberTimes < numRange / 4 * 2) {
 			
-				 move = { speed, 0.0, 0.0 };
+				Math::Vector4 move = { speed, 0.0, 0.0 };
 			
 			}
 			else if (numRange / 4 * 2 <= _numberTimes && _numberTimes < numRange / 4 * 3) {
 			
-				 move = { 0.0, 0.0, -speed };
+				Math::Vector4 move = { 0.0, 0.0, -speed };
 			
 			}
 			else {
-				 move = { -speed, 0.0, 0.0 };
+				Math::Vector4 move = { -speed, 0.0, 0.0 };
 			}
 
 		
