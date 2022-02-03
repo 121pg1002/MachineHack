@@ -11,10 +11,10 @@
 #include <DxLib.h>
 #include "../Actor/Actor.h"
 namespace {
-  constexpr int  _aniSpeed= 10;//アニメーション速度
-  constexpr int _cgNum = 5;//画像枚数
-  constexpr float _cgXPosition = 85.0/2;//エネルギーゲージの配置調整用変数
-  constexpr float _cgYPosition = 140.0;
+    constexpr int  _aniSpeed = 10;//アニメーション速度
+    constexpr int _cgNum = 5;//画像枚数
+    constexpr float _cgXPosition = 85.0 / 2;//エネルギーゲージの配置調整用変数
+    constexpr float _cgYPosition = 140.0;
 }
 namespace MachineHuck::Gauge {
 
@@ -26,42 +26,42 @@ namespace MachineHuck::Gauge {
 
     void GaugePlayer::Init(Actor::Actor& act) {
         const AppFrame::Asset::AssetServer::TextureMap texturePlayerGauge{
-     /*     {"EnergyPl1", {"energy/playerEnergy1.png", 5, 1, 425, 85}},
-          {"EnergyPl2", {"energy/playerEnergy2.png", 5, 1, 425, 85}},
-          {"EnergyPl3", {"energy/playerEnergy3.png", 5, 1, 425, 85}},
-          {"EnergyPl4", {"energy/playerEnergy4.png", 5, 1, 425, 85}},
-          {"EnergyPl5", {"energy/playerEnergy5.png", 5, 1, 425, 85}},*/
-          {"EnergyPl6", {"energy/playerEnergy6.png", 1, 1, 85, 85}},
-          {"EnergyPl11", {"energy/kari/01.png", 1, 1, 85, 85}},
-          {"EnergyPl12", {"energy/kari/02.png", 1, 1, 85, 85}},
-          {"EnergyPl13", {"energy/kari/03.png", 1, 1, 85, 85}},
-          {"EnergyPl14", {"energy/kari/04.png", 1, 1, 85, 85}},
-          {"EnergyPl15", {"energy/kari/05.png", 1, 1, 85, 85}},
-          {"EnergyPl21", {"energy/kari/20/01.png", 1, 1, 85, 85}},
-          {"EnergyPl22", {"energy/kari/20/02.png", 1, 1, 85, 85}},
-          {"EnergyPl23", {"energy/kari/20/03.png", 1, 1, 85, 85}},
-          {"EnergyPl24", {"energy/kari/20/04.png", 1, 1, 85, 85}},
-          {"EnergyPl25", {"energy/kari/20/05.png", 1, 1, 85, 85}},
-          {"EnergyPl31", {"energy/kari/40/01.png", 1, 1, 85, 85}},
-          {"EnergyPl32", {"energy/kari/40/02.png", 1, 1, 85, 85}},
-          {"EnergyPl33", {"energy/kari/40/03.png", 1, 1, 85, 85}},
-          {"EnergyPl34", {"energy/kari/40/04.png", 1, 1, 85, 85}},
-          {"EnergyPl35", {"energy/kari/40/05.png", 1, 1, 85, 85}},
-          {"EnergyPl41", {"energy/kari/60/01.png", 1, 1, 85, 85}},
-          {"EnergyPl42", {"energy/kari/60/02.png", 1, 1, 85, 85}},
-          {"EnergyPl43", {"energy/kari/60/03.png", 1, 1, 85, 85}},
-          {"EnergyPl44", {"energy/kari/60/04.png", 1, 1, 85, 85}},
-          {"EnergyPl45", {"energy/kari/60/05.png", 1, 1, 85, 85}},
-          {"EnergyPl51", {"energy/kari/80/01.png", 1, 1, 85, 85}},
-          {"EnergyPl52", {"energy/kari/80/02.png", 1, 1, 85, 85}},
-          {"EnergyPl53", {"energy/kari/80/03.png", 1, 1, 85, 85}},
-          {"EnergyPl54", {"energy/kari/80/04.png", 1, 1, 85, 85}},
-          {"EnergyPl55", {"energy/kari/80/05.png", 1, 1, 85, 85}}
+            /*     {"EnergyPl1", {"energy/playerEnergy1.png", 5, 1, 425, 85}},
+                 {"EnergyPl2", {"energy/playerEnergy2.png", 5, 1, 425, 85}},
+                 {"EnergyPl3", {"energy/playerEnergy3.png", 5, 1, 425, 85}},
+                 {"EnergyPl4", {"energy/playerEnergy4.png", 5, 1, 425, 85}},
+                 {"EnergyPl5", {"energy/playerEnergy5.png", 5, 1, 425, 85}},*/
+                 {"EnergyPl6", {"energy/playerEnergy6.png", 1, 1, 85, 85}},
+                 {"EnergyPl11", {"energy/kari/01.png", 1, 1, 85, 85}},
+                 {"EnergyPl12", {"energy/kari/02.png", 1, 1, 85, 85}},
+                 {"EnergyPl13", {"energy/kari/03.png", 1, 1, 85, 85}},
+                 {"EnergyPl14", {"energy/kari/04.png", 1, 1, 85, 85}},
+                 {"EnergyPl15", {"energy/kari/05.png", 1, 1, 85, 85}},
+                 {"EnergyPl21", {"energy/kari/20/01.png", 1, 1, 85, 85}},
+                 {"EnergyPl22", {"energy/kari/20/02.png", 1, 1, 85, 85}},
+                 {"EnergyPl23", {"energy/kari/20/03.png", 1, 1, 85, 85}},
+                 {"EnergyPl24", {"energy/kari/20/04.png", 1, 1, 85, 85}},
+                 {"EnergyPl25", {"energy/kari/20/05.png", 1, 1, 85, 85}},
+                 {"EnergyPl31", {"energy/kari/40/01.png", 1, 1, 85, 85}},
+                 {"EnergyPl32", {"energy/kari/40/02.png", 1, 1, 85, 85}},
+                 {"EnergyPl33", {"energy/kari/40/03.png", 1, 1, 85, 85}},
+                 {"EnergyPl34", {"energy/kari/40/04.png", 1, 1, 85, 85}},
+                 {"EnergyPl35", {"energy/kari/40/05.png", 1, 1, 85, 85}},
+                 {"EnergyPl41", {"energy/kari/60/01.png", 1, 1, 85, 85}},
+                 {"EnergyPl42", {"energy/kari/60/02.png", 1, 1, 85, 85}},
+                 {"EnergyPl43", {"energy/kari/60/03.png", 1, 1, 85, 85}},
+                 {"EnergyPl44", {"energy/kari/60/04.png", 1, 1, 85, 85}},
+                 {"EnergyPl45", {"energy/kari/60/05.png", 1, 1, 85, 85}},
+                 {"EnergyPl51", {"energy/kari/80/01.png", 1, 1, 85, 85}},
+                 {"EnergyPl52", {"energy/kari/80/02.png", 1, 1, 85, 85}},
+                 {"EnergyPl53", {"energy/kari/80/03.png", 1, 1, 85, 85}},
+                 {"EnergyPl54", {"energy/kari/80/04.png", 1, 1, 85, 85}},
+                 {"EnergyPl55", {"energy/kari/80/05.png", 1, 1, 85, 85}}
         };
         auto& as = act.GetGame().GetAssetServer();
         as.LoadTextures(texturePlayerGauge);
         _handlePl = as.GetTexture("EnergyPl6");
-//        _handlePl1[5] = as.GetTextureAni("EnergyPl1",5);
+        //        _handlePl1[5] = as.GetTextureAni("EnergyPl1",5);
         _handlePl1[0] = as.GetTexture("EnergyPl11");
         _handlePl1[1] = as.GetTexture("EnergyPl12");
         _handlePl1[2] = as.GetTexture("EnergyPl13");
@@ -93,10 +93,10 @@ namespace MachineHuck::Gauge {
         _gaugeTimer = 0;
     }
     void GaugePlayer::Update() {
-        if (_gauge > 100) {
-            _gauge = 100;
-       }
-      _gaugeTimer++;
+        if (_gauge > _gaugeMax) {
+            _gauge = _gaugeMax;
+        }
+        _gaugeTimer++;
     }
 
     void GaugePlayer::Update(Actor::Actor& act) {
@@ -115,35 +115,41 @@ namespace MachineHuck::Gauge {
     }
 
     void GaugePlayer::Draw(Actor::Actor& act) {
-   
+
         //  GaugeBase::Draw(act);
         auto gaugeStr = std::to_string(_gauge);
+        auto gaugemaxStr = std::to_string(_gaugeMax);
         auto pos = act.GetPosition();
         auto v = ConvWorldPosToScreenPos(ToDX(pos));
         DrawString(static_cast<int>(v.x), static_cast<int>(v.y) - 250, gaugeStr.c_str(), GetColor(0, 255, 0));
+        DrawString(static_cast<int>(v.x), static_cast<int>(v.y) - 200, gaugemaxStr.c_str(), GetColor(0, 255, 0));
         //DrawString(1000,  200, gaugeStr.c_str(), GetColor(0, 255, 0));
        // DrawGraph(static_cast<int>(v.x), static_cast<int>(v.y), _handlePl, TRUE);
 
-        if (_gauge < 1) {
-        DrawGraph(static_cast<int>(v.x) - _cgXPosition , static_cast<int>(v.y) - _cgYPosition, _handlePl0, TRUE);
+        double gauge = static_cast<double>(_gauge);
+        double gaugemax = static_cast<double>(_gaugeMax);
+
+
+        if ((gauge / gaugemax) < 0.0) {
+            DrawGraph(static_cast<int>(v.x) - _cgXPosition, static_cast<int>(v.y) - _cgYPosition, _handlePl0, TRUE);
         }
-        else if (_gauge > 0 && _gauge < 21) {
-        DrawGraph(static_cast<int>(v.x)-_cgXPosition, static_cast<int>(v.y) - _cgYPosition, _handlePl1[(_gaugeTimer / _aniSpeed) % _cgNum], TRUE);
+        else if ((gauge / gaugemax) > 0.0 && (gauge / gaugemax) < 0.2) {
+            DrawGraph(static_cast<int>(v.x) - _cgXPosition, static_cast<int>(v.y) - _cgYPosition, _handlePl1[(_gaugeTimer / _aniSpeed) % _cgNum], TRUE);
         }
-        else if (_gauge > 20 && _gauge < 41) {
-          DrawGraph(static_cast<int>(v.x) - _cgXPosition , static_cast<int>(v.y) - _cgYPosition, _handlePl2[(_gaugeTimer / _aniSpeed) % _cgNum], TRUE);
+        else if ((gauge / gaugemax) > 0.2 && (gauge / gaugemax) < 0.4) {
+            DrawGraph(static_cast<int>(v.x) - _cgXPosition, static_cast<int>(v.y) - _cgYPosition, _handlePl2[(_gaugeTimer / _aniSpeed) % _cgNum], TRUE);
         }
-        else if (_gauge > 40 && _gauge < 61) {
-          DrawGraph(static_cast<int>(v.x) - _cgXPosition , static_cast<int>(v.y) - _cgYPosition, _handlePl3[(_gaugeTimer / _aniSpeed) % _cgNum], TRUE);
+        else if ((gauge / gaugemax) > 0.4 && (gauge / gaugemax) < 0.6) {
+            DrawGraph(static_cast<int>(v.x) - _cgXPosition, static_cast<int>(v.y) - _cgYPosition, _handlePl3[(_gaugeTimer / _aniSpeed) % _cgNum], TRUE);
         }
-        else if (_gauge > 60 && _gauge < 81) {
-          DrawGraph(static_cast<int>(v.x) - _cgXPosition , static_cast<int>(v.y) - _cgYPosition, _handlePl4[(_gaugeTimer / _aniSpeed) % _cgNum], TRUE);
+        else if ((gauge / gaugemax) > 0.6 && (gauge / gaugemax) < 0.8) {
+            DrawGraph(static_cast<int>(v.x) - _cgXPosition, static_cast<int>(v.y) - _cgYPosition, _handlePl4[(_gaugeTimer / _aniSpeed) % _cgNum], TRUE);
         }
-        else if (_gauge > 80 && _gauge < 100) {
-          DrawGraph(static_cast<int>(v.x) - _cgXPosition , static_cast<int>(v.y) - _cgYPosition, _handlePl5[(_gaugeTimer /_aniSpeed) % _cgNum], TRUE);
+        else if ((gauge / gaugemax) > 0.8 && (gauge / gaugemax) < 1.0) {
+            DrawGraph(static_cast<int>(v.x) - _cgXPosition, static_cast<int>(v.y) - _cgYPosition, _handlePl5[(_gaugeTimer / _aniSpeed) % _cgNum], TRUE);
         }
-        else if (_gauge > 99) {
-            DrawGraph(static_cast<int>(v.x) - _cgXPosition , static_cast<int>(v.y) - _cgYPosition, _handlePl, TRUE);
+        else if (gauge >= gaugemax) {
+            DrawGraph(static_cast<int>(v.x) - _cgXPosition, static_cast<int>(v.y) - _cgYPosition, _handlePl, TRUE);
         }
     }
 }

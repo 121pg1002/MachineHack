@@ -158,6 +158,15 @@
     <ClCompile Include="source\Enemy\CatchEnemy.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="source\Item\Item.cpp">
+      <Filter>Item</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Item\ItemParameter.cpp">
+      <Filter>Item</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Parameter\IStageParam.cpp">
+      <Filter>Parameter</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Enemy">
@@ -222,6 +231,9 @@
     </Filter>
     <Filter Include="Flag">
       <UniqueIdentifier>{ade52994-b96d-4bb0-9a85-8c02979ce85b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Item">
+      <UniqueIdentifier>{bb50e74c-876a-4038-a74e-629e912213cb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -386,6 +398,15 @@
     </ClInclude>
     <ClInclude Include="source\Enemy\CatchEnemy.h">
       <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Item\Item.h">
+      <Filter>Item</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Item\ItemParameter.h">
+      <Filter>Item</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Parameter\IStageParam.h">
+      <Filter>Parameter</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

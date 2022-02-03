@@ -57,7 +57,8 @@ namespace MachineHuck::Actor {
             Enemy,
             Stage,
             Gimmick,
-            ShadowMap
+            ShadowMap,
+            Item
         };
 
         enum class ActorState {
@@ -107,6 +108,12 @@ namespace MachineHuck::Actor {
          * @return  TypeId::Enemy
          */
         TypeId IsEnemy() const { return TypeId::Enemy; }
+
+        /**
+        * @brief   エネミーかどうか
+        * @return  TypeId::Enemy
+        */
+        TypeId IsItem() const { return TypeId::Item; }
 
         /**
          * 

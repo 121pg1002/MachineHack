@@ -7,16 +7,19 @@
  *********************************************************************/
 
 #include "ActorFactory.h"
+#include <algorithm>
 #include "ActorServer.h"
 #include "../Player/Player.h"
 #include "../Enemy/TackleEnemy.h"
 #include "../Enemy/CatchEnemy.h"
+#include "../Enemy/EnemyParameter.h"
 #include "../Stage/Stage.h"
 #include "../Model/ModelAnimComponent.h"
 #include "../State/StateComponent.h"
 #include "../Camera/CameraComponent.h"
 #include "../Gimmick/DamageFloorGimmick.h"
 #include "../Gimmick/BrokenWall.h"
+#include "../Item/Item.h"
 
 namespace Camera = MachineHuck::Camera;
 
@@ -76,7 +79,16 @@ namespace MachineHuck::Actor {
         _spawnProgress = 0;
         _progress = 0;
         _eStageParamVMap = eStageParamVMap;
+
     }
+    void ActorFactory::SetSpawnTable(std::unordered_map<int, ISMV> vIStageParamMap) {
+        _spawnProgress = 0;
+        _progress = 0;
+        _iStageParamVMap = vIStageParamMap;
+
+    }
+
+
 
     //void ActorFactory::UpdateSpawn() {
     //    while (_spawnTable.size() > _spawnProgress) {
@@ -130,23 +142,25 @@ namespace MachineHuck::Actor {
 
             }
 
-            //前のフロアのエネミーを削除する
+            //前のフロアのエネミーとアイテムを削除する
             for (auto i = _game.GetActorServer().GetActors().begin(); i < _game.GetActorServer().GetActors().end(); i++) {
-            
+
                 //エネミーかどうか
-                if ((*i)->GetTypeId() == (*i)->IsEnemy()) {
-                
+                if ((*i)->GetTypeId() == (*i)->IsEnemy() || (*i)->GetTypeId() == (*i)->IsItem()) {
+
                     //ハッキング中かどうか
                     if ((*i)->IsHucked()) {
-                    
+
                         continue;
                     }
 
                     (*i)->SetDead();
-                    
+
                 }
-            
+
             }
+
+
 
             ////前のステージ番号を更新
             _oldStageNo = _currentStageNo;
@@ -165,7 +179,6 @@ namespace MachineHuck::Actor {
                 for (auto no : num) {
 
                     auto& spawnFloor = _eStageParamVMap[no];
-
                     //新しい描画フロアのエネミーをリスポーンさせる
                     for (auto&& floorEnemy : spawnFloor) {
 
@@ -177,9 +190,66 @@ namespace MachineHuck::Actor {
                         actor->SetPosition(floorEnemy.GetPosition());
                         actor->SetRotation(floorEnemy.GetRotation());
                         actor->SetScale(floorEnemy.GetScale());
+
+                        //auto levelRoutineMap = actor->GetGame().GetEnemyParameter().GetLevelRoutineMap();
+
+                        ////vectorのイテレータを取得
+                        ////auto iter = std::find(spawnFloor.begin(), spawnFloor.end(), floorEnemy);
+
+                        //////インデックス番号を取得
+                        ////auto num = std::distance(spawnFloor.begin(), iter);
+                        //// 
+                        //auto vLevelRoutine = levelRoutineMap[no];
+
+                        //////対応する番号の要素を取得
+                        //auto&& [level, routine] = vLevelRoutine[num];
+
+
+                        //actor->SetLevel(level);
+                        //actor->SetRoutine(routine);
+
+
+
                         _game.GetActorServer().Add(std::move(actor));
 
                     }
+                    auto& spawnFloori = _iStageParamVMap[no];
+                    //新しい描画フロアのエネミーをリスポーンさせる
+                    for (auto&& floorItem : spawnFloori) {
+
+                        auto&& actor = Create("Item");
+
+                        //auto pos = floor.GetPosition();
+                        //Math::Vector4 dif = {};
+
+                        actor->SetPosition(floorItem.GetPosition());
+                        actor->SetRotation(floorItem.GetRotation());
+                        actor->SetScale(floorItem.GetScale());
+
+                        //auto levelRoutineMap = actor->GetGame().GetEnemyParameter().GetLevelRoutineMap();
+
+                        ////vectorのイテレータを取得
+                        ////auto iter = std::find(spawnFloor.begin(), spawnFloor.end(), floorEnemy);
+
+                        //////インデックス番号を取得
+                        ////auto num = std::distance(spawnFloor.begin(), iter);
+                        //// 
+                        //auto vLevelRoutine = levelRoutineMap[no];
+
+                        //////対応する番号の要素を取得
+                        //auto&& [level, routine] = vLevelRoutine[num];
+
+
+                        //actor->SetLevel(level);
+                        //actor->SetRoutine(routine);
+
+
+
+                        _game.GetActorServer().Add(std::move(actor));
+
+                    }
+
+
 
 
 
@@ -188,6 +258,7 @@ namespace MachineHuck::Actor {
 
 
             }
+
 
 
 
@@ -212,7 +283,7 @@ namespace MachineHuck::Actor {
         // プレイヤーの生成
         auto player = std::make_unique<Player::Player>(game);
         player->SetCameraComponent(camera);
-        player->SetPosition({ -Differ * 5.0 + Differ* 0.5, 0, Differ * 0.5 });
+        player->SetPosition({ -Differ * 5.0 + Differ * 0.5, 0, Differ * 0.5 });
         player->SetRotation({ 0.5, 0.0, 0.0 });
 
         // モデルの読み込みと生成
@@ -253,6 +324,8 @@ namespace MachineHuck::Actor {
         //for(int i =0; i < )
 
         enemy->LoadJson("resource/json/tackle.json");
+
+
 
         //↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓は、他の生成するときに同じ敵の種類のものを書く
         //enemy->LoadJson("resource/json/Grab.json");
@@ -361,7 +434,7 @@ namespace MachineHuck::Actor {
         state->Register("Catch", std::make_shared<Enemy::CatchEnemy::StateCatch>(*enemy));
         state->Register("CatchAfter", std::make_shared<Enemy::CatchEnemy::StateCatchAfter>(*enemy));
         state->Register("CatchPre", std::make_shared<Enemy::CatchEnemy::StateCatchPre>(*enemy));
-       // state->Register("Attack", std::make_shared<Enemy::CatchEnemy::StateAttack>(*enemy));
+        // state->Register("Attack", std::make_shared<Enemy::CatchEnemy::StateAttack>(*enemy));
         state->Register("IsHucking", std::make_shared<Enemy::CatchEnemy::StateHucking>(*enemy));
         state->Register("IsHucked", std::make_shared<Enemy::CatchEnemy::StateHucked>(*enemy));
         enemy->SetStateComponent(std::move(state));
@@ -400,6 +473,15 @@ namespace MachineHuck::Actor {
         //auto model = std::make_unique<Model::ModelComponent>(*brokenWall);
         //model->SetModel("brokenwall", 1000);
         return brokenWall;
+    }
+
+    std::unique_ptr<Actor> ItemCreator::Create(AppFrame::Game& game) {
+        auto item = std::make_unique<Item::Item>(game);
+        auto model = std::make_unique<Model::ModelAnimeComponent>(*item);
+        model->SetModel("Item", 1000);
+        item->SetModelComponent(std::move(model));
+
+        return item;
     }
 }
 

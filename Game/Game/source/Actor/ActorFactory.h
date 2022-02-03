@@ -15,6 +15,7 @@
 #include <DxLib.h>
 #include "AppFrame.h"
 #include "../Parameter/EStageParam.h"
+#include "../Parameter/IStageParam.h"
 
 namespace MachineHuck::Actor {
     class Actor;
@@ -33,6 +34,7 @@ namespace MachineHuck::Actor {
 
     using ESMV = std::vector<Parameter::EStageParam>;
     using StageV = std::vector<int>;
+    using ISMV = std::vector<Parameter::IStageParam>;
     /// @class ActorFactory
     /// @brief アクターの生成を一元管理する
     ///        生成したいアクター用のクリエイターを登録して使用する
@@ -56,27 +58,27 @@ namespace MachineHuck::Actor {
         /**
          * @breif 登録したインスタンスを削除
          */
-        //void Delete();
+         //void Delete();
 
-        //struct SpawnRecord {
-        //    int _progress{ 0 };
-        //    std::string _key;
-        //    Math::Vector4 _position{ 0, 0, 0 };
-        //    Math::Vector4 _rotation{ 0, 0, 0 };
-        //};
+         //struct SpawnRecord {
+         //    int _progress{ 0 };
+         //    std::string _key;
+         //    Math::Vector4 _position{ 0, 0, 0 };
+         //    Math::Vector4 _rotation{ 0, 0, 0 };
+         //};
 
-     //   using SpawnTable = std::vector<SpawnRecord>;
+      //   using SpawnTable = std::vector<SpawnRecord>;
 
 
 
-       // void SetSpawnTable(SpawnTable spawnTable);
+        // void SetSpawnTable(SpawnTable spawnTable);
 
-        /**
-         * @brief  スポーンテーブルの中身を生成
-         * @param  vEStageParamMap
-         */
+         /**
+          * @brief  スポーンテーブルの中身を生成
+          * @param  vEStageParamMap
+          */
         void SetSpawnTable(std::unordered_map<int, ESMV> vEStageParamMap);
-
+        void SetSpawnTable(std::unordered_map<int, ISMV> vIStageParamMap);
         /**
          *
          * @brief 毎フレーム生成の確認
@@ -128,7 +130,7 @@ namespace MachineHuck::Actor {
         // std::vector<SpawnRecord> _spawnTable;
 
         std::unordered_map<int, ESMV> _eStageParamVMap;
-
+        std::unordered_map<int, ISMV> _iStageParamVMap;
         int _progress{ 0 };
         int _spawnProgress{ 0 };
         StageV _oldStageNo{ -1 };
@@ -221,6 +223,14 @@ namespace MachineHuck::Actor {
         /// @return 壊せる壁のインスタンス
         virtual std::unique_ptr<Actor> Create(AppFrame::Game& game);
 
+
+    };
+
+    class ItemCreator : public CreatorBase {
+        /// アイテムの生成
+        /// @param  game ゲームクラスへの参照
+        /// @return アイテムのインスタンス
+        virtual std::unique_ptr<Actor> Create(AppFrame::Game& game);
 
     };
 

@@ -8,11 +8,12 @@
 
 
 #include "SceneInGame.h"
-//#include <numbers>
+ //#include <numbers>
 #include "AppFrame.h"
 #include "../Actor/ActorServer.h"
 #include "../Actor/ActorFactory.h"
 #include "../Enemy/EnemyParameter.h"
+#include "../Item/ItemParameter.h"
 #include "../UI/UIComponent.h"
 #include "../Flag/FlagData.h"
 
@@ -33,27 +34,28 @@ namespace MachineHuck::Scene {
     void SceneInGame::Init() {
         // 使用するモデル
         AppFrame::Asset::AssetServer::ModelMap usedInGame{
-        //{"Player",    "SDChar/SDChar.mv1"},
-        {"Player",    "Player/player.mv1"},
-        {"SkySphere", "model/skysphere.mv1"},
-        {"Ground",    "model/ground.mv1"},
-        {"Spider",    "tackle/takcle.mv1"},
-        {"pCube",      "model/pCube.mv1"},
-        {"floor",     "model/floor.mv1"},
-        {"wall",      "model/wall.mv1"},
-        {"Dungeon",   "model/Dungeon.mv1"},
-        {"breakwall",  "model/breakwall.mv1"},
-        {"enemy",      "model/enemy.mv1"},
-        {"gate",       "model/gate.mv1"},
-        {"normalfloor",  "model/normalfloor.mv1"},
-        {"normalwall",  "model/normalwall.mv1"},
-        {"secretfloor", "model/secretfloor.mv1"},
-        {"secretwall", "model/secretwall.mv1"},
-        //  {"damagefloor",  "target.mv1"},
-          {"entrypoint", "entrypoint.mv1"},
-          {"test", "test.mv1"},
-          // {"Dungeon",   "Dungeon.mv1"},
-          // {"stage0",    "stage0.mv1"}
+            //{"Player",    "SDChar/SDChar.mv1"},
+            {"Player",    "Player/player.mv1"},
+            {"SkySphere", "model/skysphere.mv1"},
+            {"Ground",    "model/ground.mv1"},
+            {"Spider",    "tackle/takcle.mv1"},
+            {"pCube",      "model/pCube.mv1"},
+            {"floor",     "model/floor.mv1"},
+            {"wall",      "model/wall.mv1"},
+            {"Dungeon",   "model/Dungeon.mv1"},
+            {"breakwall",  "model/breakwall.mv1"},
+            {"enemy",      "model/enemy.mv1"},
+            {"gate",       "model/gate.mv1"},
+            {"normalfloor",  "model/normalfloor.mv1"},
+            {"normalwall",  "model/normalwall.mv1"},
+            {"secretfloor", "model/secretfloor.mv1"},
+            {"secretwall", "model/secretwall.mv1"},
+            //  {"damagefloor",  "target.mv1"},
+              {"entrypoint", "entrypoint.mv1"},
+              {"test", "test.mv1"},
+              // {"Dungeon",   "Dungeon.mv1"},
+              // {"stage0",    "stage0.mv1"}
+              {"Item","Item.mv1"}
 
         };
 
@@ -94,17 +96,17 @@ namespace MachineHuck::Scene {
         af.Register("Player", std::make_unique<Actor::PlayerCreator>());
         af.Register("TackleEnemy", std::make_unique<Actor::TackleEnemyCreator>());
         af.Register("CatchEnemy", std::make_unique<Actor::CatchEnemyCreator>());
-       //  af.Register("AlartEnemy", std::make_unique<AlartEnemyCreator>());
+        //  af.Register("AlartEnemy", std::make_unique<AlartEnemyCreator>());
         af.Register("Stage", std::make_unique<Actor::StageCreator>());
         af.Register("DamageFloor", std::make_unique<Actor::DamageFloorGimmickCreator>());
         af.Register("BrokenWall", std::make_unique<Actor::BrokenWallCreator>());
-
+        af.Register("Item", std::make_unique<Actor::ItemCreator>());
 
         //for (int i = 0; i < StageAll; i++) {
 
 
 
-        
+
         //    //ステージ番号をstringに変換
         //    auto no = std::to_string(i);
         //    //下の二つを起動すればjsonが読み込める
@@ -133,16 +135,17 @@ namespace MachineHuck::Scene {
             //下の二つを起動すればjsonが読み込める
             //auto stageParameter = std::make_unique<StageParameter>();
             GetGame().GetEnemyParameter().LoadStageEnemyParam(i, "resource/json/stageenemy" + no + ".json");
+            GetGame().GetItemParameter().LoadStageItemParam(i, "resource/json/stageitem" + no + ".json");
         }
 
 
         //読み込んだエネミーのステージ配置をテーブルに入れる
         auto inGame = GetGame().GetEnemyParameter().GetFloorEnemyMap();
-
+        auto inGamei = GetGame().GetItemParameter().GetFloorItemMap();
         //エネミーのスポーンテーブルの読み込み
 
         af.SetSpawnTable(inGame);
-
+        af.SetSpawnTable(inGamei);
         //af.SetSpawnTable(EParam->GetStageEnemyParameter());
 
         //// アクターサーバーに登録※個別アクセス用
@@ -151,7 +154,7 @@ namespace MachineHuck::Scene {
         // ステージの生成と追加
         auto stage = af.Create("Stage");
         as.Add(std::move(stage));
-        
+
         ////ダメージ床ギミックの生成と追加
         //auto damageFloorGimmick = af.Create("DamageFloor");
         //as.Add(std::move(damageFloorGimmick));
@@ -193,7 +196,7 @@ namespace MachineHuck::Scene {
         if (input.GetJoypad().Button_X()) {
             // Xボタンでマップ画面へ
             GetSceneServer().PopBack(true);
-            GetSceneServer().PushBack("Map",true);
+            GetSceneServer().PushBack("Map", true);
         }
         if (input.GetJoypad().Button_Y()) {
             // Yボタンでアイテム画面へ

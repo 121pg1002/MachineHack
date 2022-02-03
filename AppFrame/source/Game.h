@@ -50,10 +50,13 @@ namespace MachineHuck::Gimmick {
 	class GimmickParameter;
 }
 
+namespace MachineHuck::Item {
+	class ItemParameter;
+}
 
 namespace AppFrame {
 	/// @class   Game
-    /// @brief   ゲーム全体のフレームワーク
+	/// @brief   ゲーム全体のフレームワーク
 	class Game {
 	public:
 		///ゲームの状態
@@ -99,10 +102,10 @@ namespace AppFrame {
 		/// @return サウンドコンポーネントの参照
 		Sound::SoundComponent& GetSoundComponent() const { return *_sound; };
 		/// スプライトサーバーの取得
-        /// @return スプライトサーバーの参照
+		/// @return スプライトサーバーの参照
 		MachineHuck::UI::SpriteServer& spriteServer() const { return *_spriteServer; }
 		/// UIコンポーネントの取得
-        /// @return UIコンポーネントの参照
+		/// @return UIコンポーネントの参照
 		MachineHuck::UI::UIComponent& GetUiComponent() const { return *_ui; }
 		/**
 		 * @brief  エネミーパラメータークラスへのアクセス
@@ -115,6 +118,14 @@ namespace AppFrame {
 		 * @return ステージパラメーターの参照
 		 */
 		MachineHuck::Stage::StageParameter& GetStageParameter() const { return *_stageParam; }
+
+		/**
+		 * @brief アイテムパラメーターの取得
+		 * @return アイテムパラメーターの参照
+		 */
+		MachineHuck::Item::ItemParameter& GetItemParameter() const { return *_iParam; }
+
+
 
 		MachineHuck::Gimmick::GimmickParameter& GetGimmickParameter() const { return *_gParam; }
 
@@ -145,6 +156,8 @@ namespace AppFrame {
 		std::unique_ptr<MachineHuck::Stage::StageParameter> _stageParam;
 
 		std::unique_ptr<MachineHuck::Gimmick::GimmickParameter> _gParam;
+
+		std::unique_ptr<MachineHuck::Item::ItemParameter> _iParam;
 
 	};
 }

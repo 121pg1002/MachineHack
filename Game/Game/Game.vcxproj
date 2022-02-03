@@ -41,6 +41,8 @@
     <ClCompile Include="source\Gimmick\DamageFloorGimmick.cpp" />
     <ClCompile Include="source\Gimmick\GimmickBase.cpp" />
     <ClCompile Include="source\Gimmick\GimmickParameter.cpp" />
+    <ClCompile Include="source\Item\Item.cpp" />
+    <ClCompile Include="source\Item\ItemParameter.cpp" />
     <ClCompile Include="source\JsonSave\JsonSave.cpp" />
     <ClCompile Include="source\Load\Load.cpp" />
     <ClCompile Include="source\Model\ModelAnimComponent.cpp" />
@@ -51,6 +53,7 @@
     <ClCompile Include="source\Parameter\EStageParam.cpp" />
     <ClCompile Include="source\Parameter\GParam.cpp" />
     <ClCompile Include="source\Parameter\GStageParam.cpp" />
+    <ClCompile Include="source\Parameter\IStageParam.cpp" />
     <ClCompile Include="source\Parameter\StageParam.cpp" />
     <ClCompile Include="source\Parameter\StageParameterBase.cpp" />
     <ClCompile Include="source\Player\Player.cpp" />
@@ -95,6 +98,8 @@
     <ClInclude Include="source\Gimmick\DamageFloorGimmick.h" />
     <ClInclude Include="source\Gimmick\GimmickBase.h" />
     <ClInclude Include="source\Gimmick\GimmickParameter.h" />
+    <ClInclude Include="source\Item\Item.h" />
+    <ClInclude Include="source\Item\ItemParameter.h" />
     <ClInclude Include="source\JsonSave\JsonSave.h" />
     <ClInclude Include="source\Load\Load.h" />
     <ClInclude Include="source\Model\ModelAnimComponent.h" />
@@ -106,6 +111,7 @@
     <ClInclude Include="source\Parameter\EStageParam.h" />
     <ClInclude Include="source\Parameter\GParam.h" />
     <ClInclude Include="source\Parameter\GStageParam.h" />
+    <ClInclude Include="source\Parameter\IStageParam.h" />
     <ClInclude Include="source\Parameter\StageParam.h" />
     <ClInclude Include="source\Parameter\StageParameterBase.h" />
     <ClInclude Include="source\Player\Player.h" />
