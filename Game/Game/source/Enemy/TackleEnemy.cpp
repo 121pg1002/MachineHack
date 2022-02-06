@@ -115,7 +115,7 @@ namespace MachineHuck::Enemy {
 		ComputeWorldTransform();
 
 		// モデルの更新
-		_model->Update();
+		_modelAnime->Update();
 
 	}
 
@@ -125,14 +125,14 @@ namespace MachineHuck::Enemy {
 
 	void TackleEnemy::Draw() {
 		// 足のトゲの為のアルファテスト設定
-		MV1SetMaterialDrawAlphaTest(_model->GetHandle(), 3, TRUE, DX_CMP_LESS, 200);
+		MV1SetMaterialDrawAlphaTest(_modelAnime->GetHandle(), 3, TRUE, DX_CMP_LESS, 200);
 #ifdef _DEBUG
 		//auto pos = _position;
 		//pos.y += 40;
 		//DrawSphere3D(pos, 50, 16, GetColor(255, 0, 0), GetColor(0, 0, 0), TRUE);
-		_model->Draw(*this, _isHit, _searchRange, true);
-		_model->Draw(*this, _isHit, _huckingRange, false);
-		_model->Draw(*this, GetActorServer().GetPosition("Player"));
+		_modelAnime->Draw(*this, _isHit, _searchRange, true);
+		_modelAnime->Draw(*this, _isHit, _huckingRange, false);
+		_modelAnime->Draw(*this, GetActorServer().GetPosition("Player"));
 
 		_gaugeBase->Draw(*this);
 #endif
@@ -347,16 +347,16 @@ namespace MachineHuck::Enemy {
 	void TackleEnemy::StateBase::Draw() {
 
 		if (_owner.GetStatus() != STATUS::ISHUCKED) {
-			_owner._model->Draw();
+			_owner.GetModelAnime().Draw();
 		}
 		else {
-			_owner._model->SpecificDraw();
+			_owner.GetModelAnime().SpecificDraw();
 		}
 	}
 
 	// 待機
 	void TackleEnemy::StateFall::Enter() {
-		_owner._model->ChangeAnime("Walk", true);
+		_owner.GetModelAnime().ChangeAnime("Walk", true);
 	}
 
 	void TackleEnemy::StateFall::Update() {
@@ -376,7 +376,7 @@ namespace MachineHuck::Enemy {
 
 	//待機
 	void TackleEnemy::StateIdle::Enter() {
-		_owner._model->ChangeAnime("Walk", true);
+		_owner.GetModelAnime().ChangeAnime("Walk", true);
 	}
 
 	void TackleEnemy::StateIdle::Update() {
@@ -415,7 +415,7 @@ namespace MachineHuck::Enemy {
 	// 走り
 	void TackleEnemy::StateRun::Enter() {
 		_tacklePreTime = 60;
-		_owner._model->ChangeAnime("Walk", true);
+		_owner.GetModelAnime().ChangeAnime("Walk", true);
 	}
 
 	void TackleEnemy::StateRun::Update() {
@@ -499,16 +499,16 @@ namespace MachineHuck::Enemy {
 
 	//死亡
 	void TackleEnemy::StateDie::Enter() {
-		_owner._model->ChangeAnime("Die");
+		_owner.GetModelAnime().ChangeAnime("Die");
 	}
 
 	void TackleEnemy::StateDie::Update() {
-		auto cnt = _owner._model->GetRepeatedCount();
+		auto cnt = _owner.GetModelAnime().GetRepeatedCount();
 		if (cnt > 0) {
 			_owner.SetActorState(ActorState::Dead);
 		}
-		auto handle = _owner._model->GetHandle();
-		auto progress = _owner._model->GetPlayProgress();
+		auto handle = _owner.GetModelAnime().GetHandle();
+		auto progress = _owner.GetModelAnime().GetPlayProgress();
 		auto num = MV1GetMeshNum(handle);
 		for (auto i = 0; i < num; ++i) {
 			MV1SetMeshOpacityRate(handle, i, 1.f - progress);
@@ -517,13 +517,13 @@ namespace MachineHuck::Enemy {
 
 	//ハッキング中のダメージ
 	void TackleEnemy::StateDamage::Enter() {
-		_owner._model->ChangeAnime("Damage", true);
+		_owner.GetModelAnime().ChangeAnime("Damage", true);
 
 	}
 
 	void TackleEnemy::StateDamage::Update() {
 
-		if (_owner._model->GetRepeatedCount() > 0) {
+		if (_owner.GetModelAnime().GetRepeatedCount() > 0) {
 
 			_owner._state->PopBack();
 
@@ -595,7 +595,7 @@ namespace MachineHuck::Enemy {
 		}
 
 
-		_owner._model->ChangeAnime("Attack", true);
+		_owner.GetModelAnime().ChangeAnime("Attack", true);
 	}
 
 	void TackleEnemy::StateTackle::Update() {
@@ -796,14 +796,14 @@ namespace MachineHuck::Enemy {
 
 
 
-		auto headPos = _owner._model->GetHeadPos("Character1_Head");
+		auto headPos = _owner.GetModelAnime().GetHeadPos("Character1_Head");
 		Flag::FlagData::SetHeadPos(headPos);
 		_tackleTime--;
 
 	}
 
 	void TackleEnemy::StateTackleAfter::Enter() {
-		_owner._model->ChangeAnime("Walk", true);
+		_owner.GetModelAnime().ChangeAnime("Walk", true);
 		_tackleAfterTime = 120;
 	}
 
@@ -855,7 +855,7 @@ namespace MachineHuck::Enemy {
 
 	void TackleEnemy::StateHucking::Enter()
 	{
-		_owner._model->ChangeAnime("Die", false);
+		_owner.GetModelAnime().ChangeAnime("Die", false);
 	}
 
 	void TackleEnemy::StateHucking::Update()
@@ -873,7 +873,7 @@ namespace MachineHuck::Enemy {
 				_owner.SetActorState(ActorState::Hucked);
 				_owner._state->GoToState("IsHucked");
 
-				auto headPos = _owner._model->GetHeadPos("Character1_Head");
+				auto headPos = _owner.GetModelAnime().GetHeadPos("Character1_Head");
 				Flag::FlagData::SetHeadPos(headPos);
 			}
 		}
@@ -884,7 +884,7 @@ namespace MachineHuck::Enemy {
 
 
 	void TackleEnemy::StateHucked::Enter() {
-		_owner._model->ChangeAnime("Idle", true);
+		_owner.GetModelAnime().ChangeAnime("Idle", true);
 	}
 
 	void TackleEnemy::StateHucked::Input(AppFrame::Input::InputComponent& input) {
@@ -931,10 +931,10 @@ namespace MachineHuck::Enemy {
 	void TackleEnemy::StateHucked::Update() {
 
 		if (_lx != 0.0 || _ly != 0.0) {
-			_owner._model->ChangeAnime("Walk", true);//頭取れたときに移動する
+			_owner.GetModelAnime().ChangeAnime("Walk", true);//頭取れたときに移動する
 		}
 		else {
-			_owner._model->ChangeAnime("Idle", true);
+			_owner.GetModelAnime().ChangeAnime("Idle", true);
 		}
 
 		//// ハッキングされたか確認
@@ -944,7 +944,7 @@ namespace MachineHuck::Enemy {
 		//	_owner._state->GoToState("Run");
 		//	_owner._status = STATUS::CHASE;
 		//}
-		auto headPos = _owner._model->GetHeadPos("Character1_Head");
+		auto headPos = _owner.GetModelAnime().GetHeadPos("Character1_Head");
 		Flag::FlagData::SetHeadPos(headPos);
 
 		if (Flag::FlagData::GetHuckDamageFlag()) {

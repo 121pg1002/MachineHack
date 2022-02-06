@@ -14,6 +14,7 @@
 #include "../Actor/ActorFactory.h"
 #include "../Enemy/EnemyParameter.h"
 #include "../Item/ItemParameter.h"
+#include "../Gimmick/GimmickParameter.h"
 #include "../UI/UIComponent.h"
 #include "../Flag/FlagData.h"
 
@@ -219,18 +220,20 @@ namespace MachineHuck::Scene {
             //auto stageParameter = std::make_unique<StageParameter>();
             GetGame().GetEnemyParameter().LoadStageEnemyParam(i, "resource/json/stageEnemy/stageenemy" + no + ".json");
             GetGame().GetItemParameter().LoadStageItemParam(i, "resource/json/stageItem/stageitem" + no + ".json");
-
+           // GetGame().GetGimmickParameter().LoadGimmickStageParameter(i, "resource/json/stageGimmick/stagegimmick" + no + ".json");
         }
 
 
         //読み込んだエネミーのステージ配置をテーブルに入れる
         auto inGame = GetGame().GetEnemyParameter().GetFloorEnemyMap();
         auto inGamei = GetGame().GetItemParameter().GetFloorItemMap();
+     //   auto inGameGimmick = GetGame().GetGimmickParameter().GetFloorGimmickMap();
 
         //エネミーのスポーンテーブルの読み込み
 
         af.SetSpawnTable(inGame);
         af.SetSpawnTable(inGamei);
+      //  af.SetSpawnTable(inGameGimmick);
 
 
         //af.SetSpawnTable(EParam->GetStageEnemyParameter());

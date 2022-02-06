@@ -3,7 +3,7 @@
  * @brief  ‰ó‚¹‚é•Ç‚ÌƒNƒ‰ƒX
  *      
  * @author hikaru Goto
- * @date   January 20 2022
+ * @date   Feburuary 6 2022
  *********************************************************************/
 #include "BrokenWall.h"
 #include "../Model/ModelComponent.h"
@@ -23,6 +23,7 @@ namespace MachineHuck::Gimmick {
 
 	void BrokenWall::Update()
 	{
+		int x = 0;
 	}
 
 	void BrokenWall::Draw()

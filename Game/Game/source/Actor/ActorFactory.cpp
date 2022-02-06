@@ -251,7 +251,7 @@ namespace MachineHuck::Actor {
         //model->Register("JumpStart", 3);
         //model->Register("JumpLoop", 4);
         //model->Register("JumpEnd", 5);
-        player->SetModelComponent(std::move(model));
+        player->SetModelAnimeComponent(std::move(model));
 
         auto state = std::make_unique<State::StateComponent>("Idle", std::make_shared <Player::Player::StateIdle>(*player));
         state->Register("Run", std::make_shared<Player::Player::StateRun>(*player));
@@ -322,7 +322,7 @@ namespace MachineHuck::Actor {
         //model->Register("WalkLeft", 12);
         //model->Register("WalkRight", 13);
         //model->Register("WartePose", 14);
-        enemy->SetModelComponent(std::move(model));
+        enemy->SetModelAnimeComponent(std::move(model));
 
         auto state = std::make_unique<State::StateComponent>("Fall", std::make_shared <Enemy::TackleEnemy::StateFall>(*enemy));
         state->Register("Idle", std::make_shared<Enemy::TackleEnemy::StateIdle>(*enemy));
@@ -389,7 +389,7 @@ namespace MachineHuck::Actor {
         //model->Register("WalkLeft", 12);
         //model->Register("WalkRight", 13);
         //model->Register("WartePose", 14);
-        enemy->SetModelComponent(std::move(model));
+        enemy->SetModelAnimeComponent(std::move(model));
 
         auto state = std::make_unique<State::StateComponent>("Fall", std::make_shared <Enemy::CatchEnemy::StateFall>(*enemy));
         state->Register("Idle", std::make_shared<Enemy::CatchEnemy::StateIdle>(*enemy));
@@ -434,14 +434,15 @@ namespace MachineHuck::Actor {
         /// âÛÇπÇÈï«ÇÃê∂ê¨
         auto brokenWall = std::make_unique<Gimmick::BrokenWall>(game);
         //// ÉÇÉfÉãÇÃì«Ç›çûÇ›Ç∆ê∂ê¨
-        //auto model = std::make_unique<Model::ModelComponent>(*brokenWall);
-        //model->SetModel("brokenwall", 1000);
+        auto model = std::make_unique<Model::ModelComponent>(*brokenWall);
+        model->SetModel("brokenwall", 1000);
+        brokenWall->SetModelComponent(std::move(model));
         return brokenWall;
     }
 
     std::unique_ptr<Actor> ItemCreator::Create(AppFrame::Game& game) {
         auto item = std::make_unique<Item::Item>(game);
-        auto model = std::make_unique<Model::ModelAnimeComponent>(*item);
+        auto model = std::make_unique<Model::ModelComponent>(*item);
         model->SetModel("Item", 1000);
         item->SetModelComponent(std::move(model));
 

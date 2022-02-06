@@ -604,7 +604,11 @@ namespace MachineHuck::Actor {
 		_state = std::move(state);
 	}
 
-	void Actor::SetModelComponent(std::unique_ptr<Model::ModelAnimeComponent> model) {
+	void Actor::SetModelAnimeComponent(std::unique_ptr<Model::ModelAnimeComponent> model) {
+		_modelAnime = std::move(model);
+	}
+
+	void Actor::SetModelComponent(std::unique_ptr<Model::ModelComponent> model) {
 		_model = std::move(model);
 	}
 

@@ -25,6 +25,7 @@ namespace MachineHuck::State {
 
 namespace MachineHuck::Model {
     class ModelAnimeComponent;
+    class ModelComponent;
 }
 
 namespace MachineHuck::Camera {
@@ -198,7 +199,8 @@ namespace MachineHuck::Actor {
         Math::Vector4 GetMove() const { return _move; }
 
         void SetStateComponent(std::unique_ptr<State::StateComponent> state);
-        void SetModelComponent(std::unique_ptr<Model::ModelAnimeComponent> model);
+        void SetModelAnimeComponent(std::unique_ptr<Model::ModelAnimeComponent> model);
+        void SetModelComponent(std::unique_ptr<Model::ModelComponent> model);
         void SetCameraComponent(std::shared_ptr<Camera::CameraComponent> camera);
 
 
@@ -260,7 +262,8 @@ namespace MachineHuck::Actor {
         //State GetState() const { return _state; }
 
         State::StateComponent& GetState() { return *_state; }
-        Model::ModelAnimeComponent& GetModel() { return *_model; }
+        Model::ModelAnimeComponent& GetModelAnime() { return *_modelAnime; }
+        const Model::ModelComponent& GetModel() const { return *_model; }
         Camera::CameraComponent& GetCamera() { return *_camera; }
 
         ActorServer& GetActorServer();
@@ -302,7 +305,8 @@ namespace MachineHuck::Actor {
         ActorState _actorState{ ActorState::Active };
         TypeId _typeId{ TypeId::Actor };
         std::unique_ptr<State::StateComponent> _state;
-        std::unique_ptr<Model::ModelAnimeComponent> _model;
+        std::unique_ptr<Model::ModelAnimeComponent> _modelAnime;
+        std::unique_ptr<Model::ModelComponent> _model;
         std::shared_ptr<Camera::CameraComponent> _camera;
         std::unique_ptr<Collision::CollisionComponent> _collision;
         std::unique_ptr<Gauge::GaugeBase> _gaugeBase;              //!< ゲージベースクラスへのユニークポインタ

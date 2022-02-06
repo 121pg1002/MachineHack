@@ -13,10 +13,11 @@
 #include "../Parameter/EStageParam.h"
 
 
-using Json = nlohmann::json;
-namespace Math = AppFrame::Math;
 
 namespace MachineHuck::Enemy {
+
+    using Json = nlohmann::json;
+    namespace Math = AppFrame::Math;
 
     namespace {
         constexpr double Differ = 3000.0; //!< 1フロアのサイズ

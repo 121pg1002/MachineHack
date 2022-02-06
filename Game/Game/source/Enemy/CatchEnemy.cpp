@@ -96,7 +96,7 @@ namespace MachineHuck::Enemy {
 		ComputeWorldTransform();
 
 		// モデルの更新
-		_model->Update();
+		_modelAnime->Update();
 
 	}
 
@@ -148,15 +148,15 @@ namespace MachineHuck::Enemy {
 
 	void CatchEnemy::Draw() {
 		// 足のトゲの為のアルファテスト設定
-		MV1SetMaterialDrawAlphaTest(_model->GetHandle(), 3, TRUE, DX_CMP_LESS, 200);
+		MV1SetMaterialDrawAlphaTest(_modelAnime->GetHandle(), 3, TRUE, DX_CMP_LESS, 200);
 #ifdef _DEBUG
 		//auto pos = _position;
 		//pos.y += 40;
 		//DrawSphere3D(pos, 50, 16, GetColor(255, 0, 0), GetColor(0, 0, 0), TRUE);
-		_model->Draw(*this, _isHit, _searchRange, true);
-		_model->Draw(*this, _isHit, _huckingRange, false);
-		_model->Draw(*this, _catchR, _catchRange);
-		_model->Draw(*this, GetActorServer().GetPosition("Player"));
+		_modelAnime->Draw(*this, _isHit, _searchRange, true);
+		_modelAnime->Draw(*this, _isHit, _huckingRange, false);
+		_modelAnime->Draw(*this, _catchR, _catchRange);
+		_modelAnime->Draw(*this, GetActorServer().GetPosition("Player"));
 
 		_gaugeBase->Draw(*this);
 #endif
@@ -168,16 +168,16 @@ namespace MachineHuck::Enemy {
 	void CatchEnemy::StateBase::Draw() {
 
 		if (_owner.GetStatus() != STATUS::ISHUCKED) {
-			_owner._model->Draw();
+			_owner.GetModelAnime().Draw();
 		}
 		else {
-			_owner._model->SpecificDraw(); //!<	ハッキング中の頭を描画停止する
+			_owner.GetModelAnime().SpecificDraw(); //!<	ハッキング中の頭を描画停止する
 		}
 	}
 
 	// 待機
 	void CatchEnemy::StateFall::Enter() {
-		_owner._model->ChangeAnime("Idle", true);
+		_owner.GetModelAnime().ChangeAnime("Idle", true);
 	}
 
 	void CatchEnemy::StateFall::Update() {
@@ -197,7 +197,7 @@ namespace MachineHuck::Enemy {
 
 	//待機
 	void CatchEnemy::StateIdle::Enter() {
-		_owner._model->ChangeAnime("Idle", true);
+		_owner.GetModelAnime().ChangeAnime("Idle", true);
 	}
 
 	void CatchEnemy::StateIdle::Update() {
@@ -228,7 +228,7 @@ namespace MachineHuck::Enemy {
 
 	//プレイヤーを見つけた後の攻撃前
 	void CatchEnemy::StateCatchPre::Enter() {
-		_owner._model->ChangeAnime("Idle", true);
+		_owner.GetModelAnime().ChangeAnime("Idle", true);
 	}
 
 	//void CatchEnemy::StateCatchPre::Input(AppFrame::Input::InputComponent& input) {
@@ -355,7 +355,7 @@ namespace MachineHuck::Enemy {
 
 		//}
 
-		_owner._model->ChangeAnime("Catch", true);
+		_owner.GetModelAnime().ChangeAnime("Catch", true);
 	}
 
 	void CatchEnemy::StateCatch::Update() {
@@ -498,7 +498,7 @@ namespace MachineHuck::Enemy {
 	}
 
 	void CatchEnemy::StateCatchAfter::Enter() {
-		_owner._model->ChangeAnime("Idle", true);
+		_owner.GetModelAnime().ChangeAnime("Idle", true);
 		_catchAfterTime = 120;
 	}
 
@@ -555,16 +555,16 @@ namespace MachineHuck::Enemy {
 
 	//死亡
 	void CatchEnemy::StateDie::Enter() {
-		_owner._model->ChangeAnime("Die");
+		_owner.GetModelAnime().ChangeAnime("Die");
 	}
 
 	void CatchEnemy::StateDie::Update() {
-		auto cnt = _owner._model->GetRepeatedCount();
+		auto cnt = _owner.GetModelAnime().GetRepeatedCount();
 		if (cnt > 0) {
 			_owner.SetActorState(ActorState::Dead);
 		}
-		auto handle = _owner._model->GetHandle();
-		auto progress = _owner._model->GetPlayProgress();
+		auto handle = _owner.GetModelAnime().GetHandle();
+		auto progress = _owner.GetModelAnime().GetPlayProgress();
 		auto num = MV1GetMeshNum(handle);
 		for (auto i = 0; i < num; ++i) {
 			MV1SetMeshOpacityRate(handle, i, 1.f - progress);
@@ -573,12 +573,12 @@ namespace MachineHuck::Enemy {
 
 	//ダメージ
 	void CatchEnemy::StateDamage::Enter() {
-		_owner._model->ChangeAnime("Damage", true);
+		_owner.GetModelAnime().ChangeAnime("Damage", true);
 	}
 
 	void CatchEnemy::StateDamage::Update() {
 
-		if (_owner._model->GetRepeatedCount() > 0) {
+		if (_owner.GetModelAnime().GetRepeatedCount() > 0) {
 
 			_owner._state->PopBack();
 
@@ -589,7 +589,7 @@ namespace MachineHuck::Enemy {
 
 	void CatchEnemy::StateHucking::Enter()
 	{
-		_owner._model->ChangeAnime("Hucking", false);
+		_owner.GetModelAnime().ChangeAnime("Hucking", false);
 	}
 
 	void CatchEnemy::StateHucking::Update()
@@ -607,7 +607,7 @@ namespace MachineHuck::Enemy {
 				_owner.SetActorState(ActorState::Hucked);
 				_owner._state->GoToState("IsHucked");
 
-				auto headPos = _owner._model->GetHeadPos("Character1_Head"); //!< 本当のキャッチの頭のフレームを入れる(仮)
+				auto headPos = _owner.GetModelAnime().GetHeadPos("Character1_Head"); //!< 本当のキャッチの頭のフレームを入れる(仮)
 				Flag::FlagData::SetHeadPos(headPos);
 			}
 		}
@@ -618,7 +618,7 @@ namespace MachineHuck::Enemy {
 
 
 	void CatchEnemy::StateHucked::Enter() {
-		_owner._model->ChangeAnime("Attack");
+		_owner.GetModelAnime().ChangeAnime("Attack");
 	}
 
 	void CatchEnemy::StateHucked::Input(AppFrame::Input::InputComponent& input) {
@@ -671,14 +671,14 @@ namespace MachineHuck::Enemy {
 		//	_owner._status = STATUS::CHASE;
 		//}
 		if (_lx != 0.0 || _ly != 0.0) {
-			_owner._model->ChangeAnime("Walk", true);//頭取れたときに移動する
+			_owner.GetModelAnime().ChangeAnime("Walk", true);//頭取れたときに移動する
 		}
 		else {
-			_owner._model->ChangeAnime("Idle", true);
+			_owner.GetModelAnime().ChangeAnime("Idle", true);
 		}
 
 
-		auto headPos = _owner._model->GetHeadPos("Character1_Head"); //!< 本当のキャッチの頭のフレームを入れる(仮)
+		auto headPos = _owner.GetModelAnime().GetHeadPos("Character1_Head"); //!< 本当のキャッチの頭のフレームを入れる(仮)
 		Flag::FlagData::SetHeadPos(headPos);
 
 		if (Flag::FlagData::GetHuckDamageFlag()) {

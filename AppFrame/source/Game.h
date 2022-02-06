@@ -126,7 +126,10 @@ namespace AppFrame {
 		MachineHuck::Item::ItemParameter& GetItemParameter() const { return *_iParam; }
 
 
-
+		/**
+		 * @brief ギミックパラメーターの取得
+		 * @return ギミックパラメーターの参照
+		 */
 		MachineHuck::Gimmick::GimmickParameter& GetGimmickParameter() const { return *_gParam; }
 
 	private:

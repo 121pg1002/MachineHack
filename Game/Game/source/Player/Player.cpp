@@ -180,24 +180,24 @@ namespace MachineHuck::Player {
 		//// ステータスに合わせてアニメーションのアタッチ
 		//switch (_status) {
 		//case ActorState::Active:
-		   // _model->ChangeAnime("Idle");
+		   // _modelAnime->ChangeAnime("Idle");
 		   // break;
 		//case ActorState::WALK:
-		   // _model->ChangeAnime("Run");
+		   // _modelAnime->ChangeAnime("Run");
 		   // break;
 
 		//case ActorState::Hucking:
-		   // _model->ChangeAnime("Attack");
+		   // _modelAnime->ChangeAnime("Attack");
 
 		//case ActorState::Hucked:
-		   // _model->ChangeAnime("Idle");
+		   // _modelAnime->ChangeAnime("Idle");
 		//}
 
 
 
 
 		// モデルの更新
-		_model->Update();
+		_modelAnime->Update();
 
 		// カメラの更新
 		//_camera->SetTarget(_position, _move);
@@ -405,7 +405,7 @@ namespace MachineHuck::Player {
 		}
 		_state->Draw();
 #ifdef _DEBUG
-		_model->Draw(*this, _isHit, _searchRange, true);
+		_modelAnime->Draw(*this, _isHit, _searchRange, true);
 		_camera->Draw(_isHit);
 		_gaugeBase->Draw();
 
@@ -501,11 +501,11 @@ namespace MachineHuck::Player {
 	//}
 
 	void Player::StateBase::Draw() {
-		_owner._model->Draw();
+		_owner.GetModelAnime().Draw();
 	}
 	/// 待機
 	void Player::StateIdle::Enter() {
-		_owner._model->ChangeAnime("Idle", true);
+		_owner.GetModelAnime().ChangeAnime("Idle", true);
 
 		////無敵フラグがオンなら120フレーム無敵時間を作る
 		//if (Flag::FlagData::GetNoDamageFlag()) {
@@ -562,7 +562,7 @@ namespace MachineHuck::Player {
 
 	/// 走り
 	void Player::StateRun::Enter() {
-		_owner._model->ChangeAnime("Run", true);
+		_owner.GetModelAnime().ChangeAnime("Run", true);
 		/*_actorState= ActorState::WALK;*/
 	}
 
@@ -627,14 +627,14 @@ namespace MachineHuck::Player {
 	//ダメージ状態
 	void Player::StateDamage::Enter() {
 
-		_owner._model->ChangeAnime("Damage", true);
+		_owner.GetModelAnime().ChangeAnime("Damage", true);
 	}
 
 	//ダメージ
 	void Player::StateDamage::Update() {
 
 
-		if (_owner._model->GetRepeatedCount() > 0) {
+		if (_owner.GetModelAnime().GetRepeatedCount() > 0) {
 
 			_owner._state->GoToState("Idle");
 
@@ -652,7 +652,7 @@ namespace MachineHuck::Player {
 
 	/// 攻撃
 	void Player::StateAttack::Enter() {
-		//_owner._model->ChangeAnime("Attack");
+		//_owner.GetModelAnime().ChangeAnime("Attack");
 		//_attackcount = 30;
 	}
 
@@ -669,12 +669,12 @@ namespace MachineHuck::Player {
 	//}
 
 	void Player::StateAttack::Update() {
-		//auto cnt = _owner._model->GetRepeatedCount();
+		//auto cnt = _owner.GetModelAnime().GetRepeatedCount();
 		//if (cnt > 0) {
 		//	_owner._state->PopBack();
 		//	return;
 		//}
-		//auto playTime = _owner._model->GetPlayTime();
+		//auto playTime = _owner.GetModelAnime().GetPlayTime();
 		//if (playTime < 3.5f || playTime > 20.f) {
 		//	_owner.HitCheckFromEnemy();
 		//	return;
@@ -682,14 +682,14 @@ namespace MachineHuck::Player {
 		//_owner._collision->EnemyFromPlayer();
 	}
 	void Player::StateAttack::Draw() {
-		//	_owner._model->Draw();
+		//	_owner.GetModelAnime().Draw();
 		//#ifdef _DEBUG
-		//	auto playTime = _owner._model->GetPlayTime();
+		//	auto playTime = _owner.GetModelAnime().GetPlayTime();
 		//	if (playTime < 3.5f || playTime > 20.f) {
 		//	  return;
 		//	}
 		//
-		//	auto handle = _owner._model->GetHandle();
+		//	auto handle = _owner.GetModelAnime().GetHandle();
 		//	auto mat = MV1GetFrameLocalWorldMatrix(handle, 28);
 		//	auto pos = VTransform({0, 0, 0}, mat);
 		//	DrawSphere3D(pos, 20, 16, GetColor(255, 0, 0), GetColor(0, 0, 0), TRUE);
@@ -715,7 +715,7 @@ namespace MachineHuck::Player {
 	/// ハッキング中
 	void Player::StateHucking::Enter() {
 
-		_owner._model->ChangeAnime("Attack");
+		_owner.GetModelAnime().ChangeAnime("Attack");
 		_huckingTime = 10;
 		/*_actorState= ActorState::Hucking;*/
 	}
@@ -851,7 +851,7 @@ namespace MachineHuck::Player {
 	/// ハッキング
 	void Player::StateHucked::Enter() {
 
-		_owner._model->ChangeAnime("Idle");
+		_owner.GetModelAnime().ChangeAnime("Idle");
 		/*_actorState= ActorState::Hucking;*/
 	}
 
@@ -965,17 +965,17 @@ namespace MachineHuck::Player {
 
 	void Player::StateDie::Enter() {
 
-		_owner._model->ChangeAnime("Die");
+		_owner.GetModelAnime().ChangeAnime("Die");
 	}
 
 	void Player::StateDie::Update() {
-		auto cnt = _owner._model->GetRepeatedCount();
+		auto cnt = _owner.GetModelAnime().GetRepeatedCount();
 		if (cnt > 0) {
 			_owner.SetActorState(ActorState::Dead);
 			Flag::FlagData::SetPlayerDead(true);
 		}
-		auto handle = _owner._model->GetHandle();
-		auto progress = _owner._model->GetPlayProgress();
+		auto handle = _owner.GetModelAnime().GetHandle();
+		auto progress = _owner.GetModelAnime().GetPlayProgress();
 		auto num = MV1GetMeshNum(handle);
 		for (auto i = 0; i < num; ++i) {
 			MV1SetMeshOpacityRate(handle, i, 1.f - progress);

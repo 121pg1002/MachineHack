@@ -14,6 +14,12 @@
 namespace MachineHuck::Gimmick {
 	using Json = nlohmann::json;
 
+	namespace {
+		constexpr double Differ = 3000.0; //!< 1フロアのサイズ
+		constexpr double StartX = -5.0 * Differ;
+		constexpr int BoardSize = 10;
+	}
+
 	GimmickParameter::GimmickParameter() {
 		_gimmickStageParamV.clear();
 		_gimmickStageNumMap.clear();
@@ -25,13 +31,36 @@ namespace MachineHuck::Gimmick {
 		_gimmickStageNumMap.clear();
 	}
 
-	bool GimmickParameter::LoadGimmickStageParameter(const int num, const std::string& filePath) {
+	bool GimmickParameter::LoadGimmickStageParameter(const int stageNo, const std::string& filePath) {
 	
 		//// Jsonファイルの読み込み
 		std::ifstream jsonFile(filePath);
 		auto jsRoot = Json::parse(jsonFile);
 
 		_gimmickStageParamV.clear();
+
+		int numX = 0;
+		int numZ = 0;
+
+		if (0 <= stageNo && stageNo <= 9) {
+
+			numX = stageNo;
+			numZ = 0;
+		}
+		else {
+
+			numX = stageNo % 10; //!< 一桁目
+			numZ = stageNo / 10; //!< 二桁目
+
+		}
+
+		auto startX = StartX;
+		auto startZ = 0.0;
+
+		auto offsetX = startX;
+		auto offsetZ = startZ;
+
+
 		//読み込めなかったとき
 		if (jsRoot["Gimmick"].size() == 0) {
 
@@ -61,6 +90,9 @@ namespace MachineHuck::Gimmick {
 				Math::Vector4 rot = { rx, ry, rz };
 				Math::Vector4 scale = { sx, sy, sz };
 
+				Math::Vector4 dif = { offsetX + Differ / 2.0 + Differ * numX, 0.0, offsetZ + Differ / 2.0 + Differ * numZ };
+
+				pos = pos + dif;
 
 				gSP.SetName(fileName);
 				gSP.SetPos(pos);
@@ -73,7 +105,7 @@ namespace MachineHuck::Gimmick {
 			}
 
 			//フロア番号で1フロア分を格納
-			_gimmickStageNumMap.emplace(num, _gimmickStageParamV);
+			_gimmickStageNumMap.emplace(stageNo, _gimmickStageParamV);
 		}
 
 		return true;
