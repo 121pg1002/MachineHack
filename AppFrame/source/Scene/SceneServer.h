@@ -58,7 +58,10 @@ namespace AppFrame::Scene {
 		/// @param[in] key  Sceneのインスタンスに関連付けるた任意の文字列
 		///
 		void GoToScene(std::string_view key);
-	
+
+		void GoToScene(std::string_view key, bool flag);
+
+
 		/// シーンの遷移
 		/// PopBackしてPushBackする
 		/// @param[in] key  Sceneのインスタンスに関連付けるた任意の文字列

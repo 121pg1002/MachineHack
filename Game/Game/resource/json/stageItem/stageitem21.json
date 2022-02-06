@@ -1,0 +1,32 @@
+{
+ 
+    "StageItem": [
+        {
+            "filename": "",
+            "handlename": "floor20",
+            "tx": -5000,
+            "ty": 0,
+            "tz": 0,
+            "rx": -0,
+            "ry": -0,
+            "rz": 0,
+            "sx": 0,
+            "sy": 0,
+            "sz": 0
+        },
+        {
+            "filename": "",
+            "handlename": "floor16",
+            "tx": 5000,
+            "ty": 0,
+            "tz": 0,
+            "rx": -0,
+            "ry": -0,
+            "rz": 0,
+            "sx": 0,
+            "sy": 0,
+            "sz": 0
+        }
+
+    ]
+}

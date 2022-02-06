@@ -35,6 +35,18 @@ namespace MachineHuck::Parameter {
 		void SetLevel(int level) { _level = level; }
 
 		/**
+		 * @brief  思考ルーチン番号を取得
+		 * @return _routine
+		 */
+		int GetRoutine() { return _routine; }
+
+		/**
+		 * @brief 思考ルーチン番号を設定
+		 * @param num
+		 */
+		void SetRoutine(int num) { _routine = num; }
+
+		/**
 		 * @brief  生成回数
 		 * @return
 		 */
@@ -43,6 +55,7 @@ namespace MachineHuck::Parameter {
 	private:
 
 		int _level; //!< 敵のレベル
+		int _routine; //!< 思考ルーチン
 		int _progress{ 0 }; //!< 生成回数
 		std::string _type;
 	};

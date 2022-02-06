@@ -23,12 +23,21 @@ namespace AppFrame::Sound{
 
 		void SetVolume(std::string_view key, int volume);
 		void SetMute(bool isMute) { _isMute = isMute; }
+
+		void Setcnt(int _cnt) { cnt = _cnt; }
+		void Addcnt(int _cnt) { cnt += _cnt; }
+		int  Getcnt() { return cnt; }
+
+		int CheckSoundPlaying();
+
 	protected:
 		void Play(std::string_view key, int playType);
 
 	private:
 		Game& _game;
 		bool _isMute{ false };
+		/// BGM‚ğ–Â‚ç‚·üŠú‚ğ’²®‚·‚é
+		int cnt;
 	};
 }
 

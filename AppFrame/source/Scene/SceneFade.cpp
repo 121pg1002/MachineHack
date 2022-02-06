@@ -91,6 +91,10 @@ namespace AppFrame::Scene {
                 MachineHuck::Flag::FlagData::SetFadeOutFlag(false);
                 MachineHuck::Flag::FlagData::SetBlackOutFlag(true);
             }
+            else if (MachineHuck::Flag::FlagData::GetNoExitFlag()) {
+                MachineHuck::Flag::FlagData::SetNoExitFlag(false);
+                GetSceneServer().PopBack(false);
+            }
             else {
                 GetSceneServer().PopBack(); // FadeOut下のシーンも一緒にポップバック
             }

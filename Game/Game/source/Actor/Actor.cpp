@@ -25,7 +25,7 @@ namespace MachineHuck::Actor {
 		_gaugeBase = std::make_unique<Gauge::GaugeBase>(*this);
 		_gaugeEnemy = std::make_unique<Gauge::GaugeEnemy>(*this);
 		_gaugePlayer = std::make_unique<Gauge::GaugePlayer>(*this);
-	
+
 	}
 
 	Actor::~Actor() {
@@ -215,6 +215,67 @@ namespace MachineHuck::Actor {
 
 	//	return false;
 	//}
+	bool Actor::CollisionFloor() {
+
+		// 移動した先でコリジョン判定
+		MV1_COLL_RESULT_POLY hitPoly;
+
+		for (auto i = GetActorServer().GetActors().begin(); i != GetActorServer().GetActors().end(); i++) {
+
+			if ((*i)->GetTypeId() != TypeId::Stage) {
+				continue;
+			}
+			else {
+
+				//全フロアマップを取得
+				auto allFloorMap = (*i)->GetCollision().GetAllFloorMap();
+
+				//触れているフロア番号を取得
+				auto floorNums = (*i)->GetCollision().GetFloorNum();
+
+
+				for (auto&& floorNum : floorNums) {
+
+
+
+					for (auto&& floor : allFloorMap[floorNum]) {
+
+						auto&& handle = floor->GetHandle();
+
+						//auto frameMapCollision = (*i)->GetCollision().GetMapCollision();
+						//ハンドルのコリジョン情報を取得
+						auto frameMapCollision = (*i)->GetCollision().GetMapCollision(handle);
+						//auto frameMapCollision = (*i)->GetCollision().GetMapCollision(handle.first);
+
+						Math::Vector4 up = { 0.0, 99.0, 0.0 };
+						Math::Vector4 under = { 0.0, -99999.0, 0.0 };
+						auto startPos = _position + up;
+						auto endPos = _position + under;
+						// 主人公の腰位置から下方向への直線
+						hitPoly = MV1CollCheck_Line(handle, frameMapCollision, ToDX(startPos), ToDX(endPos));
+
+
+
+						if (hitPoly.HitFlag) {
+							_position = { _position.GetX(), hitPoly.HitPosition.y, _position.GetZ() };
+
+							return true;
+						}
+						else {
+
+							return false;
+						}
+					}
+				}
+
+			}
+
+		}
+
+		return false;
+
+		return false;
+	}
 
 	bool Actor::CollisionFloor(AppFrame::Math::Vector4 oldPos, double r) {
 
@@ -517,10 +578,12 @@ namespace MachineHuck::Actor {
 							}
 							else {
 
-								return false;
+								continue;
 							}
 
 						}
+
+						return false;
 					}
 				}
 

@@ -34,9 +34,11 @@ namespace MachineHuck::Scene {
           _leftClickToStart = as.GetTexture("LeftClickToStart");*/
 
           // サウンドコンポーネントの取得
-        auto& sc = GetSoundComponent();
-        sc.PlayLoop("bgm1");
-        sc.SetVolume("bgm1", 50);
+        AppFrame::Asset::AssetServer::SoundMap soundToUsed{
+            {"close"  ,{"se/se_close.wav" ,false}}
+        };
+        GetAssetServer().LoadSounds(soundToUsed);
+
     }
     ///
     /// 入口
@@ -53,9 +55,15 @@ namespace MachineHuck::Scene {
             GetSceneServer().GoToScene("Team");
             _alpha = 255;
         }
+
         if (input.GetJoypad().Button_X()) {
-            GetSceneServer().PopBack(1);
-            GetSceneServer().PushBack("InGame",1);
+            //*se マップ画面を閉じる
+            GetSoundComponent().Play("close");
+
+            // GetSceneServer().PopBack();
+             //GetSceneServer().PushBack("InGame",1);
+
+            GetSceneServer().GoToScene("InGame", false);
             _alpha = 255;
         }
 
@@ -63,7 +71,7 @@ namespace MachineHuck::Scene {
     /// 更新
     void  SceneMap::Update() {
         _alpha = (_alpha + 8) % 255;
-       
+
     }
     ///
     /// 描画

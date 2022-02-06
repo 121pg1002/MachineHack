@@ -1,0 +1,32 @@
+{
+ 
+    "StageItem": [
+        {
+            "filename": "EnergyTank",
+            "handlename": "floor20",
+            "tx": -400,
+            "ty": 0,
+            "tz": 100,
+            "rx": -0,
+            "ry": -0,
+            "rz": 0,
+            "sx": 1,
+            "sy": 1,
+            "sz": 1
+        },
+        {
+            "filename": "EnergySuck",
+            "handlename": "floor16",
+            "tx": -200,
+            "ty": 0,
+            "tz": 500,
+            "rx": -0,
+            "ry": -0,
+            "rz": 0,
+            "sx": 1,
+            "sy": 1,
+            "sz": 1
+        }
+
+    ]
+}

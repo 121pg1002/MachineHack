@@ -158,14 +158,14 @@
     <ClCompile Include="source\Enemy\CatchEnemy.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="source\Parameter\IStageParam.cpp">
+      <Filter>Parameter</Filter>
+    </ClCompile>
     <ClCompile Include="source\Item\Item.cpp">
       <Filter>Item</Filter>
     </ClCompile>
     <ClCompile Include="source\Item\ItemParameter.cpp">
       <Filter>Item</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Parameter\IStageParam.cpp">
-      <Filter>Parameter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -399,14 +399,14 @@
     <ClInclude Include="source\Enemy\CatchEnemy.h">
       <Filter>Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="source\Parameter\IStageParam.h">
+      <Filter>Parameter</Filter>
+    </ClInclude>
     <ClInclude Include="source\Item\Item.h">
       <Filter>Item</Filter>
     </ClInclude>
     <ClInclude Include="source\Item\ItemParameter.h">
       <Filter>Item</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Parameter\IStageParam.h">
-      <Filter>Parameter</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

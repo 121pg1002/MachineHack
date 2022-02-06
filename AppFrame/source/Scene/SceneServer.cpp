@@ -72,6 +72,12 @@ namespace AppFrame::Scene {
         PushBack("FadeOut");          // フェードアウトをプッシュバック
     }
 
+    void SceneServer::GoToScene(std::string_view key, bool flag) {
+        InsertBelowBack(key.data(), flag);  // 次のシーンを挿入
+        InsertBelowBack("FadeIn");    // フェードインを挿入
+        PushBack("FadeOut");          // フェードアウトをプッシュバック
+    }
+
 
     void SceneServer::GoToScene(std::string_view key, std::string_view sceneNext, bool flag) {
         

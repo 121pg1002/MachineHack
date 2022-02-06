@@ -109,6 +109,9 @@ namespace MachineHuck::Gauge {
         int _handlePl0;
        // Actor::Actor& _actor; //!< アクタークラスの参照
 
+        int _handleNormalNumber[10] = { 0 };
+        int _handleGiri[10] = { 0 };
+
 
     };
 

@@ -15,8 +15,8 @@ namespace MachineHuck::Enemy {
 	//静的なメンバ―変数を実体化させる
 	int CatchEnemy::StateBase::_huckNoDamageTime;
 
-	CatchEnemy::CatchEnemy(AppFrame::Game& game) : EnemyBase{game} {
-	
+	CatchEnemy::CatchEnemy(AppFrame::Game& game) : EnemyBase{ game } {
+
 		_r = 0.0;
 		_huckR = 0.0;
 		_catchR = 0.0;
@@ -35,7 +35,7 @@ namespace MachineHuck::Enemy {
 	}
 
 	void CatchEnemy::LoadJson(const std::string& filePath) {
-	
+
 		auto eParam = std::make_unique<EnemyParameter>();
 		eParam->LoadEnemyParam(filePath);
 
@@ -46,7 +46,7 @@ namespace MachineHuck::Enemy {
 		_huckR = 200.0;
 
 		_catchR = 300.0;
-		
+
 		_catchRange = eParam->GetEnemyParam("searchrange", 1);
 		_searchRange = eParam->GetEnemyParam("searchrange", 1);
 		_huckingRange = eParam->GetEnemyParam("searchrange", 0);////////←とりあえず、仮
@@ -58,7 +58,7 @@ namespace MachineHuck::Enemy {
 		//死亡中ではない
 		if (_status != STATUS::DYING) {
 
-			
+
 			if (GetActorState() == ActorState::Hucking) {
 				_status = STATUS::ISHUCKING;
 			}
@@ -101,7 +101,7 @@ namespace MachineHuck::Enemy {
 	}
 
 	void CatchEnemy::HuckedRotation(double lx, double ly) {
-	
+
 
 		//横方向の傾きと縦方向の傾きの大きさ
 		double length = sqrt(lx * lx + ly * ly);
@@ -126,7 +126,7 @@ namespace MachineHuck::Enemy {
 
 
 		if (direction.Length() > 0.0) {
-		
+
 			auto yRot = std::atan2(direction.GetX(), direction.GetZ());
 
 			Math::Vector4 rot = { 0.1, yRot, 0.0 };
@@ -135,11 +135,11 @@ namespace MachineHuck::Enemy {
 			//移動していたら減らす
 			GetGaugeBase().Update(*this);
 			GetGaugeEnemy().Update(*this);
-		
+
 		}
 
 
-	
+
 	}
 
 	void CatchEnemy::Input(AppFrame::Input::InputComponent& input) {
@@ -177,7 +177,7 @@ namespace MachineHuck::Enemy {
 
 	// 待機
 	void CatchEnemy::StateFall::Enter() {
-		_owner._model->ChangeAnime("Fall", true);
+		_owner._model->ChangeAnime("Idle", true);
 	}
 
 	void CatchEnemy::StateFall::Update() {
@@ -197,7 +197,7 @@ namespace MachineHuck::Enemy {
 
 	//待機
 	void CatchEnemy::StateIdle::Enter() {
-		_owner._model->ChangeAnime("Fall", true);
+		_owner._model->ChangeAnime("Idle", true);
 	}
 
 	void CatchEnemy::StateIdle::Update() {
@@ -238,7 +238,7 @@ namespace MachineHuck::Enemy {
 	//}
 
 	void CatchEnemy::StateCatchPre::Update() {
-	
+
 		//ハッキングされているか
 		if (_owner.IsHucked()) {
 
@@ -249,7 +249,7 @@ namespace MachineHuck::Enemy {
 
 			//主人公の回転方向は反対向きのためマイナス
 			Math::Vector4 move = { std::cos(-rot.GetY() + nine), 0.0, std::sin(-rot.GetY() + nine) };
-		
+
 
 		}
 		else {//通常時
@@ -276,15 +276,15 @@ namespace MachineHuck::Enemy {
 			if (_catchPreTime < 0) {
 
 				_owner._state->GoToState("Catch");
-			
+
 			}
 
 
-		
+
 		}
 
 
-	
+
 	}
 
 
@@ -417,7 +417,7 @@ namespace MachineHuck::Enemy {
 								else {
 									//プレイヤーがハッキング状態か
 									if ((*i)->IsHucked()) {
-									
+
 										continue;
 									}
 									else {
@@ -439,7 +439,7 @@ namespace MachineHuck::Enemy {
 											(*i)->GetState().GoToState("Damage");
 
 										}
-									
+
 									}
 
 
@@ -447,39 +447,39 @@ namespace MachineHuck::Enemy {
 							}
 							else {
 
-								
+
 								//if (!Flag::FlagData::GetHuckNoDamageFlag()) {
 
 									//敵エネミーがハッキングされているか
-									if ((*i)->IsHucked()) {
+								if ((*i)->IsHucked()) {
 
-										//ハッキングされている敵が点で敵の扇形との当たり判定
-										if (_owner._collision->FanToPoint(_owner, **i, _owner._catchR, _owner._catchRange)) {
+									//ハッキングされている敵が点で敵の扇形との当たり判定
+									if (_owner._collision->FanToPoint(_owner, **i, _owner._catchR, _owner._catchRange)) {
 
-											//ハッキングされている敵のゲージを減少させる
-											(*i)->GetGaugeBase().DownGauge(15);
-											(*i)->GetGaugeEnemy().DownGauge(15);
+										//ハッキングされている敵のゲージを減少させる
+										(*i)->GetGaugeBase().DownGauge(15);
+										(*i)->GetGaugeEnemy().DownGauge(15);
 
-											//ハッキングされている敵をダメージ状態に変更
-											(*i)->GetState().PushBack("Damage");
+										//ハッキングされている敵をダメージ状態に変更
+										(*i)->GetState().PushBack("Damage");
 
-											Flag::FlagData::SetHuckDamageFlag(true);
-										}
-
-
+										Flag::FlagData::SetHuckDamageFlag(true);
 									}
-									else {
-										continue;
-									}
+
+
+								}
+								else {
+									continue;
+								}
 
 								//}
-							
-							
+
+
 							}
 
 
 						}
-					
+
 					}
 
 
@@ -498,7 +498,7 @@ namespace MachineHuck::Enemy {
 	}
 
 	void CatchEnemy::StateCatchAfter::Enter() {
-		_owner._model->ChangeAnime("Fall", true);
+		_owner._model->ChangeAnime("Idle", true);
 		_catchAfterTime = 120;
 	}
 
@@ -670,6 +670,13 @@ namespace MachineHuck::Enemy {
 		//	_owner._state->GoToState("Run");
 		//	_owner._status = STATUS::CHASE;
 		//}
+		if (_lx != 0.0 || _ly != 0.0) {
+			_owner._model->ChangeAnime("Walk", true);//頭取れたときに移動する
+		}
+		else {
+			_owner._model->ChangeAnime("Idle", true);
+		}
+
 
 		auto headPos = _owner._model->GetHeadPos("Character1_Head"); //!< 本当のキャッチの頭のフレームを入れる(仮)
 		Flag::FlagData::SetHeadPos(headPos);
@@ -698,7 +705,10 @@ namespace MachineHuck::Enemy {
 		//Math::Vector4 oldPos = _owner.GetPosition();
 
 		//ハッキング中の向き設定
-		_owner.HuckedRotation(_lx, _ly);
+		//_owner.HuckedRotation(_lx, _ly);
+
+		//ハッキング中の移動を設定
+		_owner.HuckedMove(_lx, _ly);
 
 		////地面と触れているかどうか
 		//_owner.CollisionFloor(oldPos);

@@ -16,7 +16,7 @@
 #include "../Flag/FlagData.h"
 
 #include <cmath>
-//#include <numbers>
+ //#include <numbers>
 #include <random>
 #include "EnemyParameter.h"
 
@@ -40,7 +40,6 @@ namespace MachineHuck::Enemy {
 		_huckingRange = 0.0;
 		_gaugeBase->Init();
 		_gaugeEnemy->Init(*this);//エネミーのエネルギーゲージの初期化
-
 	}
 
 	void TackleEnemy::LoadJson(const std::string& filePath)
@@ -48,19 +47,32 @@ namespace MachineHuck::Enemy {
 		auto eParam = std::make_unique<EnemyParameter>();
 		eParam->LoadEnemyParam(filePath);
 
-		//2つめの値がレベル
-		_r = eParam->GetEnemyParam("r", 0);
+		//auto eParam = std::make_unique<EnemyParameter>();
+		//eParam->LoadEnemyParam("resource/json/tackle.json");
+		////2つめの値がレベル
+		//_r = eParam->GetEnemyParam("r", 0);
 		_r = 150.0;
-		//_huckR = eParam->GetEnemyParam("r", 1);
+		//_huckR = eParam->GetEnemyParam("r", 0);
 		_huckR = 200.0;
 
 		_searchRange = eParam->GetEnemyParam("searchrange", 1);
 		_huckingRange = eParam->GetEnemyParam("searchrange", 0);////////←とりあえず、仮
 
 
+
 	}
 
+	//各種パラメーターを読み込む
+	//void TackleEnemy::ParameterLoad() {
+
+
+	//	
+	//}
+
+
 	void TackleEnemy::Update() {
+
+		EnemyBase::Update();
 		//ゲージ
 		_gaugeEnemy->Update();
 
@@ -86,7 +98,7 @@ namespace MachineHuck::Enemy {
 		}
 
 		if (_status != STATUS::DYING && _status != STATUS::CHASE) {
-			Move("TackleEnemy");
+			Move("TackleEnemy", _routine, 2.0, 200);
 		}
 
 		if (_status == STATUS::ISHUCKED) {
@@ -127,7 +139,7 @@ namespace MachineHuck::Enemy {
 		_state->Draw();
 		//if (!GetShadowMapflg() == TRUE) {
 		_gaugeEnemy->Draw(*this);
-//	}
+		//	}
 	}
 
 	void TackleEnemy::ComputeWorldTransform() {
@@ -333,7 +345,7 @@ namespace MachineHuck::Enemy {
 
 
 	void TackleEnemy::StateBase::Draw() {
-		
+
 		if (_owner.GetStatus() != STATUS::ISHUCKED) {
 			_owner._model->Draw();
 		}
@@ -344,18 +356,18 @@ namespace MachineHuck::Enemy {
 
 	// 待機
 	void TackleEnemy::StateFall::Enter() {
-		_owner._model->ChangeAnime("Fall", true);
+		_owner._model->ChangeAnime("Walk", true);
 	}
 
 	void TackleEnemy::StateFall::Update() {
 
 		//_owner.LockOn();
-		if (_owner._position.GetY() > 0){
+		if (_owner._position.GetY() > 0) {
 			auto posY = _owner._position.GetY() - 5;
 			//Math::Vector4 _pos = { 0.0, _pos_y, 0.0 };
 			_owner._position = { _owner.GetPosition().GetX(), posY, _owner.GetPosition().GetZ() };
 		}
-		else{
+		else {
 			Math::Vector4 pos = { _owner.GetPosition().GetX(), 0.0, _owner.GetPosition().GetZ() };
 			_owner._position = pos;
 			_owner._state->GoToState("Idle");
@@ -364,7 +376,7 @@ namespace MachineHuck::Enemy {
 
 	//待機
 	void TackleEnemy::StateIdle::Enter() {
-		_owner._model->ChangeAnime("Fall", true);
+		_owner._model->ChangeAnime("Walk", true);
 	}
 
 	void TackleEnemy::StateIdle::Update() {
@@ -391,6 +403,9 @@ namespace MachineHuck::Enemy {
 				if (_owner._collision->FanToPoint(_owner, **i, true)) {
 					_owner._state->GoToState("Run");
 					_owner._status = STATUS::CHASE;
+					//*se プレイヤー発見
+					_owner.GetGame().GetSoundComponent().Play("contact");
+
 				}
 
 			}
@@ -400,7 +415,7 @@ namespace MachineHuck::Enemy {
 	// 走り
 	void TackleEnemy::StateRun::Enter() {
 		_tacklePreTime = 60;
-		_owner._model->ChangeAnime("RunAniVor", true);
+		_owner._model->ChangeAnime("Walk", true);
 	}
 
 	void TackleEnemy::StateRun::Update() {
@@ -420,9 +435,10 @@ namespace MachineHuck::Enemy {
 		//}
 		/*_owner.LockOn();*/
 		Math::Vector4 oldPos = _owner.GetPosition();
-		_owner.Move("TackleEnemy");
+		//_owner.Move("TackleEnemy");
+		_owner.Direction();
 
-		
+
 		//追跡状態か
 		if (_owner._status == STATUS::CHASE)
 		{
@@ -445,10 +461,12 @@ namespace MachineHuck::Enemy {
 			//	_loseSightTime = 60;
 			//}
 
-			//タックル準備時間が0およびタックル距離内
-			if (_tacklePreTime < 0 && _dif.Length_XZ() < 600.0) {
+			//タックル準備時間が0
+			if (_tacklePreTime < 0) {
 
 				_owner._state->GoToState("Tackle");
+				//*se 攻撃(タックル）
+				_owner.GetGame().GetSoundComponent().Play("tackle");
 
 			}
 			else {//タックル準備中
@@ -504,19 +522,19 @@ namespace MachineHuck::Enemy {
 	}
 
 	void TackleEnemy::StateDamage::Update() {
-	
+
 		if (_owner._model->GetRepeatedCount() > 0) {
-		
+
 			_owner._state->PopBack();
-		
+
 		}
-	
+
 	}
 
 	TackleEnemy::StateTackle::StateTackle(TackleEnemy& owner) :StateBase{ owner } {
 
 		_tackleTime = 60;
-		_speed = 5.0;
+		_speed = 10.0;
 	}
 
 	void TackleEnemy::StateTackle::Enter() {
@@ -529,27 +547,27 @@ namespace MachineHuck::Enemy {
 		//ハッキングされている場合
 		if (_owner.GetStatus() == STATUS::ISHUCKED) {
 
-		//ゲージ減少
-		_owner.GetGaugeBase().DownGauge(30);
-		_owner.GetGaugeEnemy().DownGauge(30);
+			//ゲージ減少
+			_owner.GetGaugeBase().DownGauge(30);
+			_owner.GetGaugeEnemy().DownGauge(30);
 			//auto player = _owner.GetActorServer().GetDir("Player");
-			
+
 			auto rot = _owner.GetRotation();
-			
+
 			//z軸を0度とする
 			auto nine = DX_PI * 90.0 / 180.0;
 
 			//仕様書より6m/s
-			auto length = 600.0;
+			auto length = 9900.0;
 
 			//主人公の回転方向は反対向きのためマイナス
 			Math::Vector4 move = { std::cos(-rot.GetY() + nine), 0.0, std::sin(-rot.GetY() + nine) };
 
-			
+
 			//目線の先に目標をつくる
 			auto forward = move * length;
 
-			
+
 			_norm = forward.Normalize();
 
 
@@ -567,200 +585,205 @@ namespace MachineHuck::Enemy {
 			Math::Vector4 rot = { 0.1, rotY, 0.0 };
 			_owner.SetRotation(rot);
 
-			if (length < 600.0) {
+			//if (length < 600.0) {
 
-				auto mat = length / 600.0;
-				dif = dif / mat;
-			}
+			//	auto mat = length / 600.0;
+			//	dif = dif / mat;
+			//}
 			_norm = dif.Normalize();
 
 		}
 
-		
+
 		_owner._model->ChangeAnime("Attack", true);
 	}
 
 	void TackleEnemy::StateTackle::Update() {
 
-		if (_tackleTime < 0) {
+
+
+
+
+		//前フレームの位置を保存
+		Math::Vector4 oldPos = _owner.GetPosition();
+
+		_owner._position = _owner.GetPosition() + _norm * _speed;
+
+		//床から出たらタックル終了
+		if (!_owner.CollisionFloor()) {
 			_owner._state->GoToState("TackleAfter");
+			_owner._position = oldPos;
 		}
-		else {
 
-			//地面のコリジョンから出ないなら
-			Math::Vector4 oldPos = _owner.GetPosition();
+		////地面と触れているかどうか
+		//_owner.CollisionFloor(oldPos, _owner.GetR());
 
-			_owner._position = _owner.GetPosition() + _norm * _speed;
+		//主人公のカメラに移動量を送る
+		//_owner.SetHuckedMove(_norm * _speed);
 
 
-			////地面と触れているかどうか
-			_owner.CollisionFloor(oldPos, _owner.GetR());
+		//}
+		//else {
+		//
+		//	Math::Vector4 zero = { 0.0, 0.0, 0.0 };
+		//	//主人公のカメラに移動量を送る
+		//	_owner.SetHuckedMove(zero);
+		//}
 
-			//主人公のカメラに移動量を送る
-			_owner.SetHuckedMove(_norm * _speed);
-			//}
-			//else {
-			//
-			//	Math::Vector4 zero = { 0.0, 0.0, 0.0 };
-			//	//主人公のカメラに移動量を送る
-			//	_owner.SetHuckedMove(zero);
-			//}
+		////ハッキングされているか(追跡時のタックルを省く)
+		if (_owner.IsHucked()) {
 
-			////ハッキングされているか(追跡時のタックルを省く)
-			if (_owner.IsHucked()) {
+			for (auto i = _owner.GetActorServer().GetActors().begin(); i != _owner.GetActorServer().GetActors().end(); i++) {
 
-				for (auto i = _owner.GetActorServer().GetActors().begin(); i != _owner.GetActorServer().GetActors().end(); i++) {
+				//!< 敵ではなかったら次へ
+				if ((*i)->GetTypeId() != TypeId::Enemy) {
 
-					//!< 敵ではなかったら次へ
-					if ((*i)->GetTypeId() != TypeId::Enemy) {
+					continue;
 
+
+					//if (_invincibleTime < 0) {
+					//	continue;
+					//}
+
+					////プレイヤーではなかったら次へ
+					//if ((*i)->GetTypeId() != TypeId::Player) {
+					//	continue;
+					//}
+					//else {
+
+					//
+					//	//プレイヤーが円で敵のAABBとの当たり判定
+					//	if (_owner._collision->CircleToOrientedAABB(**i, _owner)) {
+					//	
+					//		//プレイヤーのゲージを減少させる
+					//		(*i)->GetGaugeBase().DownGauge(15);
+					//		_invincibleTime = 15;
+
+					//		//スタティックでプレイヤーに共有
+					//		Flag::FlagData::SetNoDamageTime(_invincibleTime);
+
+					//		//プレイヤーをダメージ状態に変更
+					//		(*i)->GetState().GoToState("Damage");
+					//	
+					//	}
+					//}
+
+
+				}
+				else {
+
+					//ハッキングされていたら次へ	
+					if ((*i)->IsHucked()) {
 						continue;
-
-
-						//if (_invincibleTime < 0) {
-						//	continue;
-						//}
-
-						////プレイヤーではなかったら次へ
-						//if ((*i)->GetTypeId() != TypeId::Player) {
-						//	continue;
-						//}
-						//else {
-
-						//
-						//	//プレイヤーが円で敵のAABBとの当たり判定
-						//	if (_owner._collision->CircleToOrientedAABB(**i, _owner)) {
-						//	
-						//		//プレイヤーのゲージを減少させる
-						//		(*i)->GetGaugeBase().DownGauge(15);
-						//		_invincibleTime = 15;
-
-						//		//スタティックでプレイヤーに共有
-						//		Flag::FlagData::SetNoDamageTime(_invincibleTime);
-
-						//		//プレイヤーをダメージ状態に変更
-						//		(*i)->GetState().GoToState("Damage");
-						//	
-						//	}
-						//}
-
-
 					}
 					else {
 
-						//ハッキングされていたら次へ	
-						if ((*i)->IsHucked()) {
-							continue;
-						}
-						else {
+						//相手エネミーの円と自分のAABB
+						if (_owner._collision->CircleToOrientedAABB(**i, _owner)) {
 
-							//相手エネミーの円と自分のAABB
-							if (_owner._collision->CircleToOrientedAABB(**i, _owner)) {
-
-								//int x = 0;
-								(*i)->SetActorState(ActorState::Dead);
-								//_owner._state->GoToState("Run");
-								//_owner._status = STATUS::CHASE;
-							}
-
+							//int x = 0;
+							(*i)->SetActorState(ActorState::Dead);
+							//_owner._state->GoToState("Run");
+							//_owner._status = STATUS::CHASE;
 						}
 
 					}
+
 				}
-
-
 			}
-			else {
-
-				//プレイヤー無敵時間中とプレイヤーダメージフラグがオンのときは、通さない
-				if (Flag::FlagData::GetNoDamageFlag() == false && Flag::FlagData::GetDamageFlag() == false) {
-
-					//ハッキング中の無敵時間中とハッキングダメージフラグがオンのときは、通さない
-					if (Flag::FlagData::GetHuckDamageFlag() == false && Flag::FlagData::GetHuckNoDamageFlag() == false) {
-
-						for (auto i = _owner.GetActorServer().GetActors().begin(); i != _owner.GetActorServer().GetActors().end(); i++) {
-
-							//エネミーではなかったら次へ
-							if ((*i)->GetTypeId() != TypeId::Enemy) {
-
-								//プレイヤーではなかったら次へ
-								if ((*i)->GetTypeId() != TypeId::Player) {
-									continue;
-								}
-								else {
-
-									if ((*i)->IsHucked()) {
-									
-										continue;
-									
-									}
-									else {
-
-										//プレイヤーが円で敵のAABBとの当たり判定
-										if (_owner._collision->CircleToOrientedAABB(**i, _owner)) {
-
-											//プレイヤーのゲージを減少させる
-											(*i)->GetGaugeBase().DownGauge(15);
-											(*i)->GetGaugePlayer().DownGauge(15);
-
-											//プレイヤーを無敵時間にする
-											//_invincibleTime = true;
-
-											//プレイヤーのダメージフラグを設定
-											Flag::FlagData::SetDamageFlag(true);
-
-											//プレイヤーをダメージ状態に変更
-											(*i)->GetState().GoToState("Damage");
-
-										}
-									
-									}
 
 
-								}
+		}
+		else {
 
+			//プレイヤー無敵時間中とプレイヤーダメージフラグがオンのときは、通さない
+			if (Flag::FlagData::GetNoDamageFlag() == false && Flag::FlagData::GetDamageFlag() == false) {
+
+				//ハッキング中の無敵時間中とハッキングダメージフラグがオンのときは、通さない
+				if (Flag::FlagData::GetHuckDamageFlag() == false && Flag::FlagData::GetHuckNoDamageFlag() == false) {
+
+					for (auto i = _owner.GetActorServer().GetActors().begin(); i != _owner.GetActorServer().GetActors().end(); i++) {
+
+						//エネミーではなかったら次へ
+						if ((*i)->GetTypeId() != TypeId::Enemy) {
+
+							//プレイヤーではなかったら次へ
+							if ((*i)->GetTypeId() != TypeId::Player) {
+								continue;
 							}
 							else {
 
+								if ((*i)->IsHucked()) {
 
-									//ハッキングされているか
-									if ((*i)->IsHucked()) {
+									continue;
 
-										//ハッキングされている敵が円で敵のAABBとの当たり判定
-										if (_owner._collision->CircleToOrientedAABB(**i, _owner)) {
+								}
+								else {
 
-											//ハッキングされている敵のゲージを減少させる
-											(*i)->GetGaugeBase().DownGauge(15);
-											(*i)->GetGaugeEnemy().DownGauge(15);
+									//プレイヤーが円で敵のAABBとの当たり判定
+									if (_owner._collision->CircleToOrientedAABB(**i, _owner)) {
 
-											//ハッキングされている敵をダメージ状態に変更
-											(*i)->GetState().PushBack("Damage");
+										//*se ダメージ
+										_owner.GetGame().GetSoundComponent().Play("damage");
 
-											Flag::FlagData::SetHuckDamageFlag(true);
-										}
+										//プレイヤーのゲージを減少させる
+										(*i)->GetGaugeBase().DownGauge(15);
+										(*i)->GetGaugePlayer().DownGauge(15);
 
+										//プレイヤーを無敵時間にする
+										//_invincibleTime = true;
+
+										//プレイヤーのダメージフラグを設定
+										Flag::FlagData::SetDamageFlag(true);
+
+										//プレイヤーをダメージ状態に変更
+										(*i)->GetState().GoToState("Damage");
 
 									}
-									else {
-										continue;
-									}
 
-
-
-
-
+								}
 
 
 							}
 
+						}
+						else {
+
+
+							//ハッキングされているか
+							if ((*i)->IsHucked()) {
+
+								//ハッキングされている敵が円で敵のAABBとの当たり判定
+								if (_owner._collision->CircleToOrientedAABB(**i, _owner)) {
+
+									//ハッキングされている敵のゲージを減少させる
+									(*i)->GetGaugeBase().DownGauge(15);
+									(*i)->GetGaugeEnemy().DownGauge(15);
+
+									//ハッキングされている敵をダメージ状態に変更
+									(*i)->GetState().PushBack("Damage");
+
+									Flag::FlagData::SetHuckDamageFlag(true);
+								}
+
+
+							}
+							else {
+								continue;
+							}
+
+
+
+
+
+
 
 						}
-					
+
+
 					}
 
-
 				}
-
 
 
 			}
@@ -769,14 +792,18 @@ namespace MachineHuck::Enemy {
 
 		}
 
+
+
+
+
 		auto headPos = _owner._model->GetHeadPos("Character1_Head");
 		Flag::FlagData::SetHeadPos(headPos);
-			_tackleTime--;
-		
+		_tackleTime--;
+
 	}
 
 	void TackleEnemy::StateTackleAfter::Enter() {
-		_owner._model->ChangeAnime("Fall", true);
+		_owner._model->ChangeAnime("Walk", true);
 		_tackleAfterTime = 120;
 	}
 
@@ -799,7 +826,7 @@ namespace MachineHuck::Enemy {
 
 		}
 		else {
-		
+
 			if (_owner.GetStatus() == STATUS::ISHUCKING) {
 				_owner._state->GoToState("IsHucking");
 				//_loseSightTime = 60;
@@ -807,7 +834,7 @@ namespace MachineHuck::Enemy {
 			else if (_owner.GetStatus() == STATUS::ISHUCKED) {
 				_owner._state->GoToState("IsHucked");
 			}
-		
+
 		}
 
 		//_invincibleTime = false;
@@ -828,7 +855,7 @@ namespace MachineHuck::Enemy {
 
 	void TackleEnemy::StateHucking::Enter()
 	{
-		_owner._model->ChangeAnime("Hucking", false);
+		_owner._model->ChangeAnime("Die", false);
 	}
 
 	void TackleEnemy::StateHucking::Update()
@@ -856,52 +883,60 @@ namespace MachineHuck::Enemy {
 	}
 
 
-	void TackleEnemy::StateHucked::Enter(){
-		_owner._model->ChangeAnime("Attack");
+	void TackleEnemy::StateHucked::Enter() {
+		_owner._model->ChangeAnime("Idle", true);
 	}
 
 	void TackleEnemy::StateHucked::Input(AppFrame::Input::InputComponent& input) {
-	
+
 		auto& joypad = input.GetJoypad();
 		auto& key = input.GetKeyBoard();
 		_lx = 0.0, _ly = 0.0;
 
-		    // 右移動と左移動
-			if (joypad.LHorison() != 0.0)
-			{
-				_lx = input.GetJoypad().LHorison() / 1000.0;
-			}
-			else if (key.Button_D() != 0)
-			{
-				_lx = 1.0;
-			}
-			else if (key.Button_A() != 0)
-			{
-				_lx = -1.0;
-			}
+		// 右移動と左移動
+		if (joypad.LHorison() != 0.0)
+		{
+			_lx = input.GetJoypad().LHorison() / 1000.0;
+		}
+		else if (key.Button_D() != 0)
+		{
+			_lx = 1.0;
+		}
+		else if (key.Button_A() != 0)
+		{
+			_lx = -1.0;
+		}
 
-			// 前進と後退
-			if (input.GetJoypad().LVertical() != 0.0)
-			{
-				_ly = input.GetJoypad().LVertical() / 1000.0;
-			}
-			else if (key.Button_W() != 0)
-			{
-				_ly = 1.0;
-			}
-			else if (key.Button_S() != 0)
-			{
-				_ly = -1.0;
-			}
-		
+		// 前進と後退
+		if (input.GetJoypad().LVertical() != 0.0)
+		{
+			_ly = input.GetJoypad().LVertical() / 1000.0;
+		}
+		else if (key.Button_W() != 0)
+		{
+			_ly = 1.0;
+		}
+		else if (key.Button_S() != 0)
+		{
+			_ly = -1.0;
+		}
+
 		if (input.GetJoypad().Button_RT() || input.GetKeyBoard().Button_Space()) {
-			
+
 			_owner._state->GoToState("Tackle");
 		}
-		
+
 	}
 
-	void TackleEnemy::StateHucked::Update(){
+	void TackleEnemy::StateHucked::Update() {
+
+		if (_lx != 0.0 || _ly != 0.0) {
+			_owner._model->ChangeAnime("Walk", true);//頭取れたときに移動する
+		}
+		else {
+			_owner._model->ChangeAnime("Idle", true);
+		}
+
 		//// ハッキングされたか確認
 		//_owner.HitCheckFrom();
 		//if (_owner.GetActorState() != ActorState::Hucked)
@@ -930,8 +965,8 @@ namespace MachineHuck::Enemy {
 		if (_huckNoDamageTime < 0 && Flag::FlagData::GetHuckNoDamageFlag()) {
 			Flag::FlagData::SetHuckNoDamageFlag(false);
 		}
-		 
-		
+
+
 		//移動時にフロアの壁との判定を取る
 		Math::Vector4 oldPos = _owner.GetPosition();
 
@@ -1015,22 +1050,25 @@ namespace MachineHuck::Enemy {
 
 			_owner._state->GoToState("Die");
 			_owner._status = STATUS::DYING;
+			//*se 破壊される
+			//_owner.GetGame().GetSoundComponent().Play("push");
+
 
 			Flag::FlagData::SetHuckDamageFlag(false);
 			Flag::FlagData::SetHuckNoDamageFlag(false);
 
 			for (auto&& actor : _owner.GetActorServer().GetActors()) {
-			
+
 				if (actor->GetTypeId() != TypeId::Player) {
 					continue;
 				}
 				else {
-				
+
 					actor->SetActorState(ActorState::Active);
 				}
-			
+
 			}
-			
+
 		}
 
 		//ハッキングされているかどうか

@@ -140,12 +140,18 @@ bool AppFrame::Game::Initialize() {
     _gParam = std::make_unique<MachineHuck::Gimmick::GimmickParameter>();
     _iParam = std::make_unique<MachineHuck::Item::ItemParameter>();
 
+
     return true;
 }
 /// 実行
 void AppFrame::Game::Run() {
     // メインループ
     while (_state != State::Quit) {
+
+        if (CheckHitKey(KEY_INPUT_ESCAPE)) {
+            break;
+        }
+
         Input(*_input);  // 入力
         Update(); // 更新
         Render(); // 描画

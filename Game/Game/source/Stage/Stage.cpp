@@ -21,7 +21,7 @@ namespace MachineHuck::Stage {
 
 	namespace {
 
-		constexpr int StageAll = 3;        //!< 読み込むstagejsonの数
+		constexpr int StageAll = 8;        //!< 読み込むstagejsonの数
 		constexpr double Differ = 3000.0; //!< 1フロアのサイズ
 		constexpr double StartX = -5.0 * Differ;
 		constexpr int BoardSize = 10;
@@ -74,7 +74,7 @@ namespace MachineHuck::Stage {
 			auto no = std::to_string(i);
 			//下の二つを起動すればjsonが読み込める
 			//auto stageParameter = std::make_unique<StageParameter>();
-			game.GetStageParameter().LoadStageParameter(i, "resource/json/stage" + no + ".json");
+			game.GetStageParameter().LoadStageParameter(i, "resource/json/stage/stage" + no + ".json");
 		}
 
 		game.GetStageParameter().LoadStageTable("resource/json/stagetable.json");
@@ -90,8 +90,13 @@ namespace MachineHuck::Stage {
 
 		//	{1,    {"teste0", "floor_collision", {"C0_01_02", ""}}},
 			{0,    {"stage0", "collision", {"A0_00_01"}, 0}},
-			{1,    {"stage1", "collision", {"A0_00_00", "A1_00_03"}, 10}},
-			{2,    {"Dunge2", "dungeon_collision", {"", ""}, 100}}
+			{1,    {"stage1", "collision", {"A0_00_00", "A1_00_02"}, 10}},
+			{2,    {"stage2", "collision", {"A1_00_01", "A2_00_03"}, 20}},
+			{3,    {"stage3", "collision", {"A2_00_02", "A3_00_04", "B1_01_03"}, 30}},
+			{4,    {"stage4", "collision", {"A3_00_03", "B2_01_04"}, 40}},
+			{5,    {"stage5", "collision", {"B1_00_03", "B2_01_02"}, 31}},
+			{6,    {"stage6", "collision", {"B2_01_03", "B3_01_01"}, 21}},
+			{7,    {"stage7", "collision", {"B3_01_02", "C1_02_01"}, 11}}
 		};
 
 		//ステージのコリジョン情報を取得
@@ -144,12 +149,14 @@ namespace MachineHuck::Stage {
 
 				auto&& handle = floor->GetHandle();
 
-				//ナビメッシュのコリジョン情報を構築
-				GetCollision().SetMapCollision(handle);
-
 				auto stageNum = GetCollision().GetFloorStageNum(i);
 
+
+
 				auto [handleName, collName, warpName, floorNum] = _collisionFloorNameMap[stageNum];
+
+				//ナビメッシュのコリジョン情報を構築
+				GetCollision().SetMapCollision(handle, collName);
 
 				std::vector<std::string> vecStr;
 
@@ -283,6 +290,11 @@ namespace MachineHuck::Stage {
 	Stage::~Stage() {
 		//_allFloor.clear();
 		_allFloorMap.clear();
+		_drawFloorV.clear();
+		_secretVMap.clear();
+		_secretV.clear();
+		_collisionFloorNameMap.clear();
+		_floorStageNum.clear();
 		//_floor.clear();
 	}
 
@@ -407,7 +419,7 @@ namespace MachineHuck::Stage {
 
 
 		auto stageNo = std::to_string(_stageNo);
-		DrawFloor();
+		//DrawFloor();
 		DrawString(0, 50, stageNo.c_str(), GetColor(255, 0, 0));
 
 

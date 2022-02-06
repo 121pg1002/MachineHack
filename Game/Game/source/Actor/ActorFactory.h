@@ -123,6 +123,9 @@ namespace MachineHuck::Actor {
          * @param  stageTable
          */
         void SetStageTable(const std::vector<StageV> stageTable) { _stageTableV = stageTable; }
+ 
+        void SetOldStageNo() { _oldStageNo.clear(); _oldStageNo.emplace_back(-1); }
+
 
     private:
         AppFrame::Game& _game;

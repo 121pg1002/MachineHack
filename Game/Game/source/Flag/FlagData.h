@@ -2,7 +2,7 @@
 /*****************************************************************//**
  * @file   FlagData.h
  * @brief  フラグデータ管理クラス
- *  
+ *
  * @author hikaru Goto
  * @date   January 28 2022
  *********************************************************************/
@@ -22,6 +22,19 @@ namespace MachineHuck::Flag {
 		static void SetFadeInFlag(bool flag) { _fadeInFlag = flag; }
 
 		static void SetFadeOutFlag(bool flag) { _fadeOutFlag = flag; }
+
+		/**
+		 *
+		 * @brief  シーン遷移における現シーンのExit処理を行わないかどうか
+		 * @return _noExitFlag
+		 */
+		static bool GetNoExitFlag() { return _noExitFlag; }
+
+		/**
+		 * @brief  シーン遷移における現シーンのExit処理を行わないかの設定
+		 * @param  flag
+		 */
+		static void SetNoExitFlag(bool flag) { _noExitFlag = flag; }
 
 		/**
 		 * @brief  ブラックアウトのフラグを取得
@@ -49,14 +62,14 @@ namespace MachineHuck::Flag {
 
 		/**
 		 *
-		 * @brief  プレイヤーのダメージフラグを取得       
+		 * @brief  プレイヤーのダメージフラグを取得
 		 * @return _damageFlag
 		 */
 		static int GetDamageFlag() { return _damageFlag; }
 
 		/**
-		 * 
-		 * @brief  プレイヤーのダメージフラグを設定       
+		 *
+		 * @brief  プレイヤーのダメージフラグを設定
 		 * @param  flag
 		 */
 		static void SetDamageFlag(bool flag) { _damageFlag = flag; }
@@ -76,20 +89,29 @@ namespace MachineHuck::Flag {
 
 		/**
 		 *
-		 * @brief  ハッキング状態のダメージフラグを取得       
+		 * @brief  ハッキング状態のダメージフラグを取得
 		 * @return _huckDamageFlag
 		 */
 		static int GetHuckDamageFlag() { return _huckDamageFlag; }
 
 		/**
-		 * 
-		 * @brief  ハッキング状態のダメージフラグを設定       
+		 *
+		 * @brief  ハッキング状態のダメージフラグを設定
 		 * @param  flag
 		 */
 		static void SetHuckDamageFlag(bool flag) { _huckDamageFlag = flag; }
 
+		/**
+		 * @brief  プレイヤーが死亡したかフラグを取得
+		 * @return _playerDead
+		 */
+		static bool GetPlayerDead() { return _playerDead; }
 
-
+		/**
+		 * @brief  プレイヤーが死亡したフラグを設定
+		 * @param  flag
+		 */
+		static void SetPlayerDead(bool flag) { _playerDead = flag; }
 
 
 		/**
@@ -105,16 +127,18 @@ namespace MachineHuck::Flag {
 		static void SetCameraPos(VECTOR pos) { _cameraPos = pos; }
 
 		/**
-		 * @brief  ハッキング中の敵の頭の位置を取得      
+		 * @brief  ハッキング中の敵の頭の位置を取得
 		 * @return _headPos
 		 */
 		static VECTOR GetHeadPos() { return _headPos; }
 
 		/**
-		 * @brief  敵の頭の位置を設定         
+		 * @brief  敵の頭の位置を設定
 		 * @param  pos
 		 */
 		static void SetHeadPos(VECTOR pos) { _headPos = pos; }
+
+
 
 	private:
 
@@ -127,6 +151,8 @@ namespace MachineHuck::Flag {
 		static bool _huckNoDamageFlag;
 		static bool _huckDamageFlag;
 		static VECTOR _headPos;
+		static bool _noExitFlag;
+		static bool _playerDead;
 
 
 	};

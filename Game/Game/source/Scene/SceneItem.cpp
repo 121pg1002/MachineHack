@@ -32,7 +32,13 @@ namespace MachineHuck::Scene {
         /*  _gameTitleHandle = as.GetTexture("GameTitle");
           _leftClickToStart = as.GetTexture("LeftClickToStart");*/
 
-          // サウンドコンポーネントの取得
+        AppFrame::Asset::AssetServer::SoundMap soundToUsed{
+            {"close"  ,{"se/se_close.wav" ,false}}
+        };
+        GetAssetServer().LoadSounds(soundToUsed);
+
+
+        // サウンドコンポーネントの取得
         auto& sc = GetSoundComponent();
         sc.PlayLoop("bgm1");
         sc.SetVolume("bgm1", 50);
@@ -52,16 +58,21 @@ namespace MachineHuck::Scene {
             GetSceneServer().GoToScene("Team");
             _alpha = 255;
         }
+
         if (input.GetJoypad().Button_Y()) {
-            GetSceneServer().PopBack();
-            GetSceneServer().PushBack("InGame",1);
+
+            //*se アイテム画面を閉じる
+            GetSoundComponent().Play("close");
+
+            //GetSceneServer().PopBack();
+            //GetSceneServer().PushBack("InGame",1);
+            GetSceneServer().GoToScene("InGame", false);
             _alpha = 255;
         }
     }
     /// 更新
     void SceneItem::Update() {
         _alpha = (_alpha + 8) % 255;
-      
     }
     ///
     /// 描画

@@ -55,5 +55,7 @@ namespace AppFrame::Sound {
         }
 
     }
+
+    int SoundComponent::CheckSoundPlaying() { return CheckSoundFile(); }
 }
 

@@ -104,22 +104,23 @@ namespace MachineHuck::Actor {
 
 
         /**
-         * @brief   エネミーかどうか      
+         * @brief   エネミーかどうか
          * @return  TypeId::Enemy
          */
         TypeId IsEnemy() const { return TypeId::Enemy; }
 
         /**
-        * @brief   エネミーかどうか
-        * @return  TypeId::Enemy
-        */
+         * @brief   エネミーかどうか
+         * @return  TypeId::Enemy
+         */
         TypeId IsItem() const { return TypeId::Item; }
 
+
         /**
-         * 
-         * @brief 死亡状態に変更       
+         *
+         * @brief 死亡状態に変更
          */
-        void SetDead()  { _actorState = ActorState::Dead; }
+        void SetDead() { _actorState = ActorState::Dead; }
 
         /**
          * @brief ステージフロアとの当たり判定
@@ -129,12 +130,17 @@ namespace MachineHuck::Actor {
          */
          //bool CollisionFloor(AppFrame::Math::Vector4 oldPos, int num);
 
-         /**
-          * @brief ステージフロアとの当たり判定
-          * @param oldPos 前フレームの位置
-          * @param r      半径
-          * @return 当たっているか当たっていないか
-          */
+        /**
+         * @brief  ステージフロアとの当たり判定
+         * @return 当たっているか当たっていないか
+         */
+        bool CollisionFloor();
+        /**
+         * @brief ステージフロアとの当たり判定と座標を戻すかどうかの判定
+         * @param oldPos 前フレームの位置
+         * @param r      半径
+         * @return 当たっているか当たっていないか
+         */
         bool CollisionFloor(AppFrame::Math::Vector4 oldPos, double r);
 
         /**
@@ -181,6 +187,12 @@ namespace MachineHuck::Actor {
         Math::Vector4 GetRotation() const { return _rotation; }
         void SetScale(const Math::Vector4& scale) { _scale = scale; }
         Math::Vector4 GetScale() const { return _scale; }
+
+        void SetLevel(const int& level) { _level = level; }
+        int GetLevel() const { return _level; }
+        void SetRoutine(const int& routine) { _routine = routine; }
+        int GetRoutine() const { return _routine; }
+
 
         void SetMove(const Math::Vector4& move) { _move = move; }
         Math::Vector4 GetMove() const { return _move; }
@@ -328,6 +340,10 @@ namespace MachineHuck::Actor {
         Math::Vector4 _huckedMove{ 0.0, 0.0, 0.0 };
 
         bool _shadowmapflg;  //シャドウマップへの描画をするかどうかのフラグ
+
+        int _level;   //!< レベル
+        int _routine; //!< 思考ルーチン番号
+
 
     private:
 

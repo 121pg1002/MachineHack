@@ -7,12 +7,10 @@
  *********************************************************************/
 
 #include "ActorFactory.h"
-#include <algorithm>
 #include "ActorServer.h"
 #include "../Player/Player.h"
 #include "../Enemy/TackleEnemy.h"
 #include "../Enemy/CatchEnemy.h"
-#include "../Enemy/EnemyParameter.h"
 #include "../Stage/Stage.h"
 #include "../Model/ModelAnimComponent.h"
 #include "../State/StateComponent.h"
@@ -42,6 +40,7 @@ namespace MachineHuck::Actor {
 namespace MachineHuck::Actor {
     /// コンストラクタ
     ActorFactory::ActorFactory(AppFrame::Game& game) : _game{ game } {
+
     }
     /// クリエイターの登録
     bool ActorFactory::Register(std::string_view type, std::unique_ptr<CreatorBase> creator) {
@@ -79,16 +78,14 @@ namespace MachineHuck::Actor {
         _spawnProgress = 0;
         _progress = 0;
         _eStageParamVMap = eStageParamVMap;
-
     }
+
     void ActorFactory::SetSpawnTable(std::unordered_map<int, ISMV> vIStageParamMap) {
         _spawnProgress = 0;
         _progress = 0;
         _iStageParamVMap = vIStageParamMap;
 
     }
-
-
 
     //void ActorFactory::UpdateSpawn() {
     //    while (_spawnTable.size() > _spawnProgress) {
@@ -142,7 +139,7 @@ namespace MachineHuck::Actor {
 
             }
 
-            //前のフロアのエネミーとアイテムを削除する
+            //前のフロアのエネミーを削除する
             for (auto i = _game.GetActorServer().GetActors().begin(); i < _game.GetActorServer().GetActors().end(); i++) {
 
                 //エネミーかどうか
@@ -158,14 +155,11 @@ namespace MachineHuck::Actor {
 
                 }
 
+
             }
-
-
 
             ////前のステージ番号を更新
             _oldStageNo = _currentStageNo;
-
-
 
 
 
@@ -179,6 +173,7 @@ namespace MachineHuck::Actor {
                 for (auto no : num) {
 
                     auto& spawnFloor = _eStageParamVMap[no];
+
                     //新しい描画フロアのエネミーをリスポーンさせる
                     for (auto&& floorEnemy : spawnFloor) {
 
@@ -191,65 +186,26 @@ namespace MachineHuck::Actor {
                         actor->SetRotation(floorEnemy.GetRotation());
                         actor->SetScale(floorEnemy.GetScale());
 
-                        //auto levelRoutineMap = actor->GetGame().GetEnemyParameter().GetLevelRoutineMap();
-
-                        ////vectorのイテレータを取得
-                        ////auto iter = std::find(spawnFloor.begin(), spawnFloor.end(), floorEnemy);
-
-                        //////インデックス番号を取得
-                        ////auto num = std::distance(spawnFloor.begin(), iter);
-                        //// 
-                        //auto vLevelRoutine = levelRoutineMap[no];
-
-                        //////対応する番号の要素を取得
-                        //auto&& [level, routine] = vLevelRoutine[num];
-
-
-                        //actor->SetLevel(level);
-                        //actor->SetRoutine(routine);
-
-
+                        //actor->SetLevel(floorEnemy.GetLevel());
+                        actor->SetRoutine(floorEnemy.GetRoutine());
 
                         _game.GetActorServer().Add(std::move(actor));
 
                     }
+
                     auto& spawnFloori = _iStageParamVMap[no];
                     //新しい描画フロアのエネミーをリスポーンさせる
                     for (auto&& floorItem : spawnFloori) {
 
                         auto&& actor = Create("Item");
 
-                        //auto pos = floor.GetPosition();
-                        //Math::Vector4 dif = {};
-
                         actor->SetPosition(floorItem.GetPosition());
                         actor->SetRotation(floorItem.GetRotation());
                         actor->SetScale(floorItem.GetScale());
 
-                        //auto levelRoutineMap = actor->GetGame().GetEnemyParameter().GetLevelRoutineMap();
-
-                        ////vectorのイテレータを取得
-                        ////auto iter = std::find(spawnFloor.begin(), spawnFloor.end(), floorEnemy);
-
-                        //////インデックス番号を取得
-                        ////auto num = std::distance(spawnFloor.begin(), iter);
-                        //// 
-                        //auto vLevelRoutine = levelRoutineMap[no];
-
-                        //////対応する番号の要素を取得
-                        //auto&& [level, routine] = vLevelRoutine[num];
-
-
-                        //actor->SetLevel(level);
-                        //actor->SetRoutine(routine);
-
-
-
                         _game.GetActorServer().Add(std::move(actor));
 
                     }
-
-
 
 
 
@@ -258,7 +214,6 @@ namespace MachineHuck::Actor {
 
 
             }
-
 
 
 
@@ -277,7 +232,7 @@ namespace MachineHuck::Actor {
         // カメラの生成
         auto camera = std::make_shared<Camera::CameraComponent>();
         camera->Init();
-        camera->SetPosition({ 0, 1500, -500 });
+        camera->SetPosition({ 0, 1000, -500 });
         camera->SetTarget({ 0, 100, 0 });
 
         // プレイヤーの生成
@@ -325,8 +280,6 @@ namespace MachineHuck::Actor {
 
         enemy->LoadJson("resource/json/tackle.json");
 
-
-
         //↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓は、他の生成するときに同じ敵の種類のものを書く
         //enemy->LoadJson("resource/json/Grab.json");
         //enemy->LoadJson("resource/json/Alart.json");
@@ -342,25 +295,23 @@ namespace MachineHuck::Actor {
         //model->Register("Idle", 2);
         //model->Register("Fall", 3);
         //model->Register("Attack", 4);
-        /*
-        No.0 attackmae
-        No.1 kaiten:頭が取れる
-        No,2 walk　歩く
-        No.3 attack 攻撃モーション 静止
-        No.4 idle  待機
-        */
+        /*No.0 idle
+            No.1 walk
+            No, 2 attack
+            No.3 tackle
+            */
         model->Register("Hucking", 3);
-        model->Register("Die", 1);
-        model->Register("Idle", 4);
-        model->Register("Fall", 2);
-        model->Register("Attack", 0);
-
-        model->Register("Hucking", 0);
-        model->Register("Die", 1);
-        model->Register("Idle", 2);
-        //model->Register("Die2", 2);
-        model->Register("Fall", 3);
-        model->Register("Attack", 4);
+        model->Register("Die", 0);
+        model->Register("Idle", 0);
+        model->Register("Walk", 1);
+        model->Register("Attack", 2);
+        model->Register("Tackle", 3);
+        //model->Register("Hucking", 0);
+        //model->Register("Die", 1);
+        //model->Register("Idle", 2);
+        ////model->Register("Die2", 2);
+        //model->Register("Fall", 3);
+        //model->Register("Attack", 4);
         //model->Register("Normal", 5);
         //model->Register("RunAniBack", 6);
         model->Register("RunAniVor", 7);
@@ -409,12 +360,25 @@ namespace MachineHuck::Actor {
         // モデルの読み込みと生成
         auto model = std::make_unique<Model::ModelAnimeComponent>(*enemy);
         model->SetModel("Spider", 1000);
-        model->Register("Hucking", 0);
-        model->Register("Die", 1);
-        model->Register("Idle", 2);
-        //model->Register("Die2", 2);
-        model->Register("Fall", 3);
-        model->Register("Catch", 4);
+        //model->Register("Hucking", 0);
+        //model->Register("Die", 1);
+        //model->Register("Idle", 2);
+        //model->Register("Fall", 3);
+        //model->Register("Catch", 4);
+        //model->Register("RunAniVor", 7);
+
+        model->Register("Hucking", 3);
+        model->Register("Die", 0);
+        model->Register("Idle", 0);
+        model->Register("Walk", 1);
+        model->Register("Attack", 2);
+        model->Register("Tackle", 3);
+        //model->Register("Hucking", 0);
+        //model->Register("Die", 1);
+        //model->Register("Idle", 2);
+        ////model->Register("Die2", 2);
+        //model->Register("Fall", 3);
+        //model->Register("Attack", 4);
         //model->Register("Normal", 5);
         //model->Register("RunAniBack", 6);
         model->Register("RunAniVor", 7);

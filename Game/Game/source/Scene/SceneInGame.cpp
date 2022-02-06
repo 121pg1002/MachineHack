@@ -19,7 +19,7 @@
 
 namespace {
 
-    constexpr int StageAll = 1; //!< 読み込むjsonの最大数
+    constexpr int StageAll = 40; //!< 読み込むjsonの最大数
 
 }
 
@@ -38,7 +38,8 @@ namespace MachineHuck::Scene {
             {"Player",    "Player/player.mv1"},
             {"SkySphere", "model/skysphere.mv1"},
             {"Ground",    "model/ground.mv1"},
-            {"Spider",    "tackle/takcle.mv1"},
+            //  {"Spider",    "tackle/takcle.mv1"},
+            {"Spider",    "tackle/takcle_sotai_multimotion.mv1"},
             {"pCube",      "model/pCube.mv1"},
             {"floor",     "model/floor.mv1"},
             {"wall",      "model/wall.mv1"},
@@ -53,20 +54,71 @@ namespace MachineHuck::Scene {
             //  {"damagefloor",  "target.mv1"},
               {"entrypoint", "entrypoint.mv1"},
               {"test", "test.mv1"},
+              {"Item","Item.mv1"}
               // {"Dungeon",   "Dungeon.mv1"},
               // {"stage0",    "stage0.mv1"}
-              {"Item","Item.mv1"}
 
         };
 
         //ステージ用
         AppFrame::Asset::AssetServer::StageMap stageHandles{
             //{"Dunge0",   "Dungeon.mv1"}
-            {"stage0",    "StageFloor/stage0.mv1"},
-            {"stage1",    "StageFloor/stage1.mv1"},
-            {"Dunge2",   "StageFloor/Dunge2.mv1"}
+            {"stage0",   "StageFloor/stage0.mv1"},
+            {"stage1",   "StageFloor/stage1.mv1"},
+            {"stage2",   "StageFloor/stage2.mv1"},
+            {"stage3",   "StageFloor/stage3.mv1"},
+            {"stage4",   "StageFloor/stage4.mv1"},
+            {"stage5",   "StageFloor/stage5.mv1"},
+            {"stage6",   "StageFloor/stage6.mv1"},
+            {"stage7",   "StageFloor/stage7.mv1"}
             //    {"Stage3",    "Stage3.mv1"}
         };
+
+        // 使用する音のテーブル
+        AppFrame::Asset::AssetServer::SoundMap soundToUsed{
+              {"floor1",{"bgm/bgm_floor1.mp3"       ,false}}              ,
+              //{"floor2",{"se/bgm_floor2"       ,true}}              ,
+              //{"bossbattle",{"se/bgm_bossbattle"   ,true}}          ,
+              //{"battle",{"se/bgm_battle" ,true}}                    ,
+              //{"save",{"se/se_save" ,true}}                          ,
+              {"getitem",{"se/se_getitem.wav" ,true}}                    ,
+              //{"store",{"se/se_store" ,true}}                        ,
+              {"hacking",{"se/se_hacking.wav" ,true}}                    ,
+              //{"hackerror",{"se/se_hackerror" ,true}}                ,
+              {"dropoff",{"se/se_dropoff.wav" ,true}}                    ,
+              {"damage"     ,   {"se/se_damage.wav" ,true}}              ,
+              {"lackenergy" ,       {"se/se_lackenergy.wav" ,true}}      ,
+              {"outofenergy",       {"se/se_outofenergy.wav" ,true}}     ,
+              {"tackle"     ,   {"se/se_tackle.wav" ,true}}              ,
+              //{"catch"      ,  {"se/se_catch" ,true}}                ,
+              //{"alert"      ,  {"se/se_alert" ,true}}                ,
+              {"exchange"   ,     {"se/se_exchange.wav" ,true}}          ,
+              //{"switch"     ,   {"se/se_switch" ,true}}              ,
+              //{"unlockgate" ,       {"se/se_unlockgate" ,true}}      ,
+              //{"lockgate"   ,     {"se/se_lockgate" ,true}}          ,
+              //{"breakwall"  ,      {"se/se_breakwall" ,true}}        ,
+              //{"floordamage",        {"se/se_floordamage" ,true}}    ,
+              //{"enemyhaunting",       {"se/se_enemyhaunting" ,true}} ,
+              //{"dropdown"     ,   {"se/se_dropdown" ,true}}          ,
+              //{"induct"       , {"se/se_induct" ,true}}              ,
+              //{"outduct"      ,  {"se/se_outduct" ,true}}            ,
+              {"openmap"      ,  {"se/se_openmap.wav" ,true}}            ,
+              {"openitem"     ,  {"se/se_openitem.wav" ,true}}           ,
+              {"close"        ,{"se/se_close.wav" ,true}}                ,
+
+              //{"breakenemy" ,      {"se/se_breakenemy" ,true}}       ,
+              //{"hitwall"    ,    {"se/se_hitwall" ,true}}            ,
+              {"contact"    ,    {"se/se_contact.wav" ,true}}            ,
+              //{"tackle"     ,   {"se/se_tackle" ,true}}              ,
+              //{"catch"      ,   {"se/se_catch" ,true}}               ,
+              //{"alert"      , {"se/se_alert", true}}                 ,
+              {"footsteps"  ,     {"se/se_footsteps.wav", true}}
+
+
+        };
+
+        GetAssetServer().LoadSounds(soundToUsed);
+
 
 
         // モデルの読み込み
@@ -91,8 +143,18 @@ namespace MachineHuck::Scene {
     }
     /// 入口
     void SceneInGame::Enter() {
+
+        //プレイヤー死亡による
+        if (Flag::FlagData::GetPlayerDead()) {
+            Init();
+            Flag::FlagData::SetPlayerDead(false);
+        }
+
         // ファクトリの生成とクリエイターの登録
         auto& af = GetActorFactory();
+
+        af.SetOldStageNo();
+
         af.Register("Player", std::make_unique<Actor::PlayerCreator>());
         af.Register("TackleEnemy", std::make_unique<Actor::TackleEnemyCreator>());
         af.Register("CatchEnemy", std::make_unique<Actor::CatchEnemyCreator>());
@@ -101,6 +163,7 @@ namespace MachineHuck::Scene {
         af.Register("DamageFloor", std::make_unique<Actor::DamageFloorGimmickCreator>());
         af.Register("BrokenWall", std::make_unique<Actor::BrokenWallCreator>());
         af.Register("Item", std::make_unique<Actor::ItemCreator>());
+
 
         //for (int i = 0; i < StageAll; i++) {
 
@@ -130,22 +193,46 @@ namespace MachineHuck::Scene {
         //エネミーのステージ配置を一括で読み込む
         for (int i = 0; i < StageAll; i++) {
 
+            if (i == 0) {
+
+
+            }
+            else if (i == 10) {
+
+            }
+            else if (i == 21) {
+
+            }
+            else if (i == 30) {
+
+            }
+            else if (i == 40) {
+
+            }
+            else {
+                continue;
+            }
+
             //ステージ番号をstringに変換
             auto no = std::to_string(i);
             //下の二つを起動すればjsonが読み込める
             //auto stageParameter = std::make_unique<StageParameter>();
-            GetGame().GetEnemyParameter().LoadStageEnemyParam(i, "resource/json/stageenemy" + no + ".json");
-            GetGame().GetItemParameter().LoadStageItemParam(i, "resource/json/stageitem" + no + ".json");
+            GetGame().GetEnemyParameter().LoadStageEnemyParam(i, "resource/json/stageEnemy/stageenemy" + no + ".json");
+            GetGame().GetItemParameter().LoadStageItemParam(i, "resource/json/stageItem/stageitem" + no + ".json");
+
         }
 
 
         //読み込んだエネミーのステージ配置をテーブルに入れる
         auto inGame = GetGame().GetEnemyParameter().GetFloorEnemyMap();
         auto inGamei = GetGame().GetItemParameter().GetFloorItemMap();
+
         //エネミーのスポーンテーブルの読み込み
 
         af.SetSpawnTable(inGame);
         af.SetSpawnTable(inGamei);
+
+
         //af.SetSpawnTable(EParam->GetStageEnemyParameter());
 
         //// アクターサーバーに登録※個別アクセス用
@@ -178,6 +265,12 @@ namespace MachineHuck::Scene {
 
         GetUiComponent().Enter();
 
+        //*se 1層目BGM
+
+       //GetGame().GetSoundComponent().PlayLoop("floor1");
+        //GetGame().GetSoundComponent().SetVolume("floor1", 100);
+
+
         // 疑似乱数
         //std::random_device seed;
         //std::mt19937 engine{seed()};
@@ -194,14 +287,24 @@ namespace MachineHuck::Scene {
             GetSceneServer().GoToScene("Epilogue");
         }
         if (input.GetJoypad().Button_X()) {
+            //*se マップ画面を開く
+            GetSoundComponent().Play("openmap");
+
             // Xボタンでマップ画面へ
-            GetSceneServer().PopBack(true);
-            GetSceneServer().PushBack("Map", true);
+            //GetSceneServer().PopBack(true);
+            //GetSceneServer().PushBack("Map",true);
+            GetSceneServer().GoToScene("Map");
+            Flag::FlagData::SetNoExitFlag(true);
         }
         if (input.GetJoypad().Button_Y()) {
+            //*se アイテム画面を開く
+            GetSoundComponent().Play("openitem");
+
             // Yボタンでアイテム画面へ
-            GetSceneServer().PopBack(true);
-            GetSceneServer().PushBack("Item", true);
+            //GetSceneServer().PopBack(true);
+            //GetSceneServer().PushBack("Item", true);
+            GetSceneServer().GoToScene("Item");
+            Flag::FlagData::SetNoExitFlag(true);
         }
         GetActorServer().Input(input);
     }
@@ -223,11 +326,17 @@ namespace MachineHuck::Scene {
 
         if (Flag::FlagData::GetFadeInFlag()) {
             GetSceneServer().GoToScene("Loading", "FadeIn", false);
-
             Flag::FlagData::SetFadeInFlag(false);
         }
 
+        //プレイヤーが死亡したら
+        if (Flag::FlagData::GetPlayerDead()) {
+            GetSceneServer().GoToScene("Title");
+        }
+
+        GetSoundComponent().Addcnt(1);
     }
+
 
     /// 描画
     void SceneInGame::Render() {

@@ -97,6 +97,13 @@ namespace MachineHuck::Gauge{
 
     protected:
 
+        int _gaugeNumberOnes;//一の位の数字
+        int _gaugeNumberTens;//十の位の数字
+        int _gaugeNumberHuns;//百の位の数字
+        int _gaugeNumber;//ゲージの数値
+    //private:
+
+
         int _gauge{ 100 };    //!< エネルギーゲージの量
         int _gaugeMax{ 100 }; //!< エネルギーゲージの最大値
         int _gaugeCount;      //!< ゲージを減らすカウンタ

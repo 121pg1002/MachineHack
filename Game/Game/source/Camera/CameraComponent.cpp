@@ -26,7 +26,7 @@ namespace MachineHuck::Camera {
 	/// ‰Šú‰».
 	///
 	void CameraComponent::Init() {
-		SetCameraNearFar(50.0f, 10000.0f);
+		SetCameraNearFar(50.0f, 50000.0f);
 	}
 	void CameraComponent::Input(AppFrame::Input::InputComponent& input) {
 	}
