@@ -79,6 +79,18 @@ namespace MachineHuck::Actor {
     /// •`‰æ
     void ActorServer::Render() {
         for (auto&& actor : _actors) {
+
+            //if (actor->GetTypeId() != actor->IsEnemy()) {
+            //
+            //    if (actor->GetTypeId() != actor->IsItem()) {
+            //    
+            //        if (actor->GetTypeId() != actor->IsStage()) {
+
+            //            actor->Draw();
+            //        }
+            //    }
+            //}
+
             if (!actor->IsDead()) {
                 actor->Draw();
             }

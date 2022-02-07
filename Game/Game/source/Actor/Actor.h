@@ -144,6 +144,14 @@ namespace MachineHuck::Actor {
          */
         bool CollisionFloor(AppFrame::Math::Vector4 oldPos, double r);
 
+
+        /**
+         * @brief  ギミックとの当たり判定       
+         * @return true  当たっている
+         *         false 当たっていない
+         */
+        bool CollisionGimmick();
+
         /**
          * @brief  ワープ位置との当たり判定
          * @param  num
@@ -156,7 +164,7 @@ namespace MachineHuck::Actor {
            * @return pos ワープ先の座標
            *
            */
-        VECTOR WarpFloor();
+        VECTOR WarpFloor(Actor& act);
 
         /**
          * @brief  ワープ中の当たり判定

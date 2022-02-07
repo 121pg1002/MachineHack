@@ -247,7 +247,7 @@ namespace MachineHuck::Player {
 			//ワープ直後か
 			if (!_warping) {
 
-				auto dxPos = WarpFloor();
+				auto dxPos = WarpFloor(*this);
 
 				//フェード用に保存
 				_fadePos = { dxPos.x, dxPos.y, dxPos.z };
@@ -291,6 +291,9 @@ namespace MachineHuck::Player {
 
 				if (_waitframe == 0) {
 					Flag::FlagData::SetFadeInFlag(true);
+
+					//ダクトワープの判定を消す
+					Flag::FlagData::SetDuctWarp(false);
 				}
 
 				if (!WarpingFloor() && _waitframe < 0) {

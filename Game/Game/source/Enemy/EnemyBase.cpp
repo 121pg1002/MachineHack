@@ -27,11 +27,11 @@ namespace MachineHuck::Enemy {
 
 
 		//// プレイヤーに向かう単位ベクトル
-//auto forward = GetForward();
-//// プレイヤーに向かう移動量ベクトル
-//auto delta = forward * _forwardSpeed;
-//// プレイヤーに向かって移動
-//_position = _position + delta;
+        //auto forward = GetForward();
+        //// プレイヤーに向かう移動量ベクトル
+        //auto delta = forward * _forwardSpeed;
+        //// プレイヤーに向かって移動
+        //_position = _position + delta;
 
 		_oldPos = _position;
 
@@ -148,7 +148,7 @@ namespace MachineHuck::Enemy {
 	//}
 
 
-		//ハッキングされたときの移動
+	//ハッキングされたときの移動
 	const void EnemyBase::HuckedMove(const double lx, const double ly) {
 
 		_move = { 0.0, 0.0, 0.0 };

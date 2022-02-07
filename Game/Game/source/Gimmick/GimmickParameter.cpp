@@ -10,6 +10,7 @@
 //#include <memory>
 #include <filesystem>
 #include "../nlohmann/json.hpp"
+//#include "../Parameter/GStageParam.h"
 
 namespace MachineHuck::Gimmick {
 	using Json = nlohmann::json;
@@ -62,7 +63,7 @@ namespace MachineHuck::Gimmick {
 
 
 		//ì«Ç›çûÇﬂÇ»Ç©Ç¡ÇΩÇ∆Ç´
-		if (jsRoot["Gimmick"].size() == 0) {
+		if (jsRoot["StageGimmick"].size() == 0) {
 
 			printf("jsRoot is not load");
 			return false;
@@ -70,21 +71,21 @@ namespace MachineHuck::Gimmick {
 		else {
 
 
-			for (int i = 0; i < jsRoot["Gimmick"].size(); i++) {
+			for (int i = 0; i < jsRoot["StageGimmick"].size(); i++) {
 
 				Parameter::GStageParam gSP;
 
-				const std::string& fileName = jsRoot["Gimmick"].at(i)["filename"];
+				const std::string& fileName = jsRoot["StageGimmick"].at(i)["filename"];
 				//auto& handleName = jsRoot["Gimmick"].at(i)["handlename"];
-				const double& tx = jsRoot["Gimmick"].at(i)["tx"];
-				const double& ty = jsRoot["Gimmick"].at(i)["ty"];
-				const double& tz = jsRoot["Gimmick"].at(i)["tz"];
-				const double& rx = jsRoot["Gimmick"].at(i)["rx"];
-				const double& ry = jsRoot["Gimmick"].at(i)["ry"];
-				const double& rz = jsRoot["Gimmick"].at(i)["rz"];
-				const double& sx = jsRoot["Gimmick"].at(i)["sx"];
-				const double& sy = jsRoot["Gimmick"].at(i)["sy"];
-				const double& sz = jsRoot["Gimmick"].at(i)["sz"];
+				const double& tx = jsRoot["StageGimmick"].at(i)["tx"];
+				const double& ty = jsRoot["StageGimmick"].at(i)["ty"];
+				const double& tz = jsRoot["StageGimmick"].at(i)["tz"];
+				const double& rx = jsRoot["StageGimmick"].at(i)["rx"];
+				const double& ry = jsRoot["StageGimmick"].at(i)["ry"];
+				const double& rz = jsRoot["StageGimmick"].at(i)["rz"];
+				const double& sx = jsRoot["StageGimmick"].at(i)["sx"];
+				const double& sy = jsRoot["StageGimmick"].at(i)["sy"];
+				const double& sz = jsRoot["StageGimmick"].at(i)["sz"];
 
 				Math::Vector4 pos = { tx, ty, tz };
 				Math::Vector4 rot = { rx, ry, rz };

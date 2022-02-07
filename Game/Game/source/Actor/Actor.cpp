@@ -16,6 +16,7 @@
 #include "../Gauge/GaugeBase.h"
 #include "../Gauge/GaugeEnemy.h"
 #include "../Gauge/GaugePlayer.h"
+#include "../Flag/FlagData.h"
 
 namespace MachineHuck::Actor {
 
@@ -272,7 +273,6 @@ namespace MachineHuck::Actor {
 
 		}
 
-		return false;
 
 		return false;
 	}
@@ -360,7 +360,68 @@ namespace MachineHuck::Actor {
 
 	}
 
-	VECTOR Actor::WarpFloor() {
+	bool Actor::CollisionGimmick() {
+
+		// 移動した先でコリジョン判定
+		MV1_COLL_RESULT_POLY hitPoly;
+
+		for (auto i = GetActorServer().GetActors().begin(); i != GetActorServer().GetActors().end(); i++) {
+
+			if ((*i)->GetTypeId() != TypeId::Gimmick) {
+				continue;
+			}
+			else {
+
+				//全フロアマップを取得
+				auto allFloorMap = (*i)->GetCollision().GetAllFloorMap();
+
+				//触れているフロア番号を取得
+				auto floorNums = (*i)->GetCollision().GetFloorNum();
+
+
+				for (auto&& floorNum : floorNums) {
+
+
+
+					for (auto&& floor : allFloorMap[floorNum]) {
+
+						auto&& handle = floor->GetHandle();
+
+						//auto frameMapCollision = (*i)->GetCollision().GetMapCollision();
+						//ハンドルのコリジョン情報を取得
+						auto frameGimmickCollision = (*i)->GetCollision().GetGimmickCollision(handle);
+						//auto frameMapCollision = (*i)->GetCollision().GetMapCollision(handle.first);
+
+						Math::Vector4 up = { 0.0, 99.0, 0.0 };
+						Math::Vector4 under = { 0.0, -99999.0, 0.0 };
+						auto startPos = _position + up;
+						auto endPos = _position + under;
+						// 主人公の腰位置から下方向への直線
+						hitPoly = MV1CollCheck_Line(handle, frameGimmickCollision, ToDX(startPos), ToDX(endPos));
+
+
+
+						if (hitPoly.HitFlag) {
+							_position = { _position.GetX(), hitPoly.HitPosition.y, _position.GetZ() };
+
+							return true;
+						}
+						else {
+
+							return false;
+						}
+					}
+				}
+
+			}
+
+		}
+
+
+		return false;
+	}
+
+	VECTOR Actor::WarpFloor(Actor& act) {
 
 		//// 移動した先でコリジョン判定
 		MV1_COLL_RESULT_POLY hitPoly;
@@ -410,104 +471,104 @@ namespace MachineHuck::Actor {
 								//_position = { _position.GetX(), hitPoly.HitPosition.y, _position.GetZ() };
 
 
-									//当たったフレームインデックス
+								//当たったフレームインデックス
 								auto frameIndex = hitPoly.FrameIndex;
 
-								//ワープ前の触れたフレーム名を取得
-								std::string name = MV1GetFrameName(handle, frameIndex);
+								//ブロックとコリジョンを除く
+								if (frameIndex != 0 && frameIndex != 1) {
+
+									//ワープ前の触れたフレーム名を取得
+									std::string name = MV1GetFrameName(handle, frameIndex);
 
 
-								//ワープメッシュ名にあるハイフンを飛ばした数字
-								auto x = name.substr(3, 2);
 
-								auto xStr = x;
-								xStr.substr(0, 1);
+									//ダクトかどうか
+									if (name.size() > 8) {
 
-								if (xStr != "0") {
-									x = x.substr(1, 1);
+										std::string::size_type nameParts = name.find("entry");
+
+										//存在した
+										if (nameParts != std::string::npos) {
+
+											//ハッキング状態か
+											if (act.IsHucked()) {
+												return VGet(0.0f, 0.0f, 0.0f);
+											}
+											else {
+												//ダクトフラグを設定
+												Flag::FlagData::SetDuctWarp(true);
+											}
+
+										}
+
+
+									}
+
+									//ワープメッシュ名にあるハイフンを飛ばした数字
+									auto x = name.substr(3, 2);
+
+									auto xStr = x;
+									xStr.substr(0, 1);
+
+									if (xStr != "0") {
+										x = x.substr(1, 1);
+									}
+
+									int xNum = std::atoi(x.c_str());
+
+									//ワープメッシュ名にあるハイフンを飛ばした数字
+									auto y = name.substr(6, 2);
+									auto yStr = y;
+									yStr.substr(0, 1);
+
+
+									if (yStr != "0") {
+										y = y.substr(1, 1);
+									}
+
+									int yNum = std::atoi(y.c_str());
+
+									//フロア番号計算
+									auto floorNum = yNum * 10 + xNum;
+
+									//ワープ先のフレーム名
+									auto toWarpName = (*i)->GetCollision().GetWarpNameFloor(floorNum, name);
+
+
+									//ワープ先のフロア番号のポインタ配列を取得
+									auto warpFloor = allFloorMap[floorNum];
+
+
+									if (warpFloor.empty()) {
+
+										printfDx("ワープフロアポインタが存在しない");
+										return VGet(0.0f, 0.0f, 0.0f);
+
+									}
+
+									//ワープ先のポインタを取得
+									auto warp = warpFloor[0];
+
+									//ワープ先のハンドルを取得
+									auto warpHandle = warp->GetHandle();
+
+									//ワープ先のフレームインデックス
+									int toWarpFrameIndex = MV1SearchFrame(warpHandle, toWarpName.c_str());
+
+
+									//ワープ先の位置を取得
+									auto pos = MV1GetFramePosition(warpHandle, toWarpFrameIndex);
+
+									return pos;
+								
+								
 								}
 
-								int xNum = std::atoi(x.c_str());
 
-								//ワープメッシュ名にあるハイフンを飛ばした数字
-								auto y = name.substr(6, 2);
-								auto yStr = y;
-								yStr.substr(0, 1);
-
-
-								if (yStr != "0") {
-									y = y.substr(1, 1);
-								}
-
-								int yNum = std::atoi(y.c_str());
-
-								//フロア番号計算
-								auto floorNum = yNum * 10 + xNum;
-
-								//ワープ先のフレーム名
-								auto toWarpName = (*i)->GetCollision().GetWarpNameFloor(floorNum, name);
-
-								////ワープメッシュ名にあるハイフンを飛ばした数字
-								//x = toWarpName.substr(3, 2);
-
-								//xStr = x;
-								//xStr.substr(0, 1);
-
-								//if (xStr != "0") {
-								//	x = x.substr(1, 1);
-								//}
-
-								//xNum = std::atoi(x.c_str());
-
-								////ワープメッシュ名にあるハイフンを飛ばした数字
-								//y = toWarpName.substr(6, 2);
-								//yStr = y;
-								//yStr.substr(0, 1);
-
-
-								//if (yStr != "0") {
-								//	y = y.substr(1, 1);
-								//}
-
-								//yNum = std::atoi(y.c_str());
-
-								////フロア番号計算
-								//auto warpFloorNum = yNum * 10 + xNum;
-
-
-								////ワープ先のステージ番号
-								//auto warpStageNum = (*i)->GetCollision().GetFloorStageNum(floorNum);
-
-								////ワープ先のハンドル
-								//auto toWarpHandle = GetGame().GetAssetServer().GetMap(warpStageNum);
-
-								//ワープ先のフロア番号のポインタ配列を取得
-								auto warpFloor = allFloorMap[floorNum];
-
-
-								if (warpFloor.empty()) {
-
-									printfDx("ワープフロアポインタが存在しない");
-									return VGet(0.0f, 0.0f, 0.0f);
-
-								}
-
-								//ワープ先のポインタを取得
-								auto warp = warpFloor[0];
-
-								//ワープ先のハンドルを取得
-								auto warpHandle = warp->GetHandle();
-
-								//ワープ先のフレームインデックス
-								int toWarpFrameIndex = MV1SearchFrame(warpHandle, toWarpName.c_str());
-
-
-								//ワープ先の位置を取得
-								auto pos = MV1GetFramePosition(warpHandle, toWarpFrameIndex);
 
 								//_position = { static_cast<double>(pos.x),  static_cast<double>(pos.y) , static_cast<double>(pos.z) };
 
-								return pos;
+								
 
 							}
 
@@ -572,8 +633,21 @@ namespace MachineHuck::Actor {
 							hitPoly = MV1CollCheck_Line(handle, frameMapCollision.second, ToDX(startPos), ToDX(endPos));
 
 							if (hitPoly.HitFlag) {
-								//// 当たった
-								return true;
+
+								//文字列の数がダクトの出口サイズ(2文字)ではないか
+								if (keyStr.size() > 3) {
+								
+									//// 当たった
+									return true;
+								}
+								else {
+
+									if (Flag::FlagData::GetDuctWarp()) {
+										return true;
+									}
+									continue;
+								}
+
 
 							}
 							else {

@@ -15,11 +15,6 @@ namespace MachineHuck::Item {
 		_status = STATUS::TANK;
 	}
 
-	void Item::Init(){}
-
-	void Item::Input(AppFrame::Input::InputComponent& input) {
-
-	}
 
 	void Item::Update() {
 
@@ -41,14 +36,14 @@ namespace MachineHuck::Item {
 						 _actorState= Actor::ActorState::Dead;
 						
 
-					  itemflg = TRUE;
+					  itemflg = true;
 
 					}
 					
 				}
 				else
 				{
-					itemflg = FALSE;
+					itemflg = false;
 				}
 				break;
 			}

@@ -11,13 +11,10 @@ namespace MachineHuck::Item {
 		/// デストラクタ
 		virtual ~Item() override = default;
 
-		virtual	void	Init() override;
-		virtual	void	Input(AppFrame::Input::InputComponent& input) override;
 		virtual	void	Update() override;
 		virtual	void	Draw() override;
 
-		/// ワールド行列の計算
-	   /// モデルのローカルZ座標が逆なのでここで180度回転させる
+		//ワールド行列の計算
 		void ComputeWorldTransform() override;
 
 		virtual TypeId GetTypeId()const override { return TypeId::Item; };

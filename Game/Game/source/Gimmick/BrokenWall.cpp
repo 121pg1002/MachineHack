@@ -12,8 +12,8 @@ namespace MachineHuck::Gimmick {
 
 	BrokenWall::BrokenWall(AppFrame::Game& game) : GimmickBase(game) {
 
-		_wall = std::make_unique<Model::ModelComponent>(*this);
-		_wall->SetModel("BrokenWall");
+		//_wall = std::make_unique<Model::ModelComponent>(*this);
+		//_wall->SetModel("BrokenWall");
 
 	}
 
@@ -23,12 +23,12 @@ namespace MachineHuck::Gimmick {
 
 	void BrokenWall::Update()
 	{
-		int x = 0;
+		_model->Update();
 	}
 
 	void BrokenWall::Draw()
 	{
-		_wall->Draw();
+		_model->Draw();
 	}
 
 

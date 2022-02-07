@@ -8,7 +8,11 @@
  *********************************************************************/
 #pragma once
 #include <string>
+#include <unordered_map>
 #include "../Parameter/GStageParam.h"
+//namespace MachineHuck::Parameter {
+//    class GStageParam;
+//}
 
 namespace MachineHuck::Gimmick {
 

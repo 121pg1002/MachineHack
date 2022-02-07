@@ -113,6 +113,18 @@ namespace MachineHuck::Flag {
 		 */
 		static void SetPlayerDead(bool flag) { _playerDead = flag; }
 
+		/**
+		 * @brief  ダクトワープの取得     
+		 * @return _ductWarp
+		 */
+		static bool GetDuctWarp() { return _ductWarp; }
+
+		/**
+		 * @brief  ダクトワープの設定    
+		 * @param  flag
+		 */
+		static void SetDuctWarp(bool flag) { _ductWarp = flag; }
+
 
 		/**
 		 * @brief  カメラ位置を取得
@@ -153,6 +165,7 @@ namespace MachineHuck::Flag {
 		static VECTOR _headPos;
 		static bool _noExitFlag;
 		static bool _playerDead;
+		static bool _ductWarp;
 
 
 	};

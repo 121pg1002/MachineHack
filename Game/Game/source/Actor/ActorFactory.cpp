@@ -18,6 +18,10 @@
 #include "../Gimmick/DamageFloorGimmick.h"
 #include "../Gimmick/BrokenWall.h"
 #include "../Item/Item.h"
+//#include "../Parameter/EStageParam.h"
+//#include "../Parameter/IStageParam.h"
+#include "../Parameter/GStageParam.h"
+
 
 namespace Camera = MachineHuck::Camera;
 
@@ -87,6 +91,13 @@ namespace MachineHuck::Actor {
 
     }
 
+    void ActorFactory::SetSpawnTable(std::unordered_map<int, GSV> gStageParamVMap) {
+        _spawnProgress = 0;
+        _progress = 0;
+        _gStageParamVMap = gStageParamVMap;
+    
+    }
+
     //void ActorFactory::UpdateSpawn() {
     //    while (_spawnTable.size() > _spawnProgress) {
     //        auto& spawnRecord = _spawnTable[_spawnProgress];
@@ -142,7 +153,7 @@ namespace MachineHuck::Actor {
             //前のフロアのエネミーを削除する
             for (auto i = _game.GetActorServer().GetActors().begin(); i < _game.GetActorServer().GetActors().end(); i++) {
 
-                //エネミーかどうか
+                //エネミーかどうか//ここアイテムもギミックも分ける
                 if ((*i)->GetTypeId() == (*i)->IsEnemy() || (*i)->GetTypeId() == (*i)->IsItem()) {
 
                     //ハッキング中かどうか
@@ -194,7 +205,7 @@ namespace MachineHuck::Actor {
                     }
 
                     auto& spawnFloori = _iStageParamVMap[no];
-                    //新しい描画フロアのエネミーをリスポーンさせる
+                    //新しい描画フロアのアイテムをリスポーンさせる
                     for (auto&& floorItem : spawnFloori) {
 
                         auto&& actor = Create("Item");
@@ -206,6 +217,22 @@ namespace MachineHuck::Actor {
                         _game.GetActorServer().Add(std::move(actor));
 
                     }
+
+
+
+                    //auto& spawnFloorGimmick = _gStageParamVMap[no];
+                    //////新しい描画フロアのギミックをリスポーンさせる
+                    //for (auto&& floorGimmick : spawnFloorGimmick) {
+
+                    //    auto&& actor = Create(floorGimmick.GetName());
+
+                    //    actor->SetPosition(floorGimmick.GetPosition());
+                    //    actor->SetRotation(floorGimmick.GetRotation());
+                    //    actor->SetScale(floorGimmick.GetScale());
+
+                    //    _game.GetActorServer().Add(std::move(actor));
+
+                    //}
 
 
 
@@ -427,19 +454,23 @@ namespace MachineHuck::Actor {
         // モデルの読み込みと生成
         //auto model = std::make_unique<Model::ModelComponent>(*damageFloorGimmick);
         //model->SetModel("damagefloor", 1000);
+        //damageFloorGimmick->SetModelComponent(std::move(model));
         return damageFloorGimmick;
     }
 
+    //壊せる壁を作成
     std::unique_ptr<Actor> BrokenWallCreator::Create(AppFrame::Game& game) {
         /// 壊せる壁の生成
         auto brokenWall = std::make_unique<Gimmick::BrokenWall>(game);
         //// モデルの読み込みと生成
         auto model = std::make_unique<Model::ModelComponent>(*brokenWall);
-        model->SetModel("brokenwall", 1000);
+        model->SetModel("BrokenWall", 1000);
         brokenWall->SetModelComponent(std::move(model));
         return brokenWall;
     }
 
+
+    //エネルギーアイテムの作成
     std::unique_ptr<Actor> ItemCreator::Create(AppFrame::Game& game) {
         auto item = std::make_unique<Item::Item>(game);
         auto model = std::make_unique<Model::ModelComponent>(*item);

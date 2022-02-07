@@ -11,6 +11,22 @@
 #include <memory>
 #include "AppFrame.h"
 #include "../ShadowMap/Shadowmap.h"
+ //#include "../Enemy/EnemyParameter.h"
+ //#include "../Item/ItemParameter.h"
+ //#include "../Gimmick/GimmickParameter.h"
+
+//namespace MachineHuck::Gimmick {
+//	class GimmickParameter;
+//}
+//
+//namespace MachineHuck::Enemy {
+//	class EnemyParameter;
+//}
+//
+//namespace MachineHuck::Item {
+//	class ItemParameter;
+//}
+
 
 class CameraComponent;
 

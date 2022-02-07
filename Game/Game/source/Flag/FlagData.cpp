@@ -21,6 +21,7 @@ namespace MachineHuck::Flag {
 	VECTOR FlagData::_headPos = VGet(0.f, 0.f, 0.f);
 	bool FlagData::_noExitFlag = false;
 	bool FlagData::_playerDead = false;
+	bool FlagData::_ductWarp = false;
 
 
 }

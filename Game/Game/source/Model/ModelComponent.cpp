@@ -62,6 +62,11 @@ namespace MachineHuck::Model {
 	//ステージモデルの設定
 	int ModelComponent::SetMap(std::string key, int no) {
 
+		if (key.size() < 5) {
+		
+			return 0;
+		}
+
 		auto keyNum = key.substr(5, 1);
 		int num = std::stoi(keyNum);
 

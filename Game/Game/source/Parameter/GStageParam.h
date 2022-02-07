@@ -13,7 +13,7 @@ namespace MachineHuck::Parameter {
 	
 	public:
 		GStageParam();
-
+		~GStageParam() override = default;
 
 	};
 

@@ -40,7 +40,9 @@ namespace MachineHuck::Collision {
 
     CollisionComponent::CollisionComponent(Actor::Actor& owner) : _owner{ owner } {
         _frameMapCollision = 0;
+        _frameGimmickCollision = 0;
         _frameMap.clear();
+        _frameGimmick.clear();
         _warpNameMap.clear();
         _warpMap.clear();
         _floorNums.push_back(0);
@@ -52,6 +54,7 @@ namespace MachineHuck::Collision {
 
     CollisionComponent::~CollisionComponent() {
         _frameMap.clear();
+        _frameGimmick.clear();
         _warpNameMap.clear();
         _warpMap.clear();
     }
@@ -805,16 +808,8 @@ namespace MachineHuck::Collision {
         return start + (end - start) * t;
     }
 
-    //ハンドルでコリジョンメッシュを検索
-    const int CollisionComponent::GetMapCollision(int handle) {
 
-        auto collisionFrame = _frameMap[handle];
-
-        return collisionFrame;
-    }
-
-
-    //ハンドルとコリジョンメッシュ名で構築
+    //マップのコリジョン情報を構築
     void CollisionComponent::SetMapCollision(int handle, std::string key) {
 
         auto frameMapCollision = MV1SearchFrame(handle, key.c_str());
@@ -832,7 +827,7 @@ namespace MachineHuck::Collision {
     }
 
 
-    //ハンドルとコリジョンメッシュ名で構築
+    //マップのコリジョン情報を全構築
     void CollisionComponent::SetMapCollision(int handle) {
 
         // auto frameMapCollision = MV1SearchFrame(handle, key.c_str());
@@ -849,6 +844,16 @@ namespace MachineHuck::Collision {
 
     }
 
+    //ギミックのコリジョン情報を構築
+    void CollisionComponent::SetGimmickCollision(int handle, std::string key) {
+        auto frameGimmickCollision = MV1SearchFrame(handle, key.c_str());
+
+        MV1SetupCollInfo(handle, frameGimmickCollision, 32, 32, 32);
+
+        _frameGimmick.emplace(handle, frameGimmickCollision);
+    
+    }
+
     //ワープメッシュ名で検索
     const std::pair<std::pair<int, int>, int> CollisionComponent::GetWarpCollision(std::string key, int handle) {
 
@@ -859,6 +864,12 @@ namespace MachineHuck::Collision {
 
     //ハンドルとワープメッシュ名で構築
     void CollisionComponent::SetWarpCollision(int handle, std::string key) {
+
+
+        if (key.size() < 8) {
+        
+            return;
+        }
 
         //対応するワープメッシュの名前
         auto name = key.substr(0, 2);

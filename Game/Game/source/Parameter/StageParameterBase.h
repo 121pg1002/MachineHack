@@ -22,7 +22,7 @@ namespace MachineHuck::Parameter {
 		/**
 		 * @brief •Ï”‚Ì‰ğ•ú
 		 */
-		~StageParameterBase() = default;
+		virtual ~StageParameterBase() = default;
 
 
 		/**

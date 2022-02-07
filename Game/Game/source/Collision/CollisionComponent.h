@@ -216,11 +216,18 @@ namespace MachineHuck::Collision {
 		 * @brief  マップコリジョン情報を取得       
 		 * @return _frameMapCollision
 		 */
-		const int GetMapCollision(int handle);
+		const int GetMapCollision(int handle) { return _frameMap[handle]; };
+
+		/**
+		 * @brief  ギミックのコリジョン情報を取得       
+		 * @param  handle
+		 * @return _frameGimmickCollision
+		 */
+		const int GetGimmickCollision(int handle) { return _frameGimmick[handle]; };
 
 
 		/**
-		 * @brief  マップのナビメッシュ情報の設定
+		 * @brief  マップのナビメッシュ情報の構築
 		 * @param  handle
 		 * @param  key
 		 */
@@ -231,6 +238,13 @@ namespace MachineHuck::Collision {
 		 * @param  handle
 		 */
 		void SetMapCollision(int handle);
+
+		/**
+		 * @brief  ギミックのナビメッシュ情報の構築       
+		 * @param  handle
+		 * @param  key
+		 */
+		void SetGimmickCollision(int handle, std::string key);
 
 
 		/**
@@ -337,8 +351,10 @@ namespace MachineHuck::Collision {
 
 		Math::Vector4 _interSection;          //!< 線分と回転した四角形との交点
 		int _frameMapCollision;               //!< マップのコリジョン情報
+		int _frameGimmickCollision;           //!< ギミックのコリジョン情報
 		//std::vector<int> _frameMapCollisions; //!< マップのコリジョン情報のベクター
 		std::unordered_map<int, int> _frameMap; //!< ハンドルをキーとしたコリジョン情報
+		std::unordered_map<int, int> _frameGimmick; //!< ハンドルをキーとしたギミックのコリジョン情報
 		std::unordered_map<int, std::vector<std::string>> _warpNameMap;   //!< ハンドルをキーとしたワープの名前配列
 		WarpMap _warpMap;                                                 //!< キーはワープコリジョンフレーム名で バリューは、ワープ先の位置情報とコリジョン情報
 		WarpName _warpNameFloor; //!< フロア番号頭をキーとした連想配列は、ワープ位置の頭文字2文字をキーとした ワープ名の名前をバリューとしてもつ

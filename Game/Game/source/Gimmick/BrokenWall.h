@@ -3,7 +3,7 @@
  * @brief  ‰ó‚¹‚é•Ç‚ÌƒNƒ‰ƒX
  * 
  * @author hikaru Goto
- * @date   January 20 2022
+ * @date   Feburuary 6 2022
  *********************************************************************/
 #pragma once
 #include <memory>

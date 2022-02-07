@@ -18,6 +18,7 @@
 #include "../UI/UIComponent.h"
 #include "../Flag/FlagData.h"
 
+
 namespace {
 
     constexpr int StageAll = 40; //!< 読み込むjsonの最大数
@@ -41,21 +42,22 @@ namespace MachineHuck::Scene {
             {"Ground",    "model/ground.mv1"},
             //  {"Spider",    "tackle/takcle.mv1"},
             {"Spider",    "tackle/takcle_sotai_multimotion.mv1"},
-            {"pCube",      "model/pCube.mv1"},
-            {"floor",     "model/floor.mv1"},
-            {"wall",      "model/wall.mv1"},
-            {"Dungeon",   "model/Dungeon.mv1"},
-            {"breakwall",  "model/breakwall.mv1"},
-            {"enemy",      "model/enemy.mv1"},
-            {"gate",       "model/gate.mv1"},
-            {"normalfloor",  "model/normalfloor.mv1"},
-            {"normalwall",  "model/normalwall.mv1"},
-            {"secretfloor", "model/secretfloor.mv1"},
-            {"secretwall", "model/secretwall.mv1"},
+            //{"pCube",      "model/pCube.mv1"},
+            //{"floor",     "model/floor.mv1"},
+            //{"wall",      "model/wall.mv1"},
+            //{"Dungeon",   "model/Dungeon.mv1"},
+            //{"breakwall",  "model/breakwall.mv1"},
+            //{"enemy",      "model/enemy.mv1"},
+            //{"gate",       "model/gate.mv1"},
+            //{"normalfloor",  "model/normalfloor.mv1"},
+            //{"normalwall",  "model/normalwall.mv1"},
+            //{"secretfloor", "model/secretfloor.mv1"},
+            //{"secretwall", "model/secretwall.mv1"},
             //  {"damagefloor",  "target.mv1"},
               {"entrypoint", "entrypoint.mv1"},
               {"test", "test.mv1"},
-              {"Item","Item.mv1"}
+              {"Item","Item.mv1"},
+            {"BrokenWall", "secretwall.mv1"}
               // {"Dungeon",   "Dungeon.mv1"},
               // {"stage0",    "stage0.mv1"}
 
@@ -71,7 +73,9 @@ namespace MachineHuck::Scene {
             {"stage4",   "StageFloor/stage4.mv1"},
             {"stage5",   "StageFloor/stage5.mv1"},
             {"stage6",   "StageFloor/stage6.mv1"},
-            {"stage7",   "StageFloor/stage7.mv1"}
+            {"stage7",   "StageFloor/stage7.mv1"},
+            {"stage8",   "StageFloor/stage8.mv1"},
+            {"stage9",   "StageFloor/stage9.mv1"}
             //    {"Stage3",    "Stage3.mv1"}
         };
 
@@ -136,6 +140,7 @@ namespace MachineHuck::Scene {
           {"black", {"BlackColor.png", 1, 1, 1920, 1080}},
           {"Energy0", {"energy/Energy0.png", 1, 1, 85, 85}}
         };
+
         // テクスチャの読み込み
         GetAssetServer().LoadTextures(TexUsed);
 
@@ -163,8 +168,9 @@ namespace MachineHuck::Scene {
         af.Register("Stage", std::make_unique<Actor::StageCreator>());
         af.Register("DamageFloor", std::make_unique<Actor::DamageFloorGimmickCreator>());
         af.Register("BrokenWall", std::make_unique<Actor::BrokenWallCreator>());
+       // af.Register("Duct", std::make_unique<Actor::DuctCreator>());
         af.Register("Item", std::make_unique<Actor::ItemCreator>());
-
+        
 
         //for (int i = 0; i < StageAll; i++) {
 
@@ -220,20 +226,20 @@ namespace MachineHuck::Scene {
             //auto stageParameter = std::make_unique<StageParameter>();
             GetGame().GetEnemyParameter().LoadStageEnemyParam(i, "resource/json/stageEnemy/stageenemy" + no + ".json");
             GetGame().GetItemParameter().LoadStageItemParam(i, "resource/json/stageItem/stageitem" + no + ".json");
-           // GetGame().GetGimmickParameter().LoadGimmickStageParameter(i, "resource/json/stageGimmick/stagegimmick" + no + ".json");
+            GetGame().GetGimmickParameter().LoadGimmickStageParameter(i, "resource/json/stageGimmick/stagegimmick" + no + ".json");
         }
 
 
         //読み込んだエネミーのステージ配置をテーブルに入れる
         auto inGame = GetGame().GetEnemyParameter().GetFloorEnemyMap();
         auto inGamei = GetGame().GetItemParameter().GetFloorItemMap();
-     //   auto inGameGimmick = GetGame().GetGimmickParameter().GetFloorGimmickMap();
+        auto inGameGimmick = GetGame().GetGimmickParameter().GetFloorGimmickMap();
 
         //エネミーのスポーンテーブルの読み込み
 
         af.SetSpawnTable(inGame);
         af.SetSpawnTable(inGamei);
-      //  af.SetSpawnTable(inGameGimmick);
+        af.SetSpawnTable(inGameGimmick);
 
 
         //af.SetSpawnTable(EParam->GetStageEnemyParameter());

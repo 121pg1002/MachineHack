@@ -16,6 +16,9 @@
 #include "AppFrame.h"
 #include "../Parameter/EStageParam.h"
 #include "../Parameter/IStageParam.h"
+//#include "../Parameter/GStageParam.h"
+
+
 
 namespace MachineHuck::Actor {
     class Actor;
@@ -24,6 +27,12 @@ namespace MachineHuck::Actor {
 
 namespace AppFrame {
     class Game;
+}
+
+namespace MachineHuck::Parameter {
+    //class EStageParam;
+    //class IStageParam;
+    class GStageParam;
 }
 
 
@@ -35,6 +44,7 @@ namespace MachineHuck::Actor {
     using ESMV = std::vector<Parameter::EStageParam>;
     using StageV = std::vector<int>;
     using ISMV = std::vector<Parameter::IStageParam>;
+    using GSV = std::vector<Parameter::GStageParam>;
     /// @class ActorFactory
     /// @brief アクターの生成を一元管理する
     ///        生成したいアクター用のクリエイターを登録して使用する
@@ -79,6 +89,7 @@ namespace MachineHuck::Actor {
           */
         void SetSpawnTable(std::unordered_map<int, ESMV> vEStageParamMap);
         void SetSpawnTable(std::unordered_map<int, ISMV> vIStageParamMap);
+        void SetSpawnTable(std::unordered_map<int, GSV> gStageParamVMap);
         /**
          *
          * @brief 毎フレーム生成の確認
@@ -134,6 +145,7 @@ namespace MachineHuck::Actor {
 
         std::unordered_map<int, ESMV> _eStageParamVMap;
         std::unordered_map<int, ISMV> _iStageParamVMap;
+        std::unordered_map<int, GSV> _gStageParamVMap;
         int _progress{ 0 };
         int _spawnProgress{ 0 };
         StageV _oldStageNo{ -1 };

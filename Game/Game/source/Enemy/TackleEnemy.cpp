@@ -973,7 +973,8 @@ namespace MachineHuck::Enemy {
 
 		_owner.HuckedMove(_lx, _ly);
 
-
+		//ギミックと触れているか触れていたら戻す
+		_owner.CollisionGimmick();
 
 		////地面と触れているかどうか
 		_owner.CollisionFloor(oldPos, _owner.GetR());
@@ -986,7 +987,7 @@ namespace MachineHuck::Enemy {
 					//ワープ直後か
 		if (!_warping) {
 
-			auto dxPos = _owner.WarpFloor();
+			auto dxPos = _owner.WarpFloor(_owner);
 
 			//フェード用に保存
 			_fadePos = { dxPos.x, dxPos.y, dxPos.z };

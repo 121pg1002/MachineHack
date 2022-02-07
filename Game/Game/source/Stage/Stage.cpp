@@ -21,7 +21,7 @@ namespace MachineHuck::Stage {
 
 	namespace {
 
-		constexpr int StageAll = 8;        //!< 読み込むstagejsonの数
+		constexpr int StageAll = 10;        //!< 読み込むstagejsonの数
 		constexpr double Differ = 3000.0; //!< 1フロアのサイズ
 		constexpr double StartX = -5.0 * Differ;
 		constexpr int BoardSize = 10;
@@ -96,7 +96,9 @@ namespace MachineHuck::Stage {
 			{4,    {"stage4", "collision", {"A3_00_03", "B2_01_04"}, 40}},
 			{5,    {"stage5", "collision", {"B1_00_03", "B2_01_02"}, 31}},
 			{6,    {"stage6", "collision", {"B2_01_03", "B3_01_01"}, 21}},
-			{7,    {"stage7", "collision", {"B3_01_02", "C1_02_01"}, 11}}
+			{7,    {"stage7", "collision", {"B3_01_02", "C1_02_01"}, 11}},
+			{8,    {"stage8", "collision", {"C1_01_01", "C2_02_02_entry", "C3_02_02"}, 12}},
+			{9,    {"stage9", "collision", {"C2", "C5_02_03", "D0_03_02"}, 22}}
 		};
 
 		//ステージのコリジョン情報を取得
