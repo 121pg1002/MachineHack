@@ -154,7 +154,7 @@ namespace MachineHuck::Actor {
             for (auto i = _game.GetActorServer().GetActors().begin(); i < _game.GetActorServer().GetActors().end(); i++) {
 
                 //エネミーかどうか//ここアイテムもギミックも分ける
-                if ((*i)->GetTypeId() == (*i)->IsEnemy() || (*i)->GetTypeId() == (*i)->IsItem()) {
+                if ((*i)->GetTypeId() == (*i)->IsEnemy() || (*i)->GetTypeId() == (*i)->IsItem() || (*i)->GetTypeId() == (*i)->IsGimmick()) {
 
                     //ハッキング中かどうか
                     if ((*i)->IsHucked()) {
@@ -164,6 +164,16 @@ namespace MachineHuck::Actor {
 
                     (*i)->SetDead();
 
+  /*                  if ((*i)->GetTypeId() != (*i)->IsEnemy()) {
+                    
+                        auto&& handle = (*i)->GetModel().GetHandle();
+                        MV1DeleteModel(handle);
+                    
+                    }
+                    else {
+                        auto&& handle = (*i)->GetModelAnime().GetHandle();
+                        MV1DeleteModel(handle);
+                    }*/
                 }
 
 
@@ -209,31 +219,60 @@ namespace MachineHuck::Actor {
                     for (auto&& floorItem : spawnFloori) {
 
                         auto&& actor = Create("Item");
+                       // auto&& actor = Create(floorItem.GetName());
 
-                        actor->SetPosition(floorItem.GetPosition());
-                        actor->SetRotation(floorItem.GetRotation());
-                        actor->SetScale(floorItem.GetScale());
+                        if (actor != nullptr) {
+                        
+                            actor->SetPosition(floorItem.GetPosition());
+                            actor->SetRotation(floorItem.GetRotation());
+                            actor->SetScale(floorItem.GetScale());
 
-                        _game.GetActorServer().Add(std::move(actor));
+                            _game.GetActorServer().Add(std::move(actor));
+                        
+                        }
 
                     }
 
+                    std::unordered_map<int, int> frameGimmicks;
 
-
-                    //auto& spawnFloorGimmick = _gStageParamVMap[no];
+                    auto& spawnFloorGimmick = _gStageParamVMap[no];
                     //////新しい描画フロアのギミックをリスポーンさせる
-                    //for (auto&& floorGimmick : spawnFloorGimmick) {
+                    for (auto&& floorGimmick : spawnFloorGimmick) {
 
-                    //    auto&& actor = Create(floorGimmick.GetName());
 
-                    //    actor->SetPosition(floorGimmick.GetPosition());
-                    //    actor->SetRotation(floorGimmick.GetRotation());
-                    //    actor->SetScale(floorGimmick.GetScale());
+                        //if (floorGimmick.GetName().size() < 3) {
+                        //
+                        //    continue;
+                        //}
+                        
 
-                    //    _game.GetActorServer().Add(std::move(actor));
+                        auto&& actor = Create(floorGimmick.GetName());
 
-                    //}
+                        //ヌルポインタではない
+                        if (actor != nullptr) {
 
+                            actor->SetPosition(floorGimmick.GetPosition());
+
+                            auto handle = actor->GetModel().GetHandle();
+                            auto gimmicks = actor->GetModel().GetModelGimmick();
+
+                            auto frameGimmick = gimmicks[handle];
+
+                            MV1RefreshCollInfo(handle, frameGimmick);
+
+                            frameGimmicks.emplace(handle, frameGimmick);
+                            
+                            actor->SetRotation(floorGimmick.GetRotation());
+                            actor->SetScale(floorGimmick.GetScale());
+
+                            _game.GetActorServer().Add(std::move(actor));
+                        
+                        }
+
+
+                    }
+
+                    _game.GetActorServer().SetGimmickCollision(frameGimmicks);
 
 
 
@@ -464,8 +503,14 @@ namespace MachineHuck::Actor {
         auto brokenWall = std::make_unique<Gimmick::BrokenWall>(game);
         //// モデルの読み込みと生成
         auto model = std::make_unique<Model::ModelComponent>(*brokenWall);
-        model->SetModel("BrokenWall", 1000);
+        auto num = model->SetModel("BrokenWall", 1000);
+
+        //ギミックのコリジョンを構築(仮)
+        model->SetModelGimmick("BrokenWall", "duct_entrance_c", num);
+        
+
         brokenWall->SetModelComponent(std::move(model));
+        
         return brokenWall;
     }
 

@@ -83,14 +83,14 @@ namespace AppFrame::Scene {
             _alpha = ALPHA_MAX;
             GetSceneServer().PopBack(); // FadeOut自身をポップバック
 
-            //インゲーム内のフェードフラグがオンのとき
+            //ワープ処理用
             if (MachineHuck::Flag::FlagData::GetFadeOutFlag()) {
 
                 //InGameのExitを通らないように
                 GetSceneServer().PopBack(false); // FadeOut下のシーンも一緒にポップバック
                 MachineHuck::Flag::FlagData::SetFadeOutFlag(false);
                 MachineHuck::Flag::FlagData::SetBlackOutFlag(true);
-            }
+            } //マップ画面やアイテム画面用のフェード処理
             else if (MachineHuck::Flag::FlagData::GetNoExitFlag()) {
                 MachineHuck::Flag::FlagData::SetNoExitFlag(false);
                 GetSceneServer().PopBack(false);

@@ -23,6 +23,7 @@ namespace MachineHuck::Gimmick {
 
 	void BrokenWall::Update()
 	{
+		ComputeWorldTransform();
 		_model->Update();
 	}
 

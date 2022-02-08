@@ -46,176 +46,6 @@ namespace MachineHuck::Actor {
 		_worldTransform = MMult(world, MGetTranslate(ToDX(_position)));
 	}
 
-	//bool Actor::CollisionFloor(AppFrame::Math::Vector4 oldPos, int num) {
-
-
-	//	// 移動した先でコリジョン判定
-	//	MV1_COLL_RESULT_POLY hitPoly;
-
-	//	//auto handle = GetGame().GetAssetServer().GetModel("Dungeon");
-
-	//	//AssetServerの方に数字でハンドルを取得できるようにする
-	//	//ここのハンドルをステージのみ番号で取得できるようにする
-	//	auto handle = GetGame().GetAssetServer().GetMap(num);
-	//	//↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ここに書く
-
-	//	//auto handle = GetGame().GetAssetServer().GetModel(handleName);
-
-	//	for (auto i = GetActorServer().GetActors().begin(); i != GetActorServer().GetActors().end(); i++) {
-
-	//		if ((*i)->GetTypeId() != TypeId::Stage) {
-	//			continue;
-	//		}
-	//		else {
-
-	//			
-
-	//			//auto frameMapCollision = (*i)->GetCollision().GetMapCollision();
-	//			//ハンドルのコリジョン情報を取得
-	//			auto frameMapCollision = (*i)->GetCollision().GetMapCollision(handle.first);
-	//			//auto frameMapCollision = (*i)->GetCollision().GetMapCollision(handle.first);
-
-	//			Math::Vector4 dif = { 0.0, 50.0, 0.0 };
-	//			Math::Vector4 under = { 0.0, -99999.0, 0.0 };
-	//			auto startPos = _position + dif;
-	//			auto endPos = _position + under;
-	//			// 主人公の腰位置から下方向への直線
-	//			
-	//			hitPoly = MV1CollCheck_Line(handle.first, frameMapCollision, ToDX(startPos), ToDX(endPos));
-
-	//			if (hitPoly.HitFlag) {
-	//				// 当たった
-	//				// 当たったY位置をキャラ座標にする
-	//				_position = { _position.GetX(), hitPoly.HitPosition.y, _position.GetZ() };
-
-	//				return true;
-	//			}
-	//			else {
-	//				// 当たらなかった。元の座標に戻す
-	//				_position = oldPos;
-
-
-	//				return false;
-	//			}
-
-	//		}
-
-	//	}
-
-	//	return false;
-
-	//}
-
-	//bool Actor::WarpFloor(int num) {
-
-	//	//// 移動した先でコリジョン判定
-	//	MV1_COLL_RESULT_POLY hitPoly;
-
-	//	//auto handle = GetGame().GetAssetServer().GetModel("Dungeon");
-
-	//	//AssetServerの方に数字でハンドルを取得できるようにする
-	//	//ここのハンドルをステージのみ番号で取得できるようにする
-	//	auto handle = GetGame().GetAssetServer().GetMap(num);
-	//	//↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ここに書く
-
-	//	//auto handle = GetGame().GetAssetServer().GetModel(handleName);
-
-	//	for (auto i = GetActorServer().GetActors().begin(); i != GetActorServer().GetActors().end(); i++) {
-
-	//		if ((*i)->GetTypeId() != TypeId::Stage) {
-	//			continue;
-	//		}
-	//		else {
-
-	//			auto keys = (*i)->GetCollision().GetWarpName(handle.first);
-
-	//			//auto frameMapCollision = (*i)->GetCollision().GetMapCollision();
-	//			for (auto keyStr : keys){
-	//			
-	//				//ハンドルのコリジョン情報を取得
-	//				auto frameMapCollision = (*i)->GetCollision().GetWarpCollision(keyStr, handle.first);
-	//				//auto frameMapCollision = (*i)->GetCollision().GetMapCollision(handle.first);
-
-	//				Math::Vector4 dif = { 0.0, 50.0, 0.0 };
-	//				Math::Vector4 under = { 0.0, -99999.0, 0.0 };
-	//				auto startPos = _position + dif;
-	//				auto endPos = _position + under;
-	//				// 主人公の腰位置から下方向への直線
-	//				hitPoly = MV1CollCheck_Line(handle.first, frameMapCollision.second, ToDX(startPos), ToDX(endPos));
-
-	//				if (hitPoly.HitFlag) {
-	//					//// 当たった
-	//					//// 当たったY位置をキャラ座標にする
-	//					//_position = { _position.GetX(), hitPoly.HitPosition.y, _position.GetZ() };
-
-	//					//当たったフレームインデックス
-	//					auto frameIndex = hitPoly.FrameIndex;
-
-	//					//ワープ前の触れたフレーム名を取得
-	//					std::string name = MV1GetFrameName(handle.first, frameIndex);
-
-
-	//	                //ワープメッシュ名にあるハイフンを飛ばした数字
-	//					auto x = name.substr(3, 2);
-
-	//					auto xStr = x;
-	//					xStr.substr(0, 1);
-
-	//					if (xStr != "0") {
-	//						x = x.substr(1, 1);
-	//					}
-
-	//					int xNum = std::atoi(x.c_str());
-
-	//					//ワープメッシュ名にあるハイフンを飛ばした数字
-	//					auto y = name.substr(5, 2);
-	//					auto yStr = y;
-	//					yStr.substr(0, 1);
-
-
-	//					if (yStr != "0") {
-	//						y = y.substr(1, 1);
-	//					}
-
-	//					int yNum = std::atoi(y.c_str());
-
-	//					//フロア番号計算
-	//					auto floorNum = yNum * 10 + xNum;
-
-	//					//ワープ先のフレーム名
-	//					auto toWarpName  = (*i)->GetCollision().GetWarpNameFloor(floorNum, name);
-
-	//					//ワープ先のステージ番号
-	//					auto warpStageNum = (*i)->GetCollision().GetFloorStageNum(floorNum);
-	//					
-	//					//ワープ先のハンドル
-	//					auto toWarpHandle = GetGame().GetAssetServer().GetMap(warpStageNum);
-
-	//					//ワープ先のフレームインデックス
-	//					int toWarpFrameIndex = MV1SearchFrame(toWarpHandle.first, toWarpName.c_str());
-	//					
-	//					//ワープ先の位置を取得
-	//					auto pos = MV1GetFramePosition(toWarpHandle.first, toWarpFrameIndex);
-
-	//					//_position = { static_cast<double>(pos.x),  static_cast<double>(pos.y) , static_cast<double>(pos.z) };
-	//					_position = {0.0, 0.0, 0.0};
-
-	//					return true;
-	//				}
-	//				else {
-
-	//					return false;
-	//				}
-	//			
-	//			}
-
-	//		}
-
-	//	}
-
-
-	//	return false;
-	//}
 	bool Actor::CollisionFloor() {
 
 		// 移動した先でコリジョン判定
@@ -417,6 +247,54 @@ namespace MachineHuck::Actor {
 
 		}
 
+
+		return false;
+	}
+
+	//壊せる壁と当たっているか
+	bool Actor::CollisionWall(Actor& gimmick, Math::Vector4 move) {
+
+		//// 移動した先でコリジョン判定
+		MV1_COLL_RESULT_POLY hitPoly;
+
+		for (auto i = GetActorServer().GetActors().begin(); i != GetActorServer().GetActors().end(); i++) {
+
+			if ((*i)->GetTypeId() != TypeId::Stage) {
+				continue;
+			}
+			else {
+				//壊せる壁のハンドル
+				auto handle = gimmick.GetModel().GetHandle();
+
+				//壊せる壁のハンドルを取得
+				//auto&&[handle, actNo] = gimmick.GetGame().GetAssetServer().GetModel("BrokenWall");
+				//(*i)->GetGame().GetAssetServer().
+				//ギミックのコリジョンフレームを取得
+				//auto gimmickFrameCollision = (*i)->GetCollision().GetGimmickCollision(handle);
+
+				
+				//auto frameGimmick = gimmick.GetActorServer().GetGimmickCollision(handle);
+				auto frameGimmick = GetGame().GetActorServer().GetGimmickCollision(handle);
+				//auto gimmickMap = gimmick.GetModel().GetModelGimmick();
+
+				//auto frameGimmick = gimmickMap[handle];
+
+				auto startPos = _position + move;
+				auto endPos = _position;
+				// 主人公の腰位置から前方向への直線
+				hitPoly = MV1CollCheck_Line(handle, frameGimmick, ToDX(startPos), ToDX(endPos));
+
+				if (hitPoly.HitFlag) {
+					//// 当たった
+					return true;
+
+				}
+				else {
+					return false;
+				}
+
+			}
+		}
 
 		return false;
 	}

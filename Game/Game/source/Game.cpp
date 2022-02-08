@@ -16,6 +16,8 @@
 #include "../source/Scene/SceneMap.h"
 #include "../source/Scene/SceneItem.h"
 #include "../source/Scene/SceneLoading.h"
+#include "../source/Scene/SceneSlideIn.h"
+#include "../source/Scene/SceneSlideOut.h"
 #include "../source/Actor/ActorServer.h"
 #include "../source/Actor/ActorFactory.h"
 #include "../source/Enemy/EnemyParameter.h"
@@ -131,6 +133,8 @@ bool AppFrame::Game::Initialize() {
     _sceneServer->Register("Map", std::make_shared<MachineHuck::Scene::SceneMap>(*this));
     _sceneServer->Register("Item", std::make_shared<MachineHuck::Scene::SceneItem>(*this));
     _sceneServer->Register("Loading", std::make_shared<MachineHuck::Scene::SceneLoading>(*this));
+    _sceneServer->Register("SlideIn", std::make_shared<MachineHuck::Scene::SceneSlideIn>(*this));
+    _sceneServer->Register("SlideOut", std::make_shared<MachineHuck::Scene::SceneSlideOut>(*this));
 
     // ƒCƒ“ƒQ[ƒ€‚ğ¶¬‚µ‚ÄƒV[ƒ“‚Æ‚µ‚Ä“o˜^
     _sceneServer->Register("InGame", std::make_shared<MachineHuck::Scene::SceneInGame>(*this));

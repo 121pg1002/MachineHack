@@ -125,6 +125,30 @@ namespace MachineHuck::Flag {
 		 */
 		static void SetDuctWarp(bool flag) { _ductWarp = flag; }
 
+		/**
+		 * @brief  スライドインフラグを取得         
+		 * @return _slideInFlag
+		 */
+		static bool GetSlideIn() { return _slideInFlag; }
+
+		/**
+		 * @brief  スライドアウトフラグを取得       
+		 * @return _slideOutFlag
+		 */
+		static bool GetSlideOut() { return _slideOutFlag; }
+
+		/**
+		 * @brief  スライドインフラグを設定      
+		 * @param  flag
+		 */
+		static void SetSlideIn(bool flag) { _slideInFlag = flag; }
+
+		/**
+		 * @brief  スライドアウトフラグを設定       
+		 * @param  flag
+		 */
+		static void SetSlideOut(bool flag) { _slideOutFlag = flag; }
+
 
 		/**
 		 * @brief  カメラ位置を取得
@@ -166,6 +190,8 @@ namespace MachineHuck::Flag {
 		static bool _noExitFlag;
 		static bool _playerDead;
 		static bool _ductWarp;
+		static bool _slideInFlag;
+		static bool _slideOutFlag;
 
 
 	};

@@ -83,7 +83,7 @@ namespace MachineHuck::Stage {
 		//_ground->SetModel("Ground");
 		//_ground->SetScale({10.f, 10.f, 10.f});
 
-		// ステージ番号, ハンドル名(SceneInGameで登録した名前), コリジョンメッシュ名, ワープ位置名, 表示するフロア番号
+		// ステージ番号, ハンドル名(識別用), コリジョンメッシュ名, ワープ位置名, 表示するフロア番号
 		CollisionMesh collMap{
 			//{"Player",    "SDChar/SDChar.mv1"},
 		//	{0,    {"Dunge0", "dungeon_collision", {"", ""}}},
@@ -108,7 +108,16 @@ namespace MachineHuck::Stage {
 		//const auto& stageVector = game.GetStageParameter().GetStageVector();
 
 		//for (int i = 0; i < stageVector.size(); i++) {
+	
+		//ギミック用のコリジョン情報テーブル
+		CollisionGimmickMesh gimmickMap{
+			{"BrokenWall", "duct_entrance_c"}
+			//{"DamageFloor", "A0_00_00"},
+			//{"Hole", "A1_00_01"}
+		
+		};
 
+		_collisionGimmickMesh = gimmickMap;
 		//	auto sP = stageVector[i];
 		//	auto pos = sP.GetPosition();
 		//	auto rot = sP.GetRotation();
@@ -126,7 +135,22 @@ namespace MachineHuck::Stage {
 		//}
 		//GetCollision().SetAllFloorMap(_allFloorMap);
 
+		//for (auto&& gimmick : _collisionGimmickMesh) {
+		//
+		//	auto&& [handleName, collName] = gimmick;
 
+		//	for (auto i = 0; i < 3; i++) {
+
+		//		//ハンドル名でハンドルを取得
+		//		auto&& [handle, actNo] = GetGame().GetAssetServer().GetModel(handleName);
+
+		//		//ギミックのコリジョン情報を構築
+		//		GetCollision().SetGimmickCollision(handle, collName);
+
+		//	}
+
+		//
+		//}
 
 
 
@@ -147,12 +171,13 @@ namespace MachineHuck::Stage {
 
 		for (int i = 0; i < _allFloorMap.size(); i++) {
 
+			//登録したステージ番号のフロアのみ通す
 			for (auto&& floor : _allFloorMap[i]) {
 
 				auto&& handle = floor->GetHandle();
 
+				//ステージ番号
 				auto stageNum = GetCollision().GetFloorStageNum(i);
-
 
 
 				auto [handleName, collName, warpName, floorNum] = _collisionFloorNameMap[stageNum];
@@ -182,21 +207,7 @@ namespace MachineHuck::Stage {
 
 				auto stageTable = game.GetStageParameter().GetStageTableVector();
 
-				//int floorNum = -1;
 
-				//if (stageNum == 0) {
-				//	floorNum = 0;
-				//}
-				//else if (stageNum == 1) {
-
-				//	floorNum = 10;
-				//}
-				//else {
-				//	floorNum = 100;
-
-				//}
-
-				//番号をフロア番号にしなければいけない
 				//ワープ先の名前を設定
 				GetCollision().SetWarpNameFloor(floorNum, vecStr);
 

@@ -23,7 +23,7 @@ namespace MachineHuck::Gimmick{
 	    void Update();
 	    void Draw();
 	private:
-		std::unique_ptr<Model::ModelComponent> _wall;
+		//std::unique_ptr<Model::ModelComponent> _wall;
     };
 }
 

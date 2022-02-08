@@ -42,7 +42,17 @@ namespace MachineHuck::Model {
 		MV1DrawModel(_handle);
 	}
 
+	void ModelComponent::SetModelGimmick(std::string key, std::string collisionName, int no) {
+	
+		auto [handle, actualNo] = _owner.GetGame().GetAssetServer().GetModel(key, no);
 
+		//ƒRƒŠƒWƒ‡ƒ“–¼‚ğ‚Á‚Ä‚±‚È‚¢‚Æ‚¢‚¯‚È‚¢
+		auto frameGimmickCollision = MV1SearchFrame(handle, collisionName.c_str());
+
+		MV1SetupCollInfo(handle, frameGimmickCollision, 32, 32, 32);
+		//_gimmickHandle[key] = handle;
+		_gimmickHandle.emplace(handle, frameGimmickCollision);
+	}
 
 	//void ModelComponent::Draw(Math::Vector4 pos, Math::Vector4 rot, Math::Vector4 scale) {
 	//
@@ -54,7 +64,7 @@ namespace MachineHuck::Model {
 
 	/// ƒ‚ƒfƒ‹‚Ìİ’è
 	int ModelComponent::SetModel(std::string_view key, int no) {
-		auto [handle, actualNo] = _owner.GetGame().GetAssetServer().GetModel(key, no);
+		auto&& [handle, actualNo] = _owner.GetGame().GetAssetServer().GetModel(key, no);
 		_handle = handle;
 		return actualNo;
 	}

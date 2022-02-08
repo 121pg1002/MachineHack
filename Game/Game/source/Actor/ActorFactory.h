@@ -138,6 +138,9 @@ namespace MachineHuck::Actor {
         void SetOldStageNo() { _oldStageNo.clear(); _oldStageNo.emplace_back(-1); }
 
 
+        int GetGimmickCollision(const int handle)  { return _frameGimmicks[handle]; }
+
+
     private:
         AppFrame::Game& _game;
         std::unordered_map<std::string, std::unique_ptr<CreatorBase>> _creatorMap;
@@ -151,6 +154,9 @@ namespace MachineHuck::Actor {
         StageV _oldStageNo{ -1 };
         StageV _currentStageNo{ 0 };
         std::vector<StageV> _stageTableV;
+
+        std::unordered_map<int, int> _frameGimmicks; //!< ハンドル名でコリジョンを保存
+        //std::unordered_map<>
     };
 
     /// @class CreatorBase

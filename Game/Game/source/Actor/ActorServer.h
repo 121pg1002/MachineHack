@@ -69,6 +69,10 @@ namespace MachineHuck::Actor {
 
 		Math::Vector4 GetDir(std::string_view key);
 
+
+		int GetGimmickCollision(const int handle)   { return _gimmicksCollision[handle]; }
+
+		void SetGimmickCollision(const std::unordered_map<int, int> gimmicks) { _gimmicksCollision = gimmicks; }
 		//Math::Vector4 GetMove(std::string_view key);
 
 	private:
@@ -76,6 +80,7 @@ namespace MachineHuck::Actor {
 		std::vector<std::unique_ptr<Actor>> _actors;
 		std::vector<std::unique_ptr<Actor>> _pendingActors;
 		std::unordered_map<std::string, _pos_dir> _registry;
+		std::unordered_map<int, int> _gimmicksCollision;
 
 	};
 }

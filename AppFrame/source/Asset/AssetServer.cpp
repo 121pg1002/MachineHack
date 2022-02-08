@@ -227,6 +227,25 @@ void Asset::AssetServer::ClearModels() {
 	_models.clear();
 }
 
+///Duplicateモデルのみ削除してクリアする
+/// //後回し
+void Asset::AssetServer::ClearDuplicateModels() {
+
+    for (auto&& [key, model] : _models) {
+        auto&& [filename, handles] = model;
+
+        for (auto handle : handles) {
+
+            //if()
+
+
+            MV1DeleteModel(handle);
+        }
+        handles.clear();
+    }
+
+}
+
 /// 全てのステージモデルを削除してクリアする
 void Asset::AssetServer::ClearMaps() {
     for (auto&& [key, model] : _maps) {

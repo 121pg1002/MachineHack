@@ -9,6 +9,7 @@
 #include "GimmickBase.h"
 #include "../Actor/Actor.h"
 #include "GimmickParameter.h"
+#include "../Collision/CollisionComponent.h"
 
 
 
@@ -29,6 +30,8 @@ namespace MachineHuck::Gimmick {
 
 
 	GimmickBase::GimmickBase(AppFrame::Game& game) : Actor::Actor(game){
+
+
 
 		////////Ç∆ÇËÇ†Ç¶Ç∏ÅAÅ´ÇÕâº
 		//for (int i = 0; i < StageAll; i++) {

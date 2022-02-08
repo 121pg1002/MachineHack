@@ -22,6 +22,8 @@ namespace MachineHuck::Flag {
 	bool FlagData::_noExitFlag = false;
 	bool FlagData::_playerDead = false;
 	bool FlagData::_ductWarp = false;
+	bool FlagData::_slideInFlag = false;
+	bool FlagData::_slideOutFlag = false;
 
 
 }

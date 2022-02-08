@@ -638,38 +638,29 @@ namespace MachineHuck::Enemy {
 				//!< 敵ではなかったら次へ
 				if ((*i)->GetTypeId() != TypeId::Enemy) {
 
-					continue;
+					//ギミックではなかったら次へ
+					if ((*i)->GetTypeId() != TypeId::Gimmick) {
+
+						continue;
+					
+					}
 
 
-					//if (_invincibleTime < 0) {
-					//	continue;
-					//}
+					//壊せる壁と当たったか
+					if (_owner.CollisionWall(**i, _norm)) {
+						//当たった壁を死亡状態に変更
+						(*i)->SetActorState(ActorState::Dead);
 
-					////プレイヤーではなかったら次へ
-					//if ((*i)->GetTypeId() != TypeId::Player) {
-					//	continue;
-					//}
-					//else {
+						//スライドアウトフラグをオンに
+						//Flag::FlagData::SetSlideOut(true);
 
-					//
-					//	//プレイヤーが円で敵のAABBとの当たり判定
-					//	if (_owner._collision->CircleToOrientedAABB(**i, _owner)) {
-					//	
-					//		//プレイヤーのゲージを減少させる
-					//		(*i)->GetGaugeBase().DownGauge(15);
-					//		_invincibleTime = 15;
+						//*se 壁が壊れる(未実装)
+						_owner.GetGame().GetSoundComponent().Play("broken");
 
-					//		//スタティックでプレイヤーに共有
-					//		Flag::FlagData::SetNoDamageTime(_invincibleTime);
-
-					//		//プレイヤーをダメージ状態に変更
-					//		(*i)->GetState().GoToState("Damage");
-					//	
-					//	}
-					//}
+					}
 
 
-				}
+				}//敵だった
 				else {
 
 					//ハッキングされていたら次へ	
@@ -681,7 +672,7 @@ namespace MachineHuck::Enemy {
 						//相手エネミーの円と自分のAABB
 						if (_owner._collision->CircleToOrientedAABB(**i, _owner)) {
 
-							//int x = 0;
+
 							(*i)->SetActorState(ActorState::Dead);
 							//_owner._state->GoToState("Run");
 							//_owner._status = STATUS::CHASE;
@@ -974,17 +965,12 @@ namespace MachineHuck::Enemy {
 		_owner.HuckedMove(_lx, _ly);
 
 		//ギミックと触れているか触れていたら戻す
-		_owner.CollisionGimmick();
+		//_owner.CollisionGimmick();
 
 		////地面と触れているかどうか
 		_owner.CollisionFloor(oldPos, _owner.GetR());
-		//	Math::Vector4 zero = { 0.0, 0.0, 0.0 };
-		//	//主人公のカメラに移動量を送る
-		//	_owner.SetHuckedMove(zero);
-		//}
-		//else {
-		//}
-					//ワープ直後か
+
+		//ワープ直後か
 		if (!_warping) {
 
 			auto dxPos = _owner.WarpFloor(_owner);

@@ -22,8 +22,11 @@ namespace MachineHuck::Stage {
 	using StageFloor = std::unordered_map<int, std::tuple<AppFrame::Math::Vector4, AppFrame::Math::Vector4, int>>;
 	//using Collision = std::vector<std::pair<std::string, std::vector<std::string>>>;
 
-	//                                       フロア番号      ハンドル名, コリジョンメッシュ名, ワープメッシュ名の配列,  フロア番号 
-	using CollisionMesh = std::unordered_map<int, std::tuple<std::string, std::string, std::vector<std::string>, int>>;
+	//                                       格納番号      ハンドル名, コリジョンメッシュ名, ワープメッシュ名の配列,  フロア番号 
+	using CollisionMesh = std::unordered_map<int, std::tuple<std::string,std::string, std::vector<std::string>, int>>;
+
+	//                                                ハンドル名, コリジョンメッシュ名
+	using CollisionGimmickMesh = std::vector<std::pair<std::string, std::string>>;
 
 	/**
 	 * @class ステージクラス
@@ -104,8 +107,11 @@ namespace MachineHuck::Stage {
 
 		std::unordered_map<int, std::vector<int>>  _secretVMap; //!< 隠しているフロア配列を部屋番号で格納するマップ      
 		std::vector<int>                    _secretV;           //!< 隠しているフロアの番号を格納
-		CollisionMesh _collisionFloorNameMap;                   //!< コリジョンの名前フレームの配列 キー: ハンドル名 バリュー: コリジョンメッシュ名
+		CollisionMesh _collisionFloorNameMap;                   //!< コリジョンの名前フレームの配列 キー: ステージ番号 バリュー: コリジョンメッシュ配列
+		CollisionGimmickMesh _collisionGimmickMesh;             //!< ギミック用のコリジョン配列 キー: ステージ番号 バリュー：　コリジョンメッシュ配列
 		std::unordered_map<int, int>        _floorStageNum; //!< フロア番号でステージ番号を格納
+
+
 		//std::vector<std::string> _handleV;                //ハンドル名の配列
 		int _stageNo;  //!< 現在のフロア番号
 

@@ -8,16 +8,16 @@
             "ty": 0,
             "tz": 0,
             "rx": -0,
-            "ry": -0,
+            "ry": 0,
             "rz": 0,
-            "sx": 1,
-            "sy": 1,
-            "sz": 1
+            "sx": 1.0,
+            "sy": 1.0,
+            "sz": 1.0
         },
         {
             "filename": "BrokenWall",
             "handlename": "floor16",
-            "tx": 0,
+            "tx": 200,
             "ty": 0,
             "tz": 0,
             "rx": -0,

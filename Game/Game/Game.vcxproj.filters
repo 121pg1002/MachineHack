@@ -167,6 +167,12 @@
     <ClCompile Include="source\Item\ItemParameter.cpp">
       <Filter>Item</Filter>
     </ClCompile>
+    <ClCompile Include="source\Scene\SceneSlideIn.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scene\SceneSlideOut.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Enemy">
@@ -407,6 +413,12 @@
     </ClInclude>
     <ClInclude Include="source\Item\ItemParameter.h">
       <Filter>Item</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Scene\SceneSlideIn.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Scene\SceneSlideOut.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

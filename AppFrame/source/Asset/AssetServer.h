@@ -135,6 +135,8 @@ namespace AppFrame {
 			/// 全てのモデルを削除してクリアする
 			virtual void ClearModels();
 
+			//特定のモデルのみ削除
+			void ClearDuplicateModels();
 			/**
 			 * @brief 全てのマップも出るを削除         
 			 */

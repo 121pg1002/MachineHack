@@ -9,6 +9,7 @@
 #pragma once
 #include <DxLib.h>
 #include <string_view>
+#include <unordered_map>
 
 namespace MachineHuck::Actor {
 	class Actor;
@@ -36,6 +37,11 @@ namespace MachineHuck::Model {
 
 		/// 描画
 		virtual void Draw();
+
+		/// @param collisionName コリジョンの名前
+		void SetModelGimmick(std::string key, std::string collsionName, int no);
+
+		std::unordered_map<int, int> GetModelGimmick() const { return _gimmickHandle; }
 
 		///**
 		// * @brief 描画 
@@ -89,15 +95,18 @@ namespace MachineHuck::Model {
 		 */
 		void SetStageNum(int num) { _stageNum = num; }
 
-		void SetHandle(int handle) { _handle = handle; }
-		int GetHandle() { return _handle; }
+		void SetHandle(const int handle) { _handle = handle; }
+		int GetHandle() const { return _handle; }
 		void SetColor(int index, float r, float g, float b);
+
+
 
 	protected:
 		Actor::Actor& _owner;
 		int _handle{ -1 };
 		bool _isLighting{ true };
 		int _stageNum{-1};
+		std::unordered_map<int, int> _gimmickHandle; //!< キー: ハンドル バリュー: フレームコリジョン
 	};
 }
 

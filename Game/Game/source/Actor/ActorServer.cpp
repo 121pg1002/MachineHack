@@ -9,6 +9,8 @@
 #include "ActorServer.h"
 #include <algorithm>
 #include "Actor.h"
+#include "../Model/ModelAnimComponent.h"
+#include "../Model/ModelComponent.h"
 
 namespace MachineHuck::Actor {
     /// アクターの追加
@@ -73,7 +75,29 @@ namespace MachineHuck::Actor {
         // アクターの中に死亡状態のアクターを削除
         auto isDead = [](auto&& act) {return act->IsDead(); };
         auto it = std::remove_if(_actors.begin(), _actors.end(), isDead);
+
+        //死亡状態か
+        //if ((*it)->IsDead()) {
+
+        //    //エネミーか
+        //    if ((*it)->GetTypeId() != (*it)->IsEnemy()) {
+
+        //        auto handle = (*it)->GetModel().GetHandle();
+        //        MV1DeleteModel(handle);
+        //    }
+        //    else {
+        //        auto handle = (*it)->GetModelAnime().GetHandle();
+        //        MV1DeleteModel(handle);
+        //    }
+        //
+        //}
+
+
+        
+
         _actors.erase(it, _actors.end());
+
+
 
     }
     /// 描画

@@ -38,8 +38,8 @@ namespace MachineHuck::Scene {
         AppFrame::Asset::AssetServer::ModelMap usedInGame{
             //{"Player",    "SDChar/SDChar.mv1"},
             {"Player",    "Player/player.mv1"},
-            {"SkySphere", "model/skysphere.mv1"},
-            {"Ground",    "model/ground.mv1"},
+            //{"SkySphere", "model/skysphere.mv1"},
+            //{"Ground",    "model/ground.mv1"},
             //  {"Spider",    "tackle/takcle.mv1"},
             {"Spider",    "tackle/takcle_sotai_multimotion.mv1"},
             //{"pCube",      "model/pCube.mv1"},
@@ -54,10 +54,10 @@ namespace MachineHuck::Scene {
             //{"secretfloor", "model/secretfloor.mv1"},
             //{"secretwall", "model/secretwall.mv1"},
             //  {"damagefloor",  "target.mv1"},
-              {"entrypoint", "entrypoint.mv1"},
-              {"test", "test.mv1"},
+              //{"entrypoint", "entrypoint.mv1"},
+              //{"test", "test.mv1"},
               {"Item","Item.mv1"},
-            {"BrokenWall", "secretwall.mv1"}
+            {"BrokenWall", "gimmick/duct_entrance.mv1"}
               // {"Dungeon",   "Dungeon.mv1"},
               // {"stage0",    "stage0.mv1"}
 
@@ -230,13 +230,12 @@ namespace MachineHuck::Scene {
         }
 
 
-        //読み込んだエネミーのステージ配置をテーブルに入れる
+        //読み込んだエネミーやアイテム、ギミックのステージ配置をテーブルに入れる
         auto inGame = GetGame().GetEnemyParameter().GetFloorEnemyMap();
         auto inGamei = GetGame().GetItemParameter().GetFloorItemMap();
         auto inGameGimmick = GetGame().GetGimmickParameter().GetFloorGimmickMap();
 
-        //エネミーのスポーンテーブルの読み込み
-
+        //エネミーやアイテム、ギミックのスポーンテーブルの読み込み
         af.SetSpawnTable(inGame);
         af.SetSpawnTable(inGamei);
         af.SetSpawnTable(inGameGimmick);
@@ -323,7 +322,7 @@ namespace MachineHuck::Scene {
         GetActorServer().Update();
         GetUiComponent().Update();
 
-
+        //フェードアウト処理
         if (Flag::FlagData::GetFadeOutFlag()) {
             //GetSceneServer().PopBack(true);
             //GetSceneServer().PushBack("FadeOut");
@@ -333,9 +332,21 @@ namespace MachineHuck::Scene {
             //フェードアウトの方でPopBackしていないのだと思う
         }
 
+        //フェードイン処理
         if (Flag::FlagData::GetFadeInFlag()) {
             GetSceneServer().GoToScene("Loading", "FadeIn", false);
             Flag::FlagData::SetFadeInFlag(false);
+        }
+
+        //スライドアウト処理
+        if (Flag::FlagData::GetSlideOut()) {
+            GetSceneServer().GoToScene("Loading", "SlideOut", false);
+        }
+
+        //スライドイン処理
+        if (Flag::FlagData::GetSlideIn()) {
+            GetSceneServer().GoToScene("Loading", "SlideIn", false);
+            Flag::FlagData::SetSlideIn(false);
         }
 
         //プレイヤーが死亡したら

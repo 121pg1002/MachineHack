@@ -845,14 +845,20 @@ namespace MachineHuck::Collision {
     }
 
     //ギミックのコリジョン情報を構築
-    void CollisionComponent::SetGimmickCollision(int handle, std::string key) {
-        auto frameGimmickCollision = MV1SearchFrame(handle, key.c_str());
+    //void CollisionComponent::SetGimmickCollision(int handle, std::string key) {
+    //    auto frameGimmickCollision = MV1SearchFrame(handle, key.c_str());
 
-        MV1SetupCollInfo(handle, frameGimmickCollision, 32, 32, 32);
+    //    MV1SetupCollInfo(handle, frameGimmickCollision, 32, 32, 32);
 
-        _frameGimmick.emplace(handle, frameGimmickCollision);
-    
-    }
+    //    if (frameGimmickCollision == -2) {
+    //    
+    //        printfDx("is not gimmickCollision");
+    //        return;
+    //    }
+
+    //    _frameGimmick.emplace(handle, frameGimmickCollision);
+    //
+    //}
 
     //ワープメッシュ名で検索
     const std::pair<std::pair<int, int>, int> CollisionComponent::GetWarpCollision(std::string key, int handle) {

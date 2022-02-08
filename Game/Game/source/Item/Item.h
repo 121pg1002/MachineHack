@@ -15,7 +15,7 @@ namespace MachineHuck::Item {
 		virtual	void	Draw() override;
 
 		//ワールド行列の計算
-		void ComputeWorldTransform() override;
+		//void ComputeWorldTransform() override;
 
 		virtual TypeId GetTypeId()const override { return TypeId::Item; };
 

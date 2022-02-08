@@ -76,12 +76,12 @@ namespace MachineHuck::Item {
 		
 	}
 
-	void Item::ComputeWorldTransform() {
-		auto world = MGetScale(ToDX(_scale));
-		world = MMult(world, MGetRotZ(static_cast<float>(_rotation.GetZ())));
-		world = MMult(world, MGetRotX(static_cast<float>(_rotation.GetX())));
-		world = MMult(world, MGetRotY(static_cast<float>(_rotation.GetY()) + DX_PI_F));
-		_worldTransform = MMult(world, MGetTranslate(ToDX(_position)));
+	//void Item::ComputeWorldTransform() {
+	//	auto world = MGetScale(ToDX(_scale));
+	//	world = MMult(world, MGetRotZ(static_cast<float>(_rotation.GetZ())));
+	//	world = MMult(world, MGetRotX(static_cast<float>(_rotation.GetX())));
+	//	world = MMult(world, MGetRotY(static_cast<float>(_rotation.GetY()) + DX_PI_F));
+	//	_worldTransform = MMult(world, MGetTranslate(ToDX(_position)));
 
-	}
+	//}
 }

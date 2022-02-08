@@ -111,11 +111,16 @@ namespace MachineHuck::Actor {
         TypeId IsEnemy() const { return TypeId::Enemy; }
 
         /**
-         * @brief   エネミーかどうか
-         * @return  TypeId::Enemy
+         * @brief   アイテムかどうか
+         * @return  TypeId::Item
          */
         TypeId IsItem() const { return TypeId::Item; }
 
+        /**
+         * @brief  ギミックかどうか       
+         * @return TypeId::Gimmick
+         */
+        TypeId IsGimmick() const { return TypeId::Gimmick; }
 
         /**
          *
@@ -151,6 +156,14 @@ namespace MachineHuck::Actor {
          *         false 当たっていない
          */
         bool CollisionGimmick();
+
+        /**
+         * @brief  壊せる壁との当たり判定    
+         * @param  move   フォワードベクトル
+         * @return true   当たっている
+         *         false  当たっていない
+         */
+        bool CollisionWall(Actor& gimmick, Math::Vector4 move);
 
         /**
          * @brief  ワープ位置との当たり判定
@@ -270,7 +283,7 @@ namespace MachineHuck::Actor {
         //State GetState() const { return _state; }
 
         State::StateComponent& GetState() { return *_state; }
-        Model::ModelAnimeComponent& GetModelAnime() { return *_modelAnime; }
+        Model::ModelAnimeComponent& GetModelAnime() const { return *_modelAnime; }
         const Model::ModelComponent& GetModel() const { return *_model; }
         Camera::CameraComponent& GetCamera() { return *_camera; }
 
@@ -279,11 +292,11 @@ namespace MachineHuck::Actor {
         ActorState GetActorState() const { return _actorState; }
         void SetActorState(ActorState state) { _actorState = state; }
 
-        Collision::CollisionComponent& GetCollision() { return *_collision; }
+        Collision::CollisionComponent& GetCollision() const { return *_collision; }
 
-        Gauge::GaugeBase& GetGaugeBase() { return *_gaugeBase; }
-        Gauge::GaugeEnemy& GetGaugeEnemy() { return *_gaugeEnemy; }
-        Gauge::GaugePlayer& GetGaugePlayer() { return *_gaugePlayer; }
+        Gauge::GaugeBase& GetGaugeBase() const  { return *_gaugeBase; }
+        Gauge::GaugeEnemy& GetGaugeEnemy() const { return *_gaugeEnemy; }
+        Gauge::GaugePlayer& GetGaugePlayer() const { return *_gaugePlayer; }
 
         void SetIsHit(bool isHit) { _isHit = isHit; };
 

@@ -64,6 +64,8 @@
     <ClCompile Include="source\Scene\SceneLoading.cpp" />
     <ClCompile Include="source\Scene\SceneMap.cpp" />
     <ClCompile Include="source\Scene\ScenePrologue.cpp" />
+    <ClCompile Include="source\Scene\SceneSlideIn.cpp" />
+    <ClCompile Include="source\Scene\SceneSlideOut.cpp" />
     <ClCompile Include="source\Scene\SceneTeam.cpp" />
     <ClCompile Include="source\Scene\SceneTitle.cpp" />
     <ClCompile Include="source\Shader\Shader.cpp" />
@@ -122,6 +124,8 @@
     <ClInclude Include="source\Scene\SceneLoading.h" />
     <ClInclude Include="source\Scene\SceneMap.h" />
     <ClInclude Include="source\Scene\ScenePrologue.h" />
+    <ClInclude Include="source\Scene\SceneSlideIn.h" />
+    <ClInclude Include="source\Scene\SceneSlideOut.h" />
     <ClInclude Include="source\Scene\SceneTeam.h" />
     <ClInclude Include="source\Scene\SceneTitle.h" />
     <ClInclude Include="source\Shader\Shader.h" />
