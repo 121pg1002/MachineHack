@@ -681,7 +681,14 @@ namespace MachineHuck::Enemy {
 					if (_owner.GetCollision().AABBToOrientedAABB(**i, _owner)) {
 					
 						(*i)->SetActorState(ActorState::Dead);
-					
+
+						//スライドフラグをオンに
+						//フェードではなくスライドにする
+						Flag::FlagData::SetSlideFlag(true);
+
+						//*se 壁が壊れる(未実装)
+						_owner.GetGame().GetSoundComponent().Play("broken");
+
 					}
 
 
@@ -1006,7 +1013,16 @@ namespace MachineHuck::Enemy {
 			//現在位置のステージ番号のワープナビメッシュに当たった場合
 			if (dxPos.x != 0.0f && dxPos.z != 0.0f) {
 
-				Flag::FlagData::SetFadeOutFlag(true);
+
+				if (!Flag::FlagData::GetSlideFlag()) {
+				
+					Flag::FlagData::SetFadeOutFlag(true);
+				
+				}
+				else {
+					Flag::FlagData::SetSlideOut(true);
+				}
+				
 				//Math::Vector4 pos = { dxPos.x, dxPos.y, dxPos.z };
 
 				//_position = pos;
@@ -1040,7 +1056,15 @@ namespace MachineHuck::Enemy {
 			}
 
 			if (_waitFrame == 0) {
-				Flag::FlagData::SetFadeInFlag(true);
+				if (!Flag::FlagData::GetSlideFlag()) {
+
+					Flag::FlagData::SetFadeInFlag(true);
+				}
+				else {
+					Flag::FlagData::SetSlideIn(true);
+					Flag::FlagData::SetSlideFlag(false);
+				}
+				
 			}
 
 			if (!_owner.WarpingFloor() && _waitFrame < 0) {

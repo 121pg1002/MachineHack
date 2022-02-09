@@ -31,9 +31,9 @@ namespace MachineHuck::Scene {
     }
 
     void SceneSlideOut::Update() {
-        _xSlideOut -= 30;
+        _xSlideOut -= 60;
 
-        if (_xSlideOut < 1920 / 2) {
+        if (_xSlideOut < -960) {
 
             GetSceneServer().PopBack(false);
             MachineHuck::Flag::FlagData::SetSlideOut(false);

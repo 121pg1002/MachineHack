@@ -33,7 +33,7 @@ namespace MachineHuck::Scene {
     private:
         int _cgXSlideIn{ 0 };  //!< xの画像ハンドル
         int _cgYSlideIn{ 0 };  //!< ｙの画像ハンドル
-        int _xSlideIn{ 1920 }; //!< x方向の移動量
+        int _xSlideIn{ 0 }; //!< x方向の移動量
         int _ySlideIn{ 0 };    //!< y方向の移動量
 
 

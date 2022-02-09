@@ -377,11 +377,11 @@ namespace MachineHuck::Collision {
 
     bool CollisionComponent::AABBToOrientedAABB(const Actor::Actor& own, const Actor::Actor& target) {
 
-        //矩形の回転角度
+        //回転する矩形の回転角度
         auto dir = target.GetRotation();
 
         
-        auto rotY = dir.GetY();
+        auto rotY = -dir.GetY();
 
         //z軸を0度とするため
         auto nine = DX_PI / 180.0 * 90.0;
@@ -414,18 +414,6 @@ namespace MachineHuck::Collision {
         //AABBの中心点
         Math::Vector2 AABBCenterXZ = { own.GetPosition().GetX(), own.GetPosition().GetZ() };
 
-        ////回転させた点を敵座標に並行移動
-        //Math::Vector4 leftUp = { leftUpX + pos.GetX(), pos.GetY(), leftUpZ + pos.GetZ() };
-        //Math::Vector4 leftDown = { leftDownX + pos.GetX(), pos.GetY(), leftDownZ + pos.GetZ() };
-        //Math::Vector4 rightUp = { rightUpX + pos.GetX(), pos.GetY(), rightUpZ + pos.GetZ() };
-        //Math::Vector4 rightDown = { rightDownX + pos.GetX(), pos.GetY(), rightDownZ + pos.GetZ() };
-
-
-        //Math::Vector4 leftUp = { leftUpX + pos.GetX(), pos.GetY(), leftUpZ + pos.GetZ() };
-        //Math::Vector4 leftDown = { leftDownX + pos.GetX(), pos.GetY(), leftDownZ + pos.GetZ() };
-        //Math::Vector4 rightUp = { rightUpX + pos.GetX(), pos.GetY(), rightUpZ + pos.GetZ() };
-        //Math::Vector4 rightDown = { rightDownX + pos.GetX(), pos.GetY(), rightDownZ + pos.GetZ() };
-
 
         //回転させた点を平行移動
         Math::Vector2 leftUpXZ =    { leftUpX + pos.GetX(),    leftUpZ + pos.GetZ() };
@@ -433,7 +421,7 @@ namespace MachineHuck::Collision {
         Math::Vector2 rightUpXZ =   { rightUpX + pos.GetX(),   rightUpZ + pos.GetZ() };
         Math::Vector2 rightDownXZ = { rightDownX + pos.GetX(), rightDownZ + pos.GetZ() };
 
-        //AABBの中心が四角形の中にある場合
+        //AABBの中心が回転四角形の中にある場合
         auto first = AppFrame::Math::Utility::InsideTrianglePoint(leftDownXZ, leftUpXZ, rightDownXZ, AABBCenterXZ);
         auto second = AppFrame::Math::Utility::InsideTrianglePoint(rightDownXZ, leftUpXZ, rightUpXZ, AABBCenterXZ);
 
@@ -442,20 +430,20 @@ namespace MachineHuck::Collision {
         }
 
 
-        //AABBの中心が四角形の外にある場合
-        if (LineToAABB(leftUpXZ, leftDownXZ, own)) {
+        //AABBの中心が回転四角形の外にある場合
+        if (LineToAABB(leftDownXZ, leftUpXZ, own)) {
             return true;
         }
 
-        if (LineToAABB(leftDownXZ, rightDownXZ, own)) {
+        if (LineToAABB(leftUpXZ, rightUpXZ, own)) {
             return true;
         }
 
-        if (LineToAABB(rightDownXZ, rightUpXZ, own)) {
+        if (LineToAABB(rightUpXZ, rightDownXZ, own)) {
             return true;
         }
 
-        if (LineToAABB(rightUpXZ, leftUpXZ, own)) {
+        if (LineToAABB(rightDownXZ, leftDownXZ, own)) {
             return true;
         }
 

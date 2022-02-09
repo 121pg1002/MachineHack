@@ -149,6 +149,18 @@ namespace MachineHuck::Flag {
 		 */
 		static void SetSlideOut(bool flag) { _slideOutFlag = flag; }
 
+		/**
+		 * @brief  スライドインアウトのフラグを取得       
+		 * @return 
+		 */
+		static bool GetSlideFlag() { return _slideFlag; }
+
+		/**
+		 * @brief  スライドインアウトのフラグを設定      
+		 * @param  flag
+		 */
+		static void SetSlideFlag(bool flag) { _slideFlag = flag; }
+
 
 		/**
 		 * @brief  カメラ位置を取得
@@ -192,7 +204,7 @@ namespace MachineHuck::Flag {
 		static bool _ductWarp;
 		static bool _slideInFlag;
 		static bool _slideOutFlag;
-
+		static bool _slideFlag;
 
 	};
 

@@ -25,16 +25,19 @@ namespace MachineHuck::Scene {
     }
 
     void SceneSlideIn::Enter() {
-        _xSlideIn = 1920;
+        _xSlideIn = 0;
     }
 
 
     void SceneSlideIn::Update() {
-        _xSlideIn -= 30;
+        _xSlideIn -= 60;
 
-        MachineHuck::Flag::FlagData::SetBlackOutFlag(false);
+        if (_xSlideIn < -120) {
+            MachineHuck::Flag::FlagData::SetBlackOutFlag(false);
+        }
+       
 
-        if (_xSlideIn < 1920/2) {
+        if (_xSlideIn < -3840) {
             GetSceneServer().PopBack();
         }
     }

@@ -2,11 +2,11 @@
  
     "StageGimmick": [
         {
-            "filename": "",
+            "filename": "BrokenWall",
             "handlename": "floor20",
-            "tx": -5000,
+            "tx": 0,
             "ty": 0,
-            "tz": 0,
+            "tz": 500,
             "rx": -0,
             "ry": -0,
             "rz": 0,

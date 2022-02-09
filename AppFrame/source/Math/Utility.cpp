@@ -54,13 +54,14 @@ namespace AppFrame::Math {
         const auto v01 = trianglePoint1 - trianglePoint0;
         const auto v12 = trianglePoint2 - trianglePoint1;
         const auto v20 = trianglePoint0 - trianglePoint2;
-        //const auto v0p = point - trianglePoint0;
-        //const auto v1p = point - trianglePoint1;
-        //const auto v2p = point - trianglePoint2;
 
-        auto c0 = v01.Cross(point);
-        auto c1 = v12.Cross(point);
-        auto c2 = v20.Cross(point);
+        const auto v0p = point - trianglePoint0;
+        const auto v1p = point - trianglePoint1;
+        const auto v2p = point - trianglePoint2;
+
+        auto c0 = v01.Cross(v0p);
+        auto c1 = v12.Cross(v1p);
+        auto c2 = v20.Cross(v2p);
 
         //c0.Normalized();
         //c1.Normalized();

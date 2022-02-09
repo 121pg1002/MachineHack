@@ -24,6 +24,7 @@ namespace MachineHuck::Flag {
 	bool FlagData::_ductWarp = false;
 	bool FlagData::_slideInFlag = false;
 	bool FlagData::_slideOutFlag = false;
+	bool FlagData::_slideFlag = false;
 
 
 }
