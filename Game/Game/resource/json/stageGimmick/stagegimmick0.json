@@ -6,7 +6,7 @@
         "handlename": "floor20",
         "tx": 0,
         "ty": 0,
-        "tz": 0,
+        "tz": -400,
         "rx": 0,
         "ry": 0,
         "rz": 0,
@@ -17,7 +17,7 @@
         {
             "filename": "BrokenWall",
             "handlename": "floor16",
-            "tx": 200,
+            "tx": 400,
             "ty": 0,
             "tz": 0,
             "rx": -0,

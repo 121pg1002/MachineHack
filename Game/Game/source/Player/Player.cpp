@@ -221,11 +221,16 @@ namespace MachineHuck::Player {
 
 			if (i->GetTypeId() != TypeId::Stage) {
 			
-				////確認用
-				//if (i->GetTypeId()  == i->IsGimmick()) {
-				//
-				//	CollisionWall(*i, _move);
-				//}
+				if (i->GetTypeId() != TypeId::Gimmick) {
+					continue;
+				}
+				
+				//壊せる壁との当たり判定
+				if (GetCollision().CircleToAABB(*this, *i)) {
+					_position = oldPos;
+				}
+					
+				
 
 				continue;
 			}
@@ -958,6 +963,10 @@ namespace MachineHuck::Player {
 						//エネミーのゲージ量を加算
 						_owner.GetGaugePlayer().PlusGauge(enemyGauge);
 					}
+
+					//もしハッキング状態が外れたらフラグを解除
+					Flag::FlagData::SetSlideFlag(false);
+
 					_owner._position = { _owner.GetPosition().GetX(), 0.0, _owner.GetPosition().GetZ() };
 					(*i)->SetActorState(ActorState::Active);
 					_owner._state->GoToState("Idle");

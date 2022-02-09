@@ -996,6 +996,18 @@ namespace MachineHuck::Enemy {
 
 		_owner.HuckedMove(_lx, _ly);
 
+		for (auto&& i : _owner.GetActorServer().GetActors()) {
+
+			if (i->GetTypeId() != TypeId::Gimmick) {
+				continue;
+			}
+
+			//壊せる壁との当たり判定
+			if (_owner.GetCollision().CircleToAABB(_owner, *i)) {
+				_owner._position = oldPos;
+			}
+		}
+
 		//ギミックと触れているか触れていたら戻す
 		//_owner.CollisionGimmick();
 
@@ -1013,7 +1025,7 @@ namespace MachineHuck::Enemy {
 			//現在位置のステージ番号のワープナビメッシュに当たった場合
 			if (dxPos.x != 0.0f && dxPos.z != 0.0f) {
 
-
+				//スライドフラグがオンか
 				if (!Flag::FlagData::GetSlideFlag()) {
 				
 					Flag::FlagData::SetFadeOutFlag(true);
