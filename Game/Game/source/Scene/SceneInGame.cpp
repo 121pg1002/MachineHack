@@ -57,7 +57,7 @@ namespace MachineHuck::Scene {
               //{"entrypoint", "entrypoint.mv1"},
               //{"test", "test.mv1"},
               {"Item","Item.mv1"},
-            {"BrokenWall", "gimmick/duct_entrance.mv1"}
+            {"BrokenWall", "gimmick/breakable_wall.mv1"}
               // {"Dungeon",   "Dungeon.mv1"},
               // {"stage0",    "stage0.mv1"}
 

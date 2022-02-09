@@ -220,8 +220,17 @@ namespace MachineHuck::Player {
 		for (auto&& i : GetActorServer().GetActors()) {
 
 			if (i->GetTypeId() != TypeId::Stage) {
+			
+				////Šm”F—p
+				//if (i->GetTypeId()  == i->IsGimmick()) {
+				//
+				//	CollisionWall(*i, _move);
+				//}
+
 				continue;
 			}
+
+
 
 			auto floorNum = i->GetCollision().GetFloorNum();
 

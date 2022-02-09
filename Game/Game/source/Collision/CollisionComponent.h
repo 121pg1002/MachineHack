@@ -79,6 +79,34 @@ namespace MachineHuck::Collision {
 		bool AABBToAABB(const Actor::Actor& act1, const Actor::Actor& act2);
 
 		/**
+		 * @brief 辺の四角形の辺の一辺を得る 
+		 * @param center
+		 * @param halfExtends
+		 * @param rot
+		 * @param point
+		 * @return 始点と終点のペア型
+		 */
+		//std::pair<Math::Vector2, Math::Vector2 > GetOrientedRectangleEdge(Math::Vector4 center, Math::Vector2 halfExtends, double rot, int point);
+
+		///**
+		// * @brief 逆ベクトルを返す
+		// * @param vec
+		// * @return 引数の逆ベクトル
+		// */
+		//Math::Vector2 GetNeGateVector(Math::Vector2 vec);
+
+		///**
+		// * @brief ベクトルを回転させる
+		// * @param vec    xzベクトル
+		// * @param radian ラジアン
+		// * @return 回転したベクトル
+		// */
+		//Math::Vector2 GetRotateVector(Math::Vector2 vec, double radian);
+		
+
+
+
+		/**
 		 * @brief  円と矩形の当たり判定を行う
 		 * @param  act1 自分(円)
 		 * @param  act2 相手(矩形)
@@ -104,6 +132,15 @@ namespace MachineHuck::Collision {
 		 * @return
 		 */
 		bool CircleToOrientedAABB(const Actor::Actor& act1, const Actor::Actor& act2);
+
+		/**
+		 * @brief 矩形と回転した矩形の当たり判定を行う 
+		 * @param own (矩形)
+		 * @param target(回転した矩形)
+		 * @return true  当たった
+		 *         false 当たっていない
+		 */
+		bool AABBToOrientedAABB(const Actor::Actor& own, const Actor::Actor& target);
 
 		/**
 		 * @brief  円と線分の当たり判定を行う
@@ -164,6 +201,14 @@ namespace MachineHuck::Collision {
 		 */
 		bool LineToAABB(const Actor::Actor& act1, const Actor::Actor& act2, const AABB box);
 
+		/**
+		 * @brief 線分とAABBの当たり判定を行う
+		 * @param startPos
+		 * @param endPos
+		 * @param target
+		 * @return 成否
+		 */
+		bool LineToAABB(Math::Vector2 startPos, Math::Vector2 endPos, const Actor::Actor& target);
 		///**
 		// * @brief  線分とAABBの当たり判定を行う
 		// * @param  act
@@ -199,6 +244,15 @@ namespace MachineHuck::Collision {
 		 * @return 座標
 		 */
 		const Math::Vector4 PointOnSegment(const Math::Vector4 start, const Math::Vector4 end, const double t);
+
+		/** 
+		 * @brief  線分上の座標を計算  
+		 * @param  start
+		 * @param  end     
+		 * @param  t
+		 * @return 座標
+		 */
+		const Math::Vector2 PointOnSegment(const Math::Vector2 start, const Math::Vector2 end, const double t);
 
 		///**
 		// * @brief  マップコリジョン情報を取得       

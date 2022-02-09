@@ -27,6 +27,11 @@ namespace MachineHuck::Enemy {
         void Input(AppFrame::Input::InputComponent& input) override;
         void Draw() override;
 
+#ifdef _DEBUG
+
+        bool DrawTackleLine(bool judge);
+#endif
+
         TypeId GetTypeId() const override { return TypeId::Enemy; };
         Type GetType() const override { return Type::Tackle; };
 

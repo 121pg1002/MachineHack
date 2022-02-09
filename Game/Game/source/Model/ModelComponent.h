@@ -38,6 +38,9 @@ namespace MachineHuck::Model {
 		/// 描画
 		virtual void Draw();
 
+		//仮とした壊せる壁のコリジョンを描画しない
+		void BrokenDraw();
+
 		/// @param collisionName コリジョンの名前
 		void SetModelGimmick(std::string key, std::string collsionName, int no);
 

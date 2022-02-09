@@ -74,6 +74,18 @@ namespace AppFrame::Math
 		*/
 		const double GetZ() const  { return _z; }
 
+        /**
+         * @brief x座標の設定
+         * @param x
+         */
+        void SetX(const double x) { _x = x; }
+
+        /**
+         * @brief z座標の設定
+         * @param z
+         */
+        void SetZ(const double z) { _z = z; }
+
        /*
         *  @brief  ベクトルの長さの計算 
         *  @return 長さ

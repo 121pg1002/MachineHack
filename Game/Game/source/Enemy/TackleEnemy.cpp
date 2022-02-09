@@ -134,12 +134,31 @@ namespace MachineHuck::Enemy {
 		_modelAnime->Draw(*this, _isHit, _huckingRange, false);
 		_modelAnime->Draw(*this, GetActorServer().GetPosition("Player"));
 
+		DrawLine3D(ToDX(_startPos), ToDX(_endPos), GetColor(0, 255, 255)); //!< タックルとギミックと確認用の当たり判定の線
+		Actor::Draw();
+		DrawTackleLine(_judge);
+
 		_gaugeBase->Draw(*this);
 #endif
 		_state->Draw();
 		//if (!GetShadowMapflg() == TRUE) {
 		_gaugeEnemy->Draw(*this);
 		//	}
+	}
+
+	bool TackleEnemy::DrawTackleLine(bool judge) {
+	
+		if (judge)
+		{
+			DrawString(0, 0, "当たっている", GetColor(255, 255, 0));
+			return true;
+		}
+		else
+		{
+			DrawString(0, 0, "当たっていない", GetColor(255, 0, 0));
+			return false;
+		}
+
 	}
 
 	void TackleEnemy::ComputeWorldTransform() {
@@ -647,16 +666,22 @@ namespace MachineHuck::Enemy {
 
 
 					//壊せる壁と当たったか
-					if (_owner.CollisionWall(**i, _norm)) {
-						//当たった壁を死亡状態に変更
+					//if (_owner.CollisionWall(**i, _norm)) {
+					//	//当たった壁を死亡状態に変更
+					//	(*i)->SetActorState(ActorState::Dead);
+
+					//	//スライドアウトフラグをオンに
+					//	//Flag::FlagData::SetSlideOut(true);
+
+					//	//*se 壁が壊れる(未実装)
+					//	_owner.GetGame().GetSoundComponent().Play("broken");
+
+					//}
+
+					if (_owner.GetCollision().AABBToOrientedAABB(**i, _owner)) {
+					
 						(*i)->SetActorState(ActorState::Dead);
-
-						//スライドアウトフラグをオンに
-						//Flag::FlagData::SetSlideOut(true);
-
-						//*se 壁が壊れる(未実装)
-						_owner.GetGame().GetSoundComponent().Play("broken");
-
+					
 					}
 
 

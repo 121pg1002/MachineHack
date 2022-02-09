@@ -75,7 +75,7 @@ namespace MachineHuck::Actor {
         virtual	void	Init() {};
         virtual	void	Input(AppFrame::Input::InputComponent& input) {};
         virtual	void	Update() {};
-        virtual	void	Draw() {};
+        virtual	void	Draw();
 
         virtual TypeId GetTypeId() const = 0;
 
@@ -312,6 +312,8 @@ namespace MachineHuck::Actor {
         bool  GetShadowMapflg() { return _shadowmapflg; }
 
 
+
+
     protected:
 
         ////*********************************///追加分 12/01
@@ -369,7 +371,13 @@ namespace MachineHuck::Actor {
         int _level;   //!< レベル
         int _routine; //!< 思考ルーチン番号
 
+#ifdef _DEBUG
 
+        Math::Vector4 _startPos;  //!< 確認用のタックルとギミックとの当たり判定の始めの点
+        Math::Vector4 _endPos;    //!< 確認用のタックルとギミックとの当たり判定の最後の点
+        bool _judge;              //!< 当たったか当たっていないか
+#endif
+        
     private:
 
     };

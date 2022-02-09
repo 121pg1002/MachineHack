@@ -42,6 +42,12 @@ namespace MachineHuck::Model {
 		MV1DrawModel(_handle);
 	}
 
+	void ModelComponent::BrokenDraw() {
+		MV1SetFrameVisible(_handle, 1, false);
+		MV1DrawModel(_handle);
+	
+	}
+
 	void ModelComponent::SetModelGimmick(std::string key, std::string collisionName, int no) {
 	
 		auto [handle, actualNo] = _owner.GetGame().GetAssetServer().GetModel(key, no);

@@ -149,6 +149,72 @@ namespace MachineHuck::Collision {
 
     }
 
+
+
+    //std::pair<Math::Vector2, Math::Vector2> CollisionComponent::GetOrientedRectangleEdge(Math::Vector4 center, Math::Vector2 halfExtends, double rot, int point) {
+    //
+    //    Math::Vector2 startPos = {0.0, 0.0};
+    //    Math::Vector2 endPos   = {0.0, 0.0};
+
+    //    std::pair<Math::Vector2, Math::Vector2> edge = std::make_pair(startPos, endPos);
+    //    auto vecA = halfExtends;
+    //    auto vecB = halfExtends;
+
+    //    // 右回りで取得する
+    //    // 0,2
+    //    // 1,3は対辺を表す
+    //    switch (point % 4) {
+    //    case 0:
+    //        vecA.SetX(-vecA.GetX());
+    //        break;
+    //    case 1:
+    //        vecB.SetZ(-vecB.GetZ());
+    //        break;
+    //    case 2:
+    //        vecA.SetZ(-vecA.GetZ());
+    //        vecB = GetNeGateVector(vecB);
+    //            break;
+    //    case 3:
+    //        vecA = GetNeGateVector(vecA);
+    //        vecB.SetX(-vecB.GetX());
+    //        break;
+    //    }
+
+    //    vecA = GetRotateVector(vecA, rot);
+    //    vecA = GetAddVector(vecA, center);
+
+    //    vecB = GetRotateVector(vecB, rot);
+    //    vecB = getAddVector(vecB, center);
+
+    //    edge.point1 = vecA;
+    //    edge.point2 = vecB;
+    //    return edge;
+
+    //}
+
+    //逆ベクトルを返す
+    //Math::Vector2 CollisionComponent::GetNeGateVector(Math::Vector2 vec) {
+    //
+    //    vec.SetX(-vec.GetX());
+    //    vec.SetZ(-vec.GetZ());
+
+    //    return vec;
+    //}
+
+    //Math::Vector2 CollisionComponent::GetRotateVector(Math::Vector2 vec, double radian) {
+    //
+    //    var sin = std::sin(radian);
+    //    var cos = std::cos(radian);
+
+    //    var r = new Vector2D();
+    //    r.x = vec.x * cos - vec.y * sin;
+    //    r.y = vec.x * sin + vec.y * cos;
+
+    //    return r;
+    //
+    //}
+
+
     bool CollisionComponent::CircleToAABB(const Actor::Actor& act1, const Actor::Actor& act2)
     {
         //主人公が球act1, 相手がAABB act2
@@ -235,6 +301,7 @@ namespace MachineHuck::Collision {
 
     bool CollisionComponent::CircleToOrientedAABB(const Actor::Actor& act1, const Actor::Actor& act2) {
 
+        //矩形の回転角度
         auto dir = act2.GetRotation();
 
         //atan2は、時計回りを正として実装しているため、向きが逆となるため符号をマイナスにしている
@@ -269,7 +336,7 @@ namespace MachineHuck::Collision {
         auto rightDownZ = max.GetX() * move.GetZ() + min.GetZ() * move.GetX();
 
         //円の中心点
-        Math::Vector2 circlePosXZ = { act1.GetPosition().GetX(), act1.GetPosition().GetZ() };
+        //Math::Vector2 circlePosXZ = { act1.GetPosition().GetX(), act1.GetPosition().GetZ() };
 
         //回転させた点を敵座標に並行移動
         Math::Vector4 leftUp =    { leftUpX    + pos.GetX(), pos.GetY(), leftUpZ    + pos.GetZ() };
@@ -305,6 +372,97 @@ namespace MachineHuck::Collision {
            //当たっていない
             return false;
         
+
+    }
+
+    bool CollisionComponent::AABBToOrientedAABB(const Actor::Actor& own, const Actor::Actor& target) {
+
+        //矩形の回転角度
+        auto dir = target.GetRotation();
+
+        
+        auto rotY = dir.GetY();
+
+        //z軸を0度とするため
+        auto nine = DX_PI / 180.0 * 90.0;
+        auto rad = rotY + nine;
+
+        //回転による移動量
+        Math::Vector4 move = { std::cos(rad), 0.0, std::sin(rad) };
+
+        //回転矩形の位置
+        auto pos = target.GetPosition();
+        //AABBの中心位置
+        //auto center = target.GetPosition();
+
+        //矩形の最小点
+        auto min = target.GetMin();
+
+        //矩形の最大点
+        auto max = target.GetMax();
+
+        //先に単位円上で回転させる
+        auto leftUpX = min.GetX() * move.GetX() - max.GetZ() * move.GetZ();
+        auto leftUpZ = min.GetX() * move.GetZ() + max.GetZ() * move.GetX();
+        auto leftDownX = min.GetX() * move.GetX() - min.GetZ() * move.GetZ();
+        auto leftDownZ = min.GetX() * move.GetZ() + min.GetZ() * move.GetX();
+        auto rightUpZ = max.GetX() * move.GetZ() + max.GetZ() * move.GetX();
+        auto rightUpX = max.GetX() * move.GetX() - max.GetZ() * move.GetZ();
+        auto rightDownX = max.GetX() * move.GetX() - min.GetZ() * move.GetZ();
+        auto rightDownZ = max.GetX() * move.GetZ() + min.GetZ() * move.GetX();
+
+        //AABBの中心点
+        Math::Vector2 AABBCenterXZ = { own.GetPosition().GetX(), own.GetPosition().GetZ() };
+
+        ////回転させた点を敵座標に並行移動
+        //Math::Vector4 leftUp = { leftUpX + pos.GetX(), pos.GetY(), leftUpZ + pos.GetZ() };
+        //Math::Vector4 leftDown = { leftDownX + pos.GetX(), pos.GetY(), leftDownZ + pos.GetZ() };
+        //Math::Vector4 rightUp = { rightUpX + pos.GetX(), pos.GetY(), rightUpZ + pos.GetZ() };
+        //Math::Vector4 rightDown = { rightDownX + pos.GetX(), pos.GetY(), rightDownZ + pos.GetZ() };
+
+
+        //Math::Vector4 leftUp = { leftUpX + pos.GetX(), pos.GetY(), leftUpZ + pos.GetZ() };
+        //Math::Vector4 leftDown = { leftDownX + pos.GetX(), pos.GetY(), leftDownZ + pos.GetZ() };
+        //Math::Vector4 rightUp = { rightUpX + pos.GetX(), pos.GetY(), rightUpZ + pos.GetZ() };
+        //Math::Vector4 rightDown = { rightDownX + pos.GetX(), pos.GetY(), rightDownZ + pos.GetZ() };
+
+
+        //回転させた点を平行移動
+        Math::Vector2 leftUpXZ =    { leftUpX + pos.GetX(),    leftUpZ + pos.GetZ() };
+        Math::Vector2 leftDownXZ =  { leftDownX + pos.GetX(),  leftDownZ + pos.GetZ() };
+        Math::Vector2 rightUpXZ =   { rightUpX + pos.GetX(),   rightUpZ + pos.GetZ() };
+        Math::Vector2 rightDownXZ = { rightDownX + pos.GetX(), rightDownZ + pos.GetZ() };
+
+        //AABBの中心が四角形の中にある場合
+        auto first = AppFrame::Math::Utility::InsideTrianglePoint(leftDownXZ, leftUpXZ, rightDownXZ, AABBCenterXZ);
+        auto second = AppFrame::Math::Utility::InsideTrianglePoint(rightDownXZ, leftUpXZ, rightUpXZ, AABBCenterXZ);
+
+        if (first || second) {
+            return true;
+        }
+
+
+        //AABBの中心が四角形の外にある場合
+        if (LineToAABB(leftUpXZ, leftDownXZ, own)) {
+            return true;
+        }
+
+        if (LineToAABB(leftDownXZ, rightDownXZ, own)) {
+            return true;
+        }
+
+        if (LineToAABB(rightDownXZ, rightUpXZ, own)) {
+            return true;
+        }
+
+        if (LineToAABB(rightUpXZ, leftUpXZ, own)) {
+            return true;
+        }
+
+
+
+        //当たっていない
+        return false;
 
     }
 
@@ -683,7 +841,6 @@ namespace MachineHuck::Collision {
        
         auto lMin = act1.GetPosition();
         auto lMax = act2.GetPosition();
-        auto boxMin = act2.GetMin();
 
         //x平面のテスト
         TestSidePlane(lMin.GetX(), lMax.GetX(), minX, tValues);
@@ -700,6 +857,50 @@ namespace MachineHuck::Collision {
             return true;
         }
         
+        return false;
+    }
+
+    bool CollisionComponent::LineToAABB(Math::Vector2 startPos, Math::Vector2 endPos, const Actor::Actor& target) {
+
+
+        std::vector<double> tValues;
+
+        Math::Vector2 posXZ = { target.GetPosition().GetX(), target.GetPosition().GetZ() };
+    
+
+        auto boxMin = target.GetMin() + posXZ;
+        auto boxMax = target.GetMax() + posXZ;
+
+        auto lMin = startPos;
+        auto lMax = endPos;
+
+        //x平面のテスト
+        TestSidePlane(lMin.GetX(), lMax.GetX(), boxMin.GetX(), tValues);
+        TestSidePlane(lMin.GetX(), lMax.GetX(), boxMax.GetX(), tValues);
+
+        //z平面のテスト
+        TestSidePlane(lMin.GetZ(), lMax.GetZ(), boxMin.GetZ(), tValues);
+        TestSidePlane(lMin.GetZ(), lMax.GetZ(), boxMax.GetZ(), tValues);
+
+        Math::Vector4 point;
+        for (auto&& t : tValues) {
+            auto point = PointOnSegment(startPos, endPos, t);
+
+            Math::Vector2 AABBLeftDownXZ  = { boxMin.GetX(), boxMin.GetZ() };
+            Math::Vector2 AABBLeftUpXZ    = { boxMin.GetX(), boxMax.GetZ() };
+            Math::Vector2 AABBRightDownXZ = { boxMax.GetX(), boxMin.GetZ() };
+            Math::Vector2 AABBRightUpXZ   = { boxMax.GetX(), boxMax.GetZ() };
+
+            //座標がAABBの中にある場合
+            auto first = AppFrame::Math::Utility::InsideTrianglePoint(AABBLeftDownXZ, AABBLeftUpXZ, AABBRightDownXZ, point);
+            auto second = AppFrame::Math::Utility::InsideTrianglePoint(AABBRightDownXZ, AABBLeftUpXZ, AABBRightUpXZ, point);
+
+            if (first || second) {
+                return true;
+            }
+           
+        }
+
         return false;
     }
 
@@ -805,6 +1006,11 @@ namespace MachineHuck::Collision {
 
     const Math::Vector4 CollisionComponent::PointOnSegment(const Math::Vector4 start, const Math::Vector4 end, const double t) {
     
+        return start + (end - start) * t;
+    }
+
+    const Math::Vector2 CollisionComponent::PointOnSegment(const Math::Vector2 start, const Math::Vector2 end, const double t) {
+
         return start + (end - start) * t;
     }
 

@@ -33,6 +33,10 @@ namespace MachineHuck::Actor {
 
 	}
 
+	void Actor::Draw() {
+		DrawLine3D(ToDX(_startPos), ToDX(_endPos), GetColor(0, 255, 255));
+	}
+
 	//CollisionComponent& Actor::GetCollision() 
 	//{
 	//	return *_collision;
@@ -278,18 +282,26 @@ namespace MachineHuck::Actor {
 				//auto gimmickMap = gimmick.GetModel().GetModelGimmick();
 
 				//auto frameGimmick = gimmickMap[handle];
+				Math::Vector4 yDif = { 0.0, 10.0, 0.0 };
 
-				auto startPos = _position + move;
-				auto endPos = _position;
+				auto startPos = _position + move * 100 + yDif;
+				auto endPos = _position + yDif;
 				// ålŒö‚Ì˜ˆÊ’u‚©‚ç‘O•ûŒü‚Ö‚Ì’¼ü
 				hitPoly = MV1CollCheck_Line(handle, frameGimmick, ToDX(startPos), ToDX(endPos));
 
+#ifdef _DEBUG
+				_startPos = startPos;
+				_endPos = endPos;
+#endif 
+
 				if (hitPoly.HitFlag) {
 					//// “–‚½‚Á‚½
+					_judge = true;
 					return true;
 
 				}
 				else {
+					_judge = false;
 					return false;
 				}
 

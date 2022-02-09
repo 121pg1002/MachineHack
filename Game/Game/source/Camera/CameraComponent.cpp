@@ -66,14 +66,14 @@ namespace MachineHuck::Camera {
 	void CameraComponent::Draw(bool isHit) {
 
 
-		if (isHit)
-		{
-			DrawString(0, 0, "“–‚½‚Á‚Ä‚¢‚é", GetColor(255, 255, 0));
-		}
-		else
-		{
-			DrawString(0, 0, "“–‚½‚Á‚Ä‚¢‚È‚¢", GetColor(255, 0, 0));
-		}
+		//if (isHit)
+		//{
+		//	DrawString(0, 0, "“–‚½‚Á‚Ä‚¢‚é", GetColor(255, 255, 0));
+		//}
+		//else
+		//{
+		//	DrawString(0, 0, "“–‚½‚Á‚Ä‚¢‚È‚¢", GetColor(255, 0, 0));
+		//}
 		//// ƒJƒƒ‰î•ñ•\¦
 		//
 		//	int x = 0, y = 0, size = 16;
