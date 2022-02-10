@@ -8,11 +8,13 @@
 #include "AppFrame.h"
 #include "TackleEnemy.h"
 #include "../Actor/ActorServer.h"
+#include "../Actor/ActorFactory.h"
 #include "../Model/ModelAnimComponent.h"
 #include "../Collision/CollisionComponent.h"
 #include "../Gauge/GaugeBase.h"
 #include "../Gauge/GaugeEnemy.h"
 #include "../Gauge/GaugePlayer.h"
+#include "../Gimmick/GimmickBase.h"
 #include "../Flag/FlagData.h"
 
 #include <cmath>
@@ -33,8 +35,8 @@ namespace MachineHuck::Enemy {
 		_huckR = 0.0;
 		_minXZ = { -200.0, -100.0 };
 		_maxXZ = { 200.0, 100.0 };
-		_lmin = { 0.0, -100.0, 0.0 };
-		_lmax = { 0.0, 100.0, 0.0 };
+		//_lmin = { 0.0, 0.0, 0.0 };
+		//_lmax = { 0.0, 100.0, 0.0 };
 		_status = STATUS::WAIT;
 		_searchRange = 0.0;
 		_huckingRange = 0.0;
@@ -54,6 +56,7 @@ namespace MachineHuck::Enemy {
 		_r = 150.0;
 		//_huckR = eParam->GetEnemyParam("r", 0);
 		_huckR = 200.0;
+		_collisionR = 50.0;
 
 		_searchRange = eParam->GetEnemyParam("searchrange", 1);
 		_huckingRange = eParam->GetEnemyParam("searchrange", 0);////////←とりあえず、仮
@@ -132,6 +135,7 @@ namespace MachineHuck::Enemy {
 		//DrawSphere3D(pos, 50, 16, GetColor(255, 0, 0), GetColor(0, 0, 0), TRUE);
 		_modelAnime->Draw(*this, _isHit, _searchRange, true);
 		_modelAnime->Draw(*this, _isHit, _huckingRange, false);
+		_modelAnime->DrawCircle(*this, _collisionR);
 		_modelAnime->Draw(*this, GetActorServer().GetPosition("Player"));
 
 		DrawLine3D(ToDX(_startPos), ToDX(_endPos), GetColor(0, 255, 255)); //!< タックルとギミックと確認用の当たり判定の線
@@ -552,7 +556,6 @@ namespace MachineHuck::Enemy {
 
 	TackleEnemy::StateTackle::StateTackle(TackleEnemy& owner) :StateBase{ owner } {
 
-		_tackleTime = 60;
 		_speed = 10.0;
 	}
 
@@ -560,8 +563,6 @@ namespace MachineHuck::Enemy {
 
 
 
-
-		_tackleTime = 60;
 
 		//ハッキングされている場合
 		if (_owner.GetStatus() == STATUS::ISHUCKED) {
@@ -620,19 +621,25 @@ namespace MachineHuck::Enemy {
 	void TackleEnemy::StateTackle::Update() {
 
 
-
-
-
 		//前フレームの位置を保存
 		Math::Vector4 oldPos = _owner.GetPosition();
 
 		_owner._position = _owner.GetPosition() + _norm * _speed;
+
+
+		//壊せる壁と当たっているか
+		if (_owner.GetCollision().CollisionBrokenWall(_owner)) {
+			_owner._state->GoToState("TackleAfter");
+			_owner._position = oldPos;
+		}
 
 		//床から出たらタックル終了
 		if (!_owner.CollisionFloor()) {
 			_owner._state->GoToState("TackleAfter");
 			_owner._position = oldPos;
 		}
+
+
 
 		////地面と触れているかどうか
 		//_owner.CollisionFloor(oldPos, _owner.GetR());
@@ -649,8 +656,13 @@ namespace MachineHuck::Enemy {
 		//	_owner.SetHuckedMove(zero);
 		//}
 
+
 		////ハッキングされているか(追跡時のタックルを省く)
 		if (_owner.IsHucked()) {
+
+			Math::Vector2 startLineXZ = { _owner.GetPosition().GetX(), _owner.GetPosition().GetZ() };
+			Math::Vector2 normXZ = { _norm.GetX(), _norm.GetZ() };
+			Math::Vector2 endLineXZ = startLineXZ + normXZ *_speed*10;
 
 			for (auto i = _owner.GetActorServer().GetActors().begin(); i != _owner.GetActorServer().GetActors().end(); i++) {
 
@@ -659,12 +671,19 @@ namespace MachineHuck::Enemy {
 
 					//ギミックではなかったら次へ
 					if ((*i)->GetTypeId() != TypeId::Gimmick) {
-
 						continue;
-					
 					}
 
+					//壊せる壁かどうか
+					if ((*i)->GetTypeGimmick() != TypeGimmick::BrokenWall) {
+					
+						continue;
+					}
 
+					//if ((*i)->GetGimmickBase().GetTypeGimmick() != (*i)->GetGimmickBase().IsBrokenWall()) {
+					//	continue;
+					//}
+					
 					//壊せる壁と当たったか
 					//if (_owner.CollisionWall(**i, _norm)) {
 					//	//当たった壁を死亡状態に変更
@@ -675,12 +694,18 @@ namespace MachineHuck::Enemy {
 
 					//	//*se 壁が壊れる(未実装)
 					//	_owner.GetGame().GetSoundComponent().Play("broken");
-
 					//}
 
-					if (_owner.GetCollision().AABBToOrientedAABB(**i, _owner)) {
+					//壊せる壁のみ判定する
+					if (_owner.GetCollision().LineToAABB(startLineXZ, endLineXZ, **i)) {
 					
+						
 						(*i)->SetActorState(ActorState::Dead);
+
+						//壊した壁の番号を取得
+						auto numPair = (*i)->GetFloorNumReserveNum();
+						//壊したことを登録
+						_owner.GetGame().GetActorFactory().SetBrokenWall(numPair.first, numPair.second);
 
 						//スライドフラグをオンに
 						//フェードではなくスライドにする
@@ -688,8 +713,21 @@ namespace MachineHuck::Enemy {
 
 						//*se 壁が壊れる(未実装)
 						_owner.GetGame().GetSoundComponent().Play("broken");
-
+					
 					}
+
+					//if (_owner.GetCollision().AABBToOrientedAABB(**i, _owner)) {
+					//
+					//	(*i)->SetActorState(ActorState::Dead);
+
+					//	//スライドフラグをオンに
+					//	//フェードではなくスライドにする
+					//	Flag::FlagData::SetSlideFlag(true);
+
+					//	//*se 壁が壊れる(未実装)
+					//	_owner.GetGame().GetSoundComponent().Play("broken");
+
+					//}
 
 
 				}//敵だった
@@ -703,7 +741,6 @@ namespace MachineHuck::Enemy {
 
 						//相手エネミーの円と自分のAABB
 						if (_owner._collision->CircleToOrientedAABB(**i, _owner)) {
-
 
 							(*i)->SetActorState(ActorState::Dead);
 							//_owner._state->GoToState("Run");
@@ -821,7 +858,6 @@ namespace MachineHuck::Enemy {
 
 		auto headPos = _owner.GetModelAnime().GetHeadPos("Character1_Head");
 		Flag::FlagData::SetHeadPos(headPos);
-		_tackleTime--;
 
 	}
 
@@ -996,16 +1032,9 @@ namespace MachineHuck::Enemy {
 
 		_owner.HuckedMove(_lx, _ly);
 
-		for (auto&& i : _owner.GetActorServer().GetActors()) {
-
-			if (i->GetTypeId() != TypeId::Gimmick) {
-				continue;
-			}
-
-			//壊せる壁との当たり判定
-			if (_owner.GetCollision().CircleToAABB(_owner, *i)) {
-				_owner._position = oldPos;
-			}
+		//壊せる壁と当たっているか
+		if (_owner.GetCollision().CollisionBrokenWall(_owner)) {
+			_owner._position = oldPos;
 		}
 
 		//ギミックと触れているか触れていたら戻す

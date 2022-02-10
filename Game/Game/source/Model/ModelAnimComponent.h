@@ -46,6 +46,9 @@ namespace MachineHuck::Model {
 		/// •`‰æîŒ^”»’è—p
 		void Draw(const Actor::Actor& owner, bool isHit, double range, bool select);
 
+		//•`‰æ‰~—p
+		void DrawCircle(const Actor::Actor& owner, double range);
+
 		//AABB—p
 		void Draw(const Actor::Actor& owner, Math::Vector4 position);
 

@@ -398,6 +398,7 @@ namespace MachineHuck::Scene {
 
         // クリエイターを削除
         GetActorFactory().Clear();
+
         //シャドウマップの削除
         DeleteShadowMap(shadowmap->GetShadowmap());
 

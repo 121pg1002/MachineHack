@@ -47,6 +47,8 @@ namespace MachineHuck::Enemy {
 
 		_catchR = 300.0;
 
+		_collisionR = 50.0;
+
 		_catchRange = eParam->GetEnemyParam("searchrange", 1);
 		_searchRange = eParam->GetEnemyParam("searchrange", 1);
 		_huckingRange = eParam->GetEnemyParam("searchrange", 0);////////←とりあえず、仮
@@ -156,6 +158,7 @@ namespace MachineHuck::Enemy {
 		_modelAnime->Draw(*this, _isHit, _searchRange, true);
 		_modelAnime->Draw(*this, _isHit, _huckingRange, false);
 		_modelAnime->Draw(*this, _catchR, _catchRange);
+		_modelAnime->DrawCircle(*this, _collisionR);
 		_modelAnime->Draw(*this, GetActorServer().GetPosition("Player"));
 
 		_gaugeBase->Draw(*this);
@@ -707,17 +710,104 @@ namespace MachineHuck::Enemy {
 		//ハッキング中の向き設定
 		//_owner.HuckedRotation(_lx, _ly);
 
+		//前フレームの座標を保存
+		auto oldPos = _owner.GetPosition();
+
 		//ハッキング中の移動を設定
 		_owner.HuckedMove(_lx, _ly);
 
+
+		
+		//壊せる壁と当たっているか
+		if (_owner.GetCollision().CollisionBrokenWall(_owner)) {
+			_owner._position = oldPos;
+		}
+
 		////地面と触れているかどうか
-		//_owner.CollisionFloor(oldPos);
+		_owner.CollisionFloor(oldPos, _owner.GetCollisionR());
 		//	Math::Vector4 zero = { 0.0, 0.0, 0.0 };
 		//	//主人公のカメラに移動量を送る
 		//	_owner.SetHuckedMove(zero);
 		//}
 		//else {
 		//}
+
+				//ワープ直後か
+		if (!_warping) {
+
+			auto dxPos = _owner.WarpFloor(_owner);
+
+			//フェード用に保存
+			_fadePos = { dxPos.x, dxPos.y, dxPos.z };
+
+			//現在位置のステージ番号のワープナビメッシュに当たった場合
+			if (dxPos.x != 0.0f && dxPos.z != 0.0f) {
+
+				//スライドフラグがオンか
+				if (!Flag::FlagData::GetSlideFlag()) {
+
+					Flag::FlagData::SetFadeOutFlag(true);
+
+				}
+				else {
+					Flag::FlagData::SetSlideOut(true);
+				}
+
+				//Math::Vector4 pos = { dxPos.x, dxPos.y, dxPos.z };
+
+				//_position = pos;
+				//_owner._position = _fadePos;
+
+				//_camera->SetRefleshPosition(_position);
+				//_camera->SetRefleshTarget(_position);
+
+				if (!_warping) {
+
+					_warping = true;
+					_waitFrame = 5;
+
+					//_fadeflag = true;
+
+				}
+				//else {
+				//	_warping = false;
+				//}
+
+				//ここにフェードイン処理
+
+			}
+
+
+		}
+		else {
+
+			if (_waitFrame == 4) {
+				_owner._position = _fadePos;
+			}
+
+			if (_waitFrame == 0) {
+				if (!Flag::FlagData::GetSlideFlag()) {
+
+					Flag::FlagData::SetFadeInFlag(true);
+				}
+				else {
+					Flag::FlagData::SetSlideIn(true);
+					Flag::FlagData::SetSlideFlag(false);
+				}
+
+			}
+
+			if (!_owner.WarpingFloor() && _waitFrame < 0) {
+
+				//_position = _fadePos;
+				_warping = false;
+
+			}
+
+
+		}
+
+		_waitFrame--;
 
 		//ゲージが0かどうか
 		if (_owner.GetGaugeBase().IsGaugeZero(_owner)) {

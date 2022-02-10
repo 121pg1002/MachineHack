@@ -16,6 +16,7 @@
 #include "../Gauge/GaugeBase.h"
 #include "../Gauge/GaugeEnemy.h"
 #include "../Gauge/GaugePlayer.h"
+#include "../Gimmick/GimmickBase.h"
 #include "../Flag/FlagData.h"
 
 namespace MachineHuck::Actor {
@@ -26,6 +27,7 @@ namespace MachineHuck::Actor {
 		_gaugeBase = std::make_unique<Gauge::GaugeBase>(*this);
 		_gaugeEnemy = std::make_unique<Gauge::GaugeEnemy>(*this);
 		_gaugePlayer = std::make_unique<Gauge::GaugePlayer>(*this);
+		//_gimmickBase = std::make_unique<Gimmick::GimmickBase>(*this);
 
 	}
 
@@ -71,7 +73,7 @@ namespace MachineHuck::Actor {
 
 				for (auto&& floorNum : floorNums) {
 
-
+					
 
 					for (auto&& floor : allFloorMap[floorNum]) {
 

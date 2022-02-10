@@ -11,4 +11,9 @@ namespace MachineHuck::Parameter {
 
 	GStageParam::GStageParam() {}
 
+	//const GStageParam GStageParam::operator ==(const GStageParam& rhs) const {
+
+	//	return ;
+	//}
+
 }

@@ -10,6 +10,7 @@
 #include <memory>
 #include <DxLib.h>
 #include "AppFrame.h"
+//#include "../Gimmick/GimmickBase.h"
  //#include "../Collision/CollisionBase.h"
 
 
@@ -41,6 +42,11 @@ namespace MachineHuck::Gauge {
     class GaugeEnemy;
     class GaugePlayer;
 }
+
+//namespace MachineHuck::Gimmick {
+//
+//    class GimmickBase;
+//}
 //class CollisionBase;
 
 //namespace Camera = MachineHuck::Camera;
@@ -62,6 +68,12 @@ namespace MachineHuck::Actor {
             Item
         };
 
+        enum class TypeGimmick {
+            BrokenWall,
+            Hole,
+            DamageFloor
+        };
+
         enum class ActorState {
             Active,
             Paused,
@@ -78,6 +90,8 @@ namespace MachineHuck::Actor {
         virtual	void	Draw();
 
         virtual TypeId GetTypeId() const = 0;
+
+        TypeGimmick GetTypeGimmick() const { return _typeGimmick; }
 
         /**
          * @brief  死亡しているかどうか
@@ -216,6 +230,10 @@ namespace MachineHuck::Actor {
         int GetRoutine() const { return _routine; }
 
 
+        std::pair<int, int> GetFloorNumReserveNum() { return _floorReserveNum; }
+        void SetFloorNumReserveNum(std::pair<int, int> floorReserveNum) { _floorReserveNum = floorReserveNum; }
+
+
         void SetMove(const Math::Vector4& move) { _move = move; }
         Math::Vector4 GetMove() const { return _move; }
 
@@ -240,6 +258,12 @@ namespace MachineHuck::Actor {
          */
         double GetHuckR()const { return _huckR; }
 
+        /**
+         * @brief  当たり判定用の円の半径を取得       
+         * @return _collisionR 当たり判定用の円の半径
+         */
+        double GetCollisionR() const { return _collisionR; }
+
         /*
         *@brief                索敵範囲の角度を取得
         *@return _searchRange  索敵範囲の角度
@@ -251,6 +275,8 @@ namespace MachineHuck::Actor {
          * @return _huckingRange ハッキングされる範囲
          */
         const double GetHuckingRange() const { return _huckingRange; }
+
+
 
         /// ////////////////////////////////////////追加分12/02
           /**
@@ -298,6 +324,8 @@ namespace MachineHuck::Actor {
         Gauge::GaugeEnemy& GetGaugeEnemy() const { return *_gaugeEnemy; }
         Gauge::GaugePlayer& GetGaugePlayer() const { return *_gaugePlayer; }
 
+        //Gimmick::GimmickBase& GetGimmickBase() const { return *_gimmickBase; }
+
         void SetIsHit(bool isHit) { _isHit = isHit; };
 
         /**
@@ -327,6 +355,8 @@ namespace MachineHuck::Actor {
         AppFrame::Game& _game;
         ActorState _actorState{ ActorState::Active };
         TypeId _typeId{ TypeId::Actor };
+        TypeGimmick _typeGimmick{ TypeGimmick::BrokenWall };
+
         std::unique_ptr<State::StateComponent> _state;
         std::unique_ptr<Model::ModelAnimeComponent> _modelAnime;
         std::unique_ptr<Model::ModelComponent> _model;
@@ -335,6 +365,7 @@ namespace MachineHuck::Actor {
         std::unique_ptr<Gauge::GaugeBase> _gaugeBase;              //!< ゲージベースクラスへのユニークポインタ
         std::unique_ptr<Gauge::GaugeEnemy> _gaugeEnemy;
         std::unique_ptr<Gauge::GaugePlayer>_gaugePlayer;
+        //std::unique_ptr<Gimmick::GimmickBase>_gimmickBase;
 
         //std::unique_ptr<CollisionBase> _collision;  //!< 当たり判定基底クラス用のポインタ
 
@@ -349,8 +380,9 @@ namespace MachineHuck::Actor {
         Math::Vector4 _move{ 0, 0, 0 };
 
 
-        double _r{ 0.0 };                            //!< 当たり判定の円の半径
+        double _r{ 0.0 };                            //!< 索敵範囲の円の半径
         double _huckR{ 0.0 };                        //!< ハッキング判定の円の半径
+        double _collisionR{ 0.0 };                   //!< 当たり判定用の半径
         Math::Vector4 _oldPos{ 0.0, 0.0, 0.0 };  //!< 前フレームの座標
 
         Math::Vector2 _minXZ{ 0.0, 0.0 };                 //!< 当たり判定のAABB用の座標
@@ -370,6 +402,7 @@ namespace MachineHuck::Actor {
 
         int _level;   //!< レベル
         int _routine; //!< 思考ルーチン番号
+        std::pair<int, int> _floorReserveNum; //!< 一つ目　フロア番号, 2つめ登録番号
 
 #ifdef _DEBUG
 

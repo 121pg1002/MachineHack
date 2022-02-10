@@ -21,6 +21,7 @@ namespace MachineHuck::Gimmick {
 		~DamageFloorGimmick() override;
 
 		TypeId GetTypeId() const override { return TypeId::Gimmick; };
+		//TypeGimmick GetTypeGimmick() const override { return TypeGimmick::DamageFloor; }
 
 		//void Enter();
 		void Update() override;

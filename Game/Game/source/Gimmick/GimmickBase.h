@@ -20,7 +20,17 @@ namespace MachineHuck::Gimmick {
 		GimmickBase(AppFrame::Game& game);
 		virtual ~GimmickBase() override = default;
 
+		//enum class TypeGimmick {
 
+		//	BrokenWall,
+		//	Hole,
+		//	DamageFloor
+		//	
+		//};
+
+		//TypeGimmick IsBrokenWall() { return TypeGimmick::BrokenWall; }
+
+		//virtual TypeGimmick GetTypeGimmick() const = 0;
 		//bool IsHitPlayer(Actor& actor);
 		//bool Create(std::string key, AppFrame::Math::Vector4 pos);
 		//bool Delete();

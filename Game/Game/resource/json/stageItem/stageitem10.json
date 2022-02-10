@@ -2,7 +2,7 @@
  
     "StageItem": [
         {
-            "filename": "",
+            "filename": "EnergyTank",
             "handlename": "floor20",
             "tx": -5000,
             "ty": 0,

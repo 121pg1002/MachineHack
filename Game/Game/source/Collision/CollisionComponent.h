@@ -114,6 +114,15 @@ namespace MachineHuck::Collision {
 		 */
 		bool CircleToAABB(const Actor::Actor& act1, const Actor::Actor& act2);
 
+
+		///**
+		// * @brief  円と矩形の当たり判定を行う
+		// * @param  act1 自分(円)
+		// * @param  act2 相手(矩形)
+		// * @return 成否
+		// */
+		//bool CollisionCircleToAABB(const Actor::Actor& act1, const Actor::Actor& act2);
+
 	
 		/**
 		 * @brief  円と矩形の当たり判定を行う       
@@ -253,6 +262,13 @@ namespace MachineHuck::Collision {
 		 * @return 座標
 		 */
 		const Math::Vector2 PointOnSegment(const Math::Vector2 start, const Math::Vector2 end, const double t);
+
+		/**
+		 * @brief  壊せる壁と当たっているか       
+		 * @param  own
+		 * @return 成否
+		 */
+		bool CollisionBrokenWall(const Actor::Actor& own);
 
 		///**
 		// * @brief  マップコリジョン情報を取得       

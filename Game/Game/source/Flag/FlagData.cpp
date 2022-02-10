@@ -27,5 +27,6 @@ namespace MachineHuck::Flag {
 	bool FlagData::_slideFlag = false;
 
 
+
 }
 

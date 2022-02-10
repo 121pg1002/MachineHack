@@ -121,7 +121,7 @@ namespace MachineHuck::Collision {
 
     bool CollisionComponent::CircleToCircle(const Actor::Actor& act1, const Actor::Actor& act2)
     {
-        _r1 = act1.GetR(); _r2 = act2.GetR();
+        _r1 = act1.GetCollisionR(); _r2 = act2.GetCollisionR();
 
         auto _differ_vec = act2.GetPosition() - act1.GetPosition();
 
@@ -244,7 +244,7 @@ namespace MachineHuck::Collision {
         dz2 = dz1 > dz2 ? dz1 : dz2;
 
         double distance = dx2 * dx2 + dz2 * dz2;
-        auto length = act1.GetR() * act1.GetR();
+        auto length = act1.GetCollisionR() * act1.GetCollisionR();
         if (distance < length)
         {
             return true;
@@ -285,7 +285,7 @@ namespace MachineHuck::Collision {
         dz2 = dz1 > dz2 ? dz1 : dz2;
 
         double distance = dx2 * dx2 + dz2 * dz2;
-        auto length = act.GetR() * act.GetR();
+        auto length = act.GetCollisionR() * act.GetCollisionR();
         if (distance < length)
         {
             return true;
@@ -502,7 +502,7 @@ namespace MachineHuck::Collision {
 
         double a = Y.Dot(Y);
         double b = 2.0 * X.Dot(Y);
-        double c = X.Dot(X) - act.GetR() * act.GetR();
+        double c = X.Dot(X) - act.GetCollisionR() * act.GetCollisionR();
 
 
         double disc = b * b - 4.0f * a * c;
@@ -892,83 +892,8 @@ namespace MachineHuck::Collision {
         return false;
     }
 
-    //bool CollisionComponent::CollisionFloor(const Actor::Actor& act) {
 
-
-    //    // 移動した先でコリジョン判定
-    //    MV1_COLL_RESULT_POLY hitPoly;
-
-    //    auto handle = act.GetAssetServer().GetModel("Dungeon");
-
-    //    for (auto i = GetActorServer().GetActors().begin(); i != GetActorServer().GetActors().end(); i++) {
-
-    //        if ((*i)->GetTypeId() != TypeId::Stage) {
-    //            continue;
-    //        }
-    //        else {
-
-    //            auto frameMapCollision = (*i)->GetCollision().GetMapCollision();
-
-    //            Math::Vector4 dif = { 0.0, 40.0, 0.0 };
-    //            Math::Vector4 under = { 0.0, -99999.0, 0.0 };
-    //            auto startPos = _position + dif;
-    //            auto endPos = _position + under;
-    //            // 主人公の腰位置から下方向への直線
-    //            hitPoly = MV1CollCheck_Line(handle.first, frameMapCollision, ToDX(startPos), ToDX(endPos));
-
-    //            if (hitPoly.HitFlag) {
-    //                // 当たった
-    //                // 当たったY位置をキャラ座標にする
-    //                _position = { _position.GetX(), hitPoly.HitPosition.y, _position.GetZ() };
-    //                return true;
-    //            }
-    //            else {
-    //                // 当たらなかった。元の座標に戻す
-    //                _position = oldPos;
-
-    //                return false;
-    //            }
-
-    //        }
-
-    //    }
-
-    //    return false;
-
-    //
-    //}
-
-
-    //bool CollisionComponent::LineToAABB(const Actor::Actor& act, const Math::Vector2 min, const Math::Vector2 max) {
-
-
-    //    std::vector<double> tValues;
-
-    //   // auto [minX, minZ, maxX, maxZ] = box;
-
-    //    Math::Vector4 lMin = { act.GetPosition().GetX(), 150.0, act.GetPosition().GetZ() };
-    //    Math::Vector4 lMax = {act.GetPosition().GetX(), -9999.0, act.GetPosition().GetZ()};
-    //   // auto boxMin = act2.GetMin();
-
-
-    //    //x平面のテスト
-    //    TestSidePlane(lMin.GetX(), lMax.GetX(), min.GetX(), tValues);
-    //    TestSidePlane(lMin.GetX(), lMax.GetX(), max.GetX(), tValues);
-
-    //    //z平面のテスト
-    //    TestSidePlane(lMin.GetZ(), lMax.GetZ(), min.GetZ(), tValues);
-    //    TestSidePlane(lMin.GetZ(), lMax.GetZ(), max.GetZ(), tValues);
-
-    //    Math::Vector4 point;
-    //    for (auto t : tValues) {
-
-    //        // _interSection = PointOnSegment(lMin, lMax, t);
-    //        return true;
-    //    }
-
-    //    return false;
-    //}
-
+    //どこの平面にあるかを求める
     bool CollisionComponent::TestSidePlane(const double start, const double end, const double negd, std::vector<double>& out) {
 
         auto denom = end - start;
@@ -992,14 +917,34 @@ namespace MachineHuck::Collision {
 
     }
 
+    //線の中の点を求める(3次元)
     const Math::Vector4 CollisionComponent::PointOnSegment(const Math::Vector4 start, const Math::Vector4 end, const double t) {
     
         return start + (end - start) * t;
     }
 
+    //線の中の点を求める(2次元)
     const Math::Vector2 CollisionComponent::PointOnSegment(const Math::Vector2 start, const Math::Vector2 end, const double t) {
 
         return start + (end - start) * t;
+    }
+
+    bool CollisionComponent::CollisionBrokenWall(const Actor::Actor& own) {
+
+        for (auto&& actor : _owner.GetActorServer().GetActors()) {
+        
+            if (actor->GetTypeId() != _owner.IsGimmick()) {
+            
+                continue;
+            }
+
+            //判定者の円と壁のAABBが当たっているか
+            if(CircleToAABB(own, *actor)) {
+                return true;
+            }
+        }
+    
+        return false;
     }
 
 

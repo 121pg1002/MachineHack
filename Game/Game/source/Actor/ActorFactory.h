@@ -45,6 +45,7 @@ namespace MachineHuck::Actor {
     using StageV = std::vector<int>;
     using ISMV = std::vector<Parameter::IStageParam>;
     using GSV = std::vector<Parameter::GStageParam>;
+
     /// @class ActorFactory
     /// @brief アクターの生成を一元管理する
     ///        生成したいアクター用のクリエイターを登録して使用する
@@ -64,6 +65,11 @@ namespace MachineHuck::Actor {
         std::unique_ptr<Actor> Create(std::string_view type);
 
         void Clear();
+
+        /**
+         * @brief  ギミックマップ内の特定の要素を削除      
+         */
+        //void ClearValueGimmick(StageV old);
 
         /**
          * @breif 登録したインスタンスを削除
@@ -137,9 +143,12 @@ namespace MachineHuck::Actor {
  
         void SetOldStageNo() { _oldStageNo.clear(); _oldStageNo.emplace_back(-1); }
 
+        //void SetBrokenWall(const Actor& act) { _brokenWallClear.push_back(act); }
 
-        int GetGimmickCollision(const int handle)  { return _frameGimmicks[handle]; }
+        //int GetGimmickCollision(const int handle)  { return _frameGimmicks[handle]; }
 
+       // void SetClearGimmick(Parameter::GStageParam gimmick);
+        void SetBrokenWall(int num, int brokenWallNum); 
 
     private:
         AppFrame::Game& _game;
@@ -149,14 +158,20 @@ namespace MachineHuck::Actor {
         std::unordered_map<int, ESMV> _eStageParamVMap;
         std::unordered_map<int, ISMV> _iStageParamVMap;
         std::unordered_map<int, GSV> _gStageParamVMap;
+
+        ISMV _iClearV; //!< 削除アイテムの保存
+        GSV _gClearV;  //!< 削除ギミックの保存
+
         int _progress{ 0 };
         int _spawnProgress{ 0 };
         StageV _oldStageNo{ -1 };
         StageV _currentStageNo{ 0 };
         std::vector<StageV> _stageTableV;
-
-        std::unordered_map<int, int> _frameGimmicks; //!< ハンドル名でコリジョンを保存
+        //std::vector<Actor> _brokenWallClear;
+        static std::unordered_map<int, std::vector<int>> _floorBrokenWall; //!< フロア番号で壊せる壁のベクターを記録
+        //std::unordered_map<int, int> _frameGimmicks; //!< ハンドル名でコリジョンを保存
         //std::unordered_map<>
+
     };
 
     /// @class CreatorBase

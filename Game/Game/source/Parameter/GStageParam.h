@@ -13,7 +13,22 @@ namespace MachineHuck::Parameter {
 	
 	public:
 		GStageParam();
-		~GStageParam() override = default;
+
+		/**
+		 * @brief   “o˜^‚µ‚½”Ô†‚ğæ“¾
+		 * @return 
+		 */
+		int GetNum() { return _num; }
+
+		/**
+		 * @brief  “o˜^‚µ‚½”Ô†‚ğİ’è         
+		 * @param  num
+		 */
+		void SetNum(int num) { _num = num; }
+
+	private:
+		int _num{-1};
+		/*const GStageParam operator ==(const GStageParam& rhs) const;*/
 
 	};
 

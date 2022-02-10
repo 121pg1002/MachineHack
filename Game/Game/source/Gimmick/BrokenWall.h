@@ -18,7 +18,8 @@ namespace MachineHuck::Gimmick{
 	    BrokenWall(AppFrame::Game& game);
 	    ~BrokenWall() override;
 
-		TypeId GetTypeId() const override { return TypeId::Gimmick; };
+		TypeId GetTypeId() const override { return TypeId::Gimmick; }
+		//TypeGimmick GetTypeGimmick() const override { return TypeGimmick::BrokenWall; }
 
 	    void Update();
 	    void Draw();

@@ -187,7 +187,6 @@ namespace MachineHuck::Flag {
 		static void SetHeadPos(VECTOR pos) { _headPos = pos; }
 
 
-
 	private:
 
 		static bool _fadeOutFlag;

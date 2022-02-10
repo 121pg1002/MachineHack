@@ -134,9 +134,11 @@ namespace MachineHuck::Enemy {
             void Enter() override;
             void Update() override;
         private:
-            int _tackleTime;
+            //int _tackleTime;
             Math::Vector4 _norm;
             double _speed;
+            //Math::Vector4 _startLine; //!< 壊せる壁との判定用の線の始点
+            //Math::Vector4 _endLine;   //!< 壊せる壁との判定用の線の終点
         };
 
         class StateTackleAfter : public StateBase {

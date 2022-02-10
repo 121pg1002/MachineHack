@@ -99,6 +99,7 @@ namespace MachineHuck::Gimmick {
 				gSP.SetPos(pos);
 				gSP.SetRot(rot);
 				gSP.SetScale(scale);
+				gSP.SetNum(i); //!< “o˜^”Ô†
 
 				//ƒMƒ~ƒbƒNˆê‚Âˆê‚Â‚ðŠi”[
 				_gimmickStageParamV.emplace_back(gSP);

@@ -16,6 +16,7 @@ namespace MachineHuck::Gimmick {
 		//_wall->SetModel("BrokenWall");
 		_minXZ = { -100.0, -50.0 };
 		_maxXZ = { 100.0, 50.0 };
+		_typeGimmick = TypeGimmick::BrokenWall;
 	}
 
 	BrokenWall::~BrokenWall() {

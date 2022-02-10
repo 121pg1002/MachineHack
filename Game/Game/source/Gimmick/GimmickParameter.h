@@ -14,6 +14,11 @@
 //    class GStageParam;
 //}
 
+//namespace MachineHuck::Parameter {
+//
+//    class GStageParam;
+//}
+
 namespace MachineHuck::Gimmick {
 
 	class GimmickParameter {

@@ -37,6 +37,7 @@ namespace MachineHuck::Player {
 		_maxXZ = { 100, 100 };
 		_isHit = false;
 		_searchRange = 60.0;
+		_collisionR = 20.0;
 		//_huckingRange = 30.0;
 		_gaugeBase->Init();
 		_gaugePlayer->Init(*this);
@@ -221,9 +222,17 @@ namespace MachineHuck::Player {
 
 			if (i->GetTypeId() != TypeId::Stage) {
 			
+
+				if (IsHucked()) {
+				
+					continue;
+				
+				}
+
 				if (i->GetTypeId() != TypeId::Gimmick) {
 					continue;
 				}
+			
 				
 				//‰ó‚¹‚é•Ç‚Æ‚Ì“–‚½‚è”»’è
 				if (GetCollision().CircleToAABB(*this, *i)) {
@@ -423,6 +432,7 @@ namespace MachineHuck::Player {
 		_state->Draw();
 #ifdef _DEBUG
 		_modelAnime->Draw(*this, _isHit, _searchRange, true);
+		_modelAnime->DrawCircle(*this, _collisionR);
 		_camera->Draw(_isHit);
 		_gaugeBase->Draw();
 

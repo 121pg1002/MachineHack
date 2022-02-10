@@ -23,6 +23,7 @@ namespace MachineHuck::Gimmick {
 		//{ 0     , "DamageFloor", {-200.f, 200.f, 0.0f} },
 		//_damageFloorV.push_back(std::move(damageFloor));
 		_r = 20.0;
+		_typeGimmick = TypeGimmick::DamageFloor;
 
 	}
 

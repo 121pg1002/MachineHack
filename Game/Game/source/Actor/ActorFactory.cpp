@@ -37,11 +37,16 @@ namespace {
 
 }
 
+
+
 namespace MachineHuck::Actor {
     class CreatorBase;
 }
 
 namespace MachineHuck::Actor {
+
+    std::unordered_map<int, std::vector<int>> ActorFactory::_floorBrokenWall;
+
     /// コンストラクタ
     ActorFactory::ActorFactory(AppFrame::Game& game) : _game{ game } {
 
@@ -70,7 +75,59 @@ namespace MachineHuck::Actor {
 
     void ActorFactory::Clear() {
         _creatorMap.clear();
+        _eStageParamVMap.clear();
+        _iStageParamVMap.clear();
+        _gStageParamVMap.clear();
+        _gClearV.clear();
     }
+
+    //void ActorFactory::SetClearGimmick(Parameter::GStageParam gimmick) {
+    //    _gClearV.push_back(gimmick);
+    //}
+
+    //void ActorFactory::ClearValueGimmick(StageV old) {
+
+    //    for (auto i = _gClearV.begin(); i != _gClearV.end(); ) {
+
+    //        for (auto&& num : old) {
+
+    //            //for (auto&& gimmick : _gStageParamVMap[num]) {
+
+    //            if (_gStageParamVMap[num].size() <= 0) {
+
+    //                return;
+    //            }
+
+    //            for (auto j = _gStageParamVMap[num].begin(); j != _gStageParamVMap[num].end();) {
+    //            
+    //                if ((*j) == (*i)) {
+    //                
+    //                    //ここに削除の要素を持ってくる
+    //                    _gStageParamVMap[num].erase(i);
+    //                    break;
+    //                }
+    //                j++;
+    //            
+    //            }
+
+    //            
+
+
+
+    //            // }
+
+    //        }
+
+    //        i++;
+    //    
+    //    
+    //    }
+
+    //    _gClearV.clear();
+
+
+
+    //}
 
     //void ActorFactory::SetSpawnTable(SpawnTable spawnTable) {
     //    _spawnProgress = 0;
@@ -179,6 +236,9 @@ namespace MachineHuck::Actor {
 
             }
 
+            //前フロアの中で削除対象をマップから削除
+            //ClearValueGimmick(_oldStageNo);
+
             ////前のステージ番号を更新
             _oldStageNo = _currentStageNo;
 
@@ -206,8 +266,6 @@ namespace MachineHuck::Actor {
                         actor->SetPosition(floorEnemy.GetPosition());
                         actor->SetRotation(floorEnemy.GetRotation());
                         actor->SetScale(floorEnemy.GetScale());
-
-                        //actor->SetLevel(floorEnemy.GetLevel());
                         actor->SetRoutine(floorEnemy.GetRoutine());
 
                         _game.GetActorServer().Add(std::move(actor));
@@ -233,46 +291,62 @@ namespace MachineHuck::Actor {
 
                     }
 
-                    std::unordered_map<int, int> frameGimmicks;
+                    //std::unordered_map<int, int> frameGimmicks;
 
-                    auto& spawnFloorGimmick = _gStageParamVMap[no];
-                    //////新しい描画フロアのギミックをリスポーンさせる
-                    for (auto&& floorGimmick : spawnFloorGimmick) {
+                    
+                   
 
+                     //////新しい描画フロアのギミックをリスポーンさせる
+                    for (auto&& floorGimmick : _gStageParamVMap[no]) {
 
-                        //if (floorGimmick.GetName().size() < 3) {
-                        //
-                        //    continue;
-                        //}
+                        bool spawnGimmickFlag = false;
+                        //次のフロアの中で壊した壁があるなら回す
+                        for(auto&& gimmick : _floorBrokenWall[no]) {
                         
-
-                        auto&& actor = Create(floorGimmick.GetName());
-
-                        //ヌルポインタではない
-                        if (actor != nullptr) {
-
-                            actor->SetPosition(floorGimmick.GetPosition());
-
-                            auto handle = actor->GetModel().GetHandle();
-                            auto gimmicks = actor->GetModel().GetModelGimmick();
-
-                            auto frameGimmick = gimmicks[handle];
-
-                            MV1RefreshCollInfo(handle, frameGimmick);
-
-                            frameGimmicks.emplace(handle, frameGimmick);
-                            
-                            actor->SetRotation(floorGimmick.GetRotation());
-                            actor->SetScale(floorGimmick.GetScale());
-
-                            _game.GetActorServer().Add(std::move(actor));
+                            //壊した壁があるならそれはリスポーンさせない
+                            if (floorGimmick.GetNum() == gimmick) {
+                                spawnGimmickFlag = true;
+                            }
                         
                         }
+
+                        if (!spawnGimmickFlag) {
+
+                            auto&& actor = Create(floorGimmick.GetName());
+
+                            //ヌルポインタではない
+                            if (actor != nullptr) {
+
+                                actor->SetPosition(floorGimmick.GetPosition());
+
+                                //auto handle = actor->GetModel().GetHandle();
+                                //auto gimmicks = actor->GetModel().GetModelGimmick();
+
+                                //auto frameGimmick = gimmicks[handle];
+
+                                //MV1RefreshCollInfo(handle, frameGimmick);
+
+                                //frameGimmicks.emplace(handle, frameGimmick);
+
+                                actor->SetRotation(floorGimmick.GetRotation());
+                                actor->SetScale(floorGimmick.GetScale());
+
+
+
+                                actor->SetFloorNumReserveNum(std::make_pair(no, floorGimmick.GetNum()));
+
+                                _game.GetActorServer().Add(std::move(actor));
+
+                            }
+                        
+                        }
+                        
+
 
 
                     }
 
-                    _game.GetActorServer().SetGimmickCollision(frameGimmicks);
+                   // _game.GetActorServer().SetGimmickCollision(frameGimmicks);
 
 
 
@@ -285,6 +359,30 @@ namespace MachineHuck::Actor {
 
         }
 
+    }
+
+    void ActorFactory::SetBrokenWall(int num, int brokenWallNum) {
+    
+        //中身があるかあ
+        if (!_floorBrokenWall[num].empty()) {
+        
+            //あったら前のベクターに加える
+            auto vecNum = _floorBrokenWall[num];
+            vecNum.push_back(brokenWallNum);
+
+            _floorBrokenWall[num] = vecNum;
+
+        }
+        else {
+        
+            //なかったら直接構築
+            std::vector<int> newNum;
+            newNum.push_back(brokenWallNum);
+
+            _floorBrokenWall[num] =  newNum;
+        
+        }
+    
     }
 
     //void ActorFactory::Delete() {
