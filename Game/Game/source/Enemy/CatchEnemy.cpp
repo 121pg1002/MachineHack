@@ -179,11 +179,11 @@ namespace MachineHuck::Enemy {
 	}
 
 	// 待機
-	void CatchEnemy::StateFall::Enter() {
+	void CatchEnemy::StateSearch::Enter() {
 		_owner.GetModelAnime().ChangeAnime("Idle", true);
 	}
 
-	void CatchEnemy::StateFall::Update() {
+	void CatchEnemy::StateSearch::Update() {
 
 		//_owner.LockOn();
 		if (_owner._position.GetY() > 0) {
@@ -550,6 +550,106 @@ namespace MachineHuck::Enemy {
 
 	}
 
+	void CatchEnemy::StateFallPre::Enter() {
+
+
+
+	}
+
+	void CatchEnemy::StateFallPre::Update() {
+
+		auto holePos = _owner.GetHolePos();
+		//Math::Vector4 holePos = { holePos.GetX, static_cast<double>(holePosVECTOR.y), static_cast<double>(holePosVECTOR.z) };
+		auto dif = holePos - _owner.GetPosition();
+
+		_norm = dif.Normalize() * 5;
+
+		if (_owner.IsHucked()) {
+
+			auto headPos = _owner.GetModelAnime().GetHeadPos("Character1_Head");
+			Flag::FlagData::SetHeadPos(headPos);
+			//_owner.SetHuckedMove(_norm);
+
+		}
+
+		_owner._position = _owner.GetPosition() + _norm;
+
+		// ワールド行列の更新
+		_owner.ComputeWorldTransform();
+
+
+		if (holePos.GetX() - 3.0 < _owner.GetPosition().GetX() && _owner._position.GetX() < holePos.GetX() + 3.0 && holePos.GetZ() - 3.0 < _owner.GetPosition().GetZ() && _owner._position.GetZ() < holePos.GetZ() + 3.0) {
+
+			_owner.GetState().GoToState("Fall");
+
+		}
+
+	}
+
+	void CatchEnemy::StateFall::Enter() {
+
+		_owner.GetModelAnime().ChangeAnime("Fall");
+	}
+
+	void CatchEnemy::StateFall::Update() {
+
+		if (_owner.GetModelAnime().GetRepeatedCount() > 0) {
+
+			//床との当たり判定を消す
+			_owner.SetFallFlag(true);
+
+		}
+
+		if (_owner.GetFallFlag()) {
+
+			//穴に落とす
+			Math::Vector4 difY = { 0.0, -10.0, 0.0 };
+			_owner._position = _owner.GetPosition() + difY;
+			auto headPos = _owner.GetModelAnime().GetHeadPos("Character1_Head");
+			Flag::FlagData::SetHeadPos(headPos);
+
+		}
+
+		//_fallCount--;
+
+		if (_owner.GetPosition().GetY() < -500.0) {
+
+
+			//ハッキング状態か
+			if (_owner.IsHucked()) {
+
+				//ここに入ってきた場所の位置を設定
+				auto warpAfterPos = Flag::FlagData::GetWarpAfterPos();
+
+				Math::Vector4 pos = { static_cast<double>(warpAfterPos.x), static_cast<double>(warpAfterPos.y), static_cast<double>(warpAfterPos.z) };
+
+
+
+				for (auto&& actor : _owner.GetActorServer().GetActors()) {
+
+					if (actor->GetTypeId() != TypeId::Player) {
+						continue;
+					}
+					else {
+
+						actor->SetActorState(ActorState::Active);
+
+						actor->GetState().GoToState("Idle");
+						//auto warpAfterPos = Flag::FlagData::GetWarpAfterPos();
+						actor->SetPosition(pos);
+					}
+
+				}
+
+			}
+
+			_owner.SetActorState(ActorState::Dead);
+
+
+		}
+
+	}
+
 	//bool CatchEnemy::StateRun::IsViewPlayer() {
 	//
 	//	_owner.GetPosition();
@@ -723,8 +823,17 @@ namespace MachineHuck::Enemy {
 			_owner._position = oldPos;
 		}
 
+		//穴と当たっているか
+		if (_owner.GetCollision().CollisionHole(_owner)) {
+			_owner.GetState().GoToState("FallPre");
+		}
+
 		////地面と触れているかどうか
-		_owner.CollisionFloor(oldPos, _owner.GetCollisionR());
+		if (!_owner.GetFallFlag()) {
+
+			////地面と触れているかどうか
+			_owner.CollisionFloor(oldPos, _owner.GetR());
+		}
 		//	Math::Vector4 zero = { 0.0, 0.0, 0.0 };
 		//	//主人公のカメラに移動量を送る
 		//	_owner.SetHuckedMove(zero);
@@ -801,6 +910,8 @@ namespace MachineHuck::Enemy {
 
 				//_position = _fadePos;
 				_warping = false;
+				auto position = _owner.GetPosition();
+				Flag::FlagData::SetWarpAfterPos(ToDX(position));
 
 			}
 
@@ -814,6 +925,9 @@ namespace MachineHuck::Enemy {
 
 			_owner._state->GoToState("Die");
 			_owner._status = STATUS::DYING;
+
+			Flag::FlagData::SetHuckDamageFlag(false);
+			Flag::FlagData::SetHuckNoDamageFlag(false);
 
 			for (auto&& actor : _owner.GetActorServer().GetActors()) {
 

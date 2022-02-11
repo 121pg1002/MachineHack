@@ -560,13 +560,15 @@ namespace MachineHuck::Actor {
         //model->Register("WartePose", 14);
         enemy->SetModelAnimeComponent(std::move(model));
 
-        auto state = std::make_unique<State::StateComponent>("Fall", std::make_shared <Enemy::CatchEnemy::StateFall>(*enemy));
+        auto state = std::make_unique<State::StateComponent>("Search", std::make_shared <Enemy::CatchEnemy::StateSearch>(*enemy));
         state->Register("Idle", std::make_shared<Enemy::CatchEnemy::StateIdle>(*enemy));
         //state->Register("Run", std::make_shared<Enemy::CatchEnemy::StateRun>(*enemy));
         state->Register("Die", std::make_shared<Enemy::CatchEnemy::StateDie>(*enemy));
         state->Register("Catch", std::make_shared<Enemy::CatchEnemy::StateCatch>(*enemy));
         state->Register("CatchAfter", std::make_shared<Enemy::CatchEnemy::StateCatchAfter>(*enemy));
         state->Register("CatchPre", std::make_shared<Enemy::CatchEnemy::StateCatchPre>(*enemy));
+        state->Register("FallPre", std::make_shared<Enemy::CatchEnemy::StateFallPre>(*enemy));
+        state->Register("Fall", std::make_shared<Enemy::CatchEnemy::StateFall>(*enemy));
         // state->Register("Attack", std::make_shared<Enemy::CatchEnemy::StateAttack>(*enemy));
         state->Register("IsHucking", std::make_shared<Enemy::CatchEnemy::StateHucking>(*enemy));
         state->Register("IsHucked", std::make_shared<Enemy::CatchEnemy::StateHucked>(*enemy));

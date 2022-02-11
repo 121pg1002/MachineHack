@@ -58,10 +58,10 @@ namespace MachineHuck::Enemy {
 
         };
 
-
-        class StateFall : public StateBase {
+        //õ“G
+        class StateSearch : public StateBase {
         public:
-            StateFall(CatchEnemy& owner) : StateBase{ owner } {};
+            StateSearch(CatchEnemy& owner) : StateBase{ owner } {};
             void Enter() override;
             void Update() override;
         };
@@ -100,6 +100,27 @@ namespace MachineHuck::Enemy {
             int _catchAfterTime;
 
         };
+
+        //—‚¿‚é‘O
+        class StateFallPre : public StateBase {
+        public:
+            StateFallPre(CatchEnemy& owner) : StateBase{ owner } {};
+            void Enter() override;
+            void Update() override;
+        private:
+            Math::Vector4 _norm;
+
+        };
+
+        //—‚¿‚éuŠÔ
+        class StateFall : public StateBase {
+        public:
+            StateFall(CatchEnemy& owner) : StateBase{ owner } {};
+            void Enter() override;
+            void Update() override;
+
+        };
+
 
         //UŒ‚’†
         //class StateAttack : public StateBase {

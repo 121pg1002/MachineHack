@@ -997,8 +997,14 @@ namespace MachineHuck::Enemy {
 			//穴に落とす
 			Math::Vector4 difY = { 0.0, -10.0, 0.0 };
 			_owner._position = _owner.GetPosition() + difY;
-			auto headPos = _owner.GetModelAnime().GetHeadPos("Character1_Head");
-			Flag::FlagData::SetHeadPos(headPos);
+
+			if (_owner.IsHucked()) {
+
+				auto headPos = _owner.GetModelAnime().GetHeadPos("Character1_Head");
+				Flag::FlagData::SetHeadPos(headPos);
+			
+			}
+
 
 		}
 
@@ -1042,35 +1048,6 @@ namespace MachineHuck::Enemy {
 	
 	}
 
-	//void TackleEnemy::HuckingFallPre::Enter() {
-	//
-	//
-	//}
-
-	//void TackleEnemy::HuckingFallPre::Update() {
-	//
-	//}
-
-	//void TackleEnemy::HuckingFall::Enter() {
-	//
-	//}
-
-	//void TackleEnemy::HuckingFall::Update() {
-	//
-
-	//	for (auto&& actor : _owner.GetActorServer().GetActors()) {
-
-	//		if (actor->GetTypeId() != TypeId::Player) {
-	//			continue;
-	//		}
-	//		else {
-
-	//			actor->SetActorState(ActorState::Active);
-	//		}
-
-	//	}
-	//
-	//}
 
 
 	void TackleEnemy::StateHucking::Enter(){
@@ -1185,8 +1162,8 @@ namespace MachineHuck::Enemy {
 		}
 
 
-		//移動時にフロアの壁との判定を取る
-		Math::Vector4 oldPos = _owner.GetPosition();
+		//前フレームの座標を保存
+		auto oldPos = _owner.GetPosition();
 
 
 		_owner.HuckedMove(_lx, _ly);
@@ -1280,6 +1257,10 @@ namespace MachineHuck::Enemy {
 
 				//_position = _fadePos;
 				_warping = false;
+
+				auto position = _owner.GetPosition();
+				Flag::FlagData::SetWarpAfterPos(ToDX(position));
+
 
 			}
 
