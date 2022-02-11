@@ -57,7 +57,8 @@ namespace MachineHuck::Scene {
               //{"entrypoint", "entrypoint.mv1"},
               //{"test", "test.mv1"},
               {"Item","Item.mv1"},
-            {"BrokenWall", "gimmick/breakable_wall.mv1"}
+            {"BrokenWall", "gimmick/breakable_wall.mv1"},
+            {"Hole", "gimmick/breakable_wall.mv1"}
               // {"Dungeon",   "Dungeon.mv1"},
               // {"stage0",    "stage0.mv1"}
 
@@ -168,6 +169,7 @@ namespace MachineHuck::Scene {
         af.Register("Stage", std::make_unique<Actor::StageCreator>());
         af.Register("DamageFloor", std::make_unique<Actor::DamageFloorGimmickCreator>());
         af.Register("BrokenWall", std::make_unique<Actor::BrokenWallCreator>());
+        af.Register("Hole", std::make_unique<Actor::HoleCreator>());
        // af.Register("Duct", std::make_unique<Actor::DuctCreator>());
         af.Register("Item", std::make_unique<Actor::ItemCreator>());
         

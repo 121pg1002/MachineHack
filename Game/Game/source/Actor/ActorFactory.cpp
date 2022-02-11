@@ -17,6 +17,7 @@
 #include "../Camera/CameraComponent.h"
 #include "../Gimmick/DamageFloorGimmick.h"
 #include "../Gimmick/BrokenWall.h"
+#include "../Gimmick/Hole.h"
 #include "../Item/Item.h"
 //#include "../Parameter/EStageParam.h"
 //#include "../Parameter/IStageParam.h"
@@ -419,6 +420,8 @@ namespace MachineHuck::Actor {
 
         auto state = std::make_unique<State::StateComponent>("Idle", std::make_shared <Player::Player::StateIdle>(*player));
         state->Register("Run", std::make_shared<Player::Player::StateRun>(*player));
+        state->Register("FallPre", std::make_shared<Player::Player::StateFallPre>(*player));
+        state->Register("Fall", std::make_shared<Player::Player::StateFall>(*player));
         state->Register("Attack", std::make_shared<Player::Player::StateAttack>(*player));
         //state->Register("KnockBack", std::make_shared<Player::StateKnockBack>(*player));
         state->Register("Hucking", std::make_shared<Player::Player::StateHucking>(*player));
@@ -604,12 +607,29 @@ namespace MachineHuck::Actor {
         auto num = model->SetModel("BrokenWall", 1000);
 
         //ギミックのコリジョンを構築(仮)
-        model->SetModelGimmick("BrokenWall", "duct_entrance_c", num);
+        //model->SetModelGimmick("BrokenWall", "duct_entrance_c", num);
         
 
         brokenWall->SetModelComponent(std::move(model));
         
         return brokenWall;
+    }
+
+    //穴を作成
+    std::unique_ptr<Actor> HoleCreator::Create(AppFrame::Game& game) {
+        /// 穴の生成
+        auto hole = std::make_unique<Gimmick::Hole>(game);
+        //// モデルの読み込みと生成
+        auto model = std::make_unique<Model::ModelComponent>(*hole);
+        auto num = model->SetModel("Hole", 1000);
+
+        //ギミックのコリジョンを構築(仮)
+        //model->SetModelGimmick("Hole", "", num);
+
+
+        hole->SetModelComponent(std::move(model));
+
+        return hole;
     }
 
 

@@ -29,7 +29,6 @@ namespace MachineHuck::Model {
 		MV1SetMatrix(_handle, _owner.GetWorldTransform());
 
 		// s—ñg‚í‚È‚¢ê‡
-
 		//auto pos = _owner.GetPosition();
 		//auto rot = _owner.GetRotation();
 

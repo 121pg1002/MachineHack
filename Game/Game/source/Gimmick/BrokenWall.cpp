@@ -23,14 +23,12 @@ namespace MachineHuck::Gimmick {
 
 	}
 
-	void BrokenWall::Update()
-	{
+	void BrokenWall::Update() {
 		ComputeWorldTransform();
 		_model->Update();
 	}
 
-	void BrokenWall::Draw()
-	{
+	void BrokenWall::Draw() {
 		//_model->Draw();
 		_model->BrokenDraw();
 

@@ -262,6 +262,15 @@ namespace MachineHuck::Actor {
 
     };
 
+    class HoleCreator : public CreatorBase {
+        /// 穴の生成
+        /// @param  game ゲームクラスへの参照
+        /// @return 壊せる壁のインスタンス
+        virtual std::unique_ptr<Actor> Create(AppFrame::Game& game);
+
+
+    };
+
     class ItemCreator : public CreatorBase {
         /// アイテムの生成
         /// @param  game ゲームクラスへの参照

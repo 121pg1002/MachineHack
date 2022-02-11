@@ -15,6 +15,7 @@ namespace MachineHuck::Gimmick{
 
 	class BrokenWall : public GimmickBase {
     public:
+
 	    BrokenWall(AppFrame::Game& game);
 	    ~BrokenWall() override;
 

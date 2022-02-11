@@ -173,6 +173,9 @@
     <ClCompile Include="source\Scene\SceneSlideOut.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="source\Gimmick\Hole.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Enemy">
@@ -419,6 +422,9 @@
     </ClInclude>
     <ClInclude Include="source\Scene\SceneSlideOut.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Gimmick\Hole.h">
+      <Filter>Gimmick</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

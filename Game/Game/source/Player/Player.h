@@ -192,6 +192,43 @@ namespace MachineHuck::Player {
         private:
             int _attackcount{ 0 };
         };
+
+        // @class StateFallPre
+        // @brief 落ちる準備
+        class StateFallPre : public StateBase {
+        public:
+            StateFallPre(Player& owner) : StateBase{ owner } {};
+            void Enter() override;
+
+            void Update() override;
+        private:
+            Math::Vector4 _norm;
+
+
+        };
+
+        //落ちる
+        class StateFall : public StateBase {
+        public:
+            StateFall(Player& owner) : StateBase{ owner } {};
+            void Enter() override;
+
+            void Update() override;
+        private:
+            int _fallCount{ 0 }; //!< 落ちるカウント
+
+
+        };
+
+        //class StateFallAfter : public StateBase {
+        //public:
+        //    StateFallAfter(Player& owner) :StateBase{ owner } {};
+        //    void Enter() override;
+        //    void Update() override;
+
+
+        //};
+
         ///// @class  StateKnockBack
         ///// @brief  ノックバック
         //class StateKnockBack : public StateBase {

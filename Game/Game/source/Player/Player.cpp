@@ -137,8 +137,7 @@ namespace MachineHuck::Player {
 
 
 
-		/////********************//////////////////////////
-
+	  /////********************//////////////////////////
 	  //if (_key.Button_C() != 0) 
 	  //{
 	  //    ly = -1.0;
@@ -147,6 +146,7 @@ namespace MachineHuck::Player {
 	  //{
 		 // ly = 1.0;
 	  //}
+
 		_state->Input(input);
 	}
 
@@ -162,13 +162,17 @@ namespace MachineHuck::Player {
 		//	_noDamageTime = 30;
 		//}
 
+		
+
 	/*_noDamageTime*/
 
 
 		Math::Vector4 oldPos = _position;
 
+		auto holePos = Flag::FlagData::GetHolePos();
+
 		//無敵時間が終了したとき
-		if (Flag::FlagData::GetDamageFlag() == false) {
+		if (Flag::FlagData::GetDamageFlag() == false && holePos.x == 0.0f && holePos.y == 0.0f && holePos.z == 0.0f) {
 			Move();
 		}
 		else {
@@ -222,7 +226,7 @@ namespace MachineHuck::Player {
 
 			if (i->GetTypeId() != TypeId::Stage) {
 			
-
+				//プレイヤーがハッキング状態なら吟味しない
 				if (IsHucked()) {
 				
 					continue;
@@ -232,12 +236,40 @@ namespace MachineHuck::Player {
 				if (i->GetTypeId() != TypeId::Gimmick) {
 					continue;
 				}
+
+				//壊せる壁かどうか
+				if (i->GetTypeGimmick() != TypeGimmick::BrokenWall) {
+					
+					//穴かどうか
+					if (i->GetTypeGimmick() != TypeGimmick::Hole) {
+					
+						continue;
+
+					}
+					else {
+
+						//穴の場合
+						if (GetCollision().CircleToAABB(*this, *i)) {
+						
+							auto holePos = i->GetPosition();
+							Flag::FlagData::SetHolePos(ToDX(holePos));
+						
+						}
+					
+					}
+
+				}
+				else {
+
+					//壊せる壁との当たり判定
+					if (GetCollision().CircleToAABB(*this, *i)) {
+						_position = oldPos;
+					}
+				
+				}
 			
 				
-				//壊せる壁との当たり判定
-				if (GetCollision().CircleToAABB(*this, *i)) {
-					_position = oldPos;
-				}
+
 					
 				
 
@@ -257,7 +289,13 @@ namespace MachineHuck::Player {
 		 //地面のナビメッシュに触れているかどうか
 
 		if (!IsHucked()) {
-			CollisionFloor(oldPos, _r);
+
+			if (!Flag::FlagData::GetFallFlag()) {
+			
+				CollisionFloor(oldPos, _r);
+
+			}
+			
 
 
 			//仮
@@ -323,6 +361,7 @@ namespace MachineHuck::Player {
 
 					//_position = _fadePos;
 					_warping = false;
+					Flag::FlagData::SetWarpAfterPos(ToDX(_position));
 
 				}
 
@@ -547,7 +586,7 @@ namespace MachineHuck::Player {
 		//	_owner._state->PushBack("Attack");
 		//}
 
-
+		
 
 		if (input.GetJoypad().Button_RT() || input.GetKeyBoard().Button_Space()) {
 			_owner._state->PushBack("Hucking");
@@ -631,11 +670,6 @@ namespace MachineHuck::Player {
 		if (_owner.GetGaugePlayer().GetGauge() < 0) {
 			_owner._state->GoToState("Die");
 		}
-		//else if (Flag::FlagData::GetNoDamageTime() > 0) {
-
-		//	_owner._state->GoToState("Damage");
-
-		//}
 		else {
 
 			_owner.GetGaugeBase().Update(_owner);
@@ -645,6 +679,19 @@ namespace MachineHuck::Player {
 		if (_noDamageTime < 0 && Flag::FlagData::GetNoDamageFlag()) {
 
 			Flag::FlagData::SetNoDamageFlag(false);
+		}
+
+
+		auto holePos = Flag::FlagData::GetHolePos();
+
+		if (holePos.x == 0.0f && holePos.y == 0.0f && holePos.z == 0.0f) {
+
+		
+		}
+		else {
+		
+			_owner._state->GoToState("FallPre");
+		
 		}
 
 		_noDamageTime--;
@@ -663,7 +710,7 @@ namespace MachineHuck::Player {
 
 		if (_owner.GetModelAnime().GetRepeatedCount() > 0) {
 
-			_owner._state->GoToState("Idle");
+			_owner.GetState().GoToState("Idle");
 
 			//_owner._state->PopBack();
 
@@ -673,6 +720,92 @@ namespace MachineHuck::Player {
 		}
 
 	}
+
+	//落ちる
+	void Player::StateFallPre::Enter() {
+	
+
+	}
+
+	//落ちる
+	void Player::StateFallPre::Update() {
+
+		auto holePosVECTOR = Flag::FlagData::GetHolePos();
+		Math::Vector4 holePos = { static_cast<double>(holePosVECTOR.x), static_cast<double>(holePosVECTOR.y), static_cast<double>(holePosVECTOR.z) };
+		auto dif = holePos - _owner.GetPosition();
+
+		_norm = dif.Normalize();
+
+		_owner._position = _owner.GetPosition() + _norm * 5;
+
+		//向きをこっちにする
+
+		// ワールド行列の更新
+		_owner.ComputeWorldTransform();
+
+
+		if (holePos.GetX() - 3.0 < _owner.GetPosition().GetX() && _owner._position.GetX() < holePos.GetX() + 3.0 && holePos.GetZ() - 3.0 < _owner.GetPosition().GetZ() && _owner._position.GetZ() < holePos.GetZ() + 3.0) {
+		
+			_owner.GetState().GoToState("Fall");
+					
+		}
+	
+	}
+
+	void Player::StateFall::Enter() {
+	
+		_owner.GetModelAnime().ChangeAnime("Fall");
+
+		//下のやつ0.0しか入らない
+		//_fallCount = _owner.GetModelAnime().GetPlayProgress();
+	}
+
+	void Player::StateFall::Update() {
+
+	
+		if (_owner.GetModelAnime().GetRepeatedCount() > 0) {
+		
+			//床との当たり判定を消す
+			Flag::FlagData::SetFallFlag(true);
+
+		}
+
+		if (Flag::FlagData::GetFallFlag()) {
+		
+			//穴に落とす
+			Math::Vector4 difY = { 0.0, -10.0, 0.0 };
+			_owner._position = _owner.GetPosition() + difY;
+		
+		}
+	
+		//_fallCount--;
+
+		if (_owner.GetPosition().GetY() < -500.0) {
+		
+			//ここに入ってきた場所の位置を設定
+			auto warpAfterPos = Flag::FlagData::GetWarpAfterPos();
+
+			Math::Vector4 pos = { static_cast<double>(warpAfterPos.x), static_cast<double>(warpAfterPos.y), static_cast<double>(warpAfterPos.z) };
+			_owner._position = pos;
+
+			//ゲージ量を減少
+			_owner.GetGaugeBase().DownGauge(10);
+			_owner.GetGaugePlayer().DownGauge(10);
+
+			_owner.GetState().GoToState("Idle");
+
+			//床との当たり判定を起動する
+			Flag::FlagData::SetFallFlag(false);
+
+			//穴の座標をリセット
+			Flag::FlagData::SetHolePos(VGet(0.f, 0.f, 0.f));
+		
+		}
+
+
+
+	}
+
 
 
 

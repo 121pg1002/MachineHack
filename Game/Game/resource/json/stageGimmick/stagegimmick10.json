@@ -15,11 +15,11 @@
             "sz": 0
         },
         {
-            "filename": "",
+            "filename": "Hole",
             "handlename": "floor16",
-            "tx": 5000,
+            "tx": 300,
             "ty": 0,
-            "tz": 0,
+            "tz": 300,
             "rx": -0,
             "ry": -0,
             "rz": 0,
