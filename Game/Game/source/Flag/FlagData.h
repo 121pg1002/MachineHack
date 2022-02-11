@@ -201,17 +201,17 @@ namespace MachineHuck::Flag {
 		 */
 		static void SetHeadPos(VECTOR pos) { _headPos = pos; }
 
-		/**
-		 * @brief  穴の位置を取得      
-		 * @return 穴の座標
-		 */
-		static VECTOR GetHolePos() { return _holePos; }
+		///**
+		// * @brief  穴の位置を取得      
+		// * @return 穴の座標
+		// */
+		//static VECTOR GetHolePos() { return _holePos; }
 
-		/**
-		 * @brief  落ちる穴の位置を設定       
-		 * @param  pos
-		 */
-		static void SetHolePos(VECTOR pos) { _holePos = pos; }
+		///**
+		// * @brief  落ちる穴の位置を設定       
+		// * @param  pos
+		// */
+		//static void SetHolePos(VECTOR pos) { _holePos = pos; }
 
 
 		/**
@@ -226,17 +226,17 @@ namespace MachineHuck::Flag {
 		 */
 		static void SetWarpAfterPos(VECTOR pos) { _warpAfterPos = pos; }
 
-		/**
-		 * @brief  落ちるフラグを取得       
-		 * @return _fallFlag
-		 */
-		static bool GetFallFlag() { return _fallFlag; }
+		///**
+		// * @brief  落ちるフラグを取得       
+		// * @return _fallFlag
+		// */
+		//static bool GetFallFlag() { return _fallFlag; }
 
-		/**
-		 * @brief  落ちるフラグを設定      
-		 * @param  flag
-		 */
-		static void SetFallFlag(bool flag) { _fallFlag = flag; }
+		///**
+		// * @brief  落ちるフラグを設定      
+		// * @param  flag
+		// */
+		//static void SetFallFlag(bool flag) { _fallFlag = flag; }
 
 
 	private:
@@ -256,9 +256,9 @@ namespace MachineHuck::Flag {
 		static bool _slideInFlag;
 		static bool _slideOutFlag;
 		static bool _slideFlag;
-		static VECTOR _holePos;      //!< 落ちる穴の位置座標
+	//	static VECTOR _holePos;      //!< 落ちる穴の位置座標
 		static VECTOR _warpAfterPos; //!< ワープ後の初期座標
-		static bool _fallFlag;                        //!< 落ちるかどうかのフラグ
+	//	static bool _fallFlag;                        //!< 落ちるかどうかのフラグ
 
 	};
 

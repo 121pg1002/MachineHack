@@ -101,7 +101,12 @@ namespace MachineHuck::Enemy {
 		//
 		//	int x = 0;
 		//}
-		CollisionFloor(_oldPos, GetR());
+		//ŒŠ‚É—Ž‚¿‚éƒtƒ‰ƒO‚ªƒIƒ“‚©
+		if (!GetFallFlag()) {
+		
+			CollisionFloor(_oldPos, GetR());
+		}
+		
 
 	}
 

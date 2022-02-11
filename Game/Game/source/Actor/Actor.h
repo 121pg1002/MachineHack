@@ -136,6 +136,10 @@ namespace MachineHuck::Actor {
          */
         TypeId IsGimmick() const { return TypeId::Gimmick; }
 
+        TypeGimmick IsBrokenWall() const { return TypeGimmick::BrokenWall; }
+
+        TypeGimmick IsHole() const { return TypeGimmick::Hole; }
+
         /**
          *
          * @brief 死亡状態に変更
@@ -339,6 +343,30 @@ namespace MachineHuck::Actor {
         */
         bool  GetShadowMapflg() { return _shadowmapflg; }
 
+        /**
+         * @brief  触れた穴の位置を取得       
+         * @return 穴の座標
+         */
+        Math::Vector4 GetHolePos() { return _holePos; }
+
+        /**
+         * @brief  触れた穴の位置を設定       
+         * @param  pos
+         */
+        void SetHolePos(Math::Vector4 pos) { _holePos = pos; }
+
+        /**
+         * @brief  落ちるフラグの取得         
+         * @return _fallFlag
+         */
+        bool GetFallFlag() { return _fallFlag; }
+
+        /**
+         * @brief  落ちるフラグの設定         
+         * @param  flag
+         */
+        void SetFallFlag(bool flag) { _fallFlag = flag; }
+
 
 
 
@@ -403,6 +431,9 @@ namespace MachineHuck::Actor {
         int _level;   //!< レベル
         int _routine; //!< 思考ルーチン番号
         std::pair<int, int> _floorReserveNum; //!< 一つ目　フロア番号, 2つめ登録番号
+
+        Math::Vector4 _holePos; //!< 穴の位置
+        bool _fallFlag;
 
 #ifdef _DEBUG
 

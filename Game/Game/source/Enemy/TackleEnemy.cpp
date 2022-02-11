@@ -100,6 +100,11 @@ namespace MachineHuck::Enemy {
 			}
 		}
 
+
+
+
+
+
 		if (_status != STATUS::DYING && _status != STATUS::CHASE) {
 			Move("TackleEnemy", _routine, 2.0, 200);
 		}
@@ -377,12 +382,12 @@ namespace MachineHuck::Enemy {
 		}
 	}
 
-	// 待機
-	void TackleEnemy::StateFall::Enter() {
+	// 索敵
+	void TackleEnemy::StateSearch::Enter() {
 		_owner.GetModelAnime().ChangeAnime("Walk", true);
 	}
 
-	void TackleEnemy::StateFall::Update() {
+	void TackleEnemy::StateSearch::Update() {
 
 		//_owner.LockOn();
 		if (_owner._position.GetY() > 0) {
@@ -540,11 +545,14 @@ namespace MachineHuck::Enemy {
 
 	//ハッキング中のダメージ
 	void TackleEnemy::StateDamage::Enter() {
-		_owner.GetModelAnime().ChangeAnime("Damage", true);
+		_owner.GetModelAnime().ChangeAnime("Damage");
 
 	}
 
 	void TackleEnemy::StateDamage::Update() {
+
+		auto headPos = _owner.GetModelAnime().GetHeadPos("Character1_Head");
+		Flag::FlagData::SetHeadPos(headPos);
 
 		if (_owner.GetModelAnime().GetRepeatedCount() > 0) {
 
@@ -664,6 +672,9 @@ namespace MachineHuck::Enemy {
 			Math::Vector2 normXZ = { _norm.GetX(), _norm.GetZ() };
 			Math::Vector2 endLineXZ = startLineXZ + normXZ *_speed*10;
 
+			auto headPos = _owner.GetModelAnime().GetHeadPos("Character1_Head");
+			Flag::FlagData::SetHeadPos(headPos);
+
 			for (auto i = _owner.GetActorServer().GetActors().begin(); i != _owner.GetActorServer().GetActors().end(); i++) {
 
 				//!< 敵ではなかったら次へ
@@ -677,6 +688,21 @@ namespace MachineHuck::Enemy {
 					//壊せる壁かどうか
 					if ((*i)->GetTypeGimmick() != TypeGimmick::BrokenWall) {
 					
+						if ((*i)->GetTypeGimmick() != TypeGimmick::Hole) {
+						
+							continue;
+						}
+
+						if (_owner.GetCollision().CircleToAABB(_owner, **i)) {
+						
+							_owner.GetState().GoToState("FallPre");
+
+							//落ちる穴の座標を設定
+							auto holePos = (*i)->GetPosition();
+							_owner.SetHolePos(holePos);
+
+						}
+
 						continue;
 					}
 
@@ -756,6 +782,14 @@ namespace MachineHuck::Enemy {
 		}
 		else {
 
+
+
+				//穴と当たっているか
+				_owner.GetCollision().CollisionHole(_owner);
+				//ハッキング状態とそうじゃ無い時に状態の遷移を変更するために少し考えよう
+
+			
+
 			//プレイヤー無敵時間中とプレイヤーダメージフラグがオンのときは、通さない
 			if (Flag::FlagData::GetNoDamageFlag() == false && Flag::FlagData::GetDamageFlag() == false) {
 
@@ -822,7 +856,7 @@ namespace MachineHuck::Enemy {
 
 									//ハッキングされている敵をダメージ状態に変更
 									(*i)->GetState().PushBack("Damage");
-
+									
 									Flag::FlagData::SetHuckDamageFlag(true);
 								}
 
@@ -855,9 +889,6 @@ namespace MachineHuck::Enemy {
 
 
 
-
-		auto headPos = _owner.GetModelAnime().GetHeadPos("Character1_Head");
-		Flag::FlagData::SetHeadPos(headPos);
 
 	}
 
@@ -911,14 +942,142 @@ namespace MachineHuck::Enemy {
 
 	}
 
+	void TackleEnemy::StateFallPre::Enter() {
+	
 
-	void TackleEnemy::StateHucking::Enter()
-	{
+	
+	}
+
+	void TackleEnemy::StateFallPre::Update() {
+	
+		auto holePos = _owner.GetHolePos();
+		//Math::Vector4 holePos = { holePos.GetX, static_cast<double>(holePosVECTOR.y), static_cast<double>(holePosVECTOR.z) };
+		auto dif = holePos - _owner.GetPosition();
+
+		_norm = dif.Normalize() * 5;
+
+		if (_owner.IsHucked()) {
+		
+			auto headPos = _owner.GetModelAnime().GetHeadPos("Character1_Head");
+			Flag::FlagData::SetHeadPos(headPos);
+			//_owner.SetHuckedMove(_norm);
+		
+		}
+
+		_owner._position = _owner.GetPosition() + _norm;
+
+		// ワールド行列の更新
+		_owner.ComputeWorldTransform();
+
+
+		if (holePos.GetX() - 3.0 < _owner.GetPosition().GetX() && _owner._position.GetX() < holePos.GetX() + 3.0 && holePos.GetZ() - 3.0 < _owner.GetPosition().GetZ() && _owner._position.GetZ() < holePos.GetZ() + 3.0) {
+
+			_owner.GetState().GoToState("Fall");
+
+		}
+	
+	}
+
+	void TackleEnemy::StateFall::Enter() {
+	
+		_owner.GetModelAnime().ChangeAnime("Fall");
+	}
+
+	void TackleEnemy::StateFall::Update() {
+	
+		if (_owner.GetModelAnime().GetRepeatedCount() > 0) {
+
+			//床との当たり判定を消す
+			_owner.SetFallFlag(true);
+
+		}
+
+		if (_owner.GetFallFlag()) {
+
+			//穴に落とす
+			Math::Vector4 difY = { 0.0, -10.0, 0.0 };
+			_owner._position = _owner.GetPosition() + difY;
+			auto headPos = _owner.GetModelAnime().GetHeadPos("Character1_Head");
+			Flag::FlagData::SetHeadPos(headPos);
+
+		}
+
+		//_fallCount--;
+
+		if (_owner.GetPosition().GetY() < -500.0) {
+
+
+			//ハッキング状態か
+			if (_owner.IsHucked()) {
+
+				//ここに入ってきた場所の位置を設定
+				auto warpAfterPos = Flag::FlagData::GetWarpAfterPos();
+
+				Math::Vector4 pos = { static_cast<double>(warpAfterPos.x), static_cast<double>(warpAfterPos.y), static_cast<double>(warpAfterPos.z) };
+
+
+
+				for (auto&& actor : _owner.GetActorServer().GetActors()) {
+
+					if (actor->GetTypeId() != TypeId::Player) {
+						continue;
+					}
+					else {
+
+						actor->SetActorState(ActorState::Active);
+
+						actor->GetState().GoToState("Idle");
+						//auto warpAfterPos = Flag::FlagData::GetWarpAfterPos();
+						actor->SetPosition(pos);
+					}
+
+				}
+			
+			}
+
+			_owner.SetActorState(ActorState::Dead);
+
+
+		}
+	
+	}
+
+	//void TackleEnemy::HuckingFallPre::Enter() {
+	//
+	//
+	//}
+
+	//void TackleEnemy::HuckingFallPre::Update() {
+	//
+	//}
+
+	//void TackleEnemy::HuckingFall::Enter() {
+	//
+	//}
+
+	//void TackleEnemy::HuckingFall::Update() {
+	//
+
+	//	for (auto&& actor : _owner.GetActorServer().GetActors()) {
+
+	//		if (actor->GetTypeId() != TypeId::Player) {
+	//			continue;
+	//		}
+	//		else {
+
+	//			actor->SetActorState(ActorState::Active);
+	//		}
+
+	//	}
+	//
+	//}
+
+
+	void TackleEnemy::StateHucking::Enter(){
 		_owner.GetModelAnime().ChangeAnime("Die", false);
 	}
 
-	void TackleEnemy::StateHucking::Update()
-	{
+	void TackleEnemy::StateHucking::Update(){
 		//// ハッキングされたか確認
 		//_owner.HitCheckFrom();
 
@@ -1037,11 +1196,20 @@ namespace MachineHuck::Enemy {
 			_owner._position = oldPos;
 		}
 
+		//穴と当たっているか
+		if (_owner.GetCollision().CollisionHole(_owner)) {
+			_owner.GetState().GoToState("FallPre");
+		}
+
 		//ギミックと触れているか触れていたら戻す
 		//_owner.CollisionGimmick();
 
-		////地面と触れているかどうか
-		_owner.CollisionFloor(oldPos, _owner.GetR());
+		if (!_owner.GetFallFlag()) {
+
+			////地面と触れているかどうか
+			_owner.CollisionFloor(oldPos, _owner.GetR());
+		}
+
 
 		//ワープ直後か
 		if (!_warping) {

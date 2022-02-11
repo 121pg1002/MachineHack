@@ -25,8 +25,8 @@ namespace MachineHuck::Flag {
 	bool FlagData::_slideInFlag = false;
 	bool FlagData::_slideOutFlag = false;
 	bool FlagData::_slideFlag = false;
-	VECTOR FlagData::_holePos = {0.0, 0.0, 0.0};
-	bool FlagData::_fallFlag = false;
+//	VECTOR FlagData::_holePos = {0.0, 0.0, 0.0};
+//	bool FlagData::_fallFlag = false;
 	VECTOR FlagData::_warpAfterPos = { 0.0, 0.0, 0.0 };
 
 }

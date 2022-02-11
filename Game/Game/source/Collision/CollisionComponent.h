@@ -270,6 +270,13 @@ namespace MachineHuck::Collision {
 		 */
 		bool CollisionBrokenWall(const Actor::Actor& own);
 
+		/**
+		 * @brief  穴と当たっているか      
+		 * @param  own
+		 * @return 成否
+		 */
+		bool CollisionHole(Actor::Actor& own);
+
 		///**
 		// * @brief  マップコリジョン情報を取得       
 		// * @return _frameMapCollision

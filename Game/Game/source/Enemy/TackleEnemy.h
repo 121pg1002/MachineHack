@@ -84,9 +84,9 @@ namespace MachineHuck::Enemy {
         };
 
 
-        class StateFall : public StateBase {
+        class StateSearch : public StateBase {
         public:
-            StateFall(TackleEnemy& owner) : StateBase{ owner } {};
+            StateSearch(TackleEnemy& owner) : StateBase{ owner } {};
             void Enter() override;
             void Update() override;
         };
@@ -151,6 +151,40 @@ namespace MachineHuck::Enemy {
             int _tackleAfterTime;
 
         };
+
+        class StateFallPre : public StateBase {
+        public:
+            StateFallPre(TackleEnemy& owner) : StateBase{ owner } {};
+            void Enter() override;
+            void Update() override;
+
+        private:
+            Math::Vector4 _norm;
+
+        };
+
+        class StateFall : public StateBase {
+        public:
+            StateFall(TackleEnemy& owner) : StateBase{ owner } {};
+            void Enter() override;
+            void Update() override;
+        
+        };
+
+        //class HuckingFallPre : public StateBase {
+        //public:
+        //    HuckingFallPre(TackleEnemy& owner) : StateBase{ owner } {};
+        //    void Enter() override;
+        //    void Update() override;
+
+        //};
+
+        //class HuckingFall : public StateBase {
+        //    HuckingFall(TackleEnemy& owner) :StateBase{ owner } {};
+        //    void Enter() override;
+        //    void Update() override;
+
+        //};
 
         class StateHucking : public StateBase
         {

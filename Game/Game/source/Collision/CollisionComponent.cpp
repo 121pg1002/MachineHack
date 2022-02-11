@@ -13,6 +13,8 @@
 #include "../Actor/Actor.h"
 #include "../Actor/ActorServer.h"
 #include "../Model/ModelAnimComponent.h"
+#include "../Flag/FlagData.h"
+#include "../State/StateComponent.h"
 
 
 
@@ -938,6 +940,11 @@ namespace MachineHuck::Collision {
                 continue;
             }
 
+            if (actor->GetTypeGimmick() != _owner.IsBrokenWall()) {
+            
+                continue;
+            }
+
             //”»’èŽÒ‚Ì‰~‚Æ•Ç‚ÌAABB‚ª“–‚½‚Á‚Ä‚¢‚é‚©
             if(CircleToAABB(own, *actor)) {
                 return true;
@@ -945,6 +952,47 @@ namespace MachineHuck::Collision {
         }
     
         return false;
+    }
+
+    bool CollisionComponent::CollisionHole(Actor::Actor& own) {
+    
+        for (auto&& actor : _owner.GetActorServer().GetActors()) {
+
+            if (actor->GetTypeId() != _owner.IsGimmick()) {
+
+                continue;
+            }
+
+            if (actor->GetTypeGimmick() != _owner.IsHole()) {
+
+                continue;
+            }
+
+            //”»’èŽÒ‚Ì‰~‚Æ•Ç‚ÌAABB‚ª“–‚½‚Á‚Ä‚¢‚é‚©
+            if (CircleToAABB(own, *actor)) {
+
+                auto holePos = actor->GetPosition();
+                own.SetHolePos(holePos);
+
+
+                //if (own.IsHucked()) {
+
+                //    own.GetState().GoToState("HuckingFallPre");
+                //
+                //}
+                //else {
+                
+                    own.GetState().GoToState("FallPre");
+                //}
+
+                
+
+                return true;
+            }
+        }
+
+        return false;
+    
     }
 
 

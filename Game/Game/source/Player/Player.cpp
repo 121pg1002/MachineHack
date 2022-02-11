@@ -169,10 +169,10 @@ namespace MachineHuck::Player {
 
 		Math::Vector4 oldPos = _position;
 
-		auto holePos = Flag::FlagData::GetHolePos();
+		auto holePos = GetHolePos();
 
 		//無敵時間が終了したとき
-		if (Flag::FlagData::GetDamageFlag() == false && holePos.x == 0.0f && holePos.y == 0.0f && holePos.z == 0.0f) {
+		if (Flag::FlagData::GetDamageFlag() == false && holePos.GetX() == 0.0 && holePos.GetY() == 0.0 && holePos.GetZ() == 0.0) {
 			Move();
 		}
 		else {
@@ -252,7 +252,7 @@ namespace MachineHuck::Player {
 						if (GetCollision().CircleToAABB(*this, *i)) {
 						
 							auto holePos = i->GetPosition();
-							Flag::FlagData::SetHolePos(ToDX(holePos));
+							SetHolePos(holePos);
 						
 						}
 					
@@ -290,7 +290,7 @@ namespace MachineHuck::Player {
 
 		if (!IsHucked()) {
 
-			if (!Flag::FlagData::GetFallFlag()) {
+			if (!GetFallFlag()) {
 			
 				CollisionFloor(oldPos, _r);
 
@@ -682,9 +682,9 @@ namespace MachineHuck::Player {
 		}
 
 
-		auto holePos = Flag::FlagData::GetHolePos();
+		auto holePos = _owner.GetHolePos();
 
-		if (holePos.x == 0.0f && holePos.y == 0.0f && holePos.z == 0.0f) {
+		if (holePos.GetX() == 0.0 && holePos.GetY() == 0.0 && holePos.GetZ() == 0.0) {
 
 		
 		}
@@ -730,8 +730,8 @@ namespace MachineHuck::Player {
 	//落ちる
 	void Player::StateFallPre::Update() {
 
-		auto holePosVECTOR = Flag::FlagData::GetHolePos();
-		Math::Vector4 holePos = { static_cast<double>(holePosVECTOR.x), static_cast<double>(holePosVECTOR.y), static_cast<double>(holePosVECTOR.z) };
+		auto holePos = _owner.GetHolePos();
+		//Math::Vector4 holePos = { holePos.GetX, static_cast<double>(holePosVECTOR.y), static_cast<double>(holePosVECTOR.z) };
 		auto dif = holePos - _owner.GetPosition();
 
 		_norm = dif.Normalize();
@@ -766,11 +766,11 @@ namespace MachineHuck::Player {
 		if (_owner.GetModelAnime().GetRepeatedCount() > 0) {
 		
 			//床との当たり判定を消す
-			Flag::FlagData::SetFallFlag(true);
+			_owner.SetFallFlag(true);
 
 		}
 
-		if (Flag::FlagData::GetFallFlag()) {
+		if (_owner.GetFallFlag()) {
 		
 			//穴に落とす
 			Math::Vector4 difY = { 0.0, -10.0, 0.0 };
@@ -795,10 +795,11 @@ namespace MachineHuck::Player {
 			_owner.GetState().GoToState("Idle");
 
 			//床との当たり判定を起動する
-			Flag::FlagData::SetFallFlag(false);
+			_owner.SetFallFlag(false);
 
 			//穴の座標をリセット
-			Flag::FlagData::SetHolePos(VGet(0.f, 0.f, 0.f));
+			Math::Vector4 zero = { 0.0, 0.0, 0.0 };
+			_owner.SetHolePos(zero);
 		
 		}
 

@@ -215,7 +215,7 @@ namespace MachineHuck::Player {
 
             void Update() override;
         private:
-            int _fallCount{ 0 }; //!< 落ちるカウント
+            //int _fallCount{ 0 }; //!< 落ちるカウント
 
 
         };
