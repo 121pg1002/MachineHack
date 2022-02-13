@@ -124,6 +124,7 @@ namespace MachineHuck::Actor {
     void ActorServer::Clear() {
         _actors.clear();
         _pendingActors.clear();
+        _registry.clear();
     }
     /// アクターの登録
     void ActorServer::Register(std::string_view key, _pos_dir vec) {

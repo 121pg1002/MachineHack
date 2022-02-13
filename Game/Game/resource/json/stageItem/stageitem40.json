@@ -1,32 +1,5 @@
 {
- 
-    "StageItem": [
-        {
-            "filename": "",
-            "handlename": "floor20",
-            "tx": 5000,
-            "ty": 0,
-            "tz": 0,
-            "rx": 0,
-            "ry": 0,
-            "rz": 0,
-            "sx": 0,
-            "sy": 0,
-            "sz": 0
-        },
-        {
-            "filename": "",
-            "handlename": "floor16",
-            "tx": 5000,
-            "ty": 0,
-            "tz": 0,
-            "rx": -0,
-            "ry": -0,
-            "rz": 0,
-            "sx": 0,
-            "sy": 0,
-            "sz": 0
-        }
-
-    ]
+"StageItem":[
+		{"filename":"EnergyTank","handlename":"EnergyTank","tx":0,"ty":0,"tz":100,"rx":-0,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1}
+	]
 }

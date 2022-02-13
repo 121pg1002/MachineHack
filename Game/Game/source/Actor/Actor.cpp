@@ -426,6 +426,11 @@ namespace MachineHuck::Actor {
 									//ワープ先のフレーム名
 									auto toWarpName = (*i)->GetCollision().GetWarpNameFloor(floorNum, name);
 
+									if (name != "" && toWarpName == "") {
+										printfDx("ワープ先のコリジョンが存在しない");
+										return VGet(0.0f, 0.0f, 0.0f);
+									}
+
 
 									//ワープ先のフロア番号のポインタ配列を取得
 									auto warpFloor = allFloorMap[floorNum];

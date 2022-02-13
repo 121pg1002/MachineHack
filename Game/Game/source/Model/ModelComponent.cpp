@@ -82,7 +82,9 @@ namespace MachineHuck::Model {
 			return 0;
 		}
 
-		auto keyNum = key.substr(5, 1);
+		auto keyNum = key.substr(5, 2);
+
+
 		int num = std::stoi(keyNum);
 
 		auto&& [handle, actualNo] = _owner.GetGame().GetAssetServer().GetMap(num, no);

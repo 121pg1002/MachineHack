@@ -80,6 +80,10 @@ namespace MachineHuck::Actor {
         _iStageParamVMap.clear();
         _gStageParamVMap.clear();
         _gClearV.clear();
+        _floorBrokenWall.clear();
+        _stageTableV.clear();
+        _currentStageNo.clear();
+        _oldStageNo.clear();
     }
 
     //void ActorFactory::SetClearGimmick(Parameter::GStageParam gimmick) {

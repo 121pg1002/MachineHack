@@ -60,6 +60,7 @@
     <ClCompile Include="source\Player\Player.cpp" />
     <ClCompile Include="source\Scene\SceneAMG.cpp" />
     <ClCompile Include="source\Scene\SceneEpilogue.cpp" />
+    <ClCompile Include="source\Scene\SceneGameOver.cpp" />
     <ClCompile Include="source\Scene\SceneInGame.cpp" />
     <ClCompile Include="source\Scene\SceneItem.cpp" />
     <ClCompile Include="source\Scene\SceneLoading.cpp" />
@@ -121,6 +122,7 @@
     <ClInclude Include="source\Player\Player.h" />
     <ClInclude Include="source\Scene\SceneAMG.h" />
     <ClInclude Include="source\Scene\SceneEpilogue.h" />
+    <ClInclude Include="source\Scene\SceneGameOver.h" />
     <ClInclude Include="source\Scene\SceneInGame.h" />
     <ClInclude Include="source\Scene\SceneItem.h" />
     <ClInclude Include="source\Scene\SceneLoading.h" />

@@ -43,11 +43,7 @@ namespace MachineHuck::Enemy {
     {
         _eStageParamV.clear();
         _eStageNumMap.clear();
-        //_eType.clear();
-        //_eSMap.clear();
-        /*_enemyStageParamMap.clear();*/
-        //_enemyParamMap.clear();
-        //_enemyParameterMap.clear();
+
         _vDoubleMap.clear();
     }
     //エネミーのステージ配置情報をjsonから読み込む
@@ -58,7 +54,7 @@ namespace MachineHuck::Enemy {
         auto jsRoot = Json::parse(jsonFile);
         auto j = jsRoot["StageEnemy"];
         _eStageParamV.clear();
-        _vLevelRoutine.clear();
+        //_vLevelRoutine.clear();
         //敵の種類で読み込むjsonを変える
         //if (filePath.find("tackle")) {
 
@@ -125,7 +121,7 @@ namespace MachineHuck::Enemy {
                 eSP.SetScale(scale);
                 eSP.SetRoutine(routine);
 
-                _vLevelRoutine.emplace_back(std::make_pair(level, routine));
+               // _vLevelRoutine.emplace_back(std::make_pair(level, routine));
 
 
                 //ブロック一つ一つを格納
@@ -137,7 +133,7 @@ namespace MachineHuck::Enemy {
             _eStageNumMap.emplace(stageNo, _eStageParamV);
 
             //フロア番号で1フロア分を格納
-            _vLevelRoutineMap.emplace(stageNo, _vLevelRoutine);
+           // _vLevelRoutineMap.emplace(stageNo, _vLevelRoutine);
 
         }
         //    auto sP = stageVector[k];

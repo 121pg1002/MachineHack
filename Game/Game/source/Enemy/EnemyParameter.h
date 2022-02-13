@@ -77,7 +77,7 @@ namespace MachineHuck::Enemy {
 		 * @brief  フロア番号をキーとしたレベルと思考ルーチン番号のコンテナを取得
 		 * @return _vLevelRoutineMap
 		 */
-		std::unordered_map<int, LevelRoutine> GetLevelRoutineMap() { return _vLevelRoutineMap; }
+		//std::unordered_map<int, LevelRoutine> GetLevelRoutineMap() { return _vLevelRoutineMap; }
 
 
 	private:
@@ -88,18 +88,9 @@ namespace MachineHuck::Enemy {
 		ESMV _eStageParamV; //!< 1フロアの敵配置情報を格納
 
 		std::unordered_map<int, ESMV> _eStageNumMap; //!< フロア番号ごとに格納
-
-	   // std::unordered_map<std::string, double> _enemyParamMap; //!< 敵のパラメーターを保存
-		//std::unordered_map<std::string, EnemyParameter> _enemyParamMap;
-
 		std::vector<DoubleMap> _vDoubleMap; //!< double型を格納するコンテナ
-
-		LevelRoutine _vLevelRoutine; //!< レベルと思考ルーチン番号を保存
-
-		std::unordered_map<int, LevelRoutine> _vLevelRoutineMap; //!< フロア番号ごとに保存
-
-		//std::unordered_map<std::string, Parameter::EParam> _enemyParamMap;//!< 敵のパラメーターを保存
-		//std::unordered_map<std::string, double> _enemyParameterMap;//!< 敵のパラメーターを保存
+		//LevelRoutine _vLevelRoutine; //!< レベルと思考ルーチン番号を保存
+		//std::unordered_map<int, LevelRoutine> _vLevelRoutineMap; //!< フロア番号ごとに保存
 
 	};
 }

@@ -1,0 +1,7 @@
+{
+"StageEnemy":[
+		{"filename":"CatchEnemy","handlename":"CatchEnemy","tx":500,"ty":0,"tz":500,"rx":-0,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1, "level": 1, "routine": 0},
+		{"filename":"TackleEnemy","handlename":"TackleEnemy","tx":-450,"ty":0,"tz":-450,"rx":-0,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1, "level": 1, "routine": 2},
+		{"filename":"TackleEnemy","handlename":"TackleEnemy1","tx":450,"ty":0,"tz":-450,"rx":-0,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1, "level": 1, "routine": 2}
+	]
+}

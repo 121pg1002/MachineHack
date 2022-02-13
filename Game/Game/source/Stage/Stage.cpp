@@ -21,7 +21,7 @@ namespace MachineHuck::Stage {
 
 	namespace {
 
-		constexpr int StageAll = 10;        //!< 読み込むstagejsonの数
+		constexpr int StageAll = 26;        //!< 読み込むstagejsonの数
 		constexpr double Differ = 3000.0; //!< 1フロアのサイズ
 		constexpr double StartX = -5.0 * Differ;
 		constexpr int BoardSize = 10;
@@ -92,13 +92,29 @@ namespace MachineHuck::Stage {
 			{0,    {"stage0", "collision", {"A0_00_01"}, 0}},
 			{1,    {"stage1", "collision", {"A0_00_00", "A1_00_02"}, 10}},
 			{2,    {"stage2", "collision", {"A1_00_01", "A2_00_03"}, 20}},
-			{3,    {"stage3", "collision", {"A2_00_02", "A3_00_04", "B1_01_03"}, 30}},
-			{4,    {"stage4", "collision", {"A3_00_03", "B2_01_04"}, 40}},
-			{5,    {"stage5", "collision", {"B1_00_03", "B2_01_02"}, 31}},
-			{6,    {"stage6", "collision", {"B2_01_03", "B3_01_01"}, 21}},
-			{7,    {"stage7", "collision", {"B3_01_02", "C1_02_01"}, 11}},
-			{8,    {"stage8", "collision", {"C1_01_01", "C2_02_02_entry", "C3_02_02"}, 12}},
-			{9,    {"stage9", "collision", {"C2", "C5_02_03", "D0_03_02"}, 22}}
+			{3,    {"stage3", "collision", {"A2_00_02", "A3_00_04", "A4_01_03"}, 30}},
+			{4,    {"stage4", "collision", {"A3_00_03"}, 40}},
+			{5,    {"stage5", "collision", {"A4_00_03", "B0_01_02"}, 31}},
+			{6,    {"stage6", "collision", {"B0_01_03", "B1_01_01"}, 21}},
+			{7,    {"stage7", "collision", {"B1_01_02", "B2_01_00", "B3_02_01"}, 11}},
+			{8,    {"stage8", "collision", {"B2_01_01"}, 1}},
+			{9,    {"stage9", "collision", {"B3_01_01", "C0_02_02", "C1_03_01", "C3"}, 12}},
+			{10,   {"stage10", "collision", {"C0_02_01", "C3_03_02"}, 22}},
+			{11,   {"stage11", "collision", {"C3_02_02", "D0_04_02", "D1_03_03", "D3_03_01"}, 23}},
+			{12,   {"stage12", "collision", {"D0_03_02", "E0_04_01"}, 24}},
+			{13,   {"stage13", "collision", {"E0_04_02", "E1_04_00"}, 14}},
+			{14,   {"stage14", "collision", {"E1_04_01", "E2_05_00", "E3_03_00"}, 4}},
+			{15,   {"stage15", "collision", {"E2_04_00"}, 5}},
+			{16,   {"stage16", "collision", {"E3_04_00", "D2_02_00"}, 3}},
+			{17,   {"stage17", "collision", {"D2_03_00", "C3_02_01_entry"}, 2}},
+			{18,   {"stage18", "collision", {"C1_02_01", "D3_03_02"}, 13}},
+			{19,   {"stage19", "collision", {"D1_03_02", "D4_04_03", "D5_02_03", "D6_03_04"}, 33}},
+			{20,   {"stage20", "collision", {"D5_03_03"}, 32}},
+			{21,   {"stage21", "collision", {"D4_03_03", "E4_04_04"}, 34}},
+			{22,   {"stage22", "collision", {"D7_03_04", "E4_04_03", "E5_03_04"}, 44}},
+			{23,   {"stage23", "collision", {"E5_04_04", "D6_03_03", "D7_04_04", "D8_02_04"}, 43}},
+			{24,   {"stage24", "collision", {"C4_01_04", "D8_03_04"}, 42}},
+			{25,   {"stage25", "collision", {"C4_02_04"}, 41}}
 		};
 
 		//ステージのコリジョン情報を取得
@@ -637,15 +653,15 @@ namespace MachineHuck::Stage {
 					//ground->SetModel(sP.GetName(), 1000);
 
 
-					ground->SetMap(sP.GetName(), 1000);
+					ground->SetMap(sP.GetName(), 1);
 
 					//とりあえず、仮で隠しの壁およびタイルを隠しようのベクターに登録
-					if (sP.GetName() == "secretwall" || sP.GetName() == "secretfloor") {
-						_secretV.push_back(k);
-					}
+					//if (sP.GetName() == "secretwall" || sP.GetName() == "secretfloor") {
+					//	_secretV.push_back(k);
+					//}
 
 					//仮で数字を取り出す機構
-					auto numStr = sP.GetName().substr(5, 1);
+					auto numStr = sP.GetName().substr(5, 2);
 					number = std::stoi(numStr);
 
 					ground->SetStageNum(number);
@@ -670,7 +686,7 @@ namespace MachineHuck::Stage {
 				floorPoses.emplace(i * BoardSize + j, floorPos);
 
 				//とりあえず、仮で隠しの壁およびタイルを隠しようのステージ番号に登録
-				_secretVMap.emplace(num, _secretV);
+				//_secretVMap.emplace(num, _secretV);
 
 				offsetX += Differ;
 

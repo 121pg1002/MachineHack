@@ -21,7 +21,7 @@
 
 namespace {
 
-    constexpr int StageAll = 40; //!< 読み込むjsonの最大数
+    constexpr int StageAll = 50; //!< 読み込むjsonの最大数
 
 }
 
@@ -76,7 +76,24 @@ namespace MachineHuck::Scene {
             {"stage6",   "StageFloor/stage6.mv1"},
             {"stage7",   "StageFloor/stage7.mv1"},
             {"stage8",   "StageFloor/stage8.mv1"},
-            {"stage9",   "StageFloor/stage9.mv1"}
+            {"stage9",   "StageFloor/stage9.mv1"},
+            {"stage10", "StageFloor/stage10.mv1"},
+            {"stage11", "StageFloor/stage11.mv1"},
+            {"stage12", "StageFloor/stage12.mv1"},
+            {"stage13", "StageFloor/stage13.mv1"},
+            {"stage14", "StageFloor/stage14.mv1"},
+            {"stage15", "StageFloor/stage15.mv1"},
+            {"stage16", "StageFloor/stage16.mv1"},
+            {"stage17", "StageFloor/stage17.mv1"},
+            {"stage18", "StageFloor/stage18.mv1"},
+            {"stage19", "StageFloor/stage19.mv1"},
+            {"stage20", "StageFloor/stage20.mv1"},
+            {"stage21", "StageFloor/stage21.mv1"},
+            {"stage22", "StageFloor/stage22.mv1"},
+            {"stage23", "StageFloor/stage23.mv1"},
+            {"stage24", "StageFloor/stage24.mv1"},
+            {"stage25", "StageFloor/stage25.mv1"}
+
             //    {"Stage3",    "Stage3.mv1"}
         };
 
@@ -202,22 +219,18 @@ namespace MachineHuck::Scene {
         //エネミーのステージ配置を一括で読み込む
         for (int i = 0; i < StageAll; i++) {
 
-            if (i == 0) {
-
-
-            }
-            else if (i == 10) {
-
-            }
-            else if (i == 21) {
-
-            }
-            else if (i == 30) {
-
-            }
-            else if (i == 40) {
-
-            }
+            if (i == 3) {}
+            else if (i == 10) {}
+            else if (i == 12) {}
+            else if (i == 13) {}
+            else if (i == 14) {}
+            else if (i == 20) {}
+            else if (i == 21) {}
+            else if (i == 23) {}
+            else if (i == 30) {}
+            else if (i == 33) {}
+            else if (i == 42) {}
+            else if (i == 44) {}
             else {
                 continue;
             }
@@ -227,9 +240,55 @@ namespace MachineHuck::Scene {
             //下の二つを起動すればjsonが読み込める
             //auto stageParameter = std::make_unique<StageParameter>();
             GetGame().GetEnemyParameter().LoadStageEnemyParam(i, "resource/json/stageEnemy/stageenemy" + no + ".json");
+            //GetGame().GetItemParameter().LoadStageItemParam(i, "resource/json/stageItem/stageitem" + no + ".json");
+            //GetGame().GetGimmickParameter().LoadGimmickStageParameter(i, "resource/json/stageGimmick/stagegimmick" + no + ".json");
+        }
+
+        //アイテムのステージ配置を一括で読み込む
+        for (int i = 0; i < StageAll; i++) {
+
+            if (i == 1) {}
+            else if (i == 5) {}
+            else if (i == 5) {}
+            else if (i == 23) {}
+            else if (i == 32) {}
+            else if (i == 40) {}
+            else if (i == 44) {}
+            else {
+                continue;
+            }
+
+            //ステージ番号をstringに変換
+            auto no = std::to_string(i);
+            //下の二つを起動すればjsonが読み込める
+            //auto stageParameter = std::make_unique<StageParameter>();
+            //GetGame().GetEnemyParameter().LoadStageEnemyParam(i, "resource/json/stageEnemy/stageenemy" + no + ".json");
             GetGame().GetItemParameter().LoadStageItemParam(i, "resource/json/stageItem/stageitem" + no + ".json");
+            //GetGame().GetGimmickParameter().LoadGimmickStageParameter(i, "resource/json/stageGimmick/stagegimmick" + no + ".json");
+        }
+
+        //ギミックのステージ配置を一括で読み込む
+        for (int i = 0; i < StageAll; i++) {
+
+            if (i == 4) {}
+            else if (i == 13) {}
+            else if (i == 23) {}
+            else if (i == 43) {}
+            else if (i == 44) {}
+            else {
+                continue;
+            }
+
+            //ステージ番号をstringに変換
+            auto no = std::to_string(i);
+            //下の二つを起動すればjsonが読み込める
+            //auto stageParameter = std::make_unique<StageParameter>();
+            //GetGame().GetEnemyParameter().LoadStageEnemyParam(i, "resource/json/stageEnemy/stageenemy" + no + ".json");
+            //GetGame().GetItemParameter().LoadStageItemParam(i, "resource/json/stageItem/stageitem" + no + ".json");
             GetGame().GetGimmickParameter().LoadGimmickStageParameter(i, "resource/json/stageGimmick/stagegimmick" + no + ".json");
         }
+
+
 
 
         //読み込んだエネミーやアイテム、ギミックのステージ配置をテーブルに入れる

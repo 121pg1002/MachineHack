@@ -1,7 +1,0 @@
-{
-  "StageEnemy":[
-    {"filename":"TackleEnemy","handlename":"floor20","tx":-100,"ty":0,"tz":500,"rx":0.1,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1, "level": 1, "routine": 2},
-    {"filename":"CatchEnemy","handlename":"floor20","tx":500,"ty":0,"tz":-500,"rx":0.1,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1, "level": 1, "routine": 0},
-    {"filename":"CatchEnemy","handlename":"floor16","tx":0,"ty":0,"tz":0,"rx":0.1,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1, "level": 1, "routine": 0}
-    ]
-  }

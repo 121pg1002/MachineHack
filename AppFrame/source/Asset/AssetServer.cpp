@@ -135,7 +135,7 @@ void Asset::AssetServer::LoadModels(const ModelMap& modelMap) {
 int Asset::AssetServer::LoadMap(std::string key, const std::string_view filename) {
     
     //”š‚ª2Œ…‚Ìê‡‚ğŒã‚Ål‚¦‚é
-    auto keyNum = key.substr(5, 1);
+    auto keyNum = key.substr(5, 2);
     int num = std::stoi(keyNum);
     //auto keyNum = key.substr(4, 2);
 
