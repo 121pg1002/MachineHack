@@ -1,5 +1,6 @@
 #pragma once
 #include <AppFrame.h>
+#include <unordered_map>
 
 /// @file    SceneMap.h
 /// @brief   アイテム画面
@@ -28,9 +29,13 @@ namespace MachineHuck::Scene {
 		/// 描画
 		void Render() override;
 
+		std::vector<int> GetPlayerVector() { return _playerV; }
+
 	private:
 		int MapHandle{ -1 };  ///< マップ画像
 		int _alpha{0};
+		std::unordered_map<int, int> _floorMap;  //!< フロアマップの
+		std::vector<int> _playerV; //!< プレイヤーのいったことのあるマップを保存するベクター
 	};
 
 

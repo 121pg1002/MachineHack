@@ -21,7 +21,7 @@
 
 namespace {
 
-    constexpr int StageAll = 50; //!< “Ç‚Ýž‚Þjson‚ÌÅ‘å”
+    constexpr int StageAll = 26; //!< “Ç‚Ýž‚Þjson‚ÌÅ‘å”
 
 }
 
@@ -220,17 +220,17 @@ namespace MachineHuck::Scene {
         for (int i = 0; i < StageAll; i++) {
 
             if (i == 3) {}
+            else if (i == 5) {}
+            else if (i == 7) {}
+            else if (i == 8) {}
+            else if (i == 9) {}
             else if (i == 10) {}
-            else if (i == 12) {}
+            else if (i == 11) {}
             else if (i == 13) {}
-            else if (i == 14) {}
-            else if (i == 20) {}
-            else if (i == 21) {}
-            else if (i == 23) {}
-            else if (i == 30) {}
-            else if (i == 33) {}
-            else if (i == 42) {}
-            else if (i == 44) {}
+            else if (i == 15) {}
+            else if (i == 18) {}
+            else if (i == 22) {}
+            else if (i == 24) {}
             else {
                 continue;
             }
@@ -249,11 +249,10 @@ namespace MachineHuck::Scene {
 
             if (i == 1) {}
             else if (i == 5) {}
-            else if (i == 5) {}
-            else if (i == 23) {}
-            else if (i == 32) {}
-            else if (i == 40) {}
-            else if (i == 44) {}
+            else if (i == 13) {}
+            else if (i == 17) {}
+            else if (i == 20) {}
+            else if (i == 24) {}
             else {
                 continue;
             }
@@ -271,10 +270,11 @@ namespace MachineHuck::Scene {
         for (int i = 0; i < StageAll; i++) {
 
             if (i == 4) {}
+            else if (i == 5) {}
+            else if (i == 8) {}
             else if (i == 13) {}
             else if (i == 23) {}
-            else if (i == 43) {}
-            else if (i == 44) {}
+            else if (i == 24) {}
             else {
                 continue;
             }

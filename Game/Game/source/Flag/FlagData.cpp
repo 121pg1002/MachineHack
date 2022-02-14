@@ -28,6 +28,7 @@ namespace MachineHuck::Flag {
 //	VECTOR FlagData::_holePos = {0.0, 0.0, 0.0};
 //	bool FlagData::_fallFlag = false;
 	VECTOR FlagData::_warpAfterPos = { 0.0, 0.0, 0.0 };
+	int FlagData::_PlayerNowFloorNum = 0;
 
 }
 

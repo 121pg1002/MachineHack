@@ -634,9 +634,7 @@ namespace MachineHuck::Actor {
         //ギミックのコリジョンを構築(仮)
         //model->SetModelGimmick("Hole", "", num);
 
-
         hole->SetModelComponent(std::move(model));
-
         return hole;
     }
 
@@ -647,7 +645,6 @@ namespace MachineHuck::Actor {
         auto model = std::make_unique<Model::ModelComponent>(*item);
         model->SetModel("Item", 1000);
         item->SetModelComponent(std::move(model));
-
         return item;
     }
 }

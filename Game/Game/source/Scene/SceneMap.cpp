@@ -7,7 +7,18 @@
 ///
 
 #include "SceneMap.h"
+#include <algorithm>
+#include "../Flag/FlagData.h"
 
+namespace {
+    constexpr double FloorSize = 150.0; //!< 1フロアのサイズ
+    constexpr double LineSize = 1.0;  //!< 描画する線のサイズ
+    constexpr double BoardSize = 5.0; //!< 行と列のサイズ
+    constexpr double StartX = 1920/2 - FloorSize * BoardSize/2.0;
+    constexpr double StartY = 150.0;
+    constexpr int    GoalNum = 21;
+
+}
 
 namespace MachineHuck::Scene {
     /// コンストラクタ
@@ -37,6 +48,7 @@ namespace MachineHuck::Scene {
         AppFrame::Asset::AssetServer::SoundMap soundToUsed{
             {"close"  ,{"se/se_close.wav" ,false}}
         };
+
         GetAssetServer().LoadSounds(soundToUsed);
 
     }
@@ -78,9 +90,51 @@ namespace MachineHuck::Scene {
     ///
     void  SceneMap::Render() {
         DrawGraph(0, 0, MapHandle, false);
-        SetDrawBlendMode(DX_BLENDMODE_ALPHA, _alpha);
+        
+        //int StartY = 100.0;
+        int offsetX = StartX;
+        int offsetY = StartY;
+        int red = 255; int green = 0; int blue = 0;
+        //y方向
+        for (int i = 0; i < BoardSize; i++) {
+        
+            offsetX = StartX;
+            //x方向
+            for (int j = 0; j < BoardSize; j++) {
+            
+                //unordered_mapでフロア番号と
+                //ここの掛け算をフロア番号と一致した場合に色の処理を分断する
+                auto value = std::find(_playerV.begin(), _playerV.end(), i * BoardSize + j);
+
+                //主人公のいる番号のフロア枠を緑にする
+                if (Flag::FlagData::GetPlayerFloorNum() == i * BoardSize * 2 + j) {
+                    red = 0; green = 255; blue = 0;
+                } //ゴールの色を赤色にする
+                else if (GoalNum == i * BoardSize + j) {
+                    red = 255; green = 0; blue = 0;
+                }
+                //その番号がいったことがある場合(白)
+                else if (value != _playerV.end()) {
+                    red = 255; green = 255; blue = 255;
+                }  //グレーにする
+                else {
+                    red = 125; green = 125; blue = 125;
+                }
+
+
+                DrawBox(offsetX, offsetY, offsetX + FloorSize, offsetY + FloorSize, GetColor(red, green, blue), false); //!< グレー
+                //DrawBox(offsetX, offsetY, offsetX + FloorSize, offsetY + FloorSize, GetColor(red, green, blue), false); //!< 白
+                //DrawBox(offsetX, offsetY, offsetX + FloorSize, offsetY + FloorSize, GetColor(red, green, blue), false); //!< 緑
+                //DrawBox(offsetX, offsetY, offsetX + FloorSize, offsetY + FloorSize, GetColor(red, green, blue), false); //!< 赤
+
+                offsetX += FloorSize;
+            }
+
+            offsetY += FloorSize;
+        }
+        //SetDrawBlendMode(DX_BLENDMODE_ALPHA, _alpha);
         // DrawGraph(1920 / 2 - 1135 / 2, 700 - 107 / 2, _leftClickToStart, TRUE);
-        SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+        //SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
         // DrawGraph(0, 0, _gameAMGHandle, true);
     }
 }

@@ -15,6 +15,7 @@
 #include "../Actor/ActorFactory.h"
 #include "StageParameter.h"
 #include "../Collision/CollisionComponent.h"
+#include "../Flag/FlagData.h"
 
 
 namespace MachineHuck::Stage {
@@ -23,8 +24,8 @@ namespace MachineHuck::Stage {
 
 		constexpr int StageAll = 26;        //!< 読み込むstagejsonの数
 		constexpr double Differ = 3000.0; //!< 1フロアのサイズ
-		constexpr double StartX = -5.0 * Differ;
-		constexpr int BoardSize = 10;
+		constexpr double StartX = -2.5 * Differ;
+		constexpr int BoardSize = 5;
 
 		//constexpr double HalfSize = 0.5 * Differ;
 		//constexpr int StartZ = -5.0 * Differ;
@@ -90,31 +91,31 @@ namespace MachineHuck::Stage {
 
 		//	{1,    {"teste0", "floor_collision", {"C0_01_02", ""}}},
 			{0,    {"stage0", "collision", {"A0_00_01"}, 0}},
-			{1,    {"stage1", "collision", {"A0_00_00", "A1_00_02"}, 10}},
-			{2,    {"stage2", "collision", {"A1_00_01", "A2_00_03"}, 20}},
-			{3,    {"stage3", "collision", {"A2_00_02", "A3_00_04", "A4_01_03"}, 30}},
-			{4,    {"stage4", "collision", {"A3_00_03"}, 40}},
-			{5,    {"stage5", "collision", {"A4_00_03", "B0_01_02"}, 31}},
-			{6,    {"stage6", "collision", {"B0_01_03", "B1_01_01"}, 21}},
-			{7,    {"stage7", "collision", {"B1_01_02", "B2_01_00", "B3_02_01"}, 11}},
+			{1,    {"stage1", "collision", {"A0_00_00", "A1_00_02"}, 5}},
+			{2,    {"stage2", "collision", {"A1_00_01", "A2_00_03"}, 10}},
+			{3,    {"stage3", "collision", {"A2_00_02", "A3_00_04", "A4_01_03"}, 15}},
+			{4,    {"stage4", "collision", {"A3_00_03"}, 20}},
+			{5,    {"stage5", "collision", {"A4_00_03", "B0_01_02"}, 16}},
+			{6,    {"stage6", "collision", {"B0_01_03", "B1_01_01"}, 11}},
+			{7,    {"stage7", "collision", {"B1_01_02", "B2_01_00", "B3_02_01"}, 6}},
 			{8,    {"stage8", "collision", {"B2_01_01"}, 1}},
-			{9,    {"stage9", "collision", {"B3_01_01", "C0_02_02", "C1_03_01", "C3"}, 12}},
-			{10,   {"stage10", "collision", {"C0_02_01", "C3_03_02"}, 22}},
-			{11,   {"stage11", "collision", {"C3_02_02", "D0_04_02", "D1_03_03", "D3_03_01"}, 23}},
-			{12,   {"stage12", "collision", {"D0_03_02", "E0_04_01"}, 24}},
-			{13,   {"stage13", "collision", {"E0_04_02", "E1_04_00"}, 14}},
+			{9,    {"stage9", "collision", {"B3_01_01", "C0_02_02", "C1_03_01", "C3"}, 7}},
+			{10,   {"stage10", "collision", {"C0_02_01", "C3_03_02"}, 12}},
+			{11,   {"stage11", "collision", {"C3_02_02", "D0_04_02", "D1_03_03", "D3_03_01"}, 13}},
+			{12,   {"stage12", "collision", {"D0_03_02", "E0_04_01"}, 14}},
+			{13,   {"stage13", "collision", {"E0_04_02", "E1_04_00"}, 9}},
 			{14,   {"stage14", "collision", {"E1_04_01", "E2_05_00", "E3_03_00"}, 4}},
 			{15,   {"stage15", "collision", {"E2_04_00"}, 5}},
 			{16,   {"stage16", "collision", {"E3_04_00", "D2_02_00"}, 3}},
 			{17,   {"stage17", "collision", {"D2_03_00", "C3_02_01_entry"}, 2}},
-			{18,   {"stage18", "collision", {"C1_02_01", "D3_03_02"}, 13}},
-			{19,   {"stage19", "collision", {"D1_03_02", "D4_04_03", "D5_02_03", "D6_03_04"}, 33}},
-			{20,   {"stage20", "collision", {"D5_03_03"}, 32}},
-			{21,   {"stage21", "collision", {"D4_03_03", "E4_04_04"}, 34}},
-			{22,   {"stage22", "collision", {"D7_03_04", "E4_04_03", "E5_03_04"}, 44}},
-			{23,   {"stage23", "collision", {"E5_04_04", "D6_03_03", "D7_04_04", "D8_02_04"}, 43}},
-			{24,   {"stage24", "collision", {"C4_01_04", "D8_03_04"}, 42}},
-			{25,   {"stage25", "collision", {"C4_02_04"}, 41}}
+			{18,   {"stage18", "collision", {"C1_02_01", "D3_03_02"}, 8}},
+			{19,   {"stage19", "collision", {"D1_03_02", "D4_04_03", "D5_02_03", "D6_03_04"}, 18}},
+			{20,   {"stage20", "collision", {"D5_03_03"}, 17}},
+			{21,   {"stage21", "collision", {"D4_03_03", "E4_04_04"}, 19}},
+			{22,   {"stage22", "collision", {"D7_03_04", "E4_04_03", "E5_03_04"}, 24}},
+			{23,   {"stage23", "collision", {"E5_04_04", "D6_03_03", "D7_04_04", "D8_02_04"}, 23}},
+			{24,   {"stage24", "collision", {"C4_01_04", "D8_03_04"}, 22}},
+			{25,   {"stage25", "collision", {"C4_02_04"}, 21}}
 		};
 
 		//ステージのコリジョン情報を取得
@@ -334,7 +335,7 @@ namespace MachineHuck::Stage {
 	   //_skySphere->SetPosition(ToDX(pos));
 
 		_stageNo = PlayerOnStageNumber();
-
+		Flag::FlagData::SetPlayerFloorNum(_stageNo); //!< マップ画面にプレイヤーの今いるフロア番号を設定
 		//触れているフロア番号で回す
 //		for (auto&& no : _drawFloorV) {
 //

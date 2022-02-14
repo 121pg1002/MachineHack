@@ -1,9 +1,5 @@
 {
 "StageGimmick":[
-		{"filename":"BrokenWall","handlename":"breakable_wall","tx":-2.5,"ty":0,"tz":600,"rx":-0,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1},
-		{"filename":"BrokenWall","handlename":"breakable_wall","tx":-2.5,"ty":0,"tz":600,"rx":-0,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1},
-		{"filename":"BrokenWall","handlename":"breakable_wall1","tx":-102.5,"ty":0,"tz":600,"rx":-0,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1},
-		{"filename":"BrokenWall","handlename":"breakable_wall2","tx":-102.5,"ty":0,"tz":-700,"rx":-0,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1},
-		{"filename":"BrokenWall","handlename":"breakable_wall3","tx":-2.5,"ty":0,"tz":-700,"rx":-0,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1}
+		{"filename":"BrokenWall","handlename":"breakable_wall","tx":500,"ty":0,"tz":-250,"rx":-0,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1}
 	]
 }

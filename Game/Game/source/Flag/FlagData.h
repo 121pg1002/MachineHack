@@ -226,6 +226,18 @@ namespace MachineHuck::Flag {
 		 */
 		static void SetWarpAfterPos(VECTOR pos) { _warpAfterPos = pos; }
 
+		/**
+		 * @brief  プレイヤーのいるフロア番号を取得
+		 * @return プレイヤーのいるフロア番号
+		 */
+		static int GetPlayerFloorNum() { return _PlayerNowFloorNum; }
+
+		/**
+		 * @brief プレイヤーのいるフロア番号を設定
+		 * @param num
+		 */
+		static void SetPlayerFloorNum(int num) { _PlayerNowFloorNum = num; }
+
 		///**
 		// * @brief  落ちるフラグを取得       
 		// * @return _fallFlag
@@ -258,6 +270,7 @@ namespace MachineHuck::Flag {
 		static bool _slideFlag;
 	//	static VECTOR _holePos;      //!< 落ちる穴の位置座標
 		static VECTOR _warpAfterPos; //!< ワープ後の初期座標
+		static int _PlayerNowFloorNum; //!< プレイヤーの現在いるフロア番号を保存
 	//	static bool _fallFlag;                        //!< 落ちるかどうかのフラグ
 
 	};

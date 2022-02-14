@@ -421,7 +421,7 @@ namespace MachineHuck::Actor {
 									int yNum = std::atoi(y.c_str());
 
 									//フロア番号計算
-									auto floorNum = yNum * 10 + xNum;
+									auto floorNum = yNum * 5 + xNum;
 
 									//ワープ先のフレーム名
 									auto toWarpName = (*i)->GetCollision().GetWarpNameFloor(floorNum, name);
