@@ -105,6 +105,7 @@ namespace AppFrame::Scene {
 		/// シーンのリスト
 		std::list<std::shared_ptr<Scene>> _scenes;
 
+
 	};
 
 }

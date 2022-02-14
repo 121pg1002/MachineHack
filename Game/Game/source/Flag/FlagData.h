@@ -8,6 +8,7 @@
  *********************************************************************/
 #pragma once
 #include <DxLib.h>
+#include <vector>
 //#include "AppFrame.h"
 namespace MachineHuck::Flag {
 
@@ -238,6 +239,25 @@ namespace MachineHuck::Flag {
 		 */
 		static void SetPlayerFloorNum(int num) { _PlayerNowFloorNum = num; }
 
+		static void SetPlayerFloorVec(std::vector<int> floorV) { _playerFloorV = floorV; }
+
+		static std::vector<int> GetPlayerFloorVec() { return _playerFloorV; }
+
+
+#ifdef _DEBUG
+		/**
+		 * @brief  デバッグモードにおける転移するフロア番号を取得         
+		 * @return 
+		 */
+		static int GetDebugNo() { return _debugNo; }
+
+
+		/**
+		 * @brief  デバッグモードにおける転移するフロア番号を設定         
+		 * @param  no
+		 */
+		static void SetDebugNo(int no) { _debugNo = no; }
+#endif
 		///**
 		// * @brief  落ちるフラグを取得       
 		// * @return _fallFlag
@@ -271,7 +291,12 @@ namespace MachineHuck::Flag {
 	//	static VECTOR _holePos;      //!< 落ちる穴の位置座標
 		static VECTOR _warpAfterPos; //!< ワープ後の初期座標
 		static int _PlayerNowFloorNum; //!< プレイヤーの現在いるフロア番号を保存
-	//	static bool _fallFlag;                        //!< 落ちるかどうかのフラグ
+		static std::vector<int> _playerFloorV; //!< プレイヤーの行ったことのあるフロア番号を登録する
+
+#ifdef _DEBUG
+		static int _debugNo; //!< デバッグモード中に転移したい番号
+#endif
+			//	static bool _fallFlag;                        //!< 落ちるかどうかのフラグ
 
 	};
 

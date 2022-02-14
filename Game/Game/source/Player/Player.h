@@ -135,6 +135,12 @@ namespace MachineHuck::Player {
         int _noDamageTime{0};
         bool _warping{ false };
         int _waitframe{ 0 };
+
+#ifdef _DEBUG
+
+        bool _debugMode; //!< デバッグモードフラグ
+        double _no;
+#endif 
       //  bool _invincible{ false }; //!< 無敵フラグ
        
     public:

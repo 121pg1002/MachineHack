@@ -15,6 +15,7 @@ namespace {
     constexpr double LineSize = 1.0;  //!< 描画する線のサイズ
     constexpr double BoardSize = 5.0; //!< 行と列のサイズ
     constexpr double StartX = 1920/2 - FloorSize * BoardSize/2.0;
+    constexpr double StartHeight = 100; //!< 上の開始高さ空ける分
     constexpr double StartY = 150.0;
     constexpr int    GoalNum = 21;
 
@@ -22,9 +23,8 @@ namespace {
 
 namespace MachineHuck::Scene {
     /// コンストラクタ
-    SceneMap::SceneMap(AppFrame::Game& game)
-        :Scene{ game }
-    {
+    SceneMap::SceneMap(AppFrame::Game& game):Scene{ game }{
+        _colorFrame = 0;
     }
     /// 初期化
     void  SceneMap::Init() {
@@ -57,6 +57,7 @@ namespace MachineHuck::Scene {
     /// 
     void  SceneMap::Enter() {
         _alpha = 0;
+        _colorFrame = 0;
     }
     ///
     /// 入力
@@ -83,8 +84,27 @@ namespace MachineHuck::Scene {
     /// 更新
     void  SceneMap::Update() {
         _alpha = (_alpha + 8) % 255;
-
+        _colorFrame++;
+        _playerV = Flag::FlagData::GetPlayerFloorVec(); //!< プレイヤーの行ったフロア番号配列を取得
     }
+
+    ////フロア番号を登録する
+    //void SceneMap::RegisterFloor() {
+    //
+    //    //これだとマップ画面を開いていないときに登録されない
+    //    auto&& playerNum = Flag::FlagData::GetPlayerFloorNum();
+
+    //    //ベクターの中から探す
+    //    auto it = std::find(_playerV.begin(), _playerV.end(), playerNum);
+
+    //    //存在しないならば
+    //    if (it == _playerV.end()) {
+    //        //追加
+    //        _playerV.push_back(playerNum);
+    //    }
+    //
+    //}
+
     ///
     /// 描画
     ///
@@ -107,7 +127,7 @@ namespace MachineHuck::Scene {
                 auto value = std::find(_playerV.begin(), _playerV.end(), i * BoardSize + j);
 
                 //主人公のいる番号のフロア枠を緑にする
-                if (Flag::FlagData::GetPlayerFloorNum() == i * BoardSize * 2 + j) {
+                if (Flag::FlagData::GetPlayerFloorNum() == i * BoardSize + j && _colorFrame % 60 < 30) {
                     red = 0; green = 255; blue = 0;
                 } //ゴールの色を赤色にする
                 else if (GoalNum == i * BoardSize + j) {
@@ -121,8 +141,8 @@ namespace MachineHuck::Scene {
                     red = 125; green = 125; blue = 125;
                 }
 
-
-                DrawBox(offsetX, offsetY, offsetX + FloorSize, offsetY + FloorSize, GetColor(red, green, blue), false); //!< グレー
+                //枠の描画
+                DrawBox(offsetX, FloorSize * BoardSize - offsetY + FloorSize + StartHeight, offsetX + FloorSize, FloorSize * BoardSize - offsetY + StartHeight, GetColor(red, green, blue), false); //!< グレー
                 //DrawBox(offsetX, offsetY, offsetX + FloorSize, offsetY + FloorSize, GetColor(red, green, blue), false); //!< 白
                 //DrawBox(offsetX, offsetY, offsetX + FloorSize, offsetY + FloorSize, GetColor(red, green, blue), false); //!< 緑
                 //DrawBox(offsetX, offsetY, offsetX + FloorSize, offsetY + FloorSize, GetColor(red, green, blue), false); //!< 赤
@@ -132,6 +152,8 @@ namespace MachineHuck::Scene {
 
             offsetY += FloorSize;
         }
+
+        
         //SetDrawBlendMode(DX_BLENDMODE_ALPHA, _alpha);
         // DrawGraph(1920 / 2 - 1135 / 2, 700 - 107 / 2, _leftClickToStart, TRUE);
         //SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);

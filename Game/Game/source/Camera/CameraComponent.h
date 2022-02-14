@@ -82,6 +82,7 @@ namespace MachineHuck {
 			float targetDist{ 500 };
 			float vertDist{ 100 };
 			Math::Vector4 _positionInitDif{ 0, 1200, -1000 }; //!< 初期カメラ位置の差分座標
+			//Math::Vector4 _positionInitDif{ 0, 2000, -200 }; //!< 初期カメラ位置の差分座標
 			Math::Vector4 _targetInitDif{ 0, 100, 0 };       //!< 初期カメラ目標の差分座標
 		};
 	}

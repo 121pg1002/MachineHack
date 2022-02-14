@@ -29,6 +29,11 @@ namespace MachineHuck::Scene {
 		/// 描画
 		void Render() override;
 
+		/**
+		 * @brief フロア番号を登録する       
+		 */
+		/*void RegisterFloor();*/
+
 		std::vector<int> GetPlayerVector() { return _playerV; }
 
 	private:
@@ -36,6 +41,7 @@ namespace MachineHuck::Scene {
 		int _alpha{0};
 		std::unordered_map<int, int> _floorMap;  //!< フロアマップの
 		std::vector<int> _playerV; //!< プレイヤーのいったことのあるマップを保存するベクター
+		int _colorFrame; //!< 点滅のフレーム用
 	};
 
 

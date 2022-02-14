@@ -97,6 +97,17 @@ namespace AppFrame {
       */
       bool Button_RB() { return _trg[8]; }
 
+      /**
+       * @brief  左スティック押し込み        
+       * @return トリガ & 左スティック
+       */
+      bool Button_Left_Thume() { return _trg[6]; }
+
+      /**
+       * @brief  右スティック押し込み         
+       * @return トリガ & 右スティック
+       */
+      bool Button_Right_Thume() { return _trg[7]; }
 
       /*
       *@brief  LTボタン

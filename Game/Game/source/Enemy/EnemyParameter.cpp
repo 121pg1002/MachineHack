@@ -21,8 +21,8 @@ namespace MachineHuck::Enemy {
 
     namespace {
         constexpr double Differ = 3000.0; //!< 1フロアのサイズ
-        constexpr double StartX = -5.0 * Differ;
-        constexpr int BoardSize = 10;
+        constexpr double StartX = -2.5 * Differ;
+        constexpr int BoardSize = 5;
     }
 
 
@@ -68,8 +68,8 @@ namespace MachineHuck::Enemy {
         }
         else {
 
-            numX = stageNo % 10; //!< 一桁目
-            numZ = stageNo / 10; //!< 二桁目
+            numX = stageNo % 5; //!< 一桁目
+            numZ = stageNo / 5; //!< 二桁目
 
         }
 

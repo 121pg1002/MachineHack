@@ -16,8 +16,8 @@ namespace MachineHuck::Item {
 
 	namespace {
 		constexpr double Differ = 3000.0; //!< 1フロアのサイズ
-		constexpr double StartX = -5.0 * Differ;
-		constexpr int BoardSize = 10;
+		constexpr double StartX = -2.5 * Differ;
+		constexpr int BoardSize = 5;
 	}
 
 	using Json = nlohmann::json;
@@ -53,8 +53,8 @@ namespace MachineHuck::Item {
 		}
 		else {
 
-			numX = num % 10; //!< 一桁目
-			numZ = num / 10; //!< 二桁目
+			numX = num % 5; //!< 一桁目
+			numZ = num / 5; //!< 二桁目
 
 		}
 

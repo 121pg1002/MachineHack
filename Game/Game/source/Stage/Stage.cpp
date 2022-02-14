@@ -8,6 +8,7 @@
 
 
 #include "Stage.h"
+#include <algorithm>
 #include <DxLib.h>
 #include "AppFrame.h"
 #include "../Model/ModelComponent.h"
@@ -15,7 +16,7 @@
 #include "../Actor/ActorFactory.h"
 #include "StageParameter.h"
 #include "../Collision/CollisionComponent.h"
-#include "../Flag/FlagData.h"
+//#include "../Flag/FlagData.h"
 
 
 namespace MachineHuck::Stage {
@@ -127,14 +128,14 @@ namespace MachineHuck::Stage {
 		//for (int i = 0; i < stageVector.size(); i++) {
 	
 		//ギミック用のコリジョン情報テーブル
-		CollisionGimmickMesh gimmickMap{
-			{"BrokenWall", "duct_entrance_c"}
-			//{"DamageFloor", "A0_00_00"},
-			//{"Hole", "A1_00_01"}
-		
-		};
+		//CollisionGimmickMesh gimmickMap{
+		//	{"BrokenWall", "duct_entrance_c"}
+		//	//{"DamageFloor", "A0_00_00"},
+		//	//{"Hole", "A1_00_01"}
+		//
+		//};
 
-		_collisionGimmickMesh = gimmickMap;
+		//_collisionGimmickMesh = gimmickMap;
 		//	auto sP = stageVector[i];
 		//	auto pos = sP.GetPosition();
 		//	auto rot = sP.GetRotation();
@@ -325,6 +326,7 @@ namespace MachineHuck::Stage {
 		_secretV.clear();
 		_collisionFloorNameMap.clear();
 		_floorStageNum.clear();
+		_playerOnceNo.clear();
 		//_floor.clear();
 	}
 
@@ -335,7 +337,8 @@ namespace MachineHuck::Stage {
 	   //_skySphere->SetPosition(ToDX(pos));
 
 		_stageNo = PlayerOnStageNumber();
-		Flag::FlagData::SetPlayerFloorNum(_stageNo); //!< マップ画面にプレイヤーの今いるフロア番号を設定
+		
+
 		//触れているフロア番号で回す
 //		for (auto&& no : _drawFloorV) {
 //
@@ -450,7 +453,7 @@ namespace MachineHuck::Stage {
 
 		auto stageNo = std::to_string(_stageNo);
 		//DrawFloor();
-		DrawString(0, 50, stageNo.c_str(), GetColor(255, 0, 0));
+		//DrawString(0, 50, stageNo.c_str(), GetColor(255, 0, 0));
 
 
 #endif 

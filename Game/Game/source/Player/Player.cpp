@@ -22,7 +22,14 @@
  //#include <numbers>
 namespace {
 
-	double measuredDistance = 500.0;
+	constexpr double measuredDistance = 500.0;
+#ifdef _DEBUG
+
+
+#endif
+
+
+
 }
 
 namespace MachineHuck::Player {
@@ -51,11 +58,61 @@ namespace MachineHuck::Player {
 		auto& key = input.GetKeyBoard();
 		lx = 0.0, ly = 0.0;
 
+#ifdef _DEBUG
+
+		//デバッグモード
+		if (joypad.Button_Left_Thume()) {
+		
+			if (_debugMode) {
+				_debugMode = false;
+			}
+			else {
+				_debugMode = true;
+			}
+			
+		}
+
+		if (_debugMode) {
+		
+		
+			if (joypad.Button_A()) {
+			
+				_no++;
+			
+			}
+			else if (joypad.Button_B()) {
+			
+				_no--;
+			}
+
+			if (_no > 25.0) {
+				_no = 25.0;
+			}
+
+			if (_no < 0.0) {
+				_no = 0.0;
+			}
+
+			//転移するフロア番号を設定
+			if (joypad.Start()) {
+				Flag::FlagData::SetDebugNo(_no);
+			
+			}
+
+
+		}
+		else {
+			_no = 0.0;
+		}
+
+
+
+#endif
 
 		if (_actorState != ActorState::Hucking && _actorState != ActorState::Hucked) {
 			// 右移動と左移動
 			if (joypad.LHorison() != 0.0) {
-				lx = input.GetJoypad().LHorison() / 1000.0;
+				lx = joypad.LHorison() / 1000.0;
 			}
 			else if (key.Button_D() != 0) {
 				lx = 1.0;
@@ -65,8 +122,8 @@ namespace MachineHuck::Player {
 			}
 
 			// 前進と後退
-			if (input.GetJoypad().LVertical() != 0.0) {
-				ly = input.GetJoypad().LVertical() / 1000.0;
+			if (joypad.LVertical() != 0.0) {
+				ly = joypad.LVertical() / 1000.0;
 			}
 			else if (key.Button_W() != 0) {
 				ly = 1.0;
@@ -161,7 +218,20 @@ namespace MachineHuck::Player {
 		//if (Flag::FlagData::GetDamageFlag() && Flag::FlagData::GetNoDamageTime() < 0) {
 		//	_noDamageTime = 30;
 		//}
+#ifdef _DEBUG
 
+		if (_debugMode) {
+		
+			int numX = static_cast<int>(_no) % 5;
+			int numZ = _no / 5;
+			double floorSize = 3000;
+			double boardSize = 5;
+			double startX = -floorSize / 2 * boardSize;
+
+			_position = {numX * floorSize + startX + floorSize/2, 0.0, numZ * floorSize + floorSize /2.0};
+			//offsetX + Differ / 2.0, 0.0, offsetZ + Differ / 2.0
+		}
+#endif
 		
 
 	/*_noDamageTime*/
@@ -449,6 +519,15 @@ namespace MachineHuck::Player {
 	}
 
 	void Player::Draw() {
+
+#ifdef _DEBUG
+		if (_debugMode) {
+			DrawString(0, 500, std::to_string(_no).c_str(), GetColor(255, 255, 255));
+		}
+		
+
+#endif
+
 		//ハッキングされた状態のアクターがあるか
 		bool IsHack = FALSE;
 		for (auto&& actors : GetActorServer().GetActors()) {
@@ -594,6 +673,9 @@ namespace MachineHuck::Player {
 		else if (Math::Vector4 v{ 0.0, 0.0, 0.0 }; v.GetX() != _owner.GetMove().GetX() || v.GetZ() != _owner.GetMove().GetZ()) {
 			_owner._state->PushBack("Run");
 		}
+
+
+
 	}
 
 

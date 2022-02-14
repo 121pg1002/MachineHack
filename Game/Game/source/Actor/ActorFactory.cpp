@@ -22,6 +22,7 @@
 //#include "../Parameter/EStageParam.h"
 //#include "../Parameter/IStageParam.h"
 #include "../Parameter/GStageParam.h"
+#include "../Flag/FlagData.h"
 
 
 namespace Camera = MachineHuck::Camera;
@@ -30,8 +31,8 @@ namespace {
 
     //constexpr int StageAll = 3;        //!< 読み込むstagejsonの数
     constexpr double Differ = 3000.0; //!< 1フロアのサイズ
-    constexpr double StartX = -5.0 * Differ;
-    constexpr int BoardSize = 10;
+    constexpr double StartX = -2.5 * Differ;
+    constexpr int BoardSize = 5;
 
     //constexpr double HalfSize = 0.5 * Differ;
     //constexpr int StartZ = -5.0 * Differ;
@@ -202,6 +203,7 @@ namespace MachineHuck::Actor {
 
                             //新しくエネミーを生み出す番号
                             num.push_back(newNum);
+
                         }
                     }
                     //else {
@@ -259,6 +261,20 @@ namespace MachineHuck::Actor {
                 for (auto no : num) {
 
                     auto& spawnFloor = _eStageParamVMap[no];
+                    Flag::FlagData::SetPlayerFloorNum(no); //!< マップ画面にプレイヤーの今いるフロア番号を設定
+                    
+                    //これだとマップ画面を開いていないときに登録されない
+                    //auto&& playerNum = Flag::FlagData::GetPlayerFloorNum();
+
+                    //ベクターの中から探す
+                    auto it = std::find(_playerOnceNo.begin(), _playerOnceNo.end(), no);
+
+                    //存在しないならば
+                    if (it == _playerOnceNo.end()) {
+                        //追加
+                        _playerOnceNo.push_back(no);
+                        Flag::FlagData::SetPlayerFloorVec(_playerOnceNo);
+                    }
 
                     //新しい描画フロアのエネミーをリスポーンさせる
                     for (auto&& floorEnemy : spawnFloor) {
@@ -407,7 +423,7 @@ namespace MachineHuck::Actor {
         // プレイヤーの生成
         auto player = std::make_unique<Player::Player>(game);
         player->SetCameraComponent(camera);
-        player->SetPosition({ -Differ * 5.0 + Differ * 0.5, 0, Differ * 0.5 });
+        player->SetPosition({ -Differ * 2.5 + Differ * 0.5, 0, Differ * 0.5 });
         player->SetRotation({ 0.5, 0.0, 0.0 });
 
         // モデルの読み込みと生成

@@ -169,6 +169,7 @@ namespace MachineHuck::Actor {
         std::vector<StageV> _stageTableV;
         //std::vector<Actor> _brokenWallClear;
         static std::unordered_map<int, std::vector<int>> _floorBrokenWall; //!< フロア番号で壊せる壁のベクターを記録
+        std::vector<int> _playerOnceNo; //!< プレイヤーが一度行ったことのある番号を保存
         //std::unordered_map<int, int> _frameGimmicks; //!< ハンドル名でコリジョンを保存
         //std::unordered_map<>
 

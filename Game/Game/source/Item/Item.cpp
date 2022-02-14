@@ -66,12 +66,12 @@ namespace MachineHuck::Item {
 		_model->Draw();
 		//_state->Draw();
 
-		if (itemflg) {
-			DrawString(100, 900, "“–‚½‚Á‚½", GetColor(255, 255, 255));
-		}
-		else {
-			DrawString(100, 900, "“–‚½‚Á‚Ä‚È‚¢", GetColor(255, 255, 255));
-		}
+		//if (itemflg) {
+		//	DrawString(100, 900, "“–‚½‚Á‚½", GetColor(255, 255, 255));
+		//}
+		//else {
+		//	DrawString(100, 900, "“–‚½‚Á‚Ä‚È‚¢", GetColor(255, 255, 255));
+		//}
 
 		
 	}
