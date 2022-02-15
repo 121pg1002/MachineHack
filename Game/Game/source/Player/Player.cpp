@@ -15,8 +15,10 @@
 #include "../Enemy/TackleEnemy.h"
 #include "../Gauge/GaugeBase.h"
 #include "../Gauge/GaugePlayer.h"
+#include "../Gauge/GaugeEnemy.h"
 #include "../UI/UIComponent.h"
 #include "../Flag/FlagData.h"
+#include "../Item/Item.h"
 
 
  //#include <numbers>
@@ -46,8 +48,8 @@ namespace MachineHuck::Player {
 		_searchRange = 60.0;
 		_collisionR = 20.0;
 		//_huckingRange = 30.0;
-		_gaugeBase->Init();
-		_gaugePlayer->Init(*this);
+		//_gaugeBase->Init();
+		//_gaugePlayer->Init(*this);
 	}
 
 	//入力
@@ -210,7 +212,7 @@ namespace MachineHuck::Player {
 
 	void Player::Update() {
 		//ゲージ
-		_gaugePlayer->Update();
+		//_gaugePlayer->Update();
 
 		//動かないときの処理に使用
 		//auto oldMove = _move;
@@ -443,7 +445,7 @@ namespace MachineHuck::Player {
 		}
 
 		//エネルギー残量ゲージの設定
-		GetGame().GetUiComponent().UpdatePlayerHp(_gaugeBase->GetGauge(), _gaugeBase->GetGaugeMax());
+		//GetGame().GetUiComponent().UpdatePlayerHp(_gaugeBase->GetGauge(), _gaugeBase->GetGaugeMax());
 		//	GetGame().GetUiComponent().UpdatePlayerHp(_gauge->GetGauge(), _gauge->GetGaugeMax());
 
 		for (auto i = GetActorServer().GetActors().begin(); i != GetActorServer().GetActors().end(); i++) {
@@ -546,14 +548,14 @@ namespace MachineHuck::Player {
 		}
 		//エネルギーゲージのシャドウマップへの描画を行わない
 		if (!GetShadowMapflg() == TRUE) {
-			_gaugePlayer->Draw(*this);
+			//_gaugePlayer->Draw(*this);
 		}
 		_state->Draw();
 #ifdef _DEBUG
 		_modelAnime->Draw(*this, _isHit, _searchRange, true);
 		_modelAnime->DrawCircle(*this, _collisionR);
 		_camera->Draw(_isHit);
-		_gaugeBase->Draw();
+		//_gaugeBase->Draw();
 
 		auto posXStr = std::to_string(_position.GetX());
 		auto posYStr = std::to_string(_position.GetY());
@@ -585,18 +587,18 @@ namespace MachineHuck::Player {
 		if (length < _analogMin) {
 			// 入力が小さかったら動かなかったことにする
 			length = 0.0;
-			_hp++;
+			//_hp++;
 		}
 		else {
 			length = 10.0;
-			_hp -= 0.1f;//エネルギー現象
+			//_hp -= 0.1f;//エネルギー現象
 		}
-		if (_hp < 0) {
-			_hp = 0;
-		}
-		if (_hp > 100) {
-			_hp = 100;
-		}
+		//if (_hp < 0) {
+		//	_hp = 0;
+		//}
+		//if (_hp > 100) {
+		//	_hp = 100;
+		//}
 
 		//横方向と縦方向の角度
 		double rad = atan2(ly, lx);
@@ -746,17 +748,16 @@ namespace MachineHuck::Player {
 		//_owner.HitCheckFromEnemy();
 
 
-		if (_owner.GetGaugeBase().GetGauge() < 0) {
+		if (_owner.GetGame().GetGaugePlayerUI().GetGauge() < 0) {
 
 			_owner._state->GoToState("Die");
 		}
-		if (_owner.GetGaugePlayer().GetGauge() < 0) {
+		if (_owner.GetGame().GetGaugePlayerUI().GetGauge() < 0) {
 			_owner._state->GoToState("Die");
 		}
 		else {
-
-			_owner.GetGaugeBase().Update(_owner);
-			_owner.GetGaugePlayer().Update(_owner);
+			//_owner.GetGaugeBase().Update(_owner);
+			_owner.GetGame().GetGaugePlayerUI().Update();
 		}
 
 		if (_noDamageTime < 0 && Flag::FlagData::GetNoDamageFlag()) {
@@ -872,8 +873,11 @@ namespace MachineHuck::Player {
 			_owner._position = pos;
 
 			//ゲージ量を減少
-			_owner.GetGaugeBase().DownGauge(10);
-			_owner.GetGaugePlayer().DownGauge(10);
+		//	_owner.GetGaugeBase().DownGauge(10);
+		//	_owner.GetGaugePlayer().DownGauge(10);
+			_owner.GetGame().GetGaugeBaseUI().DownGauge(10);
+			_owner.GetGame().GetGaugePlayerUI().DownGauge(10);
+
 
 			_owner.GetState().GoToState("Idle");
 
@@ -1023,6 +1027,8 @@ namespace MachineHuck::Player {
 										_owner._state->GoToState("Hucked");
 										//*se ハッキング(成功)
 										_owner.GetGame().GetSoundComponent().Play("hacking");
+										//プレイヤーゲージからエネミーゲージに切り替える
+										_owner.GetGame().GetGaugeBaseUI().SetGaugeFlag(false);
 
 									}
 									else {
@@ -1128,10 +1134,10 @@ namespace MachineHuck::Player {
 
 				if (!(*i)->IsHucked()) {
 
-					if ((*i)->GetGaugeBase().GetGauge() > 0) {
-						continue;
-					}
-					if ((*i)->GetGaugePlayer().GetGauge() > 0) {
+					//if ((*i)->GetGaugeBase().GetGauge() > 0) {
+					//	continue;
+					//}
+					if ((*i)->GetGame().GetGaugePlayerUI().GetGauge() > 0) {
 						continue;
 					}
 					else {
@@ -1177,19 +1183,28 @@ namespace MachineHuck::Player {
 				}
 				else {
 
-					auto enemyGauge = (*i)->GetGaugeBase().GetGauge();
+					//auto enemyGauge = (*i)->GetGaugeBase().GetGauge();
 
 					//エネミーのゲージが0以上なら
-					if (enemyGauge > 0) {
+					auto enemyGauge = (*i)->GetGame().GetGaugeEnemyUI().GetEnemyGauge();
+					auto suckGauge = enemyGauge * 2;
 
-						//エネミーのゲージ量を加算
-						_owner.GetGaugeBase().PlusGauge(enemyGauge);
+					if (enemyGauge > 0) {
+						//エネルギーサックを取得している場合
+						if (_owner.GetGame().GetItem().GetSuckFlg() == true) {
+							//貰えるエネルギーを2倍してエネミーのゲージ量を加算
+							_owner.GetGame().GetGaugePlayerUI().PlusGauge(suckGauge);
+							//エネルギーサックを未取得にセットする
+							_owner.GetGame().GetItem().SetSuckFlg(false);
+						}
+						else {
+							//エネミーのゲージ量を加算
+							_owner.GetGame().GetGaugePlayerUI().PlusGauge(enemyGauge);
+						}
 					}
-					auto enemyGaugePlayer = (*i)->GetGaugePlayer().GetGauge();
-					if (enemyGaugePlayer > 0) {
-						//エネミーのゲージ量を加算
-						_owner.GetGaugePlayer().PlusGauge(enemyGauge);
-					}
+					//ハッキングフラグをfalseにする
+					_owner.GetGame().GetGaugeBaseUI().SetGaugeFlag(true);
+
 
 					//もしハッキング状態が外れたらフラグを解除
 					Flag::FlagData::SetSlideFlag(false);

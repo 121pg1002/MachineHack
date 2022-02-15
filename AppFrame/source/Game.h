@@ -51,7 +51,13 @@ namespace MachineHuck::Gimmick {
 }
 
 namespace MachineHuck::Item {
+	class Item;
 	class ItemParameter;
+}
+namespace MachineHuck::Gauge {
+	class GaugeBase;
+	class GaugeEnemy;
+	class GaugePlayer;
 }
 
 namespace AppFrame {
@@ -119,6 +125,13 @@ namespace AppFrame {
 		 */
 		MachineHuck::Stage::StageParameter& GetStageParameter() const { return *_stageParam; }
 
+	   /**
+		* @brief アイテムの取得
+		* @return アイテムの参照
+		*/
+		MachineHuck::Item::Item& GetItem()const { return *_itemCom; }
+
+
 		/**
 		 * @brief アイテムパラメーターの取得
 		 * @return アイテムパラメーターの参照
@@ -131,6 +144,11 @@ namespace AppFrame {
 		 * @return ギミックパラメーターの参照
 		 */
 		MachineHuck::Gimmick::GimmickParameter& GetGimmickParameter() const { return *_gParam; }
+
+		MachineHuck::Gauge::GaugeBase& GetGaugeBaseUI()const { return *_gaugeBaseUi; }
+		MachineHuck::Gauge::GaugePlayer& GetGaugePlayerUI()const { return *_gaugePlayerUi; }
+		MachineHuck::Gauge::GaugeEnemy& GetGaugeEnemyUI()const { return *_gaugeEnemyUi; }
+
 
 	private:
 		/// 状態
@@ -161,6 +179,15 @@ namespace AppFrame {
 		std::unique_ptr<MachineHuck::Gimmick::GimmickParameter> _gParam;
 
 		std::unique_ptr<MachineHuck::Item::ItemParameter> _iParam;
+
+		//アイテムのユニークポインタ
+		std::unique_ptr<MachineHuck::Item::Item>_itemCom;
+
+
+		std::unique_ptr<MachineHuck::Gauge::GaugeBase>_gaugeBaseUi;
+		std::unique_ptr<MachineHuck::Gauge::GaugePlayer>_gaugePlayerUi;
+		std::unique_ptr<MachineHuck::Gauge::GaugeEnemy>_gaugeEnemyUi;
+
 
 	};
 }

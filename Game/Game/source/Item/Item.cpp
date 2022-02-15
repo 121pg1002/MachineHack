@@ -27,19 +27,34 @@ namespace MachineHuck::Item {
 					//*se ƒAƒCƒeƒ€“üŽè
 					GetGame().GetSoundComponent().Play("getitem");
 
-					if (GetStatus()==STATUS::TANK)
+					if (GetStatus() == STATUS::TANK)
 					{
-						(*i)->GetGaugePlayer().PlusGauge(1000);
+						/*(*i)->GetGaugePlayer().PlusGauge(1000);
 						(*i)->GetGaugeBase().PlusGauge(1000);
 						(*i)->GetGaugePlayer().SetGaugeMax((*i)->GetGaugePlayer().GetGaugeMax() + 10);
-						(*i)->GetGaugeBase().SetGaugeMax((*i)->GetGaugePlayer().GetGaugeMax() + 10);
-						 _actorState= Actor::ActorState::Dead;
-						
+						(*i)->GetGaugeBase().SetGaugeMax((*i)->GetGaugePlayer().GetGaugeMax() + 10);*/
+						(*i)->GetGame().GetGaugePlayerUI().PlusGauge(1000);
+						(*i)->GetGame().GetGaugeBaseUI().PlusGauge(1000);
+						(*i)->GetGame().GetGaugePlayerUI().SetGaugeMax((*i)->GetGame().GetGaugePlayerUI().GetGaugeMax() + 10);
+						(*i)->GetGame().GetGaugeBaseUI().SetGaugeMax((*i)->GetGame().GetGaugePlayerUI().GetGaugeMax() + 10);
 
-					  itemflg = true;
+						_actorState = Actor::ActorState::Dead;
+
+
+						itemflg = true;
+					}
+					else if (GetStatus() == STATUS::SUCK)
+					{
+						//“G‚©‚ç–á‚¦‚éƒGƒlƒ‹ƒM[‚Ì—Ê‚ð2”{‚É‚·‚é
+						_actorState = Actor::ActorState::Dead;
+						itemflg = true;
+						_suckFig = true;
+					}
+					else if (GetStatus() == STATUS::KEYITEM)
+					{
 
 					}
-					
+
 				}
 				else
 				{
@@ -48,8 +63,8 @@ namespace MachineHuck::Item {
 				break;
 			}
 		}
-		
-		
+
+
 		/*float movex = _oldPos.GetX() + 1.0f;
 		AppFrame::Math::Vector4 vec4{ movex,_position.GetY(),_position.GetZ(),_position.GetW() };
 		_position.Set(vec4);*/
@@ -57,8 +72,8 @@ namespace MachineHuck::Item {
 		ComputeWorldTransform();
 
 		_model->Update();
-		
-		
+
+
 
 	}
 
@@ -73,7 +88,7 @@ namespace MachineHuck::Item {
 		//	DrawString(100, 900, "“–‚½‚Á‚Ä‚È‚¢", GetColor(255, 255, 255));
 		//}
 
-		
+
 	}
 
 	//void Item::ComputeWorldTransform() {

@@ -7,6 +7,13 @@
  *********************************************************************/
 
 #include "DamageFloorGimmick.h"
+#include "../Model/ModelAnimComponent.h"
+#include "../Collision/CollisionComponent.h"
+#include "../Actor/ActorServer.h"
+#include "../State/StateComponent.h"
+#include "../Gauge/GaugeBase.h"
+#include "../Gauge/GaugePlayer.h"
+
 
 
 namespace MachineHuck::Gimmick {
@@ -35,6 +42,14 @@ namespace MachineHuck::Gimmick {
 	void DamageFloorGimmick::Update()
 	{
 	//	_damageFloor->Update();
+		for (auto i = GetActorServer().GetActors().begin(); i != GetActorServer().GetActors().end(); i++) {
+			if ((*i)->GetTypeId() == TypeId::Player) {
+				(*i)->GetGame().GetGaugePlayerUI().DownGauge(10);
+				//	_actorState = Actor::ActorState::Dead;
+
+				break;
+			}
+		}
 	}
 
 	void DamageFloorGimmick::Draw() 

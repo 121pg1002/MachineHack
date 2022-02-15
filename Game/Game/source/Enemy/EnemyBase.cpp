@@ -193,8 +193,11 @@ namespace MachineHuck::Enemy {
 			SetRotation(rot);
 
 			//ˆÚ“®‚µ‚Ä‚¢‚½‚çŒ¸‚ç‚·
-			GetGaugeBase().Update(*this);
-			GetGaugeEnemy().Update(*this);
+		//	GetGaugeBase().Update(*this);
+		//	GetGaugeEnemy().Update(*this);
+			GetGame().GetGaugeBaseUI().Update();
+			GetGame().GetGaugeEnemyUI().Update();
+
 		}
 
 		//ålŒö‚ÌƒJƒƒ‰‚ÉˆÚ“®—Ê‚ğ‘—‚é

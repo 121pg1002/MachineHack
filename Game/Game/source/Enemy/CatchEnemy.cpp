@@ -28,7 +28,7 @@ namespace MachineHuck::Enemy {
 		_searchRange = 0.0;
 		_huckingRange = 0.0;
 		_catchRange = 0.0;
-		_gaugeBase->Init();
+		//_gaugeBase->Init();
 		//_gaugeEnemy->Init(*this);
 
 
@@ -135,8 +135,10 @@ namespace MachineHuck::Enemy {
 			SetRotation(rot);
 
 			//移動していたら減らす
-			GetGaugeBase().Update(*this);
-			GetGaugeEnemy().Update(*this);
+			//GetGaugeBase().Update(*this);
+			//GetGaugeEnemy().Update(*this);
+			GetGame().GetGaugeBaseUI().Update();
+			GetGame().GetGaugeEnemyUI().Update();
 
 		}
 
@@ -149,23 +151,23 @@ namespace MachineHuck::Enemy {
 	}
 
 	void CatchEnemy::Draw() {
-//		// 足のトゲの為のアルファテスト設定
-//		MV1SetMaterialDrawAlphaTest(_modelAnime->GetHandle(), 3, TRUE, DX_CMP_LESS, 200);
-//#ifdef _DEBUG
-//		//auto pos = _position;
-//		//pos.y += 40;
-//		//DrawSphere3D(pos, 50, 16, GetColor(255, 0, 0), GetColor(0, 0, 0), TRUE);
-//		_modelAnime->Draw(*this, _isHit, _searchRange, true);
-//		_modelAnime->Draw(*this, _isHit, _huckingRange, false);
-//		_modelAnime->Draw(*this, _catchR, _catchRange);
-//		_modelAnime->DrawCircle(*this, _collisionR);
-//		_modelAnime->Draw(*this, GetActorServer().GetPosition("Player"));
-//
-//		_gaugeBase->Draw(*this);
-//#endif
-//		_state->Draw();
-//
-//		_gaugeEnemy->Draw(*this);
+		// 足のトゲの為のアルファテスト設定
+		MV1SetMaterialDrawAlphaTest(_modelAnime->GetHandle(), 3, TRUE, DX_CMP_LESS, 200);
+#ifdef _DEBUG
+		//auto pos = _position;
+		//pos.y += 40;
+		//DrawSphere3D(pos, 50, 16, GetColor(255, 0, 0), GetColor(0, 0, 0), TRUE);
+		_modelAnime->Draw(*this, _isHit, _searchRange, true);
+		_modelAnime->Draw(*this, _isHit, _huckingRange, false);
+		_modelAnime->Draw(*this, _catchR, _catchRange);
+		_modelAnime->DrawCircle(*this, _collisionR);
+		_modelAnime->Draw(*this, GetActorServer().GetPosition("Player"));
+
+		//_gaugeBase->Draw(*this);
+#endif
+		_state->Draw();
+
+		//_gaugeEnemy->Draw(*this);
 	}
 
 	void CatchEnemy::StateBase::Draw() {
@@ -316,8 +318,11 @@ namespace MachineHuck::Enemy {
 		if (_owner.GetStatus() == STATUS::ISHUCKED) {
 
 			//ゲージ減少
-			_owner.GetGaugeBase().DownGauge(20);
-			_owner.GetGaugeEnemy().DownGauge(20);
+	/*		_owner.GetGaugeBase().DownGauge(20);
+			_owner.GetGaugeEnemy().DownGauge(20);*/
+			_owner.GetGame().GetGaugeBaseUI().DownGauge(20);
+			_owner.GetGame().GetGaugeEnemyUI().DownGauge(20);
+
 			//auto player = _owner.GetActorServer().GetDir("Player");
 
 			//auto rot = _owner.GetRotation();
@@ -429,8 +434,10 @@ namespace MachineHuck::Enemy {
 										if (_owner._collision->FanToPoint(_owner, **i, _owner._catchR, _owner._catchRange)) {
 
 											//プレイヤーのゲージを減少させる
-											(*i)->GetGaugeBase().DownGauge(15);
-											(*i)->GetGaugePlayer().DownGauge(15);
+										//	(*i)->GetGaugeBase().DownGauge(15);
+										//	(*i)->GetGaugePlayer().DownGauge(15);
+											(*i)->GetGame().GetGaugeBaseUI().DownGauge(15);
+											(*i)->GetGame().GetGaugePlayerUI().DownGauge(15);
 
 											//プレイヤーを無敵時間にする
 											//_invincibleTime = true;
@@ -460,8 +467,10 @@ namespace MachineHuck::Enemy {
 									if (_owner._collision->FanToPoint(_owner, **i, _owner._catchR, _owner._catchRange)) {
 
 										//ハッキングされている敵のゲージを減少させる
-										(*i)->GetGaugeBase().DownGauge(15);
-										(*i)->GetGaugeEnemy().DownGauge(15);
+										//(*i)->GetGaugeBase().DownGauge(15);
+										//(*i)->GetGaugeEnemy().DownGauge(15);
+										(*i)->GetGame().GetGaugeBaseUI().DownGauge(15);
+										(*i)->GetGame().GetGaugeEnemyUI().DownGauge(15);
 
 										//ハッキングされている敵をダメージ状態に変更
 										(*i)->GetState().PushBack("Damage");
@@ -508,7 +517,8 @@ namespace MachineHuck::Enemy {
 	void CatchEnemy::StateCatchAfter::Update() {
 
 		//ハッキング中に体力が0になったか
-		if (_owner.GetGaugeBase().IsGaugeZero(_owner)) {
+		//if (_owner.GetGaugeBase().IsGaugeZero(_owner)) {
+		if (_owner.GetGame().GetGaugeBaseUI().IsGaugeZero(_owner)) {
 			_owner._state->GoToState("Die");
 
 			for (auto&& actor : _owner.GetActorServer().GetActors()) {
@@ -921,7 +931,7 @@ namespace MachineHuck::Enemy {
 		_waitFrame--;
 
 		//ゲージが0かどうか
-		if (_owner.GetGaugeBase().IsGaugeZero(_owner)) {
+		if (_owner.GetGame().GetGaugeBaseUI().IsGaugeZero(_owner)) {
 
 			_owner._state->GoToState("Die");
 			_owner._status = STATUS::DYING;

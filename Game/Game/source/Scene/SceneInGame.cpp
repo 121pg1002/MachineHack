@@ -17,6 +17,10 @@
 #include "../Gimmick/GimmickParameter.h"
 #include "../UI/UIComponent.h"
 #include "../Flag/FlagData.h"
+#include "../Gauge/GaugePlayer.h"
+#include "../Gauge/GaugeEnemy.h"
+#include "../Player/Player.h"
+#include "../Enemy/TackleEnemy.h"
 
 
 namespace {
@@ -167,6 +171,10 @@ namespace MachineHuck::Scene {
         GetAssetServer().LoadTextures(TexUsed);
 
         _grHandle = GetAssetServer().GetTexture("black");
+
+        GetGaugeBaseUI().Init();
+        //   GetGaugeEnemyUI().Init();
+        GetGaugePlayerUI().Init();
 
     }
     /// “üŒû
@@ -337,6 +345,8 @@ namespace MachineHuck::Scene {
         as.Add(std::move(player));
 
         GetUiComponent().Enter();
+        GetGaugePlayerUI().Update();
+
 
         //*se 1‘w–ÚBGM
 
@@ -445,6 +455,26 @@ namespace MachineHuck::Scene {
         SetUseShadowMap(0, -1);
         //UI‚Ì•`‰æ
         GetUiComponent().Render();
+
+        GetGaugeBaseUI().Draw();
+        if (GetGaugeBaseUI().GetGaygeFlag() == TRUE) {
+            GetGaugePlayerUI().Draw();
+        }
+        else if (GetGaugeBaseUI().GetGaygeFlag() == FALSE) {
+            GetGaugeEnemyUI().Draw();
+        }
+
+
+        /*    for (auto i = GetActorServer().GetActors().begin(); i != GetActorServer().GetActors().end(); i++) {
+              if ((*i)->GetActorState() == Actor::Actor::ActorState::Hucked) {
+
+                GetGaugeEnemyUI().Draw();
+              }
+              else {
+                GetGaugePlayerUI().Draw();
+              }
+
+            }*/
 
         if (Flag::FlagData::GetBlackOutFlag()) {
             DrawGraph(0, 0, _grHandle, true);

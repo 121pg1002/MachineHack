@@ -27,6 +27,9 @@
 #include "../source/Effect/EffectServer.h"
 #include "../source/UI/UIComponent.h"
 #include "../source/UI/SpriteServer.h"
+#include "../source/Gauge/GaugeEnemy.h"
+#include "../source/Gauge/GaugePlayer.h"
+#include "../source/Item/Item.h"
 #include <DxLib.h>
 
 AppFrame::Game::Game() {
@@ -92,6 +95,13 @@ bool AppFrame::Game::Initialize() {
     // UIコンポーネントの生成
     _ui = std::make_unique<MachineHuck::UI::UIComponent>(*this);
 
+    //アイテムコンポーネントの生成
+    _itemCom = std::make_unique<MachineHuck::Item::Item>(*this);
+
+    _gaugeBaseUi = std::make_unique<MachineHuck::Gauge::GaugeBase>(*this);
+    _gaugePlayerUi = std::make_unique<MachineHuck::Gauge::GaugePlayer>(*this);
+    _gaugeEnemyUi = std::make_unique<MachineHuck::Gauge::GaugeEnemy>(*this);
+
 
     // アセットサーバーの生成
     _assetServer = std::make_unique<AppFrame::Asset::AssetServer>(*this);
@@ -109,6 +119,39 @@ bool AppFrame::Game::Initialize() {
       {"bgm1", {"se/energy.mp3", false}},
 
       // {"bgm2", {"stage1.mid", false}},
+     //{"save",{"se/se_save" ,true}}                          ,
+    {"getitem",{"se/se_getitem.wav" ,true}}                    ,
+    //{"store",{"se/se_store" ,true}}                        ,
+    {"hacking",{"se/se_hacking.wav" ,true}}                    ,
+    //{"hackerror",{"se/se_hackerror" ,true}}                ,
+    {"dropoff",{"se/se_dropoff.wav" ,true}}                    ,
+    {"damage"     ,   {"se/se_damage.wav" ,true}}              ,
+    {"lackenergy" ,       {"se/se_lackenergy.wav" ,true}}      ,
+    {"outofenergy",       {"se/se_outofenergy.wav" ,true}}     ,
+    {"tackle"     ,   {"se/se_tackle.wav" ,true}}              ,
+    //{"catch"      ,  {"se/se_catch" ,true}}                ,
+    //{"alert"      ,  {"se/se_alert" ,true}}                ,
+    {"exchange"   ,     {"se/se_exchange.wav" ,true}}          ,
+    //{"switch"     ,   {"se/se_switch" ,true}}              ,
+    //{"unlockgate" ,       {"se/se_unlockgate" ,true}}      ,
+    //{"lockgate"   ,     {"se/se_lockgate" ,true}}          ,
+    //{"breakwall"  ,      {"se/se_breakwall" ,true}}        ,
+    //{"floordamage",        {"se/se_floordamage" ,true}}    ,
+    //{"enemyhaunting",       {"se/se_enemyhaunting" ,true}} ,
+    //{"dropdown"     ,   {"se/se_dropdown" ,true}}          ,
+    //{"induct"       , {"se/se_induct" ,true}}              ,
+    //{"outduct"      ,  {"se/se_outduct" ,true}}            ,
+    {"openmap"      ,  {"se/se_openmap.wav" ,true}}            ,
+    {"openitem"     ,  {"se/se_openitem.wav" ,true}}           ,
+    {"close"        ,{"se/se_close.wav" ,true}}                ,
+
+    //{"breakenemy" ,      {"se/se_breakenemy" ,true}}       ,
+    //{"hitwall"    ,    {"se/se_hitwall" ,true}}            ,
+    {"contact"    ,    {"se/se_contact.wav" ,true}}            ,
+    //{"tackle"     ,   {"se/se_tackle" ,true}}              ,
+    //{"catch"      ,   {"se/se_catch" ,true}}               ,
+    //{"alert"      , {"se/se_alert", true}}                 ,
+    {"footsteps"  ,     {"se/se_footsteps.wav", true}}
     };
     // 音の読み込み
     as.LoadSounds(soundToUsed);

@@ -43,4 +43,15 @@ MachineHuck::UI::UIComponent& Scene::Scene::GetUiComponent() {
 	return _game.GetUiComponent();
 }
 
+//ƒQ[ƒW‚Ìæ“¾
+MachineHuck::Gauge::GaugeBase& Scene::Scene::GetGaugeBaseUI() {
+	return _game.GetGaugeBaseUI();
+}
+MachineHuck::Gauge::GaugePlayer& Scene::Scene::GetGaugePlayerUI() {
+	return _game.GetGaugePlayerUI();
+}
+MachineHuck::Gauge::GaugeEnemy& Scene::Scene::GetGaugeEnemyUI() {
+	return _game.GetGaugeEnemyUI();
+}
+
 

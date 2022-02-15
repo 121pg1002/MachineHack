@@ -24,9 +24,9 @@ namespace MachineHuck::Actor {
 	Actor::Actor(AppFrame::Game& game) : _game{ game }
 	{
 		_collision = std::make_unique<Collision::CollisionComponent>(*this);
-		_gaugeBase = std::make_unique<Gauge::GaugeBase>(*this);
-		_gaugeEnemy = std::make_unique<Gauge::GaugeEnemy>(*this);
-		_gaugePlayer = std::make_unique<Gauge::GaugePlayer>(*this);
+		//_gaugeBase = std::make_unique<Gauge::GaugeBase>(*this);
+		//_gaugeEnemy = std::make_unique<Gauge::GaugeEnemy>(*this);
+		//_gaugePlayer = std::make_unique<Gauge::GaugePlayer>(*this);
 		//_gimmickBase = std::make_unique<Gimmick::GimmickBase>(*this);
 
 	}
@@ -367,12 +367,18 @@ namespace MachineHuck::Actor {
 								auto frameIndex = hitPoly.FrameIndex;
 
 								//ブロックとコリジョンを除く
-								if (frameIndex != 0 && frameIndex != 1) {
+//								if (frameIndex != 0 && frameIndex != 1) {
 
 									//ワープ前の触れたフレーム名を取得
 									std::string name = MV1GetFrameName(handle, frameIndex);
 
+									std::string::size_type nameParts = name.find("block");
 
+									//存在した
+									if (nameParts != std::string::npos) {
+										continue;
+
+									}
 
 									//ダクトかどうか
 									if (name.size() > 8) {
@@ -459,7 +465,7 @@ namespace MachineHuck::Actor {
 									return pos;
 								
 								
-								}
+	//							}
 
 
 

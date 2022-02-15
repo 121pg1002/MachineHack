@@ -9,11 +9,12 @@
 #pragma once
 #include "GaugeBase.h"
 #include "../ShadowMap/Shadowmap.h"
+#include "AppFrame.h"
 namespace MachineHuck::Actor {
     class Actor;
 }
 namespace MachineHuck::Shadow {
-  class ShadowMap;
+    class ShadowMap;
 }
 namespace MachineHuck::Gauge {
 
@@ -29,21 +30,17 @@ namespace MachineHuck::Gauge {
          * @brief コンストラクタ
          * @param act アクタークラスの参照
          */
-        GaugePlayer(Actor::Actor& act);
+        GaugePlayer(AppFrame::Game& game);
 
         /**
          * @brief 初期化
          */
-        void Init(Actor::Actor& act);
+        void Init();
+
         /**
         * @brief 更新
         */
         void Update();
-        /**
-         * @brief 更新
-         * @param act アクタークラスの参照
-         */
-        void Update(Actor::Actor& act);
 
 
 
@@ -51,7 +48,7 @@ namespace MachineHuck::Gauge {
          * @brief 描画
          * @param act
          */
-        void Draw(Actor::Actor& act);
+        void Draw();
         /**
        * @brief  ゲージの量を取得
        * @return _gauge
@@ -94,25 +91,27 @@ namespace MachineHuck::Gauge {
          * @param gaugeMax
          */
         void SetGaugeMax(int gaugeMax) { _gaugeMax = gaugeMax; }
+
+        void UpdatePlayerPosition(Math::Vector4 pos) { _gaugePlayerPosition = pos; };
+
+        Math::Vector4 GetPlayerPos() { return _gaugePlayerPosition; }
+        /// プレイヤーのHPバー更新
+       /// @param[in] hp 表示するヒットポイント
+       /// @param[in] hpRange ヒットポイントの範囲
+        void UpdatePlayerHp(float gauge) { _gauge = gauge; };
     private:
 
-        //int _gauge{ 100 };    //!< エネルギーゲージの量
-        //int _gaugeMax{ 100 }; //!< エネルギーゲージの最大値
         int _gaugeCount;      //!< ゲージを減らすカウンタ
         int _gaugeTimer{ 0 };
         int _handlePl;          //エネルギーゲージ満タン
-        int _handlePl1[5] = {0};
+        int _handlePl1[5] = { 0 };
         int _handlePl2[5] = { 0 };
         int _handlePl3[5] = { 0 };
         int _handlePl4[5] = { 0 };
         int _handlePl5[5] = { 0 };
         int _handlePl0;
-       // Actor::Actor& _actor; //!< アクタークラスの参照
-
-        int _handleNormalNumber[10] = { 0 };
-        int _handleGiri[10] = { 0 };
-
-
+        Math::Vector4 _oldPlayerPosition = { 0,0,0 };
+        Math::Vector4 _gaugePlayerPosition = { 0,0,0 };
     };
 
 }

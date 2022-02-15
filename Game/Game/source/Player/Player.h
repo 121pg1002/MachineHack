@@ -135,6 +135,7 @@ namespace MachineHuck::Player {
         int _noDamageTime{0};
         bool _warping{ false };
         int _waitframe{ 0 };
+        int _gaugehp{ 0 };//HP
 
 #ifdef _DEBUG
 

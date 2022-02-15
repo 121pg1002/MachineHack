@@ -10,6 +10,7 @@
 #include "../State/StateComponent.h"
 #include <memory>
 #include "EnemyBase.h"
+#include "../Gauge/GaugeEnemy.h"
 
 class ModelAnimeComponent;
 namespace Math = AppFrame::Math;
@@ -199,6 +200,7 @@ namespace MachineHuck::Enemy {
         {
         public:
             StateHucked(TackleEnemy& owner) : StateBase{ owner } {};
+            void Init();
             void Enter() override;
             void Input(AppFrame::Input::InputComponent& input) override;
             void Update() override;
@@ -207,6 +209,9 @@ namespace MachineHuck::Enemy {
             bool _warping;
             Math::Vector4 _fadePos;
             int _waitFrame;
+            int _gaugeTakleEnemy{ 100 };
+            int _gaugeCount{ 0 };
+
 
         };
     };

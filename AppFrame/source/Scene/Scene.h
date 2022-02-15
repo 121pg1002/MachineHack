@@ -18,6 +18,12 @@ namespace MachineHuck::UI {
 	class UIComponent;
 }
 
+namespace MachineHuck::Gauge {
+	class GaugeBase;
+	class GaugePlayer;
+	class GaugeEnemy;
+}
+
 namespace AppFrame {
 	class Game;
 	namespace Input {
@@ -85,6 +91,16 @@ namespace AppFrame::Scene {
 		/// UIコンポーネントの取得
 		/// @return UIコンポーネントの参照
 		MachineHuck::UI::UIComponent& GetUiComponent();
+
+		/// ゲージベースの取得
+		/// @return ゲージベースの参照
+		MachineHuck::Gauge::GaugeBase& GetGaugeBaseUI();
+		/// プレイヤーエネルギーゲージの取得
+		/// @return プレイヤーエネルギーゲージの参照
+		MachineHuck::Gauge::GaugePlayer& GetGaugePlayerUI();
+		/// エネミーエネルギーゲージの取得
+		/// @return エネミーエネルギーゲージの参照
+		MachineHuck::Gauge::GaugeEnemy& GetGaugeEnemyUI();
 
 
 

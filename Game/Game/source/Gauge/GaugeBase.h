@@ -2,23 +2,26 @@
 /*****************************************************************//**
  * @file   GaugeBase.h
  * @brief  ゲージの基底クラス
- * 
+ *
  * @author hikaru Goto
  * @date   January 17 2022
  *********************************************************************/
 #pragma once
-
+#include "AppFrame.h"
 namespace MachineHuck::Actor {
     class Actor;
 }
+//namespace AppFrame::Scene {
+//    class Scene;
+//}
 
-namespace MachineHuck::Gauge{
+namespace MachineHuck::Gauge {
 
     /**
      * @class GaugeBase
      * @brief ゲージの管理クラス
      */
-    class GaugeBase{
+    class GaugeBase : public AppFrame::Scene::Scene {
 
     public:
 
@@ -26,7 +29,7 @@ namespace MachineHuck::Gauge{
          * @brief コンストラクタ
          * @param act アクタークラスの参照
          */
-        GaugeBase(Actor::Actor& act);
+        GaugeBase(AppFrame::Game& game);
 
         /**
          * @brief 初期化
@@ -37,7 +40,7 @@ namespace MachineHuck::Gauge{
          * @brief 更新
          * @param act アクタークラスの参照
          */
-        void Update(Actor::Actor& act);
+        void Update();
 
 #ifdef _DEBUG
         /**
@@ -45,11 +48,11 @@ namespace MachineHuck::Gauge{
          */
         void Draw();
 
-        /**
-         * @brief 描画
-         * @param act
-         */
-        void Draw(Actor::Actor& act);
+        ///**
+        // * @brief 描画
+        // * @param act
+        // */
+        //void Draw();
 #endif
 
         /**
@@ -95,21 +98,22 @@ namespace MachineHuck::Gauge{
          */
         void SetGaugeMax(int gaugeMax) { _gaugeMax = gaugeMax; }
 
+        void SetGaugeFlag(bool flag) { _gaugeFlag = flag; };
+        bool GetGaygeFlag() { return _gaugeFlag; }
     protected:
-
         int _gaugeNumberOnes;//一の位の数字
         int _gaugeNumberTens;//十の位の数字
         int _gaugeNumberHuns;//百の位の数字
         int _gaugeNumber;//ゲージの数値
-    //private:
-
-
-        int _gauge{ 100 };    //!< エネルギーゲージの量
-        int _gaugeMax{ 100 }; //!< エネルギーゲージの最大値
+        float _gauge{ 100.0f };    //!< エネルギーゲージの量
+        float _gaugeMax{ 100.0f }; //!< エネルギーゲージの最大値
         int _gaugeCount;      //!< ゲージを減らすカウンタ
+        bool _gaugeFlag;  //プレイヤーゲージ、エネミーゲージの切り替えフラグ
 
-        Actor::Actor& _actor; //!< アクタークラスの参照
+        int _handleNormalNumber[10] = { 0 };//数値  
+        int _handleGiri[10] = { 0 };
 
+        double lx{ 0.0 }, ly{ 0.0 };                    //!< 左アナログスティックの傾き
 
     };
 

@@ -40,8 +40,10 @@ namespace MachineHuck::Enemy {
 		_status = STATUS::WAIT;
 		_searchRange = 0.0;
 		_huckingRange = 0.0;
-		_gaugeBase->Init();
-		_gaugeEnemy->Init(*this);//エネミーのエネルギーゲージの初期化
+		//_gaugeBase->Init();
+		//_gaugeEnemy->Init(*this);//エネミーのエネルギーゲージの初期化
+		GetGame().GetGaugeEnemyUI().Init();
+
 	}
 
 	void TackleEnemy::LoadJson(const std::string& filePath)
@@ -77,7 +79,7 @@ namespace MachineHuck::Enemy {
 
 		EnemyBase::Update();
 		//ゲージ
-		_gaugeEnemy->Update();
+		//_gaugeEnemy->Update();
 
 		if (_status != STATUS::DYING) {
 
@@ -132,27 +134,27 @@ namespace MachineHuck::Enemy {
 	}
 
 	void TackleEnemy::Draw() {
-		// 足のトゲの為のアルファテスト設定
-//		MV1SetMaterialDrawAlphaTest(_modelAnime->GetHandle(), 3, TRUE, DX_CMP_LESS, 200);
-//#ifdef _DEBUG
-//		//auto pos = _position;
-//		//pos.y += 40;
-//		//DrawSphere3D(pos, 50, 16, GetColor(255, 0, 0), GetColor(0, 0, 0), TRUE);
-//		_modelAnime->Draw(*this, _isHit, _searchRange, true);
-//		_modelAnime->Draw(*this, _isHit, _huckingRange, false);
-//		_modelAnime->DrawCircle(*this, _collisionR);
-//		_modelAnime->Draw(*this, GetActorServer().GetPosition("Player"));
-//
-//		DrawLine3D(ToDX(_startPos), ToDX(_endPos), GetColor(0, 255, 255)); //!< タックルとギミックと確認用の当たり判定の線
-//		Actor::Draw();
-//		DrawTackleLine(_judge);
-//
-//		_gaugeBase->Draw(*this);
-//#endif
-//		_state->Draw();
-//		//if (!GetShadowMapflg() == TRUE) {
-//		_gaugeEnemy->Draw(*this);
-		//	}
+		//足のトゲの為のアルファテスト設定
+		MV1SetMaterialDrawAlphaTest(_modelAnime->GetHandle(), 3, TRUE, DX_CMP_LESS, 200);
+#ifdef _DEBUG
+		//auto pos = _position;
+		//pos.y += 40;
+		//DrawSphere3D(pos, 50, 16, GetColor(255, 0, 0), GetColor(0, 0, 0), TRUE);
+		_modelAnime->Draw(*this, _isHit, _searchRange, true);
+		_modelAnime->Draw(*this, _isHit, _huckingRange, false);
+		_modelAnime->DrawCircle(*this, _collisionR);
+		_modelAnime->Draw(*this, GetActorServer().GetPosition("Player"));
+
+		DrawLine3D(ToDX(_startPos), ToDX(_endPos), GetColor(0, 255, 255)); //!< タックルとギミックと確認用の当たり判定の線
+		Actor::Draw();
+		DrawTackleLine(_judge);
+
+		//_gaugeBase->Draw(*this);
+#endif
+		_state->Draw();
+		//if (!GetShadowMapflg() == TRUE) {
+		//_gaugeEnemy->Draw(*this);
+			//}
 	}
 
 	bool TackleEnemy::DrawTackleLine(bool judge) {
@@ -576,8 +578,11 @@ namespace MachineHuck::Enemy {
 		if (_owner.GetStatus() == STATUS::ISHUCKED) {
 
 			//ゲージ減少
-			_owner.GetGaugeBase().DownGauge(30);
-			_owner.GetGaugeEnemy().DownGauge(30);
+	//		_owner.GetGaugeBase().DownGauge(30);
+	//		_owner.GetGaugeEnemy().DownGauge(30);
+			_owner.GetGame().GetGaugeBaseUI().DownGauge(30);
+			_owner.GetGame().GetGaugeEnemyUI().DownGauge(30);
+
 			//auto player = _owner.GetActorServer().GetDir("Player");
 
 			auto rot = _owner.GetRotation();
@@ -756,6 +761,7 @@ namespace MachineHuck::Enemy {
 					//}
 
 
+
 				}//敵だった
 				else {
 
@@ -821,8 +827,10 @@ namespace MachineHuck::Enemy {
 										_owner.GetGame().GetSoundComponent().Play("damage");
 
 										//プレイヤーのゲージを減少させる
-										(*i)->GetGaugeBase().DownGauge(15);
-										(*i)->GetGaugePlayer().DownGauge(15);
+										/*(*i)->GetGaugeBase().DownGauge(15);
+										(*i)->GetGaugePlayer().DownGauge(15);*/
+										(*i)->GetGame().GetGaugeBaseUI().DownGauge(15);
+										(*i)->GetGame().GetGaugePlayerUI().DownGauge(15);
 
 										//プレイヤーを無敵時間にする
 										//_invincibleTime = true;
@@ -851,8 +859,10 @@ namespace MachineHuck::Enemy {
 								if (_owner._collision->CircleToOrientedAABB(**i, _owner)) {
 
 									//ハッキングされている敵のゲージを減少させる
-									(*i)->GetGaugeBase().DownGauge(15);
-									(*i)->GetGaugeEnemy().DownGauge(15);
+									//(*i)->GetGaugeBase().DownGauge(15);
+									//(*i)->GetGaugeEnemy().DownGauge(15);
+									(*i)->GetGame().GetGaugeBaseUI().DownGauge(15);
+									(*i)->GetGame().GetGaugePlayerUI().DownGauge(15);
 
 									//ハッキングされている敵をダメージ状態に変更
 									(*i)->GetState().PushBack("Damage");
@@ -900,7 +910,7 @@ namespace MachineHuck::Enemy {
 	void TackleEnemy::StateTackleAfter::Update() {
 
 
-		if (_owner.GetGaugeBase().IsGaugeZero(_owner)) {
+		if (_owner.GetGame().GetGaugeBaseUI().IsGaugeZero(_owner)) {
 			_owner._state->GoToState("Die");
 
 			for (auto&& actor : _owner.GetActorServer().GetActors()) {
@@ -1077,6 +1087,10 @@ namespace MachineHuck::Enemy {
 
 	}
 
+	/// 初期化
+	void TackleEnemy::StateHucked::Init() {
+		_gaugeTakleEnemy = 100;
+	}
 
 	void TackleEnemy::StateHucked::Enter() {
 		_owner.GetModelAnime().ChangeAnime("Idle", true);
@@ -1087,6 +1101,10 @@ namespace MachineHuck::Enemy {
 		auto& joypad = input.GetJoypad();
 		auto& key = input.GetKeyBoard();
 		_lx = 0.0, _ly = 0.0;
+
+		//ゲージ更新
+		_owner.GetGame().GetGaugeEnemyUI().Update();
+
 
 		// 右移動と左移動
 		if (joypad.LHorison() != 0.0)
@@ -1127,6 +1145,12 @@ namespace MachineHuck::Enemy {
 
 		if (_lx != 0.0 || _ly != 0.0) {
 			_owner.GetModelAnime().ChangeAnime("Walk", true);//頭取れたときに移動する
+		 //ゲージ減少する
+			if (_gaugeCount % 15 == 0) {
+				_gaugeTakleEnemy--;
+			}
+			_owner.GetGame().GetGaugeEnemyUI().UpdateEnemyHp(_gaugeTakleEnemy);
+			_gaugeCount++;
 		}
 		else {
 			_owner.GetModelAnime().ChangeAnime("Idle", true);
@@ -1272,7 +1296,7 @@ namespace MachineHuck::Enemy {
 
 
 		//ゲージが0かどうか
-		if (_owner.GetGaugeBase().IsGaugeZero(_owner)) {
+		if (_owner.GetGame().GetGaugeBaseUI().IsGaugeZero(_owner)) {
 
 			_owner._state->GoToState("Die");
 			_owner._status = STATUS::DYING;

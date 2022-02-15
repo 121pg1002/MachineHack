@@ -9,7 +9,10 @@
 #include "GaugePlayer.h"
 #include <string>
 #include <DxLib.h>
+#include "AppFrame.h"
 #include "../Actor/Actor.h"
+#include "../Gauge/GaugeEnemy.h"
+#include "../Player/Player.h"
 namespace {
     constexpr int  _aniSpeed = 10;//ƒAƒjƒ[ƒVƒ‡ƒ“‘¬“x
     constexpr int _cgNum = 5;//‰æ‘œ–‡”
@@ -17,45 +20,17 @@ namespace {
     constexpr float _cgYPosition = 140.0;
     constexpr float _cgXNumPosition = 23 / 2;//”’lƒQ[ƒW‚Ì”z’u
     constexpr float _cgYNumPosition = 60;
-
+    constexpr double _analogMin = 0.3;
 
 }
 namespace MachineHuck::Gauge {
 
-    GaugePlayer::GaugePlayer(Actor::Actor& act) : GaugeBase{ act } {
+    GaugePlayer::GaugePlayer(AppFrame::Game& game) : GaugeBase{ game } {
         _gaugeCount = 0;
-        //_handlePl = act.GetGame().GetAssetServer().GetTexture("EnergyPl6");
-       // _handlePl1[] = act.GetGame().GetAssetServer().GetTexture("EnergyPl1" );
     }
 
-    void GaugePlayer::Init(Actor::Actor& act) {
+    void GaugePlayer::Init() {
         const AppFrame::Asset::AssetServer::TextureMap texturePlayerGauge{
-            /*     {"EnergyPl1", {"energy/playerEnergy1.png", 5, 1, 425, 85}},
-                 {"EnergyPl2", {"energy/playerEnergy2.png", 5, 1, 425, 85}},
-                 {"EnergyPl3", {"energy/playerEnergy3.png", 5, 1, 425, 85}},
-                 {"EnergyPl4", {"energy/playerEnergy4.png", 5, 1, 425, 85}},
-                 {"EnergyPl5", {"energy/playerEnergy5.png", 5, 1, 425, 85}},*/
-                 {"Normal0", {"energy/02_Value/01_’Êí/0.png", 1, 1, 23, 32}},
-                 {"Normal1", {"energy/02_Value/01_’Êí/1.png", 1, 1, 23, 32}},
-                 {"Normal2", {"energy/02_Value/01_’Êí/2.png", 1, 1, 23, 32}},
-                 {"Normal3", {"energy/02_Value/01_’Êí/3.png", 1, 1, 23, 32}},
-                 {"Normal4", {"energy/02_Value/01_’Êí/4.png", 1, 1, 23, 32}},
-                 {"Normal5", {"energy/02_Value/01_’Êí/5.png", 1, 1, 23, 32}},
-                 {"Normal6", {"energy/02_Value/01_’Êí/6.png", 1, 1, 23, 32}},
-                 {"Normal7", {"energy/02_Value/01_’Êí/7.png", 1, 1, 23, 32}},
-                 {"Normal8", {"energy/02_Value/01_’Êí/8.png", 1, 1, 23, 32}},
-                 {"Normal9", {"energy/02_Value/01_’Êí/9.png", 1, 1, 23, 32}},
-
-                 {"Giri0", {"energy/02_Value/02_•mŽ€/0.png", 1, 1, 23, 32}},
-                 {"Giri1", {"energy/02_Value/02_•mŽ€/1.png", 1, 1, 23, 32}},
-                 {"Giri2", {"energy/02_Value/02_•mŽ€/2.png", 1, 1, 23, 32}},
-                 {"Giri3", {"energy/02_Value/02_•mŽ€/3.png", 1, 1, 23, 32}},
-                 {"Giri4", {"energy/02_Value/02_•mŽ€/4.png", 1, 1, 23, 32}},
-                 {"Giri5", {"energy/02_Value/02_•mŽ€/5.png", 1, 1, 23, 32}},
-                 {"Giri6", {"energy/02_Value/02_•mŽ€/6.png", 1, 1, 23, 32}},
-                 {"Giri7", {"energy/02_Value/02_•mŽ€/7.png", 1, 1, 23, 32}},
-                 {"Giri8", {"energy/02_Value/02_•mŽ€/8.png", 1, 1, 23, 32}},
-                 {"Giri9", {"energy/02_Value/02_•mŽ€/9.png", 1, 1, 23, 32}},
                  {"EnergyPl6", {"energy/playerEnergy6.png", 1, 1, 85, 85}},
                  {"EnergyPl11", {"energy/kari/01.png", 1, 1, 85, 85}},
                  {"EnergyPl12", {"energy/kari/02.png", 1, 1, 85, 85}},
@@ -83,10 +58,9 @@ namespace MachineHuck::Gauge {
                  {"EnergyPl54", {"energy/kari/80/04.png", 1, 1, 85, 85}},
                  {"EnergyPl55", {"energy/kari/80/05.png", 1, 1, 85, 85}}
         };
-        auto& as = act.GetGame().GetAssetServer();
+        auto& as = GetGame().GetAssetServer();
         as.LoadTextures(texturePlayerGauge);
         _handlePl = as.GetTexture("EnergyPl6");
-        //        _handlePl1[5] = as.GetTextureAni("EnergyPl1",5);
         _handlePl1[0] = as.GetTexture("EnergyPl11");
         _handlePl1[1] = as.GetTexture("EnergyPl12");
         _handlePl1[2] = as.GetTexture("EnergyPl13");
@@ -112,48 +86,42 @@ namespace MachineHuck::Gauge {
         _handlePl5[2] = as.GetTexture("EnergyPl53");
         _handlePl5[3] = as.GetTexture("EnergyPl54");
         _handlePl5[4] = as.GetTexture("EnergyPl55");
-        _handlePl0 = act.GetGame().GetAssetServer().GetTexture("Energy0");
-        _handleNormalNumber[0] = as.GetTexture("Normal0");
-        _handleNormalNumber[1] = as.GetTexture("Normal1");
-        _handleNormalNumber[2] = as.GetTexture("Normal2");
-        _handleNormalNumber[3] = as.GetTexture("Normal3");
-        _handleNormalNumber[4] = as.GetTexture("Normal4");
-        _handleNormalNumber[5] = as.GetTexture("Normal5");
-        _handleNormalNumber[6] = as.GetTexture("Normal6");
-        _handleNormalNumber[7] = as.GetTexture("Normal7");
-        _handleNormalNumber[8] = as.GetTexture("Normal8");
-        _handleNormalNumber[9] = as.GetTexture("Normal9");
+        _handlePl0 = GetGame().GetAssetServer().GetTexture("Energy0");
+        auto& asn = GetGame().GetAssetServer();
 
-        _handleGiri[0] = as.GetTexture("Giri0");
-        _handleGiri[1] = as.GetTexture("Giri1");
-        _handleGiri[2] = as.GetTexture("Giri2");
-        _handleGiri[3] = as.GetTexture("Giri3");
-        _handleGiri[4] = as.GetTexture("Giri4");
-        _handleGiri[5] = as.GetTexture("Giri5");
-        _handleGiri[6] = as.GetTexture("Giri6");
-        _handleGiri[7] = as.GetTexture("Giri7");
-        _handleGiri[8] = as.GetTexture("Giri8");
-        _handleGiri[9] = as.GetTexture("Giri9");
+        _handleNormalNumber[0] = asn.GetTexture("Normal0");
+        _handleNormalNumber[1] = asn.GetTexture("Normal1");
+        _handleNormalNumber[2] = asn.GetTexture("Normal2");
+        _handleNormalNumber[3] = asn.GetTexture("Normal3");
+        _handleNormalNumber[4] = asn.GetTexture("Normal4");
+        _handleNormalNumber[5] = asn.GetTexture("Normal5");
+        _handleNormalNumber[6] = asn.GetTexture("Normal6");
+        _handleNormalNumber[7] = asn.GetTexture("Normal7");
+        _handleNormalNumber[8] = asn.GetTexture("Normal8");
+        _handleNormalNumber[9] = asn.GetTexture("Normal9");
+
+        _handleGiri[0] = asn.GetTexture("Giri0");
+        _handleGiri[1] = asn.GetTexture("Giri1");
+        _handleGiri[2] = asn.GetTexture("Giri2");
+        _handleGiri[3] = asn.GetTexture("Giri3");
+        _handleGiri[4] = asn.GetTexture("Giri4");
+        _handleGiri[5] = asn.GetTexture("Giri5");
+        _handleGiri[6] = asn.GetTexture("Giri6");
+        _handleGiri[7] = asn.GetTexture("Giri7");
+        _handleGiri[8] = asn.GetTexture("Giri8");
+        _handleGiri[9] = asn.GetTexture("Giri9");
 
         _gauge = 100;
-        _gaugeCount = 0;
         _gaugeTimer = 0;
     }
+
     void GaugePlayer::Update() {
-        if (_gauge > 100) {
-            _gauge = 100;
+        if (_gauge > _gaugeMax) {
+            _gauge = _gaugeMax;
         }
         _gaugeTimer++;
-        //_gauge=(_gauge/_gaugeMAX)*100
-      //  _gaugeNumber = _gauge;
-
-        if (_gauge == _gaugeMax) {
-            _gaugeNumber = _gauge / _gaugeMax * 100;
-        }
-        else {
-            _gaugeNumber = _gauge % _gaugeMax;
-        }
-        _gaugeNumberHuns = _gaugeNumber / 100;
+        _gaugeNumber = _gauge / _gaugeMax * 100;
+        _gaugeNumberHuns = _gauge / _gaugeMax;
         if (_gaugeNumberHuns != 1) {
             _gaugeNumberTens = _gaugeNumber / 10;
             _gaugeNumberOnes = _gaugeNumber % 10;
@@ -162,14 +130,14 @@ namespace MachineHuck::Gauge {
             _gaugeNumberTens = 0;
             _gaugeNumberOnes = 0;
         }
-    }
-
-    void GaugePlayer::Update(Actor::Actor& act) {
-
-        if (_gaugeCount % 15 == 0) {
-            _gauge--;
+        if (_gaugeTimer > 1) {
+            if ((_oldPlayerPosition.GetX() != _gaugePlayerPosition.GetX() || _oldPlayerPosition.GetZ() != _gaugePlayerPosition.GetZ()) && _gaugePlayerPosition.GetY() == 0) {
+                if (_gaugeCount % 15 == 0) {
+                    _gauge--;
+                }
+                _oldPlayerPosition = _gaugePlayerPosition;
+            }
         }
-
         _gaugeCount++;
     }
     void GaugePlayer::DownGauge(const int gauge) {
@@ -179,41 +147,34 @@ namespace MachineHuck::Gauge {
         _gauge += gauge;
     }
 
-    void GaugePlayer::Draw(Actor::Actor& act) {
-
-        //  GaugeBase::Draw(act);
+    void GaugePlayer::Draw() {
         auto gaugeStr = std::to_string(_gauge);
         auto gaugemaxStr = std::to_string(_gaugeMax);
 
-        auto pos = act.GetPosition();
+        auto pos = _gaugePlayerPosition;
         auto v = ConvWorldPosToScreenPos(ToDX(pos));
         DrawString(static_cast<int>(v.x), static_cast<int>(v.y) - 250, gaugeStr.c_str(), GetColor(0, 255, 0));
         DrawString(static_cast<int>(v.x), static_cast<int>(v.y) - 200, gaugemaxStr.c_str(), GetColor(0, 255, 0));
-        //DrawString(1000,  200, gaugeStr.c_str(), GetColor(0, 255, 0));
-       // DrawGraph(static_cast<int>(v.x), static_cast<int>(v.y), _handlePl, TRUE);
 
-        double gauge = static_cast<double>(_gauge);
-        double gaugemax = static_cast<double>(_gaugeMax);
-
-        if (_gauge < 1) {
+        if (_gaugeNumber < 1) {
             DrawGraph(static_cast<int>(v.x) - _cgXPosition, static_cast<int>(v.y) - _cgYPosition, _handlePl0, TRUE);
         }
-        else if (_gauge > 0 && _gauge < 21) {
+        else if (_gaugeNumber > 0 && _gaugeNumber < 21) {
             DrawGraph(static_cast<int>(v.x) - _cgXPosition, static_cast<int>(v.y) - _cgYPosition, _handlePl1[(_gaugeTimer / _aniSpeed) % _cgNum], TRUE);
         }
-        else if (_gauge > 20 && _gauge < 41) {
+        else if (_gaugeNumber > 20 && _gaugeNumber < 41) {
             DrawGraph(static_cast<int>(v.x) - _cgXPosition, static_cast<int>(v.y) - _cgYPosition, _handlePl2[(_gaugeTimer / _aniSpeed) % _cgNum], TRUE);
         }
-        else if (_gauge > 40 && _gauge < 61) {
+        else if (_gaugeNumber > 40 && _gaugeNumber < 61) {
             DrawGraph(static_cast<int>(v.x) - _cgXPosition, static_cast<int>(v.y) - _cgYPosition, _handlePl3[(_gaugeTimer / _aniSpeed) % _cgNum], TRUE);
         }
-        else if (_gauge > 60 && _gauge < 81) {
+        else if (_gaugeNumber > 60 && _gaugeNumber < 81) {
             DrawGraph(static_cast<int>(v.x) - _cgXPosition, static_cast<int>(v.y) - _cgYPosition, _handlePl4[(_gaugeTimer / _aniSpeed) % _cgNum], TRUE);
         }
-        else if (_gauge > 80 && _gauge < 100) {
+        else if (_gaugeNumber > 80 && _gaugeNumber < 100) {
             DrawGraph(static_cast<int>(v.x) - _cgXPosition, static_cast<int>(v.y) - _cgYPosition, _handlePl5[(_gaugeTimer / _aniSpeed) % _cgNum], TRUE);
         }
-        else if (_gauge > 99) {
+        else if (_gaugeNumber > 99) {
             DrawGraph(static_cast<int>(v.x) - _cgXPosition, static_cast<int>(v.y) - _cgYPosition, _handlePl, TRUE);
         }
         //100‚Ì‚­‚ç‚¢
@@ -294,6 +255,6 @@ namespace MachineHuck::Gauge {
             DrawGraph(static_cast<int>(v.x) - _cgXNumPosition + 23, static_cast<int>(v.y) - _cgYNumPosition, _handleNormalNumber[0], TRUE);
             break;
         }
-
     }
+
 }

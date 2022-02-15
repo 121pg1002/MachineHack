@@ -8,6 +8,7 @@
  *********************************************************************/
 #pragma once
 #include "GaugeBase.h"
+#include "AppFrame.h"
 #include "../ShadowMap/Shadowmap.h"
 namespace MachineHuck::Actor {
     class Actor;
@@ -17,59 +18,51 @@ namespace MachineHuck::Shadow {
 }
 namespace MachineHuck::Gauge {
 
-  /**
-   * @class GaugeBase
-   * @brief ゲージの管理クラス
-   */
-   //    class GaugeBase {
-  class GaugeEnemy :public GaugeBase {
-  public:
-
     /**
-     * @brief コンストラクタ
-     * @param act アクタークラスの参照
+     * @class GaugeBase
+     * @brief ゲージの管理クラス
      */
-    GaugeEnemy(Actor::Actor& act);
+     //    class GaugeBase {
+    class GaugeEnemy :public GaugeBase {
+    public:
 
-    /**
-     * @brief 初期化
-     */
-    void Init(Actor::Actor& act);
-    /**
-    * @brief 更新
-    */
-    void Update();
-    /**
-     * @brief 更新
-     * @param act アクタークラスの参照
-     */
-    void Update(Actor::Actor& act);
+        /**
+         * @brief コンストラクタ
+         * @param act アクタークラスの参照
+         */
+        GaugeEnemy(AppFrame::Game& game);
 
+        /**
+         * @brief 初期化
+         */
+        void Init();
+        /**
+        * @brief 更新
+        */
+        void Update();
 
+        /**
+         * @brief 描画
+         * @param act
+         */
+        void Draw();
 
-    /**
-     * @brief 描画
-     * @param act
-     */
-    void Draw(Actor::Actor& act);
+        void UpdateEnemyPosition(Math::Vector4 pos) { _gaugeEnemyPosition = pos; };
+        Math::Vector4 GetGaugeEnemyPosition() { return _gaugeEnemyPosition; }
+        void UpdateEnemyHp(float gauge) { _gauge = gauge; };
 
+        int GetEnemyGauge() { return _gauge; }
+    private:
+        int _gaugeCount;      //!< ゲージを減らすカウンタ
 
-
-
-  private:
-
-    //int _gauge{ 100 };    //!< エネルギーゲージの量
-    //int _gaugeMax{ 100 }; //!< エネルギーゲージの最大値
-    int _gaugeCount;      //!< ゲージを減らすカウンタ
-
-   // Actor::Actor& _actor; //!< アクタークラスの参照
-    int _handleEn;          //エネルギーゲージ満タン
-    int _handleEn1[5] = { 0 };
-    int _handleEn2[5] = { 0 };
-    int _handleEn3[5] = { 0 };
-    int _handleEn4[5] = { 0 };
-    int _handleEn5[5] = { 0 };
-    int _handleEn0;
-    int _gaugeTimer{ 0 };
-  };
+        int _handleEn;          //エネルギーゲージ満タン
+        int _handleEn1[5] = { 0 };
+        int _handleEn2[5] = { 0 };
+        int _handleEn3[5] = { 0 };
+        int _handleEn4[5] = { 0 };
+        int _handleEn5[5] = { 0 };
+        int _handleEn0;
+        int _gaugeTimer{ 0 };
+        Math::Vector4  _gaugeEnemyPosition = { 0, 0, 0 };
+    };
 }

@@ -324,9 +324,9 @@ namespace MachineHuck::Actor {
 
         Collision::CollisionComponent& GetCollision() const { return *_collision; }
 
-        Gauge::GaugeBase& GetGaugeBase() const  { return *_gaugeBase; }
-        Gauge::GaugeEnemy& GetGaugeEnemy() const { return *_gaugeEnemy; }
-        Gauge::GaugePlayer& GetGaugePlayer() const { return *_gaugePlayer; }
+        //Gauge::GaugeBase& GetGaugeBase() const  { return *_gaugeBase; }
+        //Gauge::GaugeEnemy& GetGaugeEnemy() const { return *_gaugeEnemy; }
+        //Gauge::GaugePlayer& GetGaugePlayer() const { return *_gaugePlayer; }
 
         //Gimmick::GimmickBase& GetGimmickBase() const { return *_gimmickBase; }
 
@@ -390,9 +390,9 @@ namespace MachineHuck::Actor {
         std::unique_ptr<Model::ModelComponent> _model;
         std::shared_ptr<Camera::CameraComponent> _camera;
         std::unique_ptr<Collision::CollisionComponent> _collision;
-        std::unique_ptr<Gauge::GaugeBase> _gaugeBase;              //!< ゲージベースクラスへのユニークポインタ
-        std::unique_ptr<Gauge::GaugeEnemy> _gaugeEnemy;
-        std::unique_ptr<Gauge::GaugePlayer>_gaugePlayer;
+        //std::unique_ptr<Gauge::GaugeBase> _gaugeBase;              //!< ゲージベースクラスへのユニークポインタ
+        //std::unique_ptr<Gauge::GaugeEnemy> _gaugeEnemy;
+        //std::unique_ptr<Gauge::GaugePlayer>_gaugePlayer;
         //std::unique_ptr<Gimmick::GimmickBase>_gimmickBase;
 
         //std::unique_ptr<CollisionBase> _collision;  //!< 当たり判定基底クラス用のポインタ
