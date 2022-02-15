@@ -232,6 +232,8 @@ namespace MachineHuck::Actor {
         int GetLevel() const { return _level; }
         void SetRoutine(const int& routine) { _routine = routine; }
         int GetRoutine() const { return _routine; }
+        void SetNumRange(const int& numRange) { _numRange = numRange; }
+        int GetNumRange() const { return _numRange; }
 
 
         std::pair<int, int> GetFloorNumReserveNum() { return _floorReserveNum; }
@@ -428,8 +430,9 @@ namespace MachineHuck::Actor {
 
         bool _shadowmapflg;  //シャドウマップへの描画をするかどうかのフラグ
 
-        int _level;   //!< レベル
-        int _routine; //!< 思考ルーチン番号
+        int _level;    //!< レベル
+        int _routine;  //!< 思考ルーチン番号
+        int _numRange; //!< 移動量
         std::pair<int, int> _floorReserveNum; //!< 一つ目　フロア番号, 2つめ登録番号
 
         Math::Vector4 _holePos; //!< 穴の位置

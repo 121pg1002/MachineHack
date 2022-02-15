@@ -288,6 +288,7 @@ namespace MachineHuck::Actor {
                         actor->SetRotation(floorEnemy.GetRotation());
                         actor->SetScale(floorEnemy.GetScale());
                         actor->SetRoutine(floorEnemy.GetRoutine());
+                        actor->SetNumRange(floorEnemy.GetNumRange());
 
                         _game.GetActorServer().Add(std::move(actor));
 

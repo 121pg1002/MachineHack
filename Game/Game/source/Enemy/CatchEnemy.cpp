@@ -81,7 +81,7 @@ namespace MachineHuck::Enemy {
 		}
 
 		if (_status != STATUS::DYING && _status != STATUS::CHASE) {
-			Move("CatchEnemy", _routine, 2.0, 400);
+			Move("CatchEnemy", _routine, 2.0, _numRange);
 		}
 
 		if (_status == STATUS::ISHUCKED) {

@@ -63,7 +63,7 @@ namespace MachineHuck::Enemy {
 		_searchRange = eParam->GetEnemyParam("searchrange", 1);
 		_huckingRange = eParam->GetEnemyParam("searchrange", 0);////////©‚Æ‚è‚ ‚¦‚¸A‰¼
 
-
+		//_numRange = eParam->GetEnemyParam();
 
 	}
 
@@ -108,7 +108,7 @@ namespace MachineHuck::Enemy {
 
 
 		if (_status != STATUS::DYING && _status != STATUS::CHASE) {
-			Move("TackleEnemy", _routine, 3.0, 480);
+			Move("TackleEnemy", _routine, 3.0, _numRange);
 		}
 
 		if (_status == STATUS::ISHUCKED) {

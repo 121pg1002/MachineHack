@@ -105,8 +105,8 @@ namespace MachineHuck::Enemy {
                 const double& sx = jsRoot["StageEnemy"].at(i)["sx"];
                 const double& sy = jsRoot["StageEnemy"].at(i)["sy"];
                 const double& sz = jsRoot["StageEnemy"].at(i)["sz"];
-                const int& level = jsRoot["StageEnemy"].at(i)["level"];  //!< レベル
-                const int& routine = jsRoot["StageEnemy"].at(i)["routine"];//!< 思考ルーチン
+                const int& numRange = jsRoot["StageEnemy"].at(i)["numrange"];  //!< 索敵の移動量
+                const int& routine = jsRoot["StageEnemy"].at(i)["routine"];//!< 索敵の移動ルーチン
 
                 Math::Vector4 pos = { tx, ty, tz };
                 Math::Vector4 rot = { rx, ry, rz };
@@ -120,12 +120,13 @@ namespace MachineHuck::Enemy {
                 eSP.SetPos(pos);
                 eSP.SetRot(rot);
                 eSP.SetScale(scale);
+                eSP.SetNumRange(numRange);
                 eSP.SetRoutine(routine);
 
                // _vLevelRoutine.emplace_back(std::make_pair(level, routine));
 
 
-                //ブロック一つ一つを格納
+                //エネミー一体一体を格納
                 _eStageParamV.emplace_back(eSP);
 
             }

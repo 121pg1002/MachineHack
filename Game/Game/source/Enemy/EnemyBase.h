@@ -90,6 +90,7 @@ namespace MachineHuck::Enemy {
 		double _forwardSpeed;
 		int _numberTimes{ -1 };
 		int _soundFrame;
+		//int _numRange; //!< ˆÚ“®ƒ‹[ƒ`ƒ“‚ÌˆÚ“®—Ê
 
 	};
 }

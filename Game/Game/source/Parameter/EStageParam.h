@@ -26,25 +26,37 @@ namespace MachineHuck::Parameter {
 		 * @brief  敵のレベルを取得する
 		 * @return _level
 		 */
-		int GetLevel() { return _level; }
+		//int GetLevel() { return _level; }
 
 		/**
 		 * @brief  敵のレベルを保存
 		 * @param  level
 		 */
-		void SetLevel(int level) { _level = level; }
+		//void SetLevel(int level) { _level = level; }
 
 		/**
-		 * @brief  思考ルーチン番号を取得
+		 * @brief  移動ルーチン番号を取得
 		 * @return _routine
 		 */
 		int GetRoutine() { return _routine; }
 
 		/**
-		 * @brief 思考ルーチン番号を設定
+		 * @brief 移動ルーチン番号を設定
 		 * @param num
 		 */
 		void SetRoutine(int num) { _routine = num; }
+
+		/** 
+		 * @brief  移動量を取得
+		 * @return 移動量
+		 */
+		int GetNumRange() { return _numRange; }
+
+		/** 
+		 * @brief  移動量を設定       
+		 * @param  numRange
+		 */
+		void SetNumRange(int numRange) { _numRange = numRange; }
 
 		/**
 		 * @brief  生成回数
@@ -55,7 +67,8 @@ namespace MachineHuck::Parameter {
 	private:
 
 		int _level; //!< 敵のレベル
-		int _routine; //!< 思考ルーチン
+		int _routine; //!< 移動ルーチン
+		int _numRange; //!< 移動量
 		int _progress{ 0 }; //!< 生成回数
 		std::string _type;
 	};
