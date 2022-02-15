@@ -85,8 +85,9 @@ namespace MachineHuck::Player {
 				_no--;
 			}
 
-			if (_no > 25.0) {
-				_no = 25.0;
+			//ƒtƒƒA‚Ì‘S”Ô†‚©‚ç1ˆø‚­
+			if (_no > 24.0) {
+				_no = 24.0;
 			}
 
 			if (_no < 0.0) {
@@ -101,9 +102,9 @@ namespace MachineHuck::Player {
 
 
 		}
-		else {
-			_no = 0.0;
-		}
+		//else {
+		//	_no = 0.0;
+		//}
 
 
 

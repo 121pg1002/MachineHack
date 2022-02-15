@@ -11,7 +11,7 @@
 #include "../Flag/FlagData.h"
 
 namespace {
-    constexpr double FloorSize = 150.0; //!< 1フロアのサイズ
+    constexpr double FloorSize = 166.0; //!< 1フロアのサイズ
     constexpr double LineSize = 1.0;  //!< 描画する線のサイズ
     constexpr double BoardSize = 5.0; //!< 行と列のサイズ
     constexpr double StartX = 1920/2 - FloorSize * BoardSize/2.0;
@@ -25,12 +25,18 @@ namespace MachineHuck::Scene {
     /// コンストラクタ
     SceneMap::SceneMap(AppFrame::Game& game):Scene{ game }{
         _colorFrame = 0;
+        _mapHandles.clear();
     }
     /// 初期化
     void  SceneMap::Init() {
         // 使用する画像のテーブル
         const AppFrame::Asset::AssetServer::TextureMap textureToUsed{
           {"MapBg",    {"Texture/cloth_00146.png",          1, 1, 1920, 1080}},
+            {"Map0", {"Texture/SceneMap/map0_small.png", 1, 1, 160, 160}},
+            {"Map1", {"Texture/SceneMap/map1_small.png", 1, 1, 160, 160}},
+            {"Map2", {"Texture/SceneMap/map2_small.png", 1, 1, 160, 160}},
+            {"Map3", {"Texture/SceneMap/map3_small.png", 1, 1, 160, 160}},
+            {"Map4", {"Texture/SceneMap/map4_small.png", 1, 1, 160, 160}}
           /*    {"GameTitleAMG",        {"GameTitle.png",        1, 1, 1553, 224}},
               {"LeftClickToStartAMG", {"LeftClickToStart.png", 1, 1, 1135, 107}},*/
         };
@@ -41,6 +47,12 @@ namespace MachineHuck::Scene {
 
         // 画像のハンドル取得
         MapHandle = as.GetTexture("MapBg");
+
+        for (int i = 0; i < 5; i++) {
+        
+            auto&& handle = as.GetTexture("Map" + std::to_string(i));
+            _mapHandles.push_back(handle);
+        }
         /*  _gameTitleHandle = as.GetTexture("GameTitle");
           _leftClickToStart = as.GetTexture("LeftClickToStart");*/
 
@@ -109,7 +121,9 @@ namespace MachineHuck::Scene {
     /// 描画
     ///
     void  SceneMap::Render() {
-        DrawGraph(0, 0, MapHandle, false);
+       // DrawGraph(0, 0, MapHandle, false);
+
+
         
         //int StartY = 100.0;
         int offsetX = StartX;
@@ -143,6 +157,25 @@ namespace MachineHuck::Scene {
 
                 //枠の描画
                 DrawBox(offsetX, FloorSize * BoardSize - offsetY + FloorSize + StartHeight, offsetX + FloorSize, FloorSize * BoardSize - offsetY + StartHeight, GetColor(red, green, blue), false); //!< グレー
+
+
+
+                //if (i == 0 && j == 0) {
+
+                //    for (auto k : _mapHandles) {
+
+                if (i == 0) {
+
+                    //マップ画面の表示(仮)
+                    DrawGraph(offsetX + 3, FloorSize * BoardSize - offsetY + StartHeight + 3, _mapHandles[j], false);
+                
+                }
+
+
+                //    }
+                //
+                //}
+
                 //DrawBox(offsetX, offsetY, offsetX + FloorSize, offsetY + FloorSize, GetColor(red, green, blue), false); //!< 白
                 //DrawBox(offsetX, offsetY, offsetX + FloorSize, offsetY + FloorSize, GetColor(red, green, blue), false); //!< 緑
                 //DrawBox(offsetX, offsetY, offsetX + FloorSize, offsetY + FloorSize, GetColor(red, green, blue), false); //!< 赤

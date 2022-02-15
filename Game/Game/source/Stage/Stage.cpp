@@ -25,8 +25,9 @@ namespace MachineHuck::Stage {
 
 		constexpr int StageAll = 26;        //!< 読み込むstagejsonの数
 		constexpr double Differ = 3000.0; //!< 1フロアのサイズ
-		constexpr double StartX = -2.5 * Differ;
-		constexpr int BoardSize = 5;
+		constexpr double BoardSize = 5.0;
+		constexpr double StartX = -BoardSize/2 * Differ;
+		
 
 		//constexpr double HalfSize = 0.5 * Differ;
 		//constexpr int StartZ = -5.0 * Differ;
@@ -416,7 +417,10 @@ namespace MachineHuck::Stage {
 				//MV1RefreshCollInfo(floor->GetHandle(), 2);
 
 				//現在位置のステージ番号を保存
-				nums.push_back(floor->GetStageNum());
+				if (floor->GetStageNum() != -1) {
+					nums.push_back(floor->GetStageNum());
+				}
+				
 
 
 			}
@@ -596,7 +600,7 @@ namespace MachineHuck::Stage {
 				auto num = stageTableVector[i][j];
 
 				//最後の一番上の列だけ除く
-				if (i != stageTableVector.size() - 1) {
+				if (i != stageTableVector.size()) {
 
 					AppFrame::Math::Vector4 min = { static_cast<double>(j) * Differ + startX, 0.0, static_cast<double>(i) * Differ };
 					AppFrame::Math::Vector4 max = { (j + 1) * Differ + startX, 0.0, (i + 1) * Differ };
@@ -654,28 +658,55 @@ namespace MachineHuck::Stage {
 					auto scale = sP.GetScale();
 					auto ground = std::make_unique<Model::ModelComponent>(*this);
 
+					std::string::size_type nameParts = sP.GetName().find("stage");
+
+					//存在した
+					if (nameParts != std::string::npos) {
+					
+						
+						ground->SetMap(sP.GetName(), 10000);
+
+						//仮で数字を取り出す機構
+						auto numStr = sP.GetName().substr(5, 2);
+						number = std::stoi(numStr);
+
+						ground->SetStageNum(number);
+					}
+					else {
+						ground->SetModel(sP.GetName(), 10000);
+					
+					}
+
+
 					//ground->SetModel(sP.GetName(), 1000);
 
 
-					ground->SetMap(sP.GetName(), 1);
+					//ground->SetMap(sP.GetName(), 10000);
 
 					//とりあえず、仮で隠しの壁およびタイルを隠しようのベクターに登録
 					//if (sP.GetName() == "secretwall" || sP.GetName() == "secretfloor") {
 					//	_secretV.push_back(k);
 					//}
+					
 
-					//仮で数字を取り出す機構
-					auto numStr = sP.GetName().substr(5, 2);
-					number = std::stoi(numStr);
+					//std::string::size_type nameParts = sP.GetName().find("stage");
 
-					ground->SetStageNum(number);
+					////存在した
+					//if (nameParts != std::string::npos) {
+
+
+
+					//}
+
+
+					
 
 					//VECTOR zero = { 0.0f, 0.0f, 0.0f };
 					ground->SetPosition(ToDX(pos));
 
 					floorPos = pos;
 
-					MV1SetupCollInfo(ground->GetHandle(), -1, 32, 32, 32);
+					//MV1SetupCollInfo(ground->GetHandle(), -1, 32, 32, 32);
 					//ground->SetPosition(zero);
 					//auto size = MV1GetFrameNum(ground->GetHandle());
 

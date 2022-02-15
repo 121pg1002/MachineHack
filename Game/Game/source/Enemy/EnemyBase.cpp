@@ -92,7 +92,7 @@ namespace MachineHuck::Enemy {
 		else {
 
 			//索敵中の移動ルーチン
-			RoutineMove(num, 2.0);
+			RoutineMove(num, speed, numRange);
 
 
 		}
@@ -222,7 +222,7 @@ namespace MachineHuck::Enemy {
 		Math::Vector4 move = { 0.0, 0.0, 0.0 };
 		double rotY = 0.0;
 
-		//左右移動
+		//左右移動(スタート左方向)
 		if (num == 1) {
 
 			if (_numberTimes < numRange / 2) {
@@ -231,13 +231,21 @@ namespace MachineHuck::Enemy {
 			}
 			else {
 				move = { -speed, 0.0, 0.0 };
-
-
 			}
 
 
-		} //上下移動
-		else if (num == 2) {
+		} //左右移動(スタート右方向)
+		else if(num == 2) {
+		
+			if (_numberTimes < numRange / 2) {
+				move = { -speed, 0.0, 0.0 };
+
+			}
+			else {
+				move = { speed, 0.0, 0.0 };
+			}
+		}//上下移動(スタート下方向)
+		else if (num == 3) {
 
 			if (_numberTimes < numRange / 2) {
 				move = { 0.0, 0.0, speed };
@@ -248,8 +256,44 @@ namespace MachineHuck::Enemy {
 
 
 
-		}//回転移動(右回転)
-		else if (num == 3) {
+		}//上下移動(スタート上方向)
+		else if (num == 4) {
+
+			if (_numberTimes < numRange / 2) {
+				move = { 0.0, 0.0, -speed };
+			}
+			else {
+				move = { 0.0, 0.0, speed };
+			}
+
+
+
+		}//回転移動(右回転, 左下スタート)
+		else if (num == 5) {
+
+			if (_numberTimes < numRange / 4) {
+
+				move = { 0.0, 0.0, -speed };
+
+			}
+			else if (numRange / 4 <= _numberTimes && _numberTimes < numRange / 4 * 2) {
+
+				move = { -speed, 0.0, 0.0 };
+
+			}
+			else if (numRange / 4 * 2 <= _numberTimes && _numberTimes < numRange / 4 * 3) {
+
+				move = { 0.0, 0.0, speed };
+
+			}
+			else {
+				move = { speed, 0.0, 0.0 };
+			}
+
+
+
+		}//回転移動(左回転, 右上スタート)
+		else if (num == 6) {
 
 			if (_numberTimes < numRange / 4) {
 
@@ -271,22 +315,57 @@ namespace MachineHuck::Enemy {
 			}
 
 
+		} //回転のみ(左回転)
+		else if (num == 7) {
 
-		}//回転のみ
-		else if (num == 4) {
+			if (_numberTimes < numRange / 4) {
 
-			//if () {
-			//
-			//}
+				move = { 0.0, 0.0, speed };
 
+			}
+			else if (numRange / 4 <= _numberTimes && _numberTimes < numRange / 4 * 2) {
 
-		} //前進
-		else if (num == 5) {
+				move = { speed, 0.0, 0.0 };
 
+			}
+			else if (numRange / 4 * 2 <= _numberTimes && _numberTimes < numRange / 4 * 3) {
 
+				move = { 0.0, 0.0, -speed };
+
+			}
+			else {
+				move = { -speed, 0.0, 0.0 };
+			}
+
+		}//回転のみ(右回転)
+		else if (num == 8) {
+
+			if (_numberTimes < numRange / 4) {
+
+				move = { 0.0, 0.0, speed };
+
+			}
+			else if (numRange / 4 <= _numberTimes && _numberTimes < numRange / 4 * 2) {
+
+				move = { speed, 0.0, 0.0 };
+
+			}
+			else if (numRange / 4 * 2 <= _numberTimes && _numberTimes < numRange / 4 * 3) {
+
+				move = { 0.0, 0.0, -speed };
+
+			}
+			else {
+				move = { -speed, 0.0, 0.0 };
+			}
+		
 		}
 
-		_position = _position + move;
+		//回転のみは移動しない
+		if (num != 7 && num != 8) {
+			_position = _position + move;
+		}
+		
 		// Y軸の回転角度を求める(時計回りz⇔x)
 		rotY = std::atan2(move.GetX(), move.GetZ());
 

@@ -81,7 +81,7 @@ namespace MachineHuck::Enemy {
 		}
 
 		if (_status != STATUS::DYING && _status != STATUS::CHASE) {
-			Move("CatchEnemy");
+			Move("CatchEnemy", _routine, 2.0, 400);
 		}
 
 		if (_status == STATUS::ISHUCKED) {
@@ -149,23 +149,23 @@ namespace MachineHuck::Enemy {
 	}
 
 	void CatchEnemy::Draw() {
-		// 足のトゲの為のアルファテスト設定
-		MV1SetMaterialDrawAlphaTest(_modelAnime->GetHandle(), 3, TRUE, DX_CMP_LESS, 200);
-#ifdef _DEBUG
-		//auto pos = _position;
-		//pos.y += 40;
-		//DrawSphere3D(pos, 50, 16, GetColor(255, 0, 0), GetColor(0, 0, 0), TRUE);
-		_modelAnime->Draw(*this, _isHit, _searchRange, true);
-		_modelAnime->Draw(*this, _isHit, _huckingRange, false);
-		_modelAnime->Draw(*this, _catchR, _catchRange);
-		_modelAnime->DrawCircle(*this, _collisionR);
-		_modelAnime->Draw(*this, GetActorServer().GetPosition("Player"));
-
-		_gaugeBase->Draw(*this);
-#endif
-		_state->Draw();
-
-		_gaugeEnemy->Draw(*this);
+//		// 足のトゲの為のアルファテスト設定
+//		MV1SetMaterialDrawAlphaTest(_modelAnime->GetHandle(), 3, TRUE, DX_CMP_LESS, 200);
+//#ifdef _DEBUG
+//		//auto pos = _position;
+//		//pos.y += 40;
+//		//DrawSphere3D(pos, 50, 16, GetColor(255, 0, 0), GetColor(0, 0, 0), TRUE);
+//		_modelAnime->Draw(*this, _isHit, _searchRange, true);
+//		_modelAnime->Draw(*this, _isHit, _huckingRange, false);
+//		_modelAnime->Draw(*this, _catchR, _catchRange);
+//		_modelAnime->DrawCircle(*this, _collisionR);
+//		_modelAnime->Draw(*this, GetActorServer().GetPosition("Player"));
+//
+//		_gaugeBase->Draw(*this);
+//#endif
+//		_state->Draw();
+//
+//		_gaugeEnemy->Draw(*this);
 	}
 
 	void CatchEnemy::StateBase::Draw() {

@@ -77,19 +77,44 @@ namespace MachineHuck::Model {
 	//ステージモデルの設定
 	int ModelComponent::SetMap(std::string key, int no) {
 
-		if (key.size() < 5) {
+		std::string::size_type nameParts = key.find("stage");
+
+		//存在した
+		if (nameParts != std::string::npos) {
 		
-			return 0;
+			auto keyNum = key.substr(5, 2);
+
+
+			int num = std::stoi(keyNum);
+
+			auto&& [handle, actualNo] = _owner.GetGame().GetAssetServer().GetMap(num, no);
+			_handle = handle;
+			return actualNo;
 		}
+		
 
-		auto keyNum = key.substr(5, 2);
+		//auto&& [handle, actualNo] = _owner.GetGame().GetAssetServer().GetModel(key);
+		//_handle = handle;
+		//return actualNo;
 
 
-		int num = std::stoi(keyNum);
+		//std::string::size_type nameParts = name.find("entry");
 
-		auto&& [handle, actualNo] = _owner.GetGame().GetAssetServer().GetMap(num, no);
-		_handle = handle;
-		return actualNo;
+		////存在した
+		//if (nameParts != std::string::npos) {
+
+		//	//ハッキング状態か
+		//	if (act.IsHucked()) {
+		//		return VGet(0.0f, 0.0f, 0.0f);
+		//	}
+		//	else {
+		//		//ダクトフラグを設定
+		//		Flag::FlagData::SetDuctWarp(true);
+		//	}
+
+		//}
+
+		
 	}
 
 

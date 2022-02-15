@@ -38,6 +38,7 @@ namespace MachineHuck::Scene {
 
 	private:
 		int MapHandle{ -1 };  ///< マップ画像
+		std::vector<int> _mapHandles; //!< ミニマップの画像
 		int _alpha{0};
 		std::unordered_map<int, int> _floorMap;  //!< フロアマップの
 		std::vector<int> _playerV; //!< プレイヤーのいったことのあるマップを保存するベクター

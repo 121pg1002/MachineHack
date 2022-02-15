@@ -46,7 +46,7 @@ namespace MachineHuck::Item {
 		int numX = 0;
 		int numZ = 0;
 
-		if (0 <= num && num <= 9) {
+		if (0 <= num && num <= 4) {
 
 			numX = num;
 			numZ = 0;

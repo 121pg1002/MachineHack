@@ -43,7 +43,7 @@ namespace MachineHuck::Gimmick {
 		int numX = 0;
 		int numZ = 0;
 
-		if (0 <= stageNo && stageNo <= 9) {
+		if (0 <= stageNo && stageNo <= 4) {
 
 			numX = stageNo;
 			numZ = 0;
