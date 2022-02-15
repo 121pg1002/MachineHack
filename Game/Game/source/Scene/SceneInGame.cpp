@@ -63,6 +63,7 @@ namespace MachineHuck::Scene {
               {"Item","Object/Item.mv1"},
             {"BrokenWall", "Object/BrokenWall.mv1"},
             {"Hole", "Object/Hole.mv1"},
+            {"DamageFloor", "Object/DamageFloor.mv1"},
             {"EntryPoint", "Object/EntryPoint.mv1"},
             {"Floor", "Object/Floor.mv1"},
             {"ObstacleWall", "Object/ObstacleWall.mv1"},

@@ -616,9 +616,9 @@ namespace MachineHuck::Actor {
         auto damageFloorGimmick = std::make_unique<Gimmick::DamageFloorGimmick>(game);
 
         // モデルの読み込みと生成
-        //auto model = std::make_unique<Model::ModelComponent>(*damageFloorGimmick);
-        //model->SetModel("damagefloor", 1000);
-        //damageFloorGimmick->SetModelComponent(std::move(model));
+        auto model = std::make_unique<Model::ModelComponent>(*damageFloorGimmick);
+        model->SetModel("DamageFloor", 1000);
+        damageFloorGimmick->SetModelComponent(std::move(model));
         return damageFloorGimmick;
     }
 
@@ -646,9 +646,6 @@ namespace MachineHuck::Actor {
         //// モデルの読み込みと生成
         auto model = std::make_unique<Model::ModelComponent>(*hole);
         auto num = model->SetModel("Hole", 1000);
-
-        //ギミックのコリジョンを構築(仮)
-        //model->SetModelGimmick("Hole", "", num);
 
         hole->SetModelComponent(std::move(model));
         return hole;

@@ -316,7 +316,28 @@ namespace MachineHuck::Player {
 					//穴かどうか
 					if (i->GetTypeGimmick() != TypeGimmick::Hole) {
 					
-						continue;
+						//ダメージ床かどうか
+						if (i->GetTypeGimmick() != TypeGimmick::DamageFloor) {
+					
+							continue;
+						}
+						else {
+						
+							//無敵中ではない
+							if (!Flag::FlagData::GetNoDamageFlag() && !Flag::FlagData::GetDamageFlag()) {
+
+								//ダメージ床に触れているか
+								if (GetCollision().CircleToAABB(*this, *i)) {
+
+									//10ダメージ受ける
+									i->GetGame().GetGaugePlayerUI().DownGauge(10);
+									_state->GoToState("Damage");
+									Flag::FlagData::SetDamageFlag(true);
+								}
+
+							}
+						
+						}
 
 					}
 					else {
@@ -339,21 +360,19 @@ namespace MachineHuck::Player {
 						_position = oldPos;
 					}
 				
-				}
-			
-				
-
-					
-				
+				}	
 
 				continue;
 			}
 
 
-
+			//フロア番号を取得
 			auto floorNum = i->GetCollision().GetFloorNum();
 
+			//そのフロア番号にあるステージの位置座標を取得
 			auto pos = i->GetCollision().GetFloorPos(floorNum[0]);
+
+			//カメラ位置に座標を送る
 			_camera->FloorPos(pos);
 
 		}
@@ -748,10 +767,10 @@ namespace MachineHuck::Player {
 		//_owner.HitCheckFromEnemy();
 
 
-		if (_owner.GetGame().GetGaugePlayerUI().GetGauge() < 0) {
+		//if (_owner.GetGame().GetGaugePlayerUI().GetGauge() < 0) {
 
-			_owner._state->GoToState("Die");
-		}
+		//	_owner._state->GoToState("Die");
+		//}
 		if (_owner.GetGame().GetGaugePlayerUI().GetGauge() < 0) {
 			_owner._state->GoToState("Die");
 		}
@@ -785,7 +804,7 @@ namespace MachineHuck::Player {
 	//ダメージ状態
 	void Player::StateDamage::Enter() {
 
-		_owner.GetModelAnime().ChangeAnime("Damage", true);
+		_owner.GetModelAnime().ChangeAnime("Damage");
 	}
 
 	//ダメージ

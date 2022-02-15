@@ -22,8 +22,8 @@ namespace MachineHuck::Gimmick{
 		TypeId GetTypeId() const override { return TypeId::Gimmick; }
 		//TypeGimmick GetTypeGimmick() const override { return TypeGimmick::BrokenWall; }
 
-	    void Update();
-	    void Draw();
+	    void Update() override;
+	    void Draw() override;
 	private:
 		//std::unique_ptr<Model::ModelComponent> _wall;
     };

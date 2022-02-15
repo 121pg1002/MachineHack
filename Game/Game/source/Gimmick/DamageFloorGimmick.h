@@ -30,7 +30,7 @@ namespace MachineHuck::Gimmick {
 	private:
 		//int _damageCount; //!< ダメージ受けるカウンタ
 		//std::vector<std::unique_ptr<Model::ModelComponent>> _damageFloorV; //!< ダメージ床の動的配列
-		std::unique_ptr<Model::ModelComponent>_damageFloor;
+		//std::unique_ptr<Model::ModelComponent>_damageFloor;
 
 	};
 }
