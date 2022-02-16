@@ -54,7 +54,7 @@ namespace MachineHuck::Player {
 
 	//入力
 	void Player::Input(AppFrame::Input::InputComponent& input) {
-		_camera->Input(input);  // カメラの入力
+		//_camera->Input(input);  // カメラの入力
 
 		auto& joypad = input.GetJoypad();
 		auto& key = input.GetKeyBoard();
@@ -154,7 +154,6 @@ namespace MachineHuck::Player {
 					//状態をハッキング中に変更
 					_actorState = ActorState::Hucking;
 
-
 					_huckCount = 100;
 
 					lx = 0.0, ly = 0.0;
@@ -179,6 +178,8 @@ namespace MachineHuck::Player {
 				_actorState = ActorState::Active;
 				_huckCount = 200;
 			}
+
+
 			if (key.Button_LShift() && _actorState == ActorState::Hucked) {
 				_actorState = ActorState::Active;
 				_huckCount = 200;
@@ -296,7 +297,8 @@ namespace MachineHuck::Player {
 
 		//if (_actorState!= ActorState::Hucked) {
 
-		//_camera->Update(_move);
+		//カメラに移動量を送る
+		_camera->Update(_move);
 
 		for (auto&& i : GetActorServer().GetActors()) {
 
@@ -388,15 +390,26 @@ namespace MachineHuck::Player {
 				continue;
 			}
 
+			////ワープ後
+			if (_waitframe == 0 || _debugMode == true) {
 
-			//フロア番号を取得
-			auto floorNum = i->GetCollision().GetFloorNum();
+			   //フロア番号を取得
+			   auto floorNum = i->GetCollision().GetFloorNum();
+			   
+			   //そのフロア番号にあるステージの位置座標を取得
+			   auto pos = i->GetCollision().GetFloorPos(floorNum[0]);
+			   
+			   //カメラ位置に座標を送る
+			   _camera->FloorPos(pos);
+			
+			}
 
-			//そのフロア番号にあるステージの位置座標を取得
-			auto pos = i->GetCollision().GetFloorPos(floorNum[0]);
+			if (-10 < _waitframe && _waitframe < 0) {
+			
+				_camera->WarpMove(_rotation);
+			}
 
-			//カメラ位置に座標を送る
-			_camera->FloorPos(pos);
+
 
 		}
 
@@ -674,7 +687,7 @@ namespace MachineHuck::Player {
 		//_y_rot += 90.0;
 		//angle.Set(0.0, _y_rot, 0.0);
 		//角度を更新
-		SetRotation(rot);
+		_rotation = rot;
 
 	}
 

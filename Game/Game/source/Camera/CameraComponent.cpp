@@ -29,23 +29,69 @@ namespace MachineHuck::Camera {
 		SetCameraNearFar(50.0f, 50000.0f);
 	}
 	void CameraComponent::Input(AppFrame::Input::InputComponent& input) {
+
+		//if(input.GetJoypad().)
+
+		//_lx = 0.0, _ly = 0.0;
+
+		//if (input.GetJoypad().LHorison() != 0.0) {
+		//	_lx = input.GetJoypad().LHorison() / 1000.0;
+		//}
+
+
+
+		//if (input.GetJoypad().LVertical() != 0.0) {
+		//	_ly = input.GetJoypad().LVertical() / 1000.0;
+		//}
+
 	}
 	///
 	/// 更新.
 	///
 	void CameraComponent::Update(Math::Vector4 move) {
+
+
+		////横方向の傾きと縦方向の傾きの大きさ
+		//double length = sqrt(_lx * _lx + _ly * _ly);
+
+		//if (length < 0.3) {
+		//	// 入力が小さかったら動かなかったことにする
+		//	length = 0.0;
+		//	//_hp++;
+		//}
+		//else {
+		//	length = 10.0;
+		//	//_hp -= 0.1f;//エネルギー現象
+		//}
+		////if (_hp < 0) {
+		////	_hp = 0;
+		////}
+		////if (_hp > 100) {
+		////	_hp = 100;
+		////}
+
+		////横方向と縦方向の角度
+		//double rad = atan2(ly, lx);
+
+		////x軸方向の移動量
+		//auto moveX = cos(rad) * length;
+
+		////z軸方向の移動量
+		//auto moveZ = sin(rad) * length;
+
+		//_move = { moveX, 0.0, moveZ };
 		//// ターゲットの向き※Yは無視
 		//auto forward = _forwardOfTarget;
 		//forward.y = 0.f;
 		//// ターゲットの向きの真逆に長さをtargetDist
 		//auto fromTarget = VScale(forward, -targetDist);
 		//fromTarget.y = vertDist;
+		
 		// カメラの位置をプレイヤーの後方の位置にする
-		_position = _position + move;
-		_target = _target + move;
+		_position = _position + move / 4;
+		_target = _target;
 
 		SetCameraPositionAndTarget_UpVecY(ToDX(_position), ToDX(_target));
-
 
 	}
 
@@ -54,9 +100,13 @@ namespace MachineHuck::Camera {
 	
 		_position = pos + _positionInitDif;
 		_target = pos + _targetInitDif;
-		SetCameraPositionAndTarget_UpVecY(ToDX(_position), ToDX(_target));
 
-		Flag::FlagData::SetCameraPos(ToDX(pos));
+		//_target = pos;
+
+		
+		SetCameraPositionAndTarget_UpVecY(ToDX(_position), ToDX(_target));
+		SetCameraMatrix();
+		//Flag::FlagData::SetCameraPos(ToDX(pos));
 
 	}
 
@@ -108,36 +158,55 @@ namespace MachineHuck::Camera {
 		_target = position + _targetInitDif;
 	}
 
+	void CameraComponent::SetCameraMatrix() {
+	
+		// 現在のクライアント領域のサイズを取得
+		int wwid = 1920, whei = 1080;
+		//GetWindowSize(&wwid, &whei);
 
-	//MATRIX GetCameraViewMatrix(VECTOR& cameraPosition, VECTOR& cameraTarget, VECTOR& cameraUp) {
-	//    //SetCameraPositionAndTargetAndUpVec(camera_position, camera_target, camera_up);
-	//    //MATRIX camera_matrix = GetCameraViewMatrix();
-	//    // ↑ 上記と同じ MATRIX の内容を計算する
-	//
-	//    // カメラの姿勢での XYZ を作成
-	//    VECTOR camera_z = VNorm(VSub(cameraTarget, cameraPosition));
-	//    VECTOR camera_x = VNorm(VCross(cameraUp, camera_z));
-	//    VECTOR camera_y = VCross(camera_z, camera_x);
-	//
-	//    MATRIX camera_matrix = MGetIdent();
-	//
-	//    camera_matrix.m[0][0] = camera_x.x;
-	//    camera_matrix.m[0][1] = camera_y.x;
-	//    camera_matrix.m[0][2] = camera_z.x;
-	//
-	//    camera_matrix.m[1][0] = camera_x.y;
-	//    camera_matrix.m[1][1] = camera_y.y;
-	//    camera_matrix.m[1][2] = camera_z.y;
-	//
-	//    camera_matrix.m[2][0] = camera_x.z;
-	//    camera_matrix.m[2][1] = camera_y.z;
-	//    camera_matrix.m[2][2] = camera_z.z;
-	//    // DX ライブラリには VECTOR にマイナス演算子をつける機能はないので VScale でマイナスにする
-	//    camera_matrix.m[3][0] = VDot(VScale(camera_x, -1.0f), cameraPosition);
-	//    camera_matrix.m[3][1] = VDot(VScale(camera_y, -1.0f), cameraPosition);
-	//    camera_matrix.m[3][2] = VDot(VScale(camera_z, -1.0f), cameraPosition);
-	//
-	//    return camera_matrix;
-	//}
+		//// 射影行列を設定
+		//MATRIX ProjectionMatrix;
+		//CreatePerspectiveFovMatrix(&ProjectionMatrix, tan(DX_PI_F / 3.0 / 2.0) * whei / wwid, 0.001f, 10000.0f, (float)whei / wwid);
+		//SetTransformToProjection(&ProjectionMatrix); //!< カメラ行列を射影行列に変換している
+		////SetupCamera_ProjectionMatrix(ProjectionMatrix);
+
+		//// ビューポート行列を設定
+		//MATRIX ViewportMatrix;
+		//CreateViewportMatrix(&ViewportMatrix, wwid / 2.0f, whei / 2.0f, (float)wwid, (float)whei);
+		//SetTransformToViewport(&ViewportMatrix);//!< カメラ行列をViewPort行列に変換している
+
+		//// 描画領域を設定
+		//SetDrawArea(0, 0, wwid, whei);
+
+		SetupCamera_Perspective(tan(DX_PI_F / 3.0 / 2.0) * whei / wwid);
+	
+	}
+
+	void CameraComponent::WarpMove(Math::Vector4 rot) {
+		Math::Vector4 move = { 0.0, 0.0, 0.0 };
+	
+		if (rot.GetY() < -2.35 || 2.35 < rot.GetY()) {
+		
+			//上から来た(下向き)
+			move = { 10.0, 0.0, 0.0 };
+
+		}
+		else if (-2.35 <= rot.GetY() && rot.GetY() <= -0.78) {
+		    //右から来た(左向き)
+			move = { 0.0, 0.0, 10.0 };
+		}
+		else if (-0.78 < rot.GetY() && rot.GetY() < 0.78) {
+		    //下から来た(上向き)
+			move = { 0.0, 0.0, -10.0 };
+		}
+		else {
+		    //左から来た(右向き)
+			move = { -10.0, 0.0, 0.0 };
+		}
+
+		_target = _target + move;
+
+		SetCameraPositionAndTarget_UpVecY(ToDX(_position), ToDX(_target));
+	}
 }
 

@@ -263,6 +263,18 @@ namespace MachineHuck::Flag {
 
 		static void SetEpilogueFlag(bool flag) { _epilogueFlag = flag; }
 
+		/**
+		 * @brief  キャッチエネミーのカウンタを取得         
+		 * @return カウンタ
+		 */
+		static int GetCatchCount() { return _catchCount; }
+
+		/** 
+		 * @brief  キャッチエネミーのカウンタを設定        
+		 * @param  count
+		 */
+		static void SetCatchCount(int count) { _catchCount = count; }
+
 
 #ifdef _DEBUG
 		/**
@@ -313,6 +325,7 @@ namespace MachineHuck::Flag {
 		static int _PlayerNowFloorNum; //!< プレイヤーの現在いるフロア番号を保存
 		static std::vector<int> _playerFloorV; //!< プレイヤーの行ったことのあるフロア番号を登録する
 		static bool _epilogueFlag;  //!< エピローグのフラグ
+		static int _catchCount;     //!< キャッチエネミーのカウンタ
 
 #ifdef _DEBUG
 		static int _debugNo; //!< デバッグモード中に転移したい番号

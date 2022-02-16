@@ -62,13 +62,19 @@ namespace MachineHuck {
 			/// @param[in] target
 			void SetTarget(Math::Vector4 target, Math::Vector4 forward = { 0,0,0 }) { _target = target; _forwardOfTarget = forward; }
 
-
 			/**
 			 * @brief  カメラ目標の更新         
 			 * @param  position
 			 */
 			void SetRefleshTarget(Math::Vector4 position);
 
+			void SetCameraMatrix();
+
+			/** 
+			 * @brief ワープ直後の主人公の方にカメラを向ける        
+			 * @param rot 主人公の向き 
+			 */
+			void WarpMove(Math::Vector4 rot);
 
 			/// 注視点方向のベクトルを取得
 			/// @return 注視点方向の単位ベクトル
@@ -81,9 +87,12 @@ namespace MachineHuck {
 			Math::Vector4 _forwardOfTarget{ 0, 0, 0 };
 			float targetDist{ 500 };
 			float vertDist{ 100 };
-			Math::Vector4 _positionInitDif{ 0, 1200, -1000 }; //!< 初期カメラ位置の差分座標
-			//Math::Vector4 _positionInitDif{ 0, 2000, -200 }; //!< 初期カメラ位置の差分座標
-			Math::Vector4 _targetInitDif{ 0, 100, 0 };       //!< 初期カメラ目標の差分座標
+			//Math::Vector4 _positionInitDif{ 0, 1200, -1000 }; //!< 初期カメラ位置の差分座標
+			Math::Vector4 _positionInitDif{ 0, 4500, -2000 };   //!< 初期カメラ位置の差分座標
+			//Math::Vector4 _positionInitDif{ 0, 2000, -200 };  //!< カメラ撮影用
+			Math::Vector4 _targetInitDif{ 0, 100, 0 };          //!< 初期カメラ目標の差分座標
+			Math::Vector4 _move{0.0, 0.0, 0.0};
+			double _lx{ 0.0 }, _ly{0.0};
 		};
 	}
 

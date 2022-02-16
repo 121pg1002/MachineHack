@@ -55,6 +55,7 @@ bool AppFrame::Game::Initialize() {
     // •`‰ææ‰æ–Ê‚ğ— ‚É‚·‚é
     SetDrawScreen(DX_SCREEN_BACK);
 
+
     //Effekseer‚Ì‰Šú‰»
     MachineHuck::Effect::EffectServer::EffekseerInit();                     //’Ç‰Á
 

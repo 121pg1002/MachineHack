@@ -313,7 +313,8 @@ namespace MachineHuck::Enemy {
 
 
 		_catchTime = 60;
-		_catchFlag = true;
+		/*_catchFlag = true;*/
+
 
 		//ハッキングされている場合
 		if (_owner.GetStatus() == STATUS::ISHUCKED) {
@@ -323,15 +324,28 @@ namespace MachineHuck::Enemy {
 			_owner.GetGame().GetGaugeEnemyUI().DownGauge(20);
 
 		}
+		//else {
+		//
+		//	Flag::FlagData::SetCatchCount(10);
+		//}
 
 		_owner.GetModelAnime().ChangeAnime("Catch");
 	}
 
 	void CatchEnemy::StateCatch::Update() {
 
-
-		//if (_catchFlag) {
+		//if (Flag::FlagData::GetCatchCount() < 0) {
+		//	_catchFlag = false;
+		//}
+		//else {
 		//
+		//
+		//
+		//}
+
+
+		//if (!_catchFlag) {
+		//	_owner._state->GoToState("CatchAfter");
 		//}
 
 

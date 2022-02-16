@@ -451,21 +451,21 @@ namespace MachineHuck::Scene {
 
         
         //シャドウマップへの描画のフラグをオンにする
-        shadowmap->SetPlayerShadowMapflg(TRUE);
+        //shadowmap->SetPlayerShadowMapflg(TRUE);
         //シャドウマップへの描画の準備を行う
-        ShadowMap_DrawSetup(shadowmap->GetShadowmap());
+        //ShadowMap_DrawSetup(shadowmap->GetShadowmap());
         //シャドウマップに描画したい3Dモデルの描画
         GetActorServer().Render();
         //シャドウマップへの描画を終了する
-        ShadowMap_DrawEnd();
+        //ShadowMap_DrawEnd();
         //シャドウマップへの描画のフラグをオフにする。
         shadowmap->SetPlayerShadowMapflg(FALSE);
         //	描画で使用するシャドウマップを変更する
-        SetUseShadowMap(0, shadowmap->GetShadowmap());
+        //SetUseShadowMap(0, shadowmap->GetShadowmap());
         //3Dモデルの描画
         GetActorServer().Render();
         //３Dモデルの描画で使用したシャドウマップの設定を解除する
-        SetUseShadowMap(0, -1);
+        //SetUseShadowMap(0, -1);
         //UIの描画
         GetUiComponent().Render();
 

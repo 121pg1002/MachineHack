@@ -10,7 +10,7 @@
 namespace MachineHuck::Item {
 	Item::Item(AppFrame::Game& game) : Actor{ game } {
 
-		_r = 1.0;
+		_r = 2.0;
 		_isHit = false;
 		_status = STATUS::TANK;
 	}

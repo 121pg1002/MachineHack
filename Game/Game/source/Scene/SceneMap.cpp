@@ -16,10 +16,10 @@ namespace {
     constexpr double LineSize = 1.0;  //!< 描画する線のサイズ
     constexpr double BoardSize = 5.0; //!< 行と列のサイズ
     constexpr double StartX = 1920/2 - FloorSize * BoardSize/2.0;
-    constexpr double StartHeight = 200; //!< 上の開始高さ空ける分
+    constexpr double StartHeight = 220; //!< 上の開始高さ空ける分
     constexpr double StartY = 150.0;
-    constexpr int    GoalNum = 21; //!< ゴールのフロア番号
-    constexpr int    Space = 10;    //!< 枠の間の間隔
+    constexpr int    GoalNum = 21;      //!< ゴールのフロア番号
+    constexpr int    Space = 10;        //!< 枠の間の間隔
 
 }
 
@@ -33,14 +33,17 @@ namespace MachineHuck::Scene {
     void  SceneMap::Init() {
         // 使用する画像のテーブル
         const AppFrame::Asset::AssetServer::TextureMap textureToUsed{
-            {"MapBg",  {"Texture/mapUI.png",          1, 1, 1920, 1080}},
+            {"MapBg",  {"Texture/SceneMap/mapUI.png",          1, 1, 1920, 1080}},
             {"Map0",   {"Texture/SceneMap/map0_small.png", 1, 1, 160, 160}},
             {"Map1",   {"Texture/SceneMap/map1_small.png", 1, 1, 160, 160}},
             {"Map2",   {"Texture/SceneMap/map2_small.png", 1, 1, 160, 160}},
             {"Map3",   {"Texture/SceneMap/map3_small.png", 1, 1, 160, 160}},
             {"Map4",   {"Texture/SceneMap/map4_small.png", 1, 1, 160, 160}},
-            {"Player", {"Texture/SceneMap/Player.png", 1, 1, 100, 100}},
-            {"Goal",   {"Texture/SceneMap/Goal.png", 1, 1, 200, 200}}
+            {"Player", {"Texture/SceneMap/player.png", 1, 1, 166, 166}},
+            {"Goal",   {"Texture/SceneMap/Goal.png", 1, 1, 200, 200}},
+            {"BackTitle", {"Texture/SceneMap/title.png", 1, 1, 1920, 1080}},
+            {"Yes", {"Texture/SceneMap/Yes.png", 1, 1, 1920, 1080}},
+            {"No", {"Texture/SceneMap/No.png", 1, 1, 1920, 1080}}
           /*    {"GameTitleAMG",        {"GameTitle.png",        1, 1, 1553, 224}},
               {"LeftClickToStartAMG", {"LeftClickToStart.png", 1, 1, 1135, 107}},*/
         };
@@ -53,6 +56,9 @@ namespace MachineHuck::Scene {
         _mapHandle = as.GetTexture("MapBg");
         _playerHandle = as.GetTexture("Player");
         _goalHandle = as.GetTexture("Goal");
+        _titleHandle = as.GetTexture("BackTitle");
+        _selectHandleYes = as.GetTexture("Yes");
+        _selectHandleNo = as.GetTexture("No");
 
         for (int i = 0; i < 5; i++) {
         
@@ -77,19 +83,60 @@ namespace MachineHuck::Scene {
     /// 入口
     /// 
     void  SceneMap::Enter() {
-        _alpha = 0;
+       // _alpha = 0;
         _colorFrame = 0;
+        _no = 0;
+        _alpha = 255;
     }
     ///
     /// 入力
     ///
     void  SceneMap::Input(AppFrame::Input::InputComponent& input) {
-        if (input.GetMouse().LeftClick()) {
-            // 左クリックでInGameへ遷移
-            GetSceneServer().GoToScene("Team");
-            _alpha = 255;
+
+        //タイトルに戻る選択肢を出す
+        if (input.GetJoypad().Button_Y()) {
+
+            if (!_titleSelectFlag) {
+
+                _titleSelectFlag = true;
+                _alpha = 128;
+            
+            }
+            else {
+                _titleSelectFlag = false;
+                _alpha = 255;
+                _no = 0; //No
+            }
         }
 
+        //No = 1かYes = 0か
+        if (_titleSelectFlag) {
+        
+            if (input.GetJoypad().LHorison() < 0.0) {
+                _no = 1; //!< Yes
+            }
+            else if(input.GetJoypad().LHorison() > 0.0){
+                _no = 0; //!< No
+            }
+
+            //AボタンかつYesを選択中ならタイトルに戻る
+            if (input.GetJoypad().Button_A()) {
+            
+                if (_no == 0) {
+                    _titleSelectFlag = false;
+                    _alpha = 255;
+                
+                }
+                else {
+                    GetSceneServer().GoToScene("Title");
+                    GetSoundComponent().PlayStopMusic();
+                }
+            
+            }
+        
+        }
+
+        //インゲームに戻る
         if (input.GetJoypad().Button_X()) {
             //*se マップ画面を閉じる
             GetSoundComponent().Play("close");
@@ -98,15 +145,18 @@ namespace MachineHuck::Scene {
              //GetSceneServer().PushBack("InGame",1);
 
             GetSceneServer().GoToScene("InGame", false);
-            _alpha = 255;
+           // _alpha = 255;
         }
 
     }
     /// 更新
     void  SceneMap::Update() {
-        _alpha = (_alpha + 8) % 255;
-        _colorFrame++;
-        _playerV = Flag::FlagData::GetPlayerFloorVec(); //!< プレイヤーの行ったフロア番号配列を取得
+       // _alpha = (_alpha + 8) % 255;
+        if (!_titleSelectFlag) {
+            _colorFrame++;
+        }
+        
+        //_playerV = Flag::FlagData::GetPlayerFloorVec(); //!< プレイヤーの行ったフロア番号配列を取得
     }
 
     ////フロア番号を登録する
@@ -130,14 +180,17 @@ namespace MachineHuck::Scene {
     /// 描画
     ///
     void  SceneMap::Render() {
+
+        SetDrawBlendMode(DX_BLENDMODE_ALPHA, _alpha);
+
         DrawGraph(0, 0, _mapHandle, true);
 
-
-        
+        auto playerV = Flag::FlagData::GetPlayerFloorVec();
         //int StartY = 100.0;
         int offsetX = StartX;
         int offsetY = StartY;
         int red = 255; int green = 0; int blue = 0;
+
         //y方向
         for (int i = 0; i < BoardSize; i++) {
         
@@ -147,7 +200,7 @@ namespace MachineHuck::Scene {
             
                 //unordered_mapでフロア番号と
                 //ここの掛け算をフロア番号と一致した場合に色の処理を分断する
-                auto value = std::find(_playerV.begin(), _playerV.end(), i * BoardSize + j);
+                auto value = std::find(playerV.begin(), playerV.end(), i * BoardSize + j);
 
                 //主人公のいる番号のフロア枠を緑にする
                 if (Flag::FlagData::GetPlayerFloorNum() == i * BoardSize + j && _colorFrame % 60 < 30) {
@@ -157,7 +210,7 @@ namespace MachineHuck::Scene {
                     red = 255; green = 0; blue = 0;
                 }
                 //その番号がいったことがある場合(白)
-                else if (value != _playerV.end()) {
+                else if (value != playerV.end()) {
                     red = 255; green = 255; blue = 255;
                 }  //グレーにする
                 else {
@@ -187,10 +240,15 @@ namespace MachineHuck::Scene {
 
                 if (i == 0) {
 
-                    //マップ画面の表示(仮)
-                    DrawGraph(offsetX + 3, FloorSize * BoardSize - offsetY + StartHeight + 3, _mapHandles[j], false);
+                    if (value != playerV.end()) {
+                        //マップ画面の表示(仮)
+                        DrawGraph(offsetX + 3, FloorSize * BoardSize - offsetY + StartHeight + 3, _mapHandles[i * BoardSize + j], false);
+
+                    }
                 
                 }
+
+
 
 
                 //プレイヤーがゴールにいないとき
@@ -203,7 +261,7 @@ namespace MachineHuck::Scene {
                 //プレイヤーの位置座標に表示
                 if (Flag::FlagData::GetPlayerFloorNum() == i * BoardSize + j) {
                 
-                    DrawGraph(offsetX + 1, FloorSize * BoardSize - offsetY + StartHeight + 1, _playerHandle, false);
+                    DrawGraph(offsetX + 1, FloorSize * BoardSize - offsetY + StartHeight + 1, _playerHandle, true);
                 
                 }
 
@@ -229,10 +287,37 @@ namespace MachineHuck::Scene {
             offsetY += FloorSize + Space - 2;
         }
 
+        SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+        //タイトルフラグがオンか
+        if (_titleSelectFlag) {
+        
+            DrawGraph(0, 0, _titleHandle, true);
+
+            //Noを選択中なら
+            if (_no == 0) {
+                SetDrawBlendMode(DX_BLENDMODE_ALPHA, _alpha);
+            }
+                DrawGraph(0, 0, _selectHandleYes, true);
+
+            if (_no == 0) {
+                SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+            }
+            
+            //Yesを選択中なら
+            if (_no == 1) {
+                SetDrawBlendMode(DX_BLENDMODE_ALPHA, _alpha);
+            }
+            DrawGraph(0, 0, _selectHandleNo, true);
+            if (_no == 1) {
+                SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+            }
+        
+        }
         
         //SetDrawBlendMode(DX_BLENDMODE_ALPHA, _alpha);
         // DrawGraph(1920 / 2 - 1135 / 2, 700 - 107 / 2, _leftClickToStart, TRUE);
-        //SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
         // DrawGraph(0, 0, _gameAMGHandle, true);
     }
 }

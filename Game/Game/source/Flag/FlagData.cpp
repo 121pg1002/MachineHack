@@ -31,6 +31,7 @@ namespace MachineHuck::Flag {
 	int FlagData::_PlayerNowFloorNum = 0;
 	std::vector<int> FlagData::_playerFloorV;
 	bool FlagData::_epilogueFlag = false;
+	int FlagData::_catchCount = 0;
 #ifdef _DEBUG
 	int FlagData::_debugNo = 0;
 #endif

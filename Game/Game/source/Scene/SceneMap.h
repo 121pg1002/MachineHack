@@ -34,17 +34,24 @@ namespace MachineHuck::Scene {
 		 */
 		/*void RegisterFloor();*/
 
-		std::vector<int> GetPlayerVector() { return _playerV; }
+		//std::vector<int> GetPlayerVector() { return _playerV; }
 
 	private:
-		int _mapHandle{ -1 };  ///< マップ画像
+		int _mapHandle{ -1 };   ///< マップ画像
 		int _playerHandle{ -1 };//!< プレイヤー画像
 		int _goalHandle{ -1 };  //!< ゴール画像
+		int _titleHandle{-1};   //!< タイトル画像
+		int _selectHandleYes{-1};  //!< 選択肢画像(Yes)
+		int _selectHandleNo{ -1 };  //!< 選択肢画像(No)
+
+
 		std::vector<int> _mapHandles; //!< ミニマップの画像
 		int _alpha{0};
 		std::unordered_map<int, int> _floorMap;  //!< フロアマップの
-		std::vector<int> _playerV; //!< プレイヤーのいったことのあるマップを保存するベクター
+		//std::vector<int> _playerV; //!< プレイヤーのいったことのあるマップを保存するベクター
 		int _colorFrame; //!< 点滅のフレーム用
+		bool _titleSelectFlag; //!< タイトルに戻るフラグを出す
+		int _no;               //!< No = 0, Yes = 1
 	};
 
 
