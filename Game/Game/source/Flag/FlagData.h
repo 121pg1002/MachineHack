@@ -239,9 +239,29 @@ namespace MachineHuck::Flag {
 		 */
 		static void SetPlayerFloorNum(int num) { _PlayerNowFloorNum = num; }
 
+		/**
+		 * @brief  プレイヤーの行ったことのあるフロア番号配列を設定         
+		 * @return プレイヤーが行ったフロア番号配列
+		 */
+		static std::vector<int> GetPlayerFloorVec() { return _playerFloorV; }
+
+
+		/**
+		 * @brief  プレイヤーの行ったことのあるフロア番号配列を設定       
+		 * @param  floorV
+		 */
 		static void SetPlayerFloorVec(std::vector<int> floorV) { _playerFloorV = floorV; }
 
-		static std::vector<int> GetPlayerFloorVec() { return _playerFloorV; }
+
+		/**
+		 *.
+		 * 
+		 * @brief         
+		 * @return 
+		 */
+		static bool GetEpilogueFlag() { return _epilogueFlag;}
+
+		static void SetEpilogueFlag(bool flag) { _epilogueFlag = flag; }
 
 
 #ifdef _DEBUG
@@ -292,6 +312,7 @@ namespace MachineHuck::Flag {
 		static VECTOR _warpAfterPos; //!< ワープ後の初期座標
 		static int _PlayerNowFloorNum; //!< プレイヤーの現在いるフロア番号を保存
 		static std::vector<int> _playerFloorV; //!< プレイヤーの行ったことのあるフロア番号を登録する
+		static bool _epilogueFlag;  //!< エピローグのフラグ
 
 #ifdef _DEBUG
 		static int _debugNo; //!< デバッグモード中に転移したい番号

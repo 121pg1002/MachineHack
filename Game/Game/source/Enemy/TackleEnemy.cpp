@@ -371,7 +371,9 @@ namespace MachineHuck::Enemy {
 	//	//	_state->GoToState("Idle");
 	//	//}
 	//}
-
+    void TackleEnemy::StateBase::Update() {
+    	_owner.GetGame().GetGaugeEnemyUI().UpdateEnemyHp(_gaugeTakleEnemy);
+    }
 
 
 	void TackleEnemy::StateBase::Draw() {
@@ -581,7 +583,13 @@ namespace MachineHuck::Enemy {
 	//		_owner.GetGaugeBase().DownGauge(30);
 	//		_owner.GetGaugeEnemy().DownGauge(30);
 			_owner.GetGame().GetGaugeBaseUI().DownGauge(30);
-			_owner.GetGame().GetGaugeEnemyUI().DownGauge(30);
+			//	_gaugeTakleEnemy -= 30;
+			auto guageE = 30;
+			_owner.GetGame().GetGaugeEnemyUI().DownGauge(guageE);
+			_gaugeTakleEnemy = _gaugeTakleEnemy - guageE;
+			//		_down30Flag = true;
+					//auto player = _owner.GetActorServer().GetDir("Player");
+
 
 			//auto player = _owner.GetActorServer().GetDir("Player");
 
@@ -1089,7 +1097,7 @@ namespace MachineHuck::Enemy {
 
 	/// 初期化
 	void TackleEnemy::StateHucked::Init() {
-		_gaugeTakleEnemy = 100;
+		//_gaugeTakleEnemy = 100;
 	}
 
 	void TackleEnemy::StateHucked::Enter() {
@@ -1103,7 +1111,7 @@ namespace MachineHuck::Enemy {
 		_lx = 0.0, _ly = 0.0;
 
 		//ゲージ更新
-		_owner.GetGame().GetGaugeEnemyUI().Update();
+		//_owner.GetGame().GetGaugeEnemyUI().Update();
 
 
 		// 右移動と左移動
@@ -1149,13 +1157,14 @@ namespace MachineHuck::Enemy {
 			if (_gaugeCount % 15 == 0) {
 				_gaugeTakleEnemy--;
 			}
-			_owner.GetGame().GetGaugeEnemyUI().UpdateEnemyHp(_gaugeTakleEnemy);
+			//_owner.GetGame().GetGaugeEnemyUI().UpdateEnemyHp(_gaugeTakleEnemy);
 			_gaugeCount++;
 		}
 		else {
 			_owner.GetModelAnime().ChangeAnime("Idle", true);
 		}
 
+		_owner.GetGame().GetGaugeEnemyUI().UpdateEnemyHp(_gaugeTakleEnemy);
 		//// ハッキングされたか確認
 		//_owner.HitCheckFrom();
 		//if (_owner.GetActorState() != ActorState::Hucked)

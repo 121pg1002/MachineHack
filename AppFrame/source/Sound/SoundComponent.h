@@ -30,6 +30,8 @@ namespace AppFrame::Sound{
 
 		int CheckSoundPlaying();
 
+		void PlayStopMusic();
+
 	protected:
 		void Play(std::string_view key, int playType);
 

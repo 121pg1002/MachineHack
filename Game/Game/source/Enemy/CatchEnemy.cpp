@@ -313,60 +313,27 @@ namespace MachineHuck::Enemy {
 
 
 		_catchTime = 60;
+		_catchFlag = true;
 
 		//ハッキングされている場合
 		if (_owner.GetStatus() == STATUS::ISHUCKED) {
 
 			//ゲージ減少
-	/*		_owner.GetGaugeBase().DownGauge(20);
-			_owner.GetGaugeEnemy().DownGauge(20);*/
 			_owner.GetGame().GetGaugeBaseUI().DownGauge(20);
 			_owner.GetGame().GetGaugeEnemyUI().DownGauge(20);
 
-			//auto player = _owner.GetActorServer().GetDir("Player");
-
-			//auto rot = _owner.GetRotation();
-
-			////z軸を0度とする
-			//auto nine = DX_PI * 90.0 / 180.0;
-
-			//仕様書より6m/s
-			//auto length = 600.0;
-
-			////主人公の回転方向は反対向きのためマイナス
-			//Math::Vector4 move = { std::cos(-rot.GetY() + nine), 0.0, std::sin(-rot.GetY() + nine) };
-
-			////向きを設定
-			//_owner.SetRotation(rot);
-
-			////目線の先に目標をつくる
-			//auto forward = move * length;
-
-
-			//_norm = forward.Normalize();
-
-
-
 		}
-		//else {
 
-		//	//追跡中
-		//	auto player = _owner.GetActorServer().GetPosition("Player");
-		//	player = { player.GetX(), 0.0, player.GetZ() };
-		//	auto dif = player - _owner.GetPosition();
-		//	//auto length = dif.Length_XZ();
-
-		//	auto rotY = std::atan2(dif.GetX(), dif.GetZ());
-		//	Math::Vector4 rot = { 0.0, rotY, 0.0 };
-		//	_owner.SetRotation(rot);
-
-
-		//}
-
-		_owner.GetModelAnime().ChangeAnime("Catch", true);
+		_owner.GetModelAnime().ChangeAnime("Catch");
 	}
 
 	void CatchEnemy::StateCatch::Update() {
+
+
+		//if (_catchFlag) {
+		//
+		//}
+
 
 		if (_catchTime < 0) {
 			_owner._state->GoToState("CatchAfter");
@@ -785,6 +752,13 @@ namespace MachineHuck::Enemy {
 		//}
 		if (_lx != 0.0 || _ly != 0.0) {
 			_owner.GetModelAnime().ChangeAnime("Walk", true);//頭取れたときに移動する
+			//ゲージ減少する
+			if (_gaugeCount % 15 == 0) {
+				_gaugeCatchEnemy--;
+			}
+			_owner.GetGame().GetGaugeEnemyUI().UpdateEnemyHp(_gaugeCatchEnemy);
+			_gaugeCount++;
+		
 		}
 		else {
 			_owner.GetModelAnime().ChangeAnime("Idle", true);

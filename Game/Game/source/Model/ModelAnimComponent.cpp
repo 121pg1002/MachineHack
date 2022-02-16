@@ -434,18 +434,19 @@ namespace MachineHuck::Model {
 
 
         //‰~‚Ì•`‰æ
-        for (double i = 0.0; i < 720.0; i++)
-        {
-            double radian = DX_PI / 180.0 * i / 2.0;
-            double x = r * std::cos(radian);
-            double z = r * std::sin(radian);
+        //for (double i = 0.0; i < 720.0; i++)
+        //{
+        //    double radian = DX_PI / 180.0 * i / 2.0;
+        //    double x = r * std::cos(radian);
+        //    double z = r * std::sin(radian);
 
-            Math::Vector4 move = { x, 0.0, z };
+        //    Math::Vector4 move = { x, 0.0, z };
 
-            Math::Vector4 newpos = owner.GetPosition() + move;
-            DrawPixel3D(ToDX(newpos), GetColor(0, 255, 0));
+        //    Math::Vector4 newpos = owner.GetPosition() + move;
+        //    DrawPixel3D(ToDX(newpos), GetColor(0, 255, 0));
 
-        }
+        //}
+        DrawCircle(owner, range);
 
 
 

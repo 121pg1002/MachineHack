@@ -8,6 +8,7 @@
 
 #include "SceneMap.h"
 #include <algorithm>
+#include "AppFrame.h"
 #include "../Flag/FlagData.h"
 
 namespace {
@@ -15,9 +16,10 @@ namespace {
     constexpr double LineSize = 1.0;  //!< 描画する線のサイズ
     constexpr double BoardSize = 5.0; //!< 行と列のサイズ
     constexpr double StartX = 1920/2 - FloorSize * BoardSize/2.0;
-    constexpr double StartHeight = 100; //!< 上の開始高さ空ける分
+    constexpr double StartHeight = 200; //!< 上の開始高さ空ける分
     constexpr double StartY = 150.0;
-    constexpr int    GoalNum = 21;
+    constexpr int    GoalNum = 21; //!< ゴールのフロア番号
+    constexpr int    Space = 10;    //!< 枠の間の間隔
 
 }
 
@@ -31,12 +33,14 @@ namespace MachineHuck::Scene {
     void  SceneMap::Init() {
         // 使用する画像のテーブル
         const AppFrame::Asset::AssetServer::TextureMap textureToUsed{
-          {"MapBg",    {"Texture/cloth_00146.png",          1, 1, 1920, 1080}},
-            {"Map0", {"Texture/SceneMap/map0_small.png", 1, 1, 160, 160}},
-            {"Map1", {"Texture/SceneMap/map1_small.png", 1, 1, 160, 160}},
-            {"Map2", {"Texture/SceneMap/map2_small.png", 1, 1, 160, 160}},
-            {"Map3", {"Texture/SceneMap/map3_small.png", 1, 1, 160, 160}},
-            {"Map4", {"Texture/SceneMap/map4_small.png", 1, 1, 160, 160}}
+            {"MapBg",  {"Texture/mapUI.png",          1, 1, 1920, 1080}},
+            {"Map0",   {"Texture/SceneMap/map0_small.png", 1, 1, 160, 160}},
+            {"Map1",   {"Texture/SceneMap/map1_small.png", 1, 1, 160, 160}},
+            {"Map2",   {"Texture/SceneMap/map2_small.png", 1, 1, 160, 160}},
+            {"Map3",   {"Texture/SceneMap/map3_small.png", 1, 1, 160, 160}},
+            {"Map4",   {"Texture/SceneMap/map4_small.png", 1, 1, 160, 160}},
+            {"Player", {"Texture/SceneMap/Player.png", 1, 1, 100, 100}},
+            {"Goal",   {"Texture/SceneMap/Goal.png", 1, 1, 200, 200}}
           /*    {"GameTitleAMG",        {"GameTitle.png",        1, 1, 1553, 224}},
               {"LeftClickToStartAMG", {"LeftClickToStart.png", 1, 1, 1135, 107}},*/
         };
@@ -46,13 +50,18 @@ namespace MachineHuck::Scene {
         as.LoadTextures(textureToUsed);
 
         // 画像のハンドル取得
-        MapHandle = as.GetTexture("MapBg");
+        _mapHandle = as.GetTexture("MapBg");
+        _playerHandle = as.GetTexture("Player");
+        _goalHandle = as.GetTexture("Goal");
 
         for (int i = 0; i < 5; i++) {
         
             auto&& handle = as.GetTexture("Map" + std::to_string(i));
             _mapHandles.push_back(handle);
         }
+
+
+
         /*  _gameTitleHandle = as.GetTexture("GameTitle");
           _leftClickToStart = as.GetTexture("LeftClickToStart");*/
 
@@ -121,7 +130,7 @@ namespace MachineHuck::Scene {
     /// 描画
     ///
     void  SceneMap::Render() {
-       // DrawGraph(0, 0, MapHandle, false);
+        DrawGraph(0, 0, _mapHandle, true);
 
 
         
@@ -155,9 +164,21 @@ namespace MachineHuck::Scene {
                     red = 125; green = 125; blue = 125;
                 }
 
-                //枠の描画
-                DrawBox(offsetX, FloorSize * BoardSize - offsetY + FloorSize + StartHeight, offsetX + FloorSize, FloorSize * BoardSize - offsetY + StartHeight, GetColor(red, green, blue), false); //!< グレー
+                //AppFrame::Math::Vector2 LeftUp    = { static_cast<double>(offsetX), FloorSize * BoardSize - static_cast<double>(offsetY) + FloorSize + StartHeight };
+                //AppFrame::Math::Vector2 LeftDown  = { static_cast<double>(offsetX), FloorSize * BoardSize - static_cast<double>(offsetY) + StartHeight };
+                //AppFrame::Math::Vector2 RightUp   = { static_cast<double>(offsetX) + FloorSize, FloorSize * BoardSize - static_cast<double>(offsetY) + FloorSize + StartHeight };
+                //AppFrame::Math::Vector2 RightDown = { static_cast<double>(offsetX) + FloorSize, FloorSize * BoardSize - static_cast<double>(offsetY) + StartHeight };
 
+
+
+                //枠の描画
+                DrawBoxAA(offsetX, FloorSize * BoardSize - offsetY + FloorSize + StartHeight, offsetX + FloorSize, FloorSize * BoardSize - offsetY + StartHeight, GetColor(red, green, blue), false, Space - 3.0);
+
+                //2変数を扱うだけなのでy座標をz座標で置き換えている
+                //DrawLineAA(LeftUp.GetX(),    LeftUp.GetZ(),    LeftDown.GetX(),  LeftDown.GetZ(), GetColor(red, green, blue), Space - 2.0);
+                //DrawLineAA(LeftDown.GetX(),  LeftDown.GetZ(),  RightDown.GetX(), RightDown.GetZ(), GetColor(red, green, blue), Space - 2.0);
+                //DrawLineAA(RightDown.GetX(), RightDown.GetZ(), RightUp.GetX(),   RightUp.GetZ(), GetColor(red, green, blue), Space - 2.0);
+                //DrawLineAA(RightUp.GetX(),   RightUp.GetZ(),   LeftUp.GetX(),    LeftUp.GetZ(), GetColor(red, green, blue), Space - 2.0);
 
 
                 //if (i == 0 && j == 0) {
@@ -172,6 +193,22 @@ namespace MachineHuck::Scene {
                 }
 
 
+                //プレイヤーがゴールにいないとき
+                if (GoalNum == i * BoardSize + j && GoalNum != Flag::FlagData::GetPlayerFloorNum()) {
+                
+                    DrawGraph(offsetX, FloorSize * BoardSize - offsetY + FloorSize + StartHeight, _goalHandle, false);
+                
+                }
+
+                //プレイヤーの位置座標に表示
+                if (Flag::FlagData::GetPlayerFloorNum() == i * BoardSize + j) {
+                
+                    DrawGraph(offsetX + 1, FloorSize * BoardSize - offsetY + StartHeight + 1, _playerHandle, false);
+                
+                }
+
+                
+
                 //    }
                 //
                 //}
@@ -179,11 +216,17 @@ namespace MachineHuck::Scene {
                 //DrawBox(offsetX, offsetY, offsetX + FloorSize, offsetY + FloorSize, GetColor(red, green, blue), false); //!< 白
                 //DrawBox(offsetX, offsetY, offsetX + FloorSize, offsetY + FloorSize, GetColor(red, green, blue), false); //!< 緑
                 //DrawBox(offsetX, offsetY, offsetX + FloorSize, offsetY + FloorSize, GetColor(red, green, blue), false); //!< 赤
-
-                offsetX += FloorSize;
+                //枠の間隔
+                //if (j == 0) {
+                    offsetX += FloorSize + Space;
+                //}
+                //else {
+                //    offsetX += FloorSize;
+                //}
+                
             }
 
-            offsetY += FloorSize;
+            offsetY += FloorSize + Space - 2;
         }
 
         

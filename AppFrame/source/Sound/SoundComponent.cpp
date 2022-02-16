@@ -57,5 +57,7 @@ namespace AppFrame::Sound {
     }
 
     int SoundComponent::CheckSoundPlaying() { return CheckSoundFile(); }
+
+    void SoundComponent::PlayStopMusic() { StopMusic(); }
 }
 

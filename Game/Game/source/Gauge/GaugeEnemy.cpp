@@ -26,8 +26,8 @@ namespace MachineHuck::Gauge {
     }
 
     void GaugeEnemy::Init() {
-        _gauge = 100;
-        _gaugeCount = 0;
+        //_gauge = 100;
+        //_gaugeCount = 0;
         const AppFrame::Asset::AssetServer::TextureMap textureTackleEnemyGauge{
           {"EnergyEn11", {"energy/kari/e1/01.png", 1, 1, 85, 85}},
           {"EnergyEn12", {"energy/kari/e1/02.png", 1, 1, 85, 85}},

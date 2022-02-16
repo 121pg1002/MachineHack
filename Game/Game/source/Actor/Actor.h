@@ -71,7 +71,8 @@ namespace MachineHuck::Actor {
         enum class TypeGimmick {
             BrokenWall,
             Hole,
-            DamageFloor
+            DamageFloor,
+            RecoveryFloor
         };
 
         enum class ActorState {

@@ -21,6 +21,9 @@ namespace MachineHuck::Enemy {
 
 	void EnemyBase::Update() {
 		_soundFrame++;
+		GetGame().GetGaugeBaseUI().Update();
+		GetGame().GetGaugeEnemyUI().Update();
+
 	}
 
 	void EnemyBase::Move(std::string_view enemyName, int num, double speed, int numRange) {

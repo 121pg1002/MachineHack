@@ -69,11 +69,15 @@ namespace MachineHuck::Enemy {
         class StateBase : public State::StateBaseRoot {
         public:
             StateBase(TackleEnemy& owner) : _owner{ owner } {};
+            void Update()override;
             void Draw() override;
         protected:
             TackleEnemy& _owner;
             bool _invincibleTime{ false };
             static int _huckNoDamageTime;
+            int _gaugeTakleEnemy{ 100 };
+            int _gaugeCount{ 0 };
+            //  bool _down30Flag = false;
         };
 
         class StateIdle : public StateBase {
@@ -209,8 +213,8 @@ namespace MachineHuck::Enemy {
             bool _warping;
             Math::Vector4 _fadePos;
             int _waitFrame;
-            int _gaugeTakleEnemy{ 100 };
-            int _gaugeCount{ 0 };
+ /*           int _gaugeTakleEnemy{ 100 };
+            int _gaugeCount{ 0 };*/
 
 
         };

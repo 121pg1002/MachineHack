@@ -17,6 +17,7 @@
 #include "../Camera/CameraComponent.h"
 #include "../Gimmick/DamageFloorGimmick.h"
 #include "../Gimmick/BrokenWall.h"
+#include "../Gimmick/RecoveryFloorGimmick.h"
 #include "../Gimmick/Hole.h"
 #include "../Item/Item.h"
 //#include "../Parameter/EStageParam.h"
@@ -295,21 +296,58 @@ namespace MachineHuck::Actor {
                     }
 
                     auto& spawnFloori = _iStageParamVMap[no];
-                    //新しい描画フロアのアイテムをリスポーンさせる
-                    for (auto&& floorItem : spawnFloori) {
+                    //行ったことのあるステージがない状態では必ずアイテムを出現させる
+                    if (_numMap.empty()) {
+                        //新しい描画フロアのアイテムをリスポーンさせる
+                        for (auto&& floorItem : spawnFloori) {
 
-                        auto&& actor = Create("Item");
-                       // auto&& actor = Create(floorItem.GetName());
+                            auto&& actor = Create("Item");
+                            // auto&& actor = Create(floorItem.GetName());
 
-                        if (actor != nullptr) {
-                        
+                            if (actor != nullptr) {
+
+                                actor->SetPosition(floorItem.GetPosition());
+                                actor->SetRotation(floorItem.GetRotation());
+                                actor->SetScale(floorItem.GetScale());
+
+                                _game.GetActorServer().Add(std::move(actor));
+
+                            }
+
+                        }
+                        //アイテムを出現させたステージ番号を登録する
+                        _numMap.push_back(no);
+
+                    }
+
+                    bool spawnItem;
+                    //現在のステージが行ったことのあるステージなら新たにアイテムを出現させない
+                    for (auto&& _num : _numMap)
+                    {
+                        if (no == _num) {
+                            spawnItem = false;
+                            break;
+                        }
+                        spawnItem = true;
+
+                    }
+
+                    if (spawnItem) {
+
+                        for (auto&& floorItem : spawnFloori) {
+
+                            auto&& actor = Create("Item");
+
                             actor->SetPosition(floorItem.GetPosition());
                             actor->SetRotation(floorItem.GetRotation());
                             actor->SetScale(floorItem.GetScale());
 
                             _game.GetActorServer().Add(std::move(actor));
-                        
+
                         }
+
+                        _numMap.push_back(no);
+
 
                     }
 
@@ -477,7 +515,7 @@ namespace MachineHuck::Actor {
 
         // モデルの読み込みと生成
         auto model = std::make_unique<Model::ModelAnimeComponent>(*enemy);
-        model->SetModel("Spider", 1000);
+        model->SetModel("Tackle", 1000);
         //model->Register("Hucking", 0);
         //model->Register("Die", 1);
         //model->Register("Idle", 2);
@@ -549,7 +587,7 @@ namespace MachineHuck::Actor {
 
         // モデルの読み込みと生成
         auto model = std::make_unique<Model::ModelAnimeComponent>(*enemy);
-        model->SetModel("Spider", 1000);
+        model->SetModel("Tackle", 1000);
         //model->Register("Hucking", 0);
         //model->Register("Die", 1);
         //model->Register("Idle", 2);
@@ -639,6 +677,23 @@ namespace MachineHuck::Actor {
         
         return brokenWall;
     }
+
+    //回復装置を作成
+    std::unique_ptr<Actor> RecoveryFloorCreator::Create(AppFrame::Game& game) {
+        /// 回復装置の生成
+        auto recoveryFloor = std::make_unique<Gimmick::RecoveryFloorGimmick>(game);
+        //// モデルの読み込みと生成
+        auto model = std::make_unique<Model::ModelComponent>(*recoveryFloor);
+        auto num = model->SetModel("Recovery", 1000);
+
+        //ギミックのコリジョンを構築(仮)
+        //model->SetModelGimmick("BrokenWall", "duct_entrance_c", num);
+
+        recoveryFloor->SetModelComponent(std::move(model));
+
+        return recoveryFloor;
+    }
+
 
     //穴を作成
     std::unique_ptr<Actor> HoleCreator::Create(AppFrame::Game& game) {

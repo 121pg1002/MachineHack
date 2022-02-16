@@ -30,6 +30,7 @@ namespace MachineHuck::Flag {
 	VECTOR FlagData::_warpAfterPos = { 0.0, 0.0, 0.0 };
 	int FlagData::_PlayerNowFloorNum = 0;
 	std::vector<int> FlagData::_playerFloorV;
+	bool FlagData::_epilogueFlag = false;
 #ifdef _DEBUG
 	int FlagData::_debugNo = 0;
 #endif

@@ -143,6 +143,8 @@ namespace MachineHuck::Actor {
  
         void SetOldStageNo() { _oldStageNo.clear(); _oldStageNo.emplace_back(-1); }
 
+        void ClearNumMap() { _numMap.clear(); }
+
         //void SetBrokenWall(const Actor& act) { _brokenWallClear.push_back(act); }
 
         //int GetGimmickCollision(const int handle)  { return _frameGimmicks[handle]; }
@@ -167,6 +169,8 @@ namespace MachineHuck::Actor {
         StageV _oldStageNo{ -1 };
         StageV _currentStageNo{ 0 };
         std::vector<StageV> _stageTableV;
+        std::vector<int> _numMap;
+
         //std::vector<Actor> _brokenWallClear;
         static std::unordered_map<int, std::vector<int>> _floorBrokenWall; //!< フロア番号で壊せる壁のベクターを記録
         std::vector<int> _playerOnceNo; //!< プレイヤーが一度行ったことのある番号を保存
@@ -260,6 +264,16 @@ namespace MachineHuck::Actor {
         /// @return 壊せる壁のインスタンス
         virtual std::unique_ptr<Actor> Create(AppFrame::Game& game);
 
+
+    };
+
+    /**
+     * @ class RecoveryFloorCreator
+     * @brief  回復装置用のクリエイター
+     */
+    class RecoveryFloorCreator : public CreatorBase {
+
+        virtual std::unique_ptr<Actor> Create(AppFrame::Game& game);
 
     };
 

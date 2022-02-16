@@ -44,8 +44,9 @@ namespace MachineHuck::Scene {
             {"Player",    "Player/player.mv1"},
             //{"SkySphere", "model/skysphere.mv1"},
             //{"Ground",    "model/ground.mv1"},
-            //  {"Spider",    "tackle/takcle.mv1"},
-            {"Spider",    "tackle/takcle_sotai_multimotion.mv1"},
+            //  {"Tackle",    "tackle/takcle.mv1"},
+            {"Tackle",    "tackle/takcle_sotai_multimotion.mv1"},
+            {"Catch", "catch/catch.mv1"},
             //{"pCube",      "model/pCube.mv1"},
             //{"floor",     "model/floor.mv1"},
             //{"wall",      "model/wall.mv1"},
@@ -60,10 +61,13 @@ namespace MachineHuck::Scene {
             //  {"damagefloor",  "target.mv1"},
               //{"entrypoint", "entrypoint.mv1"},
               //{"test", "test.mv1"},
+            
               {"Item","Object/Item.mv1"},
             {"BrokenWall", "Object/BrokenWall.mv1"},
             {"Hole", "Object/Hole.mv1"},
             {"DamageFloor", "Object/DamageFloor.mv1"},
+            {"Recovery", "Object/Recovery.mv1"},
+            {"RecoveryFloor", "Object/RecoveryFloor.mv1"},
             {"EntryPoint", "Object/EntryPoint.mv1"},
             {"Floor", "Object/Floor.mv1"},
             {"ObstacleWall", "Object/ObstacleWall.mv1"},
@@ -198,6 +202,7 @@ namespace MachineHuck::Scene {
         //  af.Register("AlartEnemy", std::make_unique<AlartEnemyCreator>());
         af.Register("Stage", std::make_unique<Actor::StageCreator>());
         af.Register("DamageFloor", std::make_unique<Actor::DamageFloorGimmickCreator>());
+        af.Register("Recovery", std::make_unique<Actor::RecoveryFloorCreator>());
         af.Register("BrokenWall", std::make_unique<Actor::BrokenWallCreator>());
         af.Register("Hole", std::make_unique<Actor::HoleCreator>());
        // af.Register("Duct", std::make_unique<Actor::DuctCreator>());
@@ -205,7 +210,6 @@ namespace MachineHuck::Scene {
         
 
         //for (int i = 0; i < StageAll; i++) {
-
 
 
 
@@ -351,8 +355,8 @@ namespace MachineHuck::Scene {
 
         //*se 1層目BGM
 
-       //GetGame().GetSoundComponent().PlayLoop("floor1");
-        //GetGame().GetSoundComponent().SetVolume("floor1", 100);
+       GetGame().GetSoundComponent().PlayLoop("floor1");
+        GetGame().GetSoundComponent().SetVolume("floor1", 100);
 
 
         // 疑似乱数
@@ -365,11 +369,12 @@ namespace MachineHuck::Scene {
     /// 入力処理
     void SceneInGame::Input(AppFrame::Input::InputComponent& input) {
 
-        if (input.GetMouse().RightClick()) {
-            // 右クリックでタイトルへ遷移
-            //GetSceneServer().GoToScene("Title");
-            GetSceneServer().GoToScene("Epilogue");
-        }
+        //if (input.GetMouse().RightClick()) {
+        //    // 右クリックでタイトルへ遷移
+        //    //GetSceneServer().GoToScene("Title");
+        //    GetSceneServer().GoToScene("Epilogue");
+        //}
+
         if (input.GetJoypad().Button_X()) {
             //*se マップ画面を開く
             GetSoundComponent().Play("openmap");
@@ -428,6 +433,13 @@ namespace MachineHuck::Scene {
         //プレイヤーが死亡したら
         if (Flag::FlagData::GetPlayerDead()) {
             GetSceneServer().GoToScene("Title");
+            GetSoundComponent().PlayStopMusic();
+        }
+
+
+        if (Flag::FlagData::GetEpilogueFlag()) {
+        
+            GetSceneServer().GoToScene("Epilogue");
         }
 
         GetSoundComponent().Addcnt(1);
@@ -437,7 +449,7 @@ namespace MachineHuck::Scene {
     /// 描画
     void SceneInGame::Render() {
 
-
+        
         //シャドウマップへの描画のフラグをオンにする
         shadowmap->SetPlayerShadowMapflg(TRUE);
         //シャドウマップへの描画の準備を行う
@@ -494,6 +506,9 @@ namespace MachineHuck::Scene {
 
         // クリエイターを削除
         GetActorFactory().Clear();
+
+        // アイテム登録用番号の削除
+        GetActorFactory().ClearNumMap();
 
         //シャドウマップの削除
         DeleteShadowMap(shadowmap->GetShadowmap());

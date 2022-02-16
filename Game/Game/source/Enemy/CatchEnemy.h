@@ -48,6 +48,8 @@ namespace MachineHuck::Enemy {
             CatchEnemy& _owner;
             bool _invincibleTime{ false };
             static int _huckNoDamageTime;
+            int _gaugeCatchEnemy{ 100 };
+            int _gaugeCount{ 0 };
         };
 
         class StateIdle : public StateBase {
@@ -87,6 +89,7 @@ namespace MachineHuck::Enemy {
             void Update() override;
         private:
             int _catchTime{60}; //!< キャッチ動作時間
+            bool _catchFlag;    //!< キャッチフラグ
         };
 
         //攻撃後

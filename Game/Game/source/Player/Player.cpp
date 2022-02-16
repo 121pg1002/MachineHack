@@ -240,9 +240,12 @@ namespace MachineHuck::Player {
 	/*_noDamageTime*/
 
 
+		GetGame().GetGaugePlayerUI().Update();
 		Math::Vector4 oldPos = _position;
-
+		GetGame().GetGaugePlayerUI().UpdatePlayerPosition(_position);
+		GetGame().GetGaugeEnemyUI().UpdateEnemyPosition(_position);
 		auto holePos = GetHolePos();
+
 
 		//無敵時間が終了したとき
 		if (Flag::FlagData::GetDamageFlag() == false && holePos.GetX() == 0.0 && holePos.GetY() == 0.0 && holePos.GetZ() == 0.0) {
@@ -319,7 +322,27 @@ namespace MachineHuck::Player {
 						//ダメージ床かどうか
 						if (i->GetTypeGimmick() != TypeGimmick::DamageFloor) {
 					
-							continue;
+							if (i->GetTypeGimmick() != TypeGimmick::RecoveryFloor) {
+							
+								continue;
+							}
+							else {
+
+								if (GetCollision().CircleToCircle(*this, (*i))) {
+								
+									i->GetGame().GetGaugePlayerUI().PlusGauge(1000);
+								
+								}
+								//for (auto i = GetActorServer().GetActors().begin(); i != GetActorServer().GetActors().end(); i++) {
+								//	if ((*i)->GetTypeId() == TypeId::Player) {
+								
+										//	_actorState = Actor::ActorState::Dead;
+
+								//		break;
+								//	}
+								//}
+							
+							}
 						}
 						else {
 						
