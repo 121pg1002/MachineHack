@@ -1058,6 +1058,23 @@ namespace MachineHuck::Collision {
     //ハンドルとワープメッシュ名で構築
     void CollisionComponent::SetWarpCollision(int handle, std::string key) {
 
+      //std::string name = MV1GetFrameName(handle, frameIndex);
+
+      std::string::size_type nameParts = key.find("Goal");
+
+      //存在した
+      if (nameParts != std::string::npos) {
+        auto warpMapCollision = MV1SearchFrame(handle, key.c_str());
+        MV1SetupCollInfo(handle, warpMapCollision, 32, 32, 32);
+
+        auto pos = std::make_pair(0, 0);
+
+        //ワープの位置とコリジョン情報
+        auto warpPosCol = std::make_pair(pos, warpMapCollision);
+        _warpMap.emplace(key, warpPosCol);
+        return;
+
+      }
 
         if (key.size() < 8) {
         
@@ -1104,7 +1121,7 @@ namespace MachineHuck::Collision {
         //auto size = MV1GetFrameNum(handle);
 
         //for (auto i = 0; i < size; i++) {
-        MV1RefreshCollInfo(handle, warpMapCollision);
+        //MV1RefreshCollInfo(handle, warpMapCollision);
         //}
 
         //ワープの位置とコリジョン情報

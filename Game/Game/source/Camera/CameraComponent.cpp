@@ -50,46 +50,16 @@ namespace MachineHuck::Camera {
 	///
 	void CameraComponent::Update(Math::Vector4 move) {
 
+		//Math::Vector4 cameraMove = { 0.0, 0.0, move.GetZ() };
 
-		////横方向の傾きと縦方向の傾きの大きさ
-		//double length = sqrt(_lx * _lx + _ly * _ly);
-
-		//if (length < 0.3) {
-		//	// 入力が小さかったら動かなかったことにする
-		//	length = 0.0;
-		//	//_hp++;
-		//}
-		//else {
-		//	length = 10.0;
-		//	//_hp -= 0.1f;//エネルギー現象
-		//}
-		////if (_hp < 0) {
-		////	_hp = 0;
-		////}
-		////if (_hp > 100) {
-		////	_hp = 100;
-		////}
-
-		////横方向と縦方向の角度
-		//double rad = atan2(ly, lx);
-
-		////x軸方向の移動量
-		//auto moveX = cos(rad) * length;
-
-		////z軸方向の移動量
-		//auto moveZ = sin(rad) * length;
-
-		//_move = { moveX, 0.0, moveZ };
-		//// ターゲットの向き※Yは無視
-		//auto forward = _forwardOfTarget;
-		//forward.y = 0.f;
-		//// ターゲットの向きの真逆に長さをtargetDist
-		//auto fromTarget = VScale(forward, -targetDist);
-		//fromTarget.y = vertDist;
-		
 		// カメラの位置をプレイヤーの後方の位置にする
 		_position = _position + move / 4;
-		_target = _target;
+
+		//Math::Vector4 cameraMove = { 0.0, 0.0, move.GetZ() };
+
+			_target = _target + move / 2;
+
+		
 
 		SetCameraPositionAndTarget_UpVecY(ToDX(_position), ToDX(_target));
 
@@ -182,26 +152,27 @@ namespace MachineHuck::Camera {
 	
 	}
 
-	void CameraComponent::WarpMove(Math::Vector4 rot) {
+	//ワープ時のカメラ移動
+	void CameraComponent::WarpMoveCamera(Math::Vector4 rot, double moveSpeed) {
 		Math::Vector4 move = { 0.0, 0.0, 0.0 };
 	
 		if (rot.GetY() < -2.35 || 2.35 < rot.GetY()) {
 		
 			//上から来た(下向き)
-			move = { 10.0, 0.0, 0.0 };
+			move = { 0.0, 0.0, moveSpeed };
 
 		}
 		else if (-2.35 <= rot.GetY() && rot.GetY() <= -0.78) {
 		    //右から来た(左向き)
-			move = { 0.0, 0.0, 10.0 };
+			move = { moveSpeed, 0.0, 0.0 };
 		}
 		else if (-0.78 < rot.GetY() && rot.GetY() < 0.78) {
 		    //下から来た(上向き)
-			move = { 0.0, 0.0, -10.0 };
+			move = { 0.0, 0.0, -moveSpeed };
 		}
 		else {
 		    //左から来た(右向き)
-			move = { -10.0, 0.0, 0.0 };
+			move = { -moveSpeed, 0.0, 0.0 };
 		}
 
 		_target = _target + move;

@@ -370,6 +370,16 @@ namespace MachineHuck::Actor {
          */
         void SetFallFlag(bool flag) { _fallFlag = flag; }
 
+        /**
+         * @brief　int型statusを設定
+         */
+        void SetStatusInt(int num) { _status = num; }
+
+        /**
+         * @brief　int型statusを取得
+         */
+        int GetStatusInt() { return _status; }
+
 
 
 
@@ -435,6 +445,8 @@ namespace MachineHuck::Actor {
         int _routine;  //!< 思考ルーチン番号
         int _numRange; //!< 移動量
         std::pair<int, int> _floorReserveNum; //!< 一つ目　フロア番号, 2つめ登録番号
+        int  _status{ 0 };  //statusをint型で測る
+
 
         Math::Vector4 _holePos; //!< 穴の位置
         bool _fallFlag;

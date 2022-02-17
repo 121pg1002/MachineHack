@@ -12,8 +12,7 @@
 namespace MachineHuck::Scene{
 
     SceneLoading::SceneLoading(AppFrame::Game& game)
-        :Scene{ game }
-    {
+        :Scene{ game }{
 
     }
 
@@ -23,10 +22,18 @@ namespace MachineHuck::Scene{
         //_alpha = (_alpha + 8) % 255;
         //if (_alpha > 200) {
 
-
-            GetSceneServer().GoToScene("InGame", "", false);
-        //    _alpha = 255;
+      if (Flag::FlagData::GetInGameExitFlag()) {
+        GetSceneServer().GoToScene("InGame", "", false);
+        Flag::FlagData::SetBlackOutFlag(true);
+      }
+      else {
+        GetSceneServer().GoToScene("InGame", "", false);
+      }
+            
             GetSceneServer().PopBack();
+            //GetSceneServer().PopFront();
+        //    _alpha = 255;
+            
            // GetSceneServer().PopBack();
        // }
     }

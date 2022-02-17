@@ -275,6 +275,77 @@ namespace MachineHuck::Flag {
 		 */
 		static void SetCatchCount(int count) { _catchCount = count; }
 
+		static bool GetOpenGate() {
+			return _openGateFlag;
+		}
+
+		/**
+		 * @brief  制限ゲートが開いたかフラグ設定
+		 * @param  flag
+		 */
+		static void SetOpenGate(bool flag) { _openGateFlag = flag; }
+
+		/**
+		 * @brief  フロア内の残りエネミー数を取得
+		 * @param  flag
+		 */
+		static int GetEnemyNum() { return enemynum; }
+
+		/**
+     * @brief  フロア内の残りエネミー数を取得
+     * @param  flag
+     */
+		static void SetEnemyNum(int num) { enemynum = num; }
+
+		/**
+				* @brief  ゲートイベントの有無を取得
+				* @param  flag
+				*/
+		static int GetGateflag() { return _gateflag; }
+
+		/**
+		 * @brief  ゲートイベントを発生させるかのフラグを設定
+		 * @param  flag
+		 */
+		static void SetGateflg(bool flag) { _gateflag = flag; }
+
+		/**
+		 * @brief  インゲームのExitを通すフラグを取得
+		 * @return フラグ
+		 */
+		static bool GetInGameExitFlag() { return _inGameExitFlag; }
+
+		/**
+		 * @brief インゲームのExitを通すフラグを設定
+		 * @param flag
+		 */
+		static void SetInGameExitFlag(bool flag) { _inGameExitFlag = flag; }
+
+		/**
+		 * @brief  ワープによるカメラの調整フラグを取得
+		 * @return カウンタ
+		 */
+		static bool GetWarpCameraFlag() { return _warpCameraFlag; }
+
+		/**
+		 * @brief ワープによるカメラの調整フラグを設定
+		 * @param flag
+		 */
+		static void SetWarpCameraFlag(bool flag) { _warpCameraFlag = flag; }
+
+		/**
+		 * @brief  ステージのコリジョンに当たっているかフラグ
+		 * @return フラグ
+		 */
+		static bool GetCollisionFlag() { return _collisionFlag; }
+
+		/**
+		 * @brief ステージのコリジョンに当たっているかフラグを設定
+		 * @param flag
+		 */
+		static void SetCollisionFlag(bool flag) { _collisionFlag = flag; }
+
+
 
 #ifdef _DEBUG
 		/**
@@ -326,6 +397,13 @@ namespace MachineHuck::Flag {
 		static std::vector<int> _playerFloorV; //!< プレイヤーの行ったことのあるフロア番号を登録する
 		static bool _epilogueFlag;  //!< エピローグのフラグ
 		static int _catchCount;     //!< キャッチエネミーのカウンタ
+		static bool _openGateFlag;//制限ゲート解放のためのフラグ
+		static bool _gateflag;//ゲートイベントが存在するかどうかのフラグ
+		static int enemynum;  //フロアに残っているエネミーの数
+		static bool _inGameExitFlag; //!< インゲームのExitを通すフラグ
+		static bool _warpCameraFlag;       //!< ワープフレーム
+		static bool _collisionFlag;   //!< ステージのコリジョンに当たっているかのフラグ
+
 
 #ifdef _DEBUG
 		static int _debugNo; //!< デバッグモード中に転移したい番号

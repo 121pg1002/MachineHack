@@ -43,6 +43,7 @@
     <ClCompile Include="source\Gimmick\GimmickParameter.cpp" />
     <ClCompile Include="source\Gimmick\Hole.cpp" />
     <ClCompile Include="source\Gimmick\RecoveryFloorGimmick.cpp" />
+    <ClCompile Include="source\Gimmick\Restrictiongate.cpp" />
     <ClCompile Include="source\Item\Item.cpp" />
     <ClCompile Include="source\Item\ItemParameter.cpp" />
     <ClCompile Include="source\JsonSave\JsonSave.cpp" />
@@ -105,6 +106,7 @@
     <ClInclude Include="source\Gimmick\GimmickParameter.h" />
     <ClInclude Include="source\Gimmick\Hole.h" />
     <ClInclude Include="source\Gimmick\RecoveryFloorGimmick.h" />
+    <ClInclude Include="source\Gimmick\Restrictiongate.h" />
     <ClInclude Include="source\Item\Item.h" />
     <ClInclude Include="source\Item\ItemParameter.h" />
     <ClInclude Include="source\JsonSave\JsonSave.h" />

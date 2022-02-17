@@ -53,11 +53,11 @@ namespace MachineHuck::Scene {
     /// 入力
     ///
     void SceneItem::Input(AppFrame::Input::InputComponent& input) {
-        if (input.GetMouse().LeftClick()) {
-            // 左クリックでInGameへ遷移
-            GetSceneServer().GoToScene("Team");
-            _alpha = 255;
-        }
+        //if (input.GetMouse().LeftClick()) {
+        //    // 左クリックでInGameへ遷移
+        //    GetSceneServer().GoToScene("Team");
+        //    _alpha = 255;
+        //}
 
         if (input.GetJoypad().Button_Y()) {
 
@@ -67,6 +67,7 @@ namespace MachineHuck::Scene {
             //GetSceneServer().PopBack();
             //GetSceneServer().PushBack("InGame",1);
             GetSceneServer().GoToScene("InGame", false);
+            //GetSceneServer().PopBack();
             _alpha = 255;
         }
     }

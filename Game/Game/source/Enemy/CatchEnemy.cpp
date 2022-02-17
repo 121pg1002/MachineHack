@@ -377,6 +377,11 @@ namespace MachineHuck::Enemy {
 							if (_owner._collision->FanToPoint(_owner, **i, _owner._catchR, _owner._catchRange)) {
 
 								(*i)->SetActorState(ActorState::Dead);
+								int enemynum = Flag::FlagData::GetEnemyNum();
+								enemynum--;
+								Flag::FlagData::SetEnemyNum(enemynum);
+
+
 
 							}
 
@@ -635,6 +640,10 @@ namespace MachineHuck::Enemy {
 			}
 
 			_owner.SetActorState(ActorState::Dead);
+			int enemynum = Flag::FlagData::GetEnemyNum();
+			enemynum--;
+			Flag::FlagData::SetEnemyNum(enemynum);
+
 
 
 		}
@@ -656,6 +665,10 @@ namespace MachineHuck::Enemy {
 		auto cnt = _owner.GetModelAnime().GetRepeatedCount();
 		if (cnt > 0) {
 			_owner.SetActorState(ActorState::Dead);
+			int enemynum = Flag::FlagData::GetEnemyNum();
+			enemynum--;
+			Flag::FlagData::SetEnemyNum(enemynum);
+
 		}
 		auto handle = _owner.GetModelAnime().GetHandle();
 		auto progress = _owner.GetModelAnime().GetPlayProgress();
@@ -842,46 +855,49 @@ namespace MachineHuck::Enemy {
 				//ワープ直後か
 		if (!_warping) {
 
-			auto dxPos = _owner.WarpFloor(_owner);
+			if (Flag::FlagData::GetOpenGate()) {
 
-			//フェード用に保存
-			_fadePos = { dxPos.x, dxPos.y, dxPos.z };
+				auto dxPos = _owner.WarpFloor(_owner);
 
-			//現在位置のステージ番号のワープナビメッシュに当たった場合
-			if (dxPos.x != 0.0f && dxPos.z != 0.0f) {
+				//フェード用に保存
+				_fadePos = { dxPos.x, dxPos.y, dxPos.z };
 
-				//スライドフラグがオンか
-				if (!Flag::FlagData::GetSlideFlag()) {
+				//現在位置のステージ番号のワープナビメッシュに当たった場合
+				if (dxPos.x != 0.0f && dxPos.z != 0.0f) {
 
-					Flag::FlagData::SetFadeOutFlag(true);
+					//スライドフラグがオンか
+					if (!Flag::FlagData::GetSlideFlag()) {
+
+						Flag::FlagData::SetFadeOutFlag(true);
+
+					}
+					else {
+						Flag::FlagData::SetSlideOut(true);
+					}
+
+					//Math::Vector4 pos = { dxPos.x, dxPos.y, dxPos.z };
+
+					//_position = pos;
+					//_owner._position = _fadePos;
+
+					//_camera->SetRefleshPosition(_position);
+					//_camera->SetRefleshTarget(_position);
+
+					if (!_warping) {
+
+						_warping = true;
+						_waitFrame = 5;
+
+						//_fadeflag = true;
+
+					}
+					//else {
+					//	_warping = false;
+					//}
+
+					//ここにフェードイン処理
 
 				}
-				else {
-					Flag::FlagData::SetSlideOut(true);
-				}
-
-				//Math::Vector4 pos = { dxPos.x, dxPos.y, dxPos.z };
-
-				//_position = pos;
-				//_owner._position = _fadePos;
-
-				//_camera->SetRefleshPosition(_position);
-				//_camera->SetRefleshTarget(_position);
-
-				if (!_warping) {
-
-					_warping = true;
-					_waitFrame = 5;
-
-					//_fadeflag = true;
-
-				}
-				//else {
-				//	_warping = false;
-				//}
-
-				//ここにフェードイン処理
-
 			}
 
 
@@ -890,6 +906,10 @@ namespace MachineHuck::Enemy {
 
 			if (_waitFrame == 4) {
 				_owner._position = _fadePos;
+			}
+
+			if (_waitFrame == 1) {
+				Flag::FlagData::SetWarpCameraFlag(true);
 			}
 
 			if (_waitFrame == 0) {

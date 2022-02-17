@@ -1,6 +1,7 @@
 {
 "StageGimmick":[
 		{"filename":"BrokenWall","handlename":"breakable_wall","tx":800,"ty":0,"tz":-350,"rx":-0,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1},
-		{"filename":"Hole","handlename":"breakable_wall1","tx":0,"ty":0,"tz":-200,"rx":-0,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1}
-	]
+		{"filename":"Hole","handlename":"breakable_wall1","tx":0,"ty":0,"tz":-200,"rx":-0,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1},
+    {"filename":"Gate","handlename":"breakable_wall1","tx":400,"ty":0,"tz":-250,"rx":-0,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1}
+]
 }

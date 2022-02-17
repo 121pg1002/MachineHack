@@ -17,7 +17,7 @@ namespace MachineHuck::Item {
 		Item(AppFrame::Game& game);
 		/// デストラクタ
 		virtual ~Item() override = default;
-
+		void	Init();
 		virtual	void	Update() override;
 		virtual	void	Draw() override;
 

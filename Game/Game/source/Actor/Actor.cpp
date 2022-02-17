@@ -172,14 +172,14 @@ namespace MachineHuck::Actor {
 							// 当たった
 							// 当たったY位置をキャラ座標にする
 							_position = { _position.GetX(), hitPoly.HitPosition.y, _position.GetZ() };
-
+							Flag::FlagData::SetCollisionFlag(true);
 							return true;
 						}
 						else {
 
 							//// 当たらなかった。元の座標に戻す
 							_position = oldPos;
-
+							Flag::FlagData::SetCollisionFlag(false);
 
 							return false;
 						}
@@ -373,12 +373,21 @@ namespace MachineHuck::Actor {
 									std::string name = MV1GetFrameName(handle, frameIndex);
 
 									std::string::size_type nameParts = name.find("block");
+									std::string::size_type nameGoal = name.find("Goal");
 
 									//存在した
 									if (nameParts != std::string::npos) {
 										continue;
 
 									}
+									
+									//存在した
+									if (nameGoal != std::string::npos) {
+										Flag::FlagData::SetEpilogueFlag(true);
+										return VGet(0.0f, 0.0f, 0.0f);
+									}
+									
+									
 
 									//ダクトかどうか
 									if (name.size() > 8) {

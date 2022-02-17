@@ -5,9 +5,10 @@
 /// @author yamawaki kota
 /// @copyright (C) Amusement Media Academy All rights Resved.
 ///
-#include "AppFrame.h"
 #include "SceneTitle.h"
+#include "AppFrame.h"
 #include <DxLib.h>
+#include "../Flag/FlagData.h"
 
 namespace MachineHuck::Scene {
     /// コンストラクタ
@@ -82,6 +83,7 @@ namespace MachineHuck::Scene {
     //更新
     void SceneTitle::Update() {
         _alpha = (_alpha + 8) % 255;
+
     }
     ///
     /// 描画

@@ -12,6 +12,7 @@
 #include "../Actor/ActorServer.h"
 #include "../Actor/ActorFactory.h"
 #include "../ShadowMap/Shadowmap.h"
+#include "../Flag/FlagData.h"
 
 namespace MachineHuck::Scene {
     /// コンストラクタ
@@ -69,17 +70,18 @@ namespace MachineHuck::Scene {
     /// 入力処理.
     ///
     void SceneEpilogue::Input(AppFrame::Input::InputComponent& input) {
-        if (input.GetMouse().LeftClick()) {
-            // 左クリックでInGameへ遷移
-            GetSceneServer().GoToScene("Title");
-            _alpha = 255;
-        }
+        //if (input.GetMouse().LeftClick()) {
+        //    // 左クリックでInGameへ遷移
+        //    GetSceneServer().GoToScene("Title");
+        //    _alpha = 255;
+        //}
     }
     void SceneEpilogue::Update() {
         _alpha = (_alpha + 8) % 255;
         if (_alpha > 200) {
             // Teamへ遷移
             GetSceneServer().GoToScene("Title");
+           // Flag::FlagData::SetBlackOutFlag(true);
             _alpha = 255;
         }
     }

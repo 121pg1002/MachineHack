@@ -1,5 +1,5 @@
 {
 "StageGimmick":[
-		{"filename":"BrokenWall","handlename":"breakable_wall","tx":-600,"ty":0,"tz":-200,"rx":-0,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1}
-	]
+		{"filename":"Gate","handlename":"breakable_wall","tx":-600,"ty":0,"tz":-200,"rx":-0,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1}
+]
 }

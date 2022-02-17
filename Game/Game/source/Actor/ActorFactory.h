@@ -166,10 +166,13 @@ namespace MachineHuck::Actor {
 
         int _progress{ 0 };
         int _spawnProgress{ 0 };
-        StageV _oldStageNo{ -1 };
-        StageV _currentStageNo{ 0 };
+        StageV _oldStageNo{ -1 }; //前フレームのステージ番号
+        StageV _currentStageNo{ 0 };//現在のステージ番号
         std::vector<StageV> _stageTableV;
         std::vector<int> _numMap;
+        int enemynum{ 0 };                                               //フロアに残っているエネミーの数
+        static std::unordered_map<int, std::vector<int>> _floorOpendGate;//フロア番号で開けた制限ゲートを記録
+
 
         //std::vector<Actor> _brokenWallClear;
         static std::unordered_map<int, std::vector<int>> _floorBrokenWall; //!< フロア番号で壊せる壁のベクターを記録
@@ -292,6 +295,13 @@ namespace MachineHuck::Actor {
         /// @return アイテムのインスタンス
         virtual std::unique_ptr<Actor> Create(AppFrame::Game& game);
 
+    };
+
+    class RestrictionGateCreater :public CreatorBase {
+      /// 制限ゲートの生成
+     /// @param  game ゲームクラスへの参照
+     /// @return 制限ゲートのインスタンス
+      virtual std::unique_ptr<Actor> Create(AppFrame::Game& game);
     };
 
 }

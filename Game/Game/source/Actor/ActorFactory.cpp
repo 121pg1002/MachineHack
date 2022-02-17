@@ -19,6 +19,7 @@
 #include "../Gimmick/BrokenWall.h"
 #include "../Gimmick/RecoveryFloorGimmick.h"
 #include "../Gimmick/Hole.h"
+#include "../Gimmick/Restrictiongate.h"
 #include "../Item/Item.h"
 //#include "../Parameter/EStageParam.h"
 //#include "../Parameter/IStageParam.h"
@@ -49,6 +50,8 @@ namespace MachineHuck::Actor {
 namespace MachineHuck::Actor {
 
     std::unordered_map<int, std::vector<int>> ActorFactory::_floorBrokenWall;
+    std::unordered_map<int, std::vector<int>> ActorFactory::_floorOpendGate;
+
 
     /// コンストラクタ
     ActorFactory::ActorFactory(AppFrame::Game& game) : _game{ game } {
@@ -83,6 +86,7 @@ namespace MachineHuck::Actor {
         _gStageParamVMap.clear();
         _gClearV.clear();
         _floorBrokenWall.clear();
+        _floorOpendGate.clear();
         _stageTableV.clear();
         _currentStageNo.clear();
         _oldStageNo.clear();
@@ -186,6 +190,13 @@ namespace MachineHuck::Actor {
 
         //現在いる番号配列と前のステージ番号配列が異なる場合
         if (_oldStageNo != _currentStageNo) {
+
+            //制限ゲートイベントが起こらないようにフラグをオフにする
+            // Flag::FlagData::SetGateflg(false);
+            //フロア内の敵の数を0にする
+            Flag::FlagData::SetEnemyNum(0);
+            //ゲートを開ける
+            Flag::FlagData::SetOpenGate(true);
 
 
             //古い配列の中の新しい番号を取り出す
@@ -293,6 +304,12 @@ namespace MachineHuck::Actor {
 
                         _game.GetActorServer().Add(std::move(actor));
 
+                        //ステージ内の敵の数を1増加させる
+                        int enemynum = Flag::FlagData::GetEnemyNum();
+                        enemynum++;
+                        Flag::FlagData::SetEnemyNum(enemynum);
+
+
                     }
 
                     auto& spawnFloori = _iStageParamVMap[no];
@@ -309,6 +326,23 @@ namespace MachineHuck::Actor {
                                 actor->SetPosition(floorItem.GetPosition());
                                 actor->SetRotation(floorItem.GetRotation());
                                 actor->SetScale(floorItem.GetScale());
+                                //stringが読み込みエラーになったため代案としてアイテム用のステータスをint型でセット
+                                if ("EnergyTank" == floorItem.GetName()) {
+                                  actor->SetStatusInt(1);
+                                }
+                                else if ("EnergySuck" == floorItem.GetName())
+                                {
+                                  actor->SetStatusInt(2);
+
+                                }
+                                else if ("flagitem" == floorItem.GetName()) {
+
+                                  actor->SetStatusInt(3);
+                                }
+                                else {
+                                  actor->SetStatusInt(0);
+
+                                }
 
                                 _game.GetActorServer().Add(std::move(actor));
 
@@ -705,6 +739,19 @@ namespace MachineHuck::Actor {
 
         hole->SetModelComponent(std::move(model));
         return hole;
+    }
+
+    //制限ゲートを作成
+    std::unique_ptr<Actor>  RestrictionGateCreater::Create(AppFrame::Game& game) {
+      /// 制限ゲートの生成
+      auto restrictionGate = std::make_unique<Gimmick::RestrictionGate>(game);
+      /// モデルの読み込みと生成
+      auto model = std::make_unique<Model::ModelComponent>(*restrictionGate);
+      model->SetModel("Gate", 1000);
+
+      restrictionGate->SetModelComponent(std::move(model));
+
+      return restrictionGate;
     }
 
 

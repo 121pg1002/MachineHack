@@ -107,7 +107,8 @@ namespace MachineHuck::Stage {
 			{12,   {"stage12", "collision", {"D0_03_02", "E0_04_01"}, 14}},
 			{13,   {"stage13", "collision", {"E0_04_02", "E1_04_00"}, 9}},
 			{14,   {"stage14", "collision", {"E1_04_01", "E2_05_00", "E3_03_00"}, 4}},
-			{15,   {"stage15", "collision", {"E2_04_00"}, 5}},
+			{15,   {"stage15", "collision", {"E2_04_00"}, 25}},
+			//{15, {"stage25", "collision", {"C4_02_04", "Goal"}, 21}},
 			{16,   {"stage16", "collision", {"E3_04_00", "D2_02_00"}, 3}},
 			{17,   {"stage17", "collision", {"D2_03_00", "C3_02_01_entry"}, 2}},
 			{18,   {"stage18", "collision", {"C1_02_01", "D3_03_02"}, 8}},
@@ -116,8 +117,9 @@ namespace MachineHuck::Stage {
 			{21,   {"stage21", "collision", {"D4_03_03", "E4_04_04"}, 19}},
 			{22,   {"stage22", "collision", {"D7_03_04", "E4_04_03", "E5_03_04"}, 24}},
 			{23,   {"stage23", "collision", {"E5_04_04", "D6_03_03", "D7_04_04", "D8_02_04"}, 23}},
-			{24,   {"stage24", "collision", {"C4_01_04", "D8_03_04"}, 22}},
-			{25,   {"stage25", "collision", {"C4_02_04"}, 21}}
+			//{24,   {"stage24", "collision", {"C4_01_04", "D8_03_04"}, 22}},
+			{24,   {"stage24", "collision", {"Goal", "D8_03_04"}, 22}},
+			{25,   {"stage25", "collision", {"C4_02_04", "Goal"}, 21}}
 		};
 
 		//ステージのコリジョン情報を取得
@@ -187,11 +189,10 @@ namespace MachineHuck::Stage {
 
 
 
-
 		for (int i = 0; i < _allFloorMap.size(); i++) {
 
 			//登録したステージ番号のフロアのみ通す
-			for (auto&& floor : _allFloorMap[i]) {
+			 auto floor = _allFloorMap[i][0];
 
 				auto&& handle = floor->GetHandle();
 
@@ -231,7 +232,7 @@ namespace MachineHuck::Stage {
 				GetCollision().SetWarpNameFloor(floorNum, vecStr);
 
 
-			}
+			
 
 
 

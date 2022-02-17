@@ -5,6 +5,7 @@
 #include "../State/StateComponent.h"
 #include "../Gauge/GaugeBase.h"
 #include "../Gauge/GaugePlayer.h"
+#include "../Flag/FlagData.h"
 
 
 namespace MachineHuck::Item {
@@ -12,7 +13,27 @@ namespace MachineHuck::Item {
 
 		_r = 2.0;
 		_isHit = false;
-		_status = STATUS::TANK;
+		Init();
+	}
+
+	void Item::Init() {
+
+		if (GetStatusInt() == 1) {
+			_status = STATUS::TANK;
+		}
+		else if (GetStatusInt() == 2)
+		{
+			_status = STATUS::SUCK;
+
+		}
+		else if (GetStatusInt() == 3) {
+
+			_status = STATUS::KEYITEM;
+		}
+		else {
+			_status = STATUS::TANK;
+
+		}
 	}
 
 
@@ -52,6 +73,8 @@ namespace MachineHuck::Item {
 					}
 					else if (GetStatus() == STATUS::KEYITEM)
 					{
+						//êßå¿ÉQÅ[ÉgÇäJÇØÇÈ
+						Flag::FlagData::SetOpenGate(true);
 
 					}
 

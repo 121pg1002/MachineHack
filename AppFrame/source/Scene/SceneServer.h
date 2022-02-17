@@ -70,7 +70,11 @@ namespace AppFrame::Scene {
 		///
 		void GoToScene(std::string_view key, std::string_view sceneNext, bool flag);
 		 
-		
+		/**
+		 * @brief リストの一番手前のシーンを削除する
+		 */
+		void PopFront();
+
 		/// リストの一番後ろ(生前面)のシーンの真下に挿入する
 		/// @param[in] key  Sceneのインスタンスに関連付けるた任意の文字列
 		/// Sceneの入口処理Enterを実行する

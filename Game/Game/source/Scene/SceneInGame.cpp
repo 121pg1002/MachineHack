@@ -71,7 +71,9 @@ namespace MachineHuck::Scene {
             {"EntryPoint", "Object/EntryPoint.mv1"},
             {"Floor", "Object/Floor.mv1"},
             {"ObstacleWall", "Object/ObstacleWall.mv1"},
-            {"Wall", "Object/Wall.mv1"}
+            {"Wall", "Object/Wall.mv1"},
+            {"Gate","Object/Gate.mv1"}
+
               // {"Dungeon",   "Dungeon.mv1"},
               // {"stage0",    "stage0.mv1"}
 
@@ -187,8 +189,20 @@ namespace MachineHuck::Scene {
 
         //プレイヤー死亡による
         if (Flag::FlagData::GetPlayerDead()) {
-            Init();
+          Init();
             Flag::FlagData::SetPlayerDead(false);
+        }
+        else if (Flag::FlagData::GetEpilogueFlag()) {
+          Init();
+          Flag::FlagData::SetEpilogueFlag(false);
+        }
+        else if (Flag::FlagData::GetInGameExitFlag()) {
+          Init();
+          Flag::FlagData::SetInGameExitFlag(false);
+          //マップ画面からのフラグがオンなら
+          if (Flag::FlagData::GetBlackOutFlag()) {
+            Flag::FlagData::SetBlackOutFlag(false);
+          }
         }
 
         // ファクトリの生成とクリエイターの登録
@@ -207,6 +221,8 @@ namespace MachineHuck::Scene {
         af.Register("Hole", std::make_unique<Actor::HoleCreator>());
        // af.Register("Duct", std::make_unique<Actor::DuctCreator>());
         af.Register("Item", std::make_unique<Actor::ItemCreator>());
+        af.Register("Gate", std::make_unique<Actor::RestrictionGateCreater>());
+
         
 
         //for (int i = 0; i < StageAll; i++) {
@@ -416,7 +432,7 @@ namespace MachineHuck::Scene {
         //フェードイン処理
         if (Flag::FlagData::GetFadeInFlag()) {
             GetSceneServer().GoToScene("Loading", "FadeIn", false);
-            Flag::FlagData::SetFadeInFlag(false);
+            //Flag::FlagData::SetFadeInFlag(false);
         }
 
         //スライドアウト処理
@@ -432,14 +448,31 @@ namespace MachineHuck::Scene {
 
         //プレイヤーが死亡したら
         if (Flag::FlagData::GetPlayerDead()) {
+            //GetSceneServer().PopBack();
+            Exit();
             GetSceneServer().GoToScene("Title");
+            //Flag::FlagData::SetBlackOutFlag(false);
             GetSoundComponent().PlayStopMusic();
         }
 
-
+        //エピローグフラグが立っていたら
         if (Flag::FlagData::GetEpilogueFlag()) {
-        
+            Exit();
             GetSceneServer().GoToScene("Epilogue");
+            //Flag::FlagData::SetBlackOutFlag(false);
+            GetSoundComponent().PlayStopMusic();
+            //Flag::FlagData::SetEpilogueFlag(false);
+        }
+
+        //インゲームのExitフラグが立っていたら(マップ画面から)
+        if (Flag::FlagData::GetInGameExitFlag()) {
+         
+          Exit();
+          GetSceneServer().GoToScene("Title");
+          //Flag::FlagData::SetBlackOutFlag(false);
+          GetSoundComponent().PlayStopMusic();
+          //Flag::FlagData::SetInGameExitFlag(false);
+
         }
 
         GetSoundComponent().Addcnt(1);
@@ -493,6 +526,11 @@ namespace MachineHuck::Scene {
             DrawGraph(0, 0, _grHandle, true);
             //Flag::FlagData::SetBlackOutFlag(false);
         }
+
+        int Color = GetColor(255, 255, 255);
+        DrawFormatString(0, 0, Color, "敵の数は %d です", Flag::FlagData::GetEnemyNum());
+
+
     }
     /// 出口
     void SceneInGame::Exit() {
@@ -512,6 +550,8 @@ namespace MachineHuck::Scene {
 
         //シャドウマップの削除
         DeleteShadowMap(shadowmap->GetShadowmap());
+
+        /*if(Flag::FlagData::Get)*/
 
     }
 }

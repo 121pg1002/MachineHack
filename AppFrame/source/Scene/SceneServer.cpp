@@ -90,6 +90,10 @@ namespace AppFrame::Scene {
         }
     }
 
+    void SceneServer::PopFront() {
+      _scenes.pop_front();
+    }
+
 
     /// リストの一番後ろ(最前面)のシーンの真下に挿入
     void SceneServer::InsertBelowBack(std::string_view key) {

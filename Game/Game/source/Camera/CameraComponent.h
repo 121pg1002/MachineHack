@@ -73,8 +73,9 @@ namespace MachineHuck {
 			/** 
 			 * @brief ワープ直後の主人公の方にカメラを向ける        
 			 * @param rot 主人公の向き 
+			 * @param moveSpeed 移動量
 			 */
-			void WarpMove(Math::Vector4 rot);
+			void WarpMoveCamera(Math::Vector4 rot, double moveSpeed);
 
 			/// 注視点方向のベクトルを取得
 			/// @return 注視点方向の単位ベクトル
@@ -87,8 +88,8 @@ namespace MachineHuck {
 			Math::Vector4 _forwardOfTarget{ 0, 0, 0 };
 			float targetDist{ 500 };
 			float vertDist{ 100 };
-			//Math::Vector4 _positionInitDif{ 0, 1200, -1000 }; //!< 初期カメラ位置の差分座標
-			Math::Vector4 _positionInitDif{ 0, 4500, -2000 };   //!< 初期カメラ位置の差分座標
+			Math::Vector4 _positionInitDif{ 0, 2000, -1000 }; //!< 初期カメラ位置の差分座標
+			//Math::Vector4 _positionInitDif{ 0, 4500, -2000 };   //!< 初期カメラ位置の差分座標
 			//Math::Vector4 _positionInitDif{ 0, 2000, -200 };  //!< カメラ撮影用
 			Math::Vector4 _targetInitDif{ 0, 100, 0 };          //!< 初期カメラ目標の差分座標
 			Math::Vector4 _move{0.0, 0.0, 0.0};

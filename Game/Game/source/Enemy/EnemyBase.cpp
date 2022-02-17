@@ -21,7 +21,7 @@ namespace MachineHuck::Enemy {
 
 	void EnemyBase::Update() {
 		_soundFrame++;
-		GetGame().GetGaugeBaseUI().Update();
+		//GetGame().GetGaugeBaseUI().Update();
 		GetGame().GetGaugeEnemyUI().Update();
 
 	}

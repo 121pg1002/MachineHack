@@ -40,7 +40,7 @@ namespace MachineHuck::Scene {
             {"Map3",   {"Texture/SceneMap/map3_small.png", 1, 1, 160, 160}},
             {"Map4",   {"Texture/SceneMap/map4_small.png", 1, 1, 160, 160}},
             {"Player", {"Texture/SceneMap/player.png", 1, 1, 166, 166}},
-            {"Goal",   {"Texture/SceneMap/Goal.png", 1, 1, 200, 200}},
+            {"Goal",   {"Texture/SceneMap/goal.png", 1, 1, 166, 166}},
             {"BackTitle", {"Texture/SceneMap/title.png", 1, 1, 1920, 1080}},
             {"Yes", {"Texture/SceneMap/Yes.png", 1, 1, 1920, 1080}},
             {"No", {"Texture/SceneMap/No.png", 1, 1, 1920, 1080}}
@@ -87,6 +87,7 @@ namespace MachineHuck::Scene {
         _colorFrame = 0;
         _no = 0;
         _alpha = 255;
+        _titleSelectFlag = false;
     }
     ///
     /// 入力
@@ -128,7 +129,15 @@ namespace MachineHuck::Scene {
                 
                 }
                 else {
-                    GetSceneServer().GoToScene("Title");
+
+                    //GetSceneServer().GoToScene("Title");
+                    Flag::FlagData::SetInGameExitFlag(true);
+                    //Flag::FlagData::SetFadeOutFlag(true);
+                    GetSceneServer().GoToScene("Loading", "FadeOut", false);
+                  //Flag::FlagData::SetBlackOutFlag(true);
+                    //GetSceneServer().PopBack();
+                    //GetSceneServer().GoToScene("Title");
+
                     GetSoundComponent().PlayStopMusic();
                 }
             
@@ -145,6 +154,7 @@ namespace MachineHuck::Scene {
              //GetSceneServer().PushBack("InGame",1);
 
             GetSceneServer().GoToScene("InGame", false);
+            //GetSceneServer().PopBack();
            // _alpha = 255;
         }
 
@@ -254,7 +264,7 @@ namespace MachineHuck::Scene {
                 //プレイヤーがゴールにいないとき
                 if (GoalNum == i * BoardSize + j && GoalNum != Flag::FlagData::GetPlayerFloorNum()) {
                 
-                    DrawGraph(offsetX, FloorSize * BoardSize - offsetY + FloorSize + StartHeight, _goalHandle, false);
+                    DrawGraph(offsetX, FloorSize * BoardSize - offsetY + StartHeight, _goalHandle, true);
                 
                 }
 

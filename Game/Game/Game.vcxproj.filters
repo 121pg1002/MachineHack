@@ -182,6 +182,9 @@
     <ClCompile Include="source\Gimmick\RecoveryFloorGimmick.cpp">
       <Filter>Gimmick</Filter>
     </ClCompile>
+    <ClCompile Include="source\Gimmick\Restrictiongate.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Enemy">
@@ -436,6 +439,9 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="source\Gimmick\RecoveryFloorGimmick.h">
+      <Filter>Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Gimmick\Restrictiongate.h">
       <Filter>Gimmick</Filter>
     </ClInclude>
   </ItemGroup>

@@ -31,7 +31,13 @@ namespace MachineHuck::Flag {
 	int FlagData::_PlayerNowFloorNum = 0;
 	std::vector<int> FlagData::_playerFloorV;
 	bool FlagData::_epilogueFlag = false;
+	bool FlagData::_openGateFlag = { false };
+	bool FlagData::_gateflag = { false };
+	int  FlagData::enemynum = 0;
 	int FlagData::_catchCount = 0;
+	bool FlagData::_inGameExitFlag = false;
+	bool FlagData::_warpCameraFlag = true;
+	bool FlagData::_collisionFlag = true;
 #ifdef _DEBUG
 	int FlagData::_debugNo = 0;
 #endif

@@ -134,7 +134,8 @@ namespace MachineHuck::Player {
         float _hp{ 100 };//プレイヤーのエネルギー残量
         //int _noDamageTime{0};
         bool _warping{ false };
-        int _waitframe{ 0 };
+        int _waitFrame{ 0 };
+        int _warpCameraFrame{ 0 }; //!< カメラ移動フレーム
         int _gaugehp{ 0 };//HP
 
 #ifdef _DEBUG

@@ -27,6 +27,7 @@ namespace MachineHuck::Gauge {
 
     GaugePlayer::GaugePlayer(AppFrame::Game& game) : GaugeBase{ game } {
         _gaugeCount = 0;
+        _gaugeMax = 100;
     }
 
     void GaugePlayer::Init() {
@@ -113,6 +114,9 @@ namespace MachineHuck::Gauge {
 
         _gauge = 100;
         _gaugeTimer = 0;
+
+        _gaugeCount = 0;
+        _gaugeMax = 100;
     }
 
     void GaugePlayer::Update() {

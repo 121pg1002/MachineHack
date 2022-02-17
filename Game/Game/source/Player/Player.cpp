@@ -241,7 +241,7 @@ namespace MachineHuck::Player {
 	/*_noDamageTime*/
 
 
-		GetGame().GetGaugePlayerUI().Update();
+		//GetGame().GetGaugePlayerUI().Update();
 		Math::Vector4 oldPos = _position;
 		GetGame().GetGaugePlayerUI().UpdatePlayerPosition(_position);
 		GetGame().GetGaugeEnemyUI().UpdateEnemyPosition(_position);
@@ -297,8 +297,12 @@ namespace MachineHuck::Player {
 
 		//if (_actorState!= ActorState::Hucked) {
 
-		//カメラに移動量を送る
-		_camera->Update(_move);
+		//ステージのコリジョンに当たっているなら
+		if (Flag::FlagData::GetCollisionFlag()) {
+			//カメラに移動量を送る
+			_camera->Update(_move);
+		}
+
 
 		for (auto&& i : GetActorServer().GetActors()) {
 
@@ -324,6 +328,7 @@ namespace MachineHuck::Player {
 						//ダメージ床かどうか
 						if (i->GetTypeGimmick() != TypeGimmick::DamageFloor) {
 					
+							//回復装置かどうか
 							if (i->GetTypeGimmick() != TypeGimmick::RecoveryFloor) {
 							
 								continue;
@@ -391,7 +396,7 @@ namespace MachineHuck::Player {
 			}
 
 			////ワープ後
-			if (_waitframe == 0 || _debugMode == true) {
+			if (Flag::FlagData::GetWarpCameraFlag() == true || _debugMode == true) {
 
 			   //フロア番号を取得
 			   auto floorNum = i->GetCollision().GetFloorNum();
@@ -401,20 +406,21 @@ namespace MachineHuck::Player {
 			   
 			   //カメラ位置に座標を送る
 			   _camera->FloorPos(pos);
-			
+				 Flag::FlagData::SetWarpCameraFlag(false);
+				 _warpCameraFrame = 10;
 			}
 
-			if (-10 < _waitframe && _waitframe < 0) {
+			if (0 < _warpCameraFrame && _warpCameraFrame < 11) {
 			
-				_camera->WarpMove(_rotation);
+				_camera->WarpMoveCamera(_rotation, 50.0);
+				_warpCameraFrame--;
 			}
-
-
 
 		}
 
 		//ステージ番号をここにもってくる[1]の部分に当てはめる
 		 //地面のナビメッシュに触れているかどうか
+
 
 		if (!IsHucked()) {
 
@@ -436,37 +442,40 @@ namespace MachineHuck::Player {
 			//ワープ直後か
 			if (!_warping) {
 
-				auto dxPos = WarpFloor(*this);
+				if (Flag::FlagData::GetOpenGate()) {
 
-				//フェード用に保存
-				_fadePos = { dxPos.x, dxPos.y, dxPos.z };
+					auto dxPos = WarpFloor(*this);
 
-				//現在位置のステージ番号のワープナビメッシュに当たった場合
-				if (dxPos.x != 0.0f && dxPos.z != 0.0f) {
+					//フェード用に保存
+					_fadePos = { dxPos.x, dxPos.y, dxPos.z };
 
-					Flag::FlagData::SetFadeOutFlag(true);
-					//Math::Vector4 pos = { dxPos.x, dxPos.y, dxPos.z };
+					//現在位置のステージ番号のワープナビメッシュに当たった場合
+					if (dxPos.x != 0.0f && dxPos.z != 0.0f) {
 
-					//_position = pos;
-					//_position = _fadePos;
+						Flag::FlagData::SetFadeOutFlag(true);
+						//Math::Vector4 pos = { dxPos.x, dxPos.y, dxPos.z };
 
-					//_camera->SetRefleshPosition(_position);
-					//_camera->SetRefleshTarget(_position);
+						//_position = pos;
+						//_position = _fadePos;
 
-					if (!_warping) {
+						//_camera->SetRefleshPosition(_position);
+						//_camera->SetRefleshTarget(_position);
 
-						_warping = true;
-						_waitframe = 5;
+						if (!_warping) {
 
-						//_fadeflag = true;
+							_warping = true;
+							_waitFrame = 5;
+
+							//_fadeflag = true;
+
+						}
+						//else {
+						//	_warping = false;
+						//}
+
+						//ここにフェードイン処理
 
 					}
-					//else {
-					//	_warping = false;
-					//}
-
-					//ここにフェードイン処理
-
 				}
 
 
@@ -474,18 +483,25 @@ namespace MachineHuck::Player {
 			else {
 
 				//描画を1フレーム回す
-				if (_waitframe == 4) {
+				if (_waitFrame == 4) {
 					_position = _fadePos;
 				}
 
-				if (_waitframe == 0) {
+				if (_waitFrame == 1) {
+					Flag::FlagData::SetWarpCameraFlag(true);
+				}
+
+				if (_waitFrame == 0) {
 					Flag::FlagData::SetFadeInFlag(true);
+
+
+					
 
 					//ダクトワープの判定を消す
 					Flag::FlagData::SetDuctWarp(false);
 				}
 
-				if (!WarpingFloor() && _waitframe < 0) {
+				if (!WarpingFloor() && _waitFrame < 0) {
 
 					//_position = _fadePos;
 					_warping = false;
@@ -495,7 +511,8 @@ namespace MachineHuck::Player {
 
 			}
 
-			_waitframe--;
+			_waitFrame--;
+			
 
 		}
 

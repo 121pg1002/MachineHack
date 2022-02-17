@@ -55,12 +55,26 @@ namespace AppFrame::Scene {
         _deltaAlpha = -ALPHA_DELTA;
     }
     void SceneFadeIn::Update() {
+
+      //if (!MachineHuck::Flag::FlagData::GetInGameExitFlag()) {
         MachineHuck::Flag::FlagData::SetBlackOutFlag(false);
+      //}
+        
 
         _alpha += _deltaAlpha;
         if (_alpha <= ALPHA_MIN) {
             _alpha = ALPHA_MIN;   
-            GetSceneServer().PopBack(); // FadeIn自身をポップバック
+
+
+            if (MachineHuck::Flag::FlagData::GetFadeInFlag()) {
+              GetSceneServer().PopBack(); // FadeIn自身をポップバック
+              GetSceneServer().PopFront(); // FadeInの下をポップバック
+              MachineHuck::Flag::FlagData::SetFadeInFlag(false);
+            }
+            else {
+              GetSceneServer().PopBack(); // FadeIn自身をポップバック
+            }
+            //GetSceneServer().PopBack(); // FadeIn自身をポップバック
         }
 
     }
