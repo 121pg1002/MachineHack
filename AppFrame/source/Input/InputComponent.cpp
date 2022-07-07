@@ -1,16 +1,18 @@
-///
-/// @file    InputComponent.cpp
-/// @brief   入力コンポーネント
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   InputComponent.cpp
+ * @brief  入力コンポーネント
+ *
+ * @author Kota Yamawaki
+ * @date   November 26 2021
+ *********************************************************************/
+
 #include "InputComponent.h"
 
+namespace Input = AppFrame::Input;
 ///
 /// 更新.
 ///
-void MouseState::Update() {
+void Input::MouseState::Update() {
   // マウスのボタン状態更新
   auto old = _fresh;
   _fresh = GetMouseInput();
@@ -30,7 +32,7 @@ void MouseState::Update() {
 ///
 /// 更新.
 ///
-void JoypadState::Update() {
+void Input::JoypadState::Update() {
 
   //前フレームのパッド状態を保存
   XINPUT_STATE _old = _fresh;
@@ -46,10 +48,10 @@ void JoypadState::Update() {
 
 }
 
-void KeyBoardState::Update() {
+void Input::KeyBoardState::Update() {
 
-    int _oldkey[5]{0};
-    for (int i = 0; i < 5; i++) 
+    int _oldkey[6]{0};
+    for (int i = 0; i < 6; i++) 
     {
         _oldkey[i] = _fresh[i];
     }
@@ -74,15 +76,19 @@ void KeyBoardState::Update() {
     {
         _fresh[4] = CheckHitKey(KEY_INPUT_RETURN);
     }
-    else 
+    else if (CheckHitKey(KEY_INPUT_LSHIFT))
     {
-        for (int i = 0; i < 5; i++)
-        {
-            _fresh[i] = 0;
-        }
+      _fresh[5] = CheckHitKey(KEY_INPUT_LSHIFT);
+    }
+    else
+    {
+      for (int i = 0; i < 6; i++)
+      {
+        _fresh[i] = 0;
+      }
     }
 
-    for (int i = 0; i < 5; i++) 
+    for (int i = 0; i < 6; i++) 
     {
         _trg[i] = (_oldkey[i] ^ _fresh[i]) & _fresh[i];
     }
@@ -92,7 +98,7 @@ void KeyBoardState::Update() {
 ///
 /// 更新.
 ///
-void InputComponent::Update() {
+void Input::InputComponent::Update() {
   _mouseState.Update();
   _joypadState.Update();
   _keyboardState.Update();

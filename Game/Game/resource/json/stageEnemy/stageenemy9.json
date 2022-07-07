@@ -1,0 +1,8 @@
+{
+"StageEnemy":[
+		{"filename":"TackleEnemy","handlename":"TackleEnemy","tx":450,"ty":0,"tz":450,"rx":-0,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1, "numrange": 200, "routine": 2},
+		{"filename":"TackleEnemy","handlename":"TackleEnemy1","tx":-450,"ty":0,"tz":-450,"rx":-0,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1, "numrange": 200, "routine": 2},
+		{"filename":"CatchEnemy","handlename":"CatchEnemy","tx":-450,"ty":0,"tz":450,"rx":-0,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1, "numrange": 200, "routine": 0},
+		{"filename":"CatchEnemy","handlename":"CatchEnemy1","tx":450,"ty":0,"tz":-450,"rx":-0,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1, "numrange": 200, "routine": 0}
+	]
+}

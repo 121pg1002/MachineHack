@@ -1,22 +1,31 @@
-/**
- * @file    EnemyParameter.h
- * @brief  パラメーターをjsonから読み込む
+/*****************************************************************//**
+ * @file   EnemyParameter.h
+ * @brief  エネミーパラメーターを読み込むクラス
  *
- *
- * @author Hikaru Goto
- * @date   2021/11/27
- */
-
+ * @author hikaru Goto
+ * @date   December 26 2021
+ *********************************************************************/
 #pragma once
 #include<unordered_map>
 #include<string>
 #include<DxLib.h>
-#include "AppFrame.h"
+#include "../Parameter/EStageParam.h"
+#include "../Parameter/EParam.h"
 
-using EStageParam = std::unordered_map < std::string, math::Vector4>;
-using EParam      = std::unordered_map < std::string, double>;
 
-namespace Enemy {
+
+
+namespace MachineHuck::Enemy {
+
+	using ESMV = std::vector<Parameter::EStageParam>;
+	//using StageV = std::vector<int>;
+
+	//using Type = std::unordered_map<std::string, Parameter::EStageParam>;
+	//using StageMap = std::unordered_map<std::string, Type>;
+	using DoubleMap = std::unordered_map<std::string, double>;
+	using LevelRoutine = std::vector<std::pair<int, int>>; //!< レベルと思考ルーチン番号を保存
+
+
 	class EnemyParameter
 	{
 	public:
@@ -32,13 +41,14 @@ namespace Enemy {
 		~EnemyParameter();
 
 		/**
-		 * @brief  エネミーのステージ配置パラメーターをjsonから読み込む
+		 * @brief  エネミーのステージ配置情報をjsonから読み込む
+		 * @param  stageNo  ステージ番号
 		 * @param  filePath
 		 */
-		void LoadStageEnemyParam(const std::string& filePath);
+		void LoadStageEnemyParam(const int stageNo, const std::string& filePath);
 
 		/*
-		* @brief  jsonから敵のパラメーターを読み込む
+		* @brief  jsonから敵の情報を読み込む
 		* @param  filePath
 		*/
 		void LoadEnemyParam(const std::string& filePath);
@@ -48,25 +58,40 @@ namespace Enemy {
 		* @param  filePath
 		* @return パラメーター
 		*/
-		double GetEnemyParam(const std::string& paramName);
+		double GetEnemyParam(const std::string& paramName, int no);
+
+		/**
+		* @brief   ベクター配列を取得する
+		* @return  _eStageParamV
+		*/
+		ESMV GetStageVector() { return _eStageParamV; }
+
+		/**
+		 * @brief  ステージの敵配置マップを取得
+		 * @return _enemyStageParamMap
+		 */
+		 //std::unordered_map<std::string, Parameter::EStageParam>GetStageEnemyParameter() { return _enemyStageParamMap; }
+		std::unordered_map<int, ESMV> GetFloorEnemyMap() { return _eStageNumMap; }
+
+		/**
+		 * @brief  フロア番号をキーとしたレベルと思考ルーチン番号のコンテナを取得
+		 * @return _vLevelRoutineMap
+		 */
+		//std::unordered_map<int, LevelRoutine> GetLevelRoutineMap() { return _vLevelRoutineMap; }
+
 
 	private:
-		std::unordered_map<std::string, EStageParam>     _enemyStageMap; //!< 敵のステージ配置を保存
-	 // std::unordered_map<std::string, double> _enemyParamMap; //!< 敵のパラメーターを保存
-		//std::unordered_map<std::string, EnemyParameter> _enemyParamMap;
-		std::unordered_map<std::string, EParam> _enemyParamMap;
-		std::string _filename;
-		std::string _handlename;
-		math::Vector4 _position;
-		math::Vector4 _rotation;
-		math::Vector4 _scale;
+		//std::unordered_map<std::string, Parameter::EStageParam>     _enemyStageParamMap; //!< 敵のステージ配置を保存
+		//std::unordered_map<std::string, Type>            _eType;              //!< 敵の種類をキーとした要素を保存
+		//std::unordered_map<std::string, StageMap>        _eSMap;              //!< ステージ番号をキーとして要素を保存
 
+		ESMV _eStageParamV; //!< 1フロアの敵配置情報を格納
 
-		double _type{ 0.0 };  //!< 種類
-		double _energy{ 0.0 }; //!< エナジー量
-		double _searchRange{ 0.0 }; //!< 索敵範囲の角度
-		double _r{ 0.0 }; //!< 索敵半径
-		double _speed{ 0.0 }; //!< 速さ
+		std::unordered_map<int, ESMV> _eStageNumMap; //!< フロア番号ごとに格納
+		std::vector<DoubleMap> _vDoubleMap; //!< double型を格納するコンテナ
+		//LevelRoutine _vLevelRoutine; //!< レベルと思考ルーチン番号を保存
+		//std::unordered_map<int, LevelRoutine> _vLevelRoutineMap; //!< フロア番号ごとに保存
 
 	};
 }
+

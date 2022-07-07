@@ -8,7 +8,7 @@
 
 #pragma once
 
-namespace math 
+namespace AppFrame::Math
 {
 	class Vector2
 	{
@@ -19,18 +19,78 @@ namespace math
 		*/
 		Vector2(double ax, double az) :_x(ax), _z(az) {}
 
+		// デストラクタ
+		~Vector2() = default;
+	
+		/*
+        *  @brief  ベクトル同士の加算
+        *  @return 加算されたベクトル
+        */
+        const Vector2 operator +(const Vector2& rhs) const;
+
+        /*
+        *  @brief  ベクトル同士の減算
+        *  @return 減算されたベクトル
+        */
+        const Vector2 operator -(const Vector2& rhs) const;
+
+        /*
+        *  @brief  ベクトルのスカラー倍(乗算)
+        *  @return 計算されたベクトル 
+        */
+        const Vector2 operator *(const double rhs) const;
+
+        /*
+        *  @brief  ベクトルのスカラー倍(除算)
+        *  @return 計算されたベクトル 
+        */
+        const Vector2 operator /(const double rhs) const;
+
+        /**
+         * @brief  内積         
+         * @param  rhs
+         * @return 計算した値
+         */
+        double Dot(const Vector2& rhs) const;
+
+
+        /**
+         * @brief  外積       
+         * @param  rhs
+         * @return 計算したベクトル
+         */
+        double Cross(const Vector2& rhs) const;
+
 
 		/*
 		*@brief  xの数値を取得
 		*@return _x
 		*/
-		double GetX() { return _x; }
+		const double GetX() const  { return _x; }
 
 		/*
 		*@brief  zの数値を取得
 		*@return _z
 		*/
-		double GetZ() { return _z; }
+		const double GetZ() const  { return _z; }
+
+        /**
+         * @brief x座標の設定
+         * @param x
+         */
+        void SetX(const double x) { _x = x; }
+
+        /**
+         * @brief z座標の設定
+         * @param z
+         */
+        void SetZ(const double z) { _z = z; }
+
+       /*
+        *  @brief  ベクトルの長さの計算 
+        *  @return 長さ
+        */
+        const double Length() const;
 
 	private:
 		double _x, _z; //!< x成分, z成分

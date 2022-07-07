@@ -10,140 +10,232 @@
 #include "../source/Scene/SceneTeam.h"
 #include "../source/Scene/SceneTitle.h"
 #include "../source/Scene/SceneTeam.h"
+#include "../source/Scene/ScenePrologue.h"
+#include "../source/Scene/SceneEpilogue.h"
 #include "../source/Scene/SceneAMG.h"
+#include "../source/Scene/SceneMap.h"
+#include "../source/Scene/SceneItem.h"
+#include "../source/Scene/SceneLoading.h"
+#include "../source/Scene/SceneSlideIn.h"
+#include "../source/Scene/SceneSlideOut.h"
 #include "../source/Actor/ActorServer.h"
 #include "../source/Actor/ActorFactory.h"
+#include "../source/Enemy/EnemyParameter.h"
+#include "../source/Stage/StageParameter.h"
+#include "../source/Gimmick/GimmickParameter.h"
+#include "../source/Item/ItemParameter.h"
+#include "../source/Effect/EffectServer.h"
+#include "../source/UI/UIComponent.h"
+#include "../source/UI/SpriteServer.h"
+#include "../source/Gauge/GaugeEnemy.h"
+#include "../source/Gauge/GaugePlayer.h"
+#include "../source/Item/Item.h"
 #include <DxLib.h>
 
-Game::Game() {
+AppFrame::Game::Game() {
 }
 
-Game::~Game() {
+AppFrame::Game::~Game() {
 }
 /// 初期化
-bool Game::Initialize() {
-  // 画面モードのを設定
-  SetGraphMode(1920, 1080, 32);
-  // ウィンドウモードに指定する
-  ChangeWindowMode(true);
-  // Dxライブラリ初期化
-  if (DxLib_Init() == -1) {
-    return false;
-  }
-                                                   //追加
+bool AppFrame::Game::Initialize() {
+    // 画面モードのを設定
+    SetGraphMode(1920, 1080, 32);
+    // ウィンドウモードに指定する
+    ChangeWindowMode(true);
 
-  // 画面の背景色を青に設定する
-  SetBackgroundColor(100, 0, 255);
-  // 描画先画面を裏にする
-  SetDrawScreen(DX_SCREEN_BACK);
+    // Dxライブラリ初期化
+    if (DxLib_Init() == -1) {
+        return false;
+    }
+    //追加
 
-  // Ｚバッファを有効にする
-  SetUseZBuffer3D(TRUE);
+// 画面の背景色を青に設定する
+    SetBackgroundColor(10, 10, 10);
+    // 描画先画面を裏にする
+    SetDrawScreen(DX_SCREEN_BACK);
 
-  // Ｚバッファへの書き込みを有効にする
-  SetWriteZBuffer3D(TRUE);
 
-  // マテリアルの自己発光色を暗い青色にする
+    //Effekseerの初期化
+    MachineHuck::Effect::EffectServer::EffekseerInit();                     //追加
+
+    // Ｚバッファを有効にする
+    SetUseZBuffer3D(TRUE);
+
+    // Ｚバッファへの書き込みを有効にする
+    SetWriteZBuffer3D(TRUE);
+
+    // マテリアルの自己発光色を暗い青色にする
 #ifdef _DEBUG
-  MATERIALPARAM material;
-  material.Diffuse = GetColorF(0.0f, 0.0f, 0.0f, 1.0f);
-  material.Specular = GetColorF(0.0f, 0.0f, 0.0f, 0.0f);
-  material.Ambient = GetColorF(0.0f, 0.0f, 0.0f, 0.0f);
-  material.Emissive = GetColorF(0.0f, 0.0f, 0.5f, 0.0f);
-  material.Power = 20.0f;
-  SetMaterialParam(material);
+    MATERIALPARAM material;
+    material.Diffuse = GetColorF(0.0f, 0.0f, 0.0f, 1.0f);
+    material.Specular = GetColorF(0.0f, 0.0f, 0.0f, 0.0f);
+    material.Ambient = GetColorF(0.0f, 0.0f, 0.0f, 0.0f);
+    material.Emissive = GetColorF(0.0f, 0.0f, 0.5f, 0.0f);
+    material.Power = 20.0f;
+    SetMaterialParam(material);
 #endif
 
 
-  // インプットコンポーネントの生成
-  _input = std::make_unique<InputComponent>();
 
-  // サウンドコンポーネントの生成
-  _sound = std::make_unique<SoundComponent>(*this);
+    // インプットコンポーネントの生成
+    _input = std::make_unique<AppFrame::Input::InputComponent>();
 
-  // アクターサーバーの生成
-  _actorServer = std::make_unique<ActorServer>();
+    // サウンドコンポーネントの生成
+    _sound = std::make_unique<AppFrame::Sound::SoundComponent>(*this);
 
-  // アクターファクトリーの生成
-  _actorFactory = std::make_unique<ActorFactory>(*this);
+    // アクターサーバーの生成
+    _actorServer = std::make_unique<MachineHuck::Actor::ActorServer>();
+
+    // アクターファクトリーの生成
+    _actorFactory = std::make_unique<MachineHuck::Actor::ActorFactory>(*this);
+
+    // スプライトサーバーの生成
+    _spriteServer = std::make_unique<MachineHuck::UI::SpriteServer>();
+
+    // UIコンポーネントの生成
+    _ui = std::make_unique<MachineHuck::UI::UIComponent>(*this);
+
+    //アイテムコンポーネントの生成
+    _itemCom = std::make_unique<MachineHuck::Item::Item>(*this);
+
+    _gaugeBaseUi = std::make_unique<MachineHuck::Gauge::GaugeBase>(*this);
+    _gaugePlayerUi = std::make_unique<MachineHuck::Gauge::GaugePlayer>(*this);
+    _gaugeEnemyUi = std::make_unique<MachineHuck::Gauge::GaugeEnemy>(*this);
 
 
-  // アセットサーバーの生成
-  _assetServer = std::make_unique<AssetServer>(*this);
+    // アセットサーバーの生成
+    _assetServer = std::make_unique<AppFrame::Asset::AssetServer>(*this);
 
-  // アセットサーバーの取得
-  auto& as = GetAssetServer();
-  // アセットのカレントフォルダ設定
-  as.ChangeCurrentPath("resource");
+    // アセットサーバーの取得
+    auto& as = GetAssetServer();
+    // アセットのカレントフォルダ設定
+    as.ChangeCurrentPath("resource");
 
-  // 使用する音のテーブル
-  const /*Asset::*/AssetServer::SoundMap soundToUsed{
-    {"damage", {"damage.wav", true}},
-    {"bgm1", {"sublight.wav", false}},
-    {"bgm2", {"stage1.mid", false}},
-  };
-  // 音の読み込み
-  as.LoadSounds(soundToUsed);
-  // サウンドコンポーネントの取得
-  auto& sc = GetSoundComponent();
-  sc.SetVolume("damage", 128);
+    // 使用する音のテーブル
+    const AppFrame::Asset::AssetServer::SoundMap soundToUsed{
+      {"damage", {"damage.wav", true}},
+      {"charging", {"se/ビーム砲チャージ.mp3", true}},
+      {"push", {"se/決定、ボタン押下33.mp3", true}},
+      {"bgm1", {"se/energy.mp3", false}},
+
+      // {"bgm2", {"stage1.mid", false}},
+     //{"save",{"se/se_save" ,true}}                          ,
+    {"getitem",{"se/se_getitem.wav" ,true}}                    ,
+    //{"store",{"se/se_store" ,true}}                        ,
+    {"hacking",{"se/se_hacking.wav" ,true}}                    ,
+    //{"hackerror",{"se/se_hackerror" ,true}}                ,
+    {"dropoff",{"se/se_dropoff.wav" ,true}}                    ,
+    {"damage"     ,   {"se/se_damage.wav" ,true}}              ,
+    {"lackenergy" ,       {"se/se_lackenergy.wav" ,true}}      ,
+    {"outofenergy",       {"se/se_outofenergy.wav" ,true}}     ,
+    {"tackle"     ,   {"se/se_tackle.wav" ,true}}              ,
+    //{"catch"      ,  {"se/se_catch" ,true}}                ,
+    //{"alert"      ,  {"se/se_alert" ,true}}                ,
+    {"exchange"   ,     {"se/se_exchange.wav" ,true}}          ,
+    //{"switch"     ,   {"se/se_switch" ,true}}              ,
+    //{"unlockgate" ,       {"se/se_unlockgate" ,true}}      ,
+    //{"lockgate"   ,     {"se/se_lockgate" ,true}}          ,
+    //{"breakwall"  ,      {"se/se_breakwall" ,true}}        ,
+    //{"floordamage",        {"se/se_floordamage" ,true}}    ,
+    //{"enemyhaunting",       {"se/se_enemyhaunting" ,true}} ,
+    //{"dropdown"     ,   {"se/se_dropdown" ,true}}          ,
+    //{"induct"       , {"se/se_induct" ,true}}              ,
+    //{"outduct"      ,  {"se/se_outduct" ,true}}            ,
+    {"openmap"      ,  {"se/se_openmap.wav" ,true}}            ,
+    {"openitem"     ,  {"se/se_openitem.wav" ,true}}           ,
+    {"close"        ,{"se/se_close.wav" ,true}}                ,
+
+    //{"breakenemy" ,      {"se/se_breakenemy" ,true}}       ,
+    //{"hitwall"    ,    {"se/se_hitwall" ,true}}            ,
+    {"contact"    ,    {"se/se_contact.wav" ,true}}            ,
+    //{"tackle"     ,   {"se/se_tackle" ,true}}              ,
+    //{"catch"      ,   {"se/se_catch" ,true}}               ,
+    //{"alert"      , {"se/se_alert", true}}                 ,
+    {"footsteps"  ,     {"se/se_footsteps.wav", true}}
+    };
+    // 音の読み込み
+    as.LoadSounds(soundToUsed);
+    // サウンドコンポーネントの取得
+    auto& sc = GetSoundComponent();
+    sc.SetVolume("damage", 128);
+    sc.SetVolume("push", 128);
 #ifdef _DEBUG
-  sc.SetMute(false);
+    sc.SetMute(false);
 #else
-  sc.SetMute(false);
+    sc.SetMute(false);
 #endif
 
-  // シーンサーバーを生成＆タイトルを生成して最初のシーンとして登録
-  _sceneServer = std::make_unique<SceneServer>("AMG", std::make_shared<SceneAMG::SceneAMG>(*this));
-  
- 
-  _sceneServer->Register("Team", std::make_shared<SceneTeam::SceneTeam>(*this));
-  _sceneServer->Register("Title", std::make_shared<SceneTitle::SceneTitle>(*this));
+    // シーンサーバーを生成＆タイトルを生成して最初のシーンとして登録
+    _sceneServer = std::make_unique<AppFrame::Scene::SceneServer>("AMG", std::make_shared<MachineHuck::Scene::SceneAMG>(*this));
 
-  // インゲームを生成してシーンとして登録
-  _sceneServer->Register("InGame", std::make_shared<SceneInGame::SceneInGame>(*this));
 
-  return true;
+    _sceneServer->Register("Team", std::make_shared<MachineHuck::Scene::SceneTeam>(*this));
+    _sceneServer->Register("Title", std::make_shared<MachineHuck::Scene::SceneTitle>(*this));
+    _sceneServer->Register("Prologue", std::make_shared<MachineHuck::Scene::ScenePrologue>(*this));
+    _sceneServer->Register("Epilogue", std::make_shared<MachineHuck::Scene::SceneEpilogue>(*this));
+    _sceneServer->Register("Map", std::make_shared<MachineHuck::Scene::SceneMap>(*this));
+    _sceneServer->Register("Item", std::make_shared<MachineHuck::Scene::SceneItem>(*this));
+    _sceneServer->Register("Loading", std::make_shared<MachineHuck::Scene::SceneLoading>(*this));
+    _sceneServer->Register("SlideIn", std::make_shared<MachineHuck::Scene::SceneSlideIn>(*this));
+    _sceneServer->Register("SlideOut", std::make_shared<MachineHuck::Scene::SceneSlideOut>(*this));
+
+    // インゲームを生成してシーンとして登録
+    _sceneServer->Register("InGame", std::make_shared<MachineHuck::Scene::SceneInGame>(*this));
+
+    _enemyParam = std::make_unique<MachineHuck::Enemy::EnemyParameter>();
+    _stageParam = std::make_unique<MachineHuck::Stage::StageParameter>();
+    _gParam = std::make_unique<MachineHuck::Gimmick::GimmickParameter>();
+    _iParam = std::make_unique<MachineHuck::Item::ItemParameter>();
+
+
+    return true;
 }
 /// 実行
-void Game::Run() {
-  // メインループ
-  while (_state != State::Quit) {
-    Input();  // 入力
-    Update(); // 更新
-    Render(); // 描画
-  }
+void AppFrame::Game::Run() {
+    // メインループ
+    while (_state != State::Quit) {
+
+        if (CheckHitKey(KEY_INPUT_ESCAPE)) {
+            break;
+        }
+
+        Input(*_input);  // 入力
+        Update(); // 更新
+        Render(); // 描画
+    }
 }
 /// 停止
-void Game::Shutdown() {                                                     //追加
-  // Dxライブラリ終了
-  DxLib_End();
+void AppFrame::Game::Shutdown() {                                                     //追加
+    //Effekseer終了処理
+    MachineHuck::Effect::EffectServer::EndEffekseer();            //追加
+                                                                                      // Dxライブラリ終了
+    DxLib_End();
 }
 /// 入力
-void Game::Input() {
-  // Windows 特有の面倒な処理をライブラリにやらせる
-  if (ProcessMessage() == -1) {
-    _state = State::Quit;  // -1 が返ってきたのでゲームを終了する
-  }
-  // 入力状態の更新
-  _input->Update();
-  if (_input->GetJoypad().Exit()) {
-    _state = State::Quit;  // ESC押されたのでゲームを終了する
-  }
-  _sceneServer->Input(*_input);    // シーンサーバーの入力処理を実行
+void AppFrame::Game::Input(AppFrame::Input::InputComponent& input) {
+    // Windows 特有の面倒な処理をライブラリにやらせる
+    if (ProcessMessage() == -1) {
+        _state = State::Quit;  // -1 が返ってきたのでゲームを終了する
+    }
+    // 入力状態の更新
+    _input->Update();
+    if (_input->GetJoypad().Exit()) {
+        _state = State::Quit;  // ESC押されたのでゲームを終了する
+    }
+    _sceneServer->Input(*_input);    // シーンサーバーの入力処理を実行
 }
 /// 更新
-void Game::Update() {
-  _sceneServer->Update(); // シーンサーバーの更新処理を実行
+void AppFrame::Game::Update() {
+    _sceneServer->Update(); // シーンサーバーの更新処理を実行
 }
 /// 描画
-void Game::Render() {
-  ClearDrawScreen();      // 画面をクリアする
-  _sceneServer->Render(); // シーンサーバーの描画処理を実行
-  ScreenFlip();           // 裏画面を表示する
+void AppFrame::Game::Render() {
+    ClearDrawScreen();      // 画面をクリアする
+    _sceneServer->Render(); // シーンサーバーの描画処理を実行
+    ScreenFlip();           // 裏画面を表示する
 }
 /// アクターサーバーの取得
 //ActorServer& Game::GetActorServer() const {
 //  return _sceneServer->GetScene().GetActorServer();
 //}
-

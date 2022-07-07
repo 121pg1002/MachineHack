@@ -32,9 +32,6 @@
     <ClCompile Include="source\Enemy\EnemyBase.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="source\Scene\EffectServer.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="source\Camera\CameraComponent.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
@@ -59,10 +56,133 @@
     <ClCompile Include="source\Collision\CollisionComponent.cpp">
       <Filter>Collision</Filter>
     </ClCompile>
-    <ClCompile Include="source\Gimmick\Gimmick.cpp">
+    <ClCompile Include="source\Gimmick\DamageFloorGimmick.cpp">
       <Filter>Gimmick</Filter>
     </ClCompile>
     <ClCompile Include="source\Gimmick\GimmickBase.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="source\JsonSave\JsonSave.cpp">
+      <Filter>JsonSave</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Parameter\EParam.cpp">
+      <Filter>Parameter</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Parameter\EStageParam.cpp">
+      <Filter>Parameter</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Parameter\GParam.cpp">
+      <Filter>Parameter</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Parameter\GStageParam.cpp">
+      <Filter>Parameter</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Parameter\StageParam.cpp">
+      <Filter>Parameter</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Parameter\StageParameterBase.cpp">
+      <Filter>Parameter</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Stage\StageParameter.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Effect\EffectBase.cpp">
+      <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Effect\EffectLaser.cpp">
+      <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Effect\EffectServer.cpp">
+      <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Effect\EffectWind.cpp">
+      <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scene\SceneEpilogue.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Gauge\GaugeBase.cpp">
+      <Filter>Gauge</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scene\ScenePrologue.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="source\UI\AnimeSprite.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\UI\Sprite.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\UI\SpriteServer.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\UI\UIComponent.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Gimmick\BrokenWall.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Gimmick\GimmickParameter.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Motion\MotionBase.cpp">
+      <Filter>Motion</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Motion\MotionHuck.cpp">
+      <Filter>Motion</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Shader\Shader.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ShadowMap\Shadowmap.cpp">
+      <Filter>ShadowMap</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scene\SceneItem.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scene\SceneMap.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Flag\FlagData.cpp">
+      <Filter>Flag</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scene\SceneLoading.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Gauge\GaugeEnemy.cpp">
+      <Filter>Gauge</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Gauge\GaugePlayer.cpp">
+      <Filter>Gauge</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Enemy\CatchEnemy.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Parameter\IStageParam.cpp">
+      <Filter>Parameter</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Item\Item.cpp">
+      <Filter>Item</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Item\ItemParameter.cpp">
+      <Filter>Item</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scene\SceneSlideIn.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scene\SceneSlideOut.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Gimmick\Hole.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scene\SceneGameOver.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Gimmick\RecoveryFloorGimmick.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Gimmick\Restrictiongate.cpp">
       <Filter>Gimmick</Filter>
     </ClCompile>
   </ItemGroup>
@@ -103,6 +223,36 @@
     <Filter Include="nlohmann">
       <UniqueIdentifier>{8335ae00-6d4a-4c9a-9b94-d5010234acb4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="JsonSave">
+      <UniqueIdentifier>{1d5738b1-ff87-443c-9cd6-c08d109a30c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Parameter">
+      <UniqueIdentifier>{0a837a55-a1e1-4350-8c43-2f54f11f32b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Effect">
+      <UniqueIdentifier>{d3f6535b-1f3d-4333-b6f8-892b80e6c6e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gauge">
+      <UniqueIdentifier>{c0a849c4-a1eb-402b-9bbb-947a9bb27929}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{7405d2c9-317e-48be-b6e1-a11787072559}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Motion">
+      <UniqueIdentifier>{a28580a0-6be4-430f-9d4f-219e86166281}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{bebc18aa-32d0-4519-b180-fd024c06f004}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShadowMap">
+      <UniqueIdentifier>{f94efe2a-315c-4048-b537-22b00779386b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Flag">
+      <UniqueIdentifier>{ade52994-b96d-4bb0-9a85-8c02979ce85b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Item">
+      <UniqueIdentifier>{bb50e74c-876a-4038-a74e-629e912213cb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Enemy\TackleEnemy.h">
@@ -135,9 +285,6 @@
     <ClInclude Include="source\Enemy\EnemyBase.h">
       <Filter>Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="source\Scene\EffectServer.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="source\Camera\CameraComponent.h">
       <Filter>Camera</Filter>
     </ClInclude>
@@ -162,7 +309,7 @@
     <ClInclude Include="source\Collision\CollisionComponent.h">
       <Filter>Collision</Filter>
     </ClInclude>
-    <ClInclude Include="source\Gimmick\Gimmick.h">
+    <ClInclude Include="source\Gimmick\DamageFloorGimmick.h">
       <Filter>Gimmick</Filter>
     </ClInclude>
     <ClInclude Include="source\Gimmick\GimmickBase.h">
@@ -170,6 +317,132 @@
     </ClInclude>
     <ClInclude Include="source\nlohmann\json.hpp">
       <Filter>nlohmann</Filter>
+    </ClInclude>
+    <ClInclude Include="source\JsonSave\JsonSave.h">
+      <Filter>JsonSave</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Parameter\EParam.h">
+      <Filter>Parameter</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Parameter\EStageParam.h">
+      <Filter>Parameter</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Parameter\GParam.h">
+      <Filter>Parameter</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Parameter\GStageParam.h">
+      <Filter>Parameter</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Parameter\StageParam.h">
+      <Filter>Parameter</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Parameter\StageParameterBase.h">
+      <Filter>Parameter</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Stage\StageParameter.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Effect\EffectBase.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Effect\EffectLaser.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Effect\EffectServer.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Effect\EffectWind.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Scene\SceneEpilogue.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Gauge\GaugeBase.h">
+      <Filter>Gauge</Filter>
+    </ClInclude>
+    <ClInclude Include="source\State\StateBaseRoot.h">
+      <Filter>State</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Scene\ScenePrologue.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="source\UI\AnimeSprite.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\UI\Sprite.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\UI\SpriteServer.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\UI\UIComponent.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Gimmick\BrokenWall.h">
+      <Filter>Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Gimmick\GimmickParameter.h">
+      <Filter>Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Motion\MotionBase.h">
+      <Filter>Motion</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Motion\MotionHuck.h">
+      <Filter>Motion</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Shader\Shader.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ShadowMap\Shadowmap.h">
+      <Filter>ShadowMap</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Scene\SceneItem.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Scene\SceneMap.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Flag\FlagData.h">
+      <Filter>Flag</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Scene\SceneLoading.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Gauge\GaugeEnemy.h">
+      <Filter>Gauge</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Gauge\GaugePlayer.h">
+      <Filter>Gauge</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Enemy\CatchEnemy.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Parameter\IStageParam.h">
+      <Filter>Parameter</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Item\Item.h">
+      <Filter>Item</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Item\ItemParameter.h">
+      <Filter>Item</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Scene\SceneSlideIn.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Scene\SceneSlideOut.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Gimmick\Hole.h">
+      <Filter>Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Scene\SceneGameOver.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Gimmick\RecoveryFloorGimmick.h">
+      <Filter>Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Gimmick\Restrictiongate.h">
+      <Filter>Gimmick</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

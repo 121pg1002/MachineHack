@@ -1,16 +1,18 @@
-/**
- * @file   Utility.h
- * @brief  便利な機能クラス
+/*****************************************************************//**
+ * @file  Utility.h
+ * @brief 便利な機能クラス
  *
  * @author Hikaru Goto
- * @date   2021/11/30
- */
+ * @date   November 30 2021
+*********************************************************************/
+
 
 #pragma once
 
-namespace math 
+namespace AppFrame::Math
 {
     class Vector4;
+    class Vector2;
 
     class Utility {
     public:
@@ -23,17 +25,36 @@ namespace math
         *  @breif  角度からラジアンに変換
         *  @return ラジアン
         */
-        static double DegreeToRadian(float degree) {return degree * PI / DEGREES_180;}
+        static double DegreeToRadian(const double degree) {return degree * PI / DEGREES_180;}
 
         /*
         *  @breif  ラジアンから角度に変換
         *  @return 角度
         */
-        static double RadianToDegree(float radion) {return radion * DEGREES_180 / PI;}
+        static double RadianToDegree(const double radian) {return radian * DEGREES_180 / PI;}
 
         // 面の法線を求める
         static Vector4 Normal(const Vector4& point0, const Vector4& point1, const Vector4& point2);
 
+        /**
+         * @brief 点と三角形の内外判定(3次元)
+         * @param trianglePoint0
+         * @param trianglePoint1
+         * @param trianglePoint2
+         * @param point
+         * @return 内か外か
+         */
+        static bool InsideTrianglePoint(const Vector4& trianglePoint0, const Vector4& trianglePoint1, const Vector4& trianglePoint2, const Vector4& point);
+
+        /**
+         * @brief 点と三角形の内外判定(2次元)
+         * @param trianglePoint0
+         * @param trianglePoint1
+         * @param trianglePoint2
+         * @param point
+         * @return 
+         */
+        static bool InsideTrianglePoint(const Vector2& trianglePoint0, const Vector2& trianglePoint1, const Vector2& trianglePoint2, const Vector2& point);
 
     private:
         Utility() = default;

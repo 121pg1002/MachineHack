@@ -1,65 +1,116 @@
-///
-/// @file    ModelComponent.h
-/// @brief   スタティックモデル用のコンポーネント
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   ModelComponent.h
+ * @brief  スタティックモデル用のコンポーネント
+ *
+ * @author yamawaki kota
+ * @date   December 6 2021
+ *********************************************************************/
+
 #pragma once
 #include <DxLib.h>
 #include <string_view>
+#include <unordered_map>
 
-class Actor;
+namespace MachineHuck::Actor {
+	class Actor;
+}
 
-///
+
+namespace MachineHuck::Model {
+	///
 /// @class   ModelComponent
 /// @brief   スタティックモデル用のコンポーネントクラスの宣言
 ///
-class ModelComponent {
-public:
-  /// コンストラクタ
-  /// @param[in] filename モデルのファイル名
-  ModelComponent(Actor& owner);
-  /// デストラクタ
-  virtual ~ModelComponent();
+	class ModelComponent {
+	public:
+		/// コンストラクタ
+		/// @param[in] filename モデルのファイル名
+		ModelComponent(Actor::Actor& owner);
+		/// デストラクタ
+		virtual ~ModelComponent();
 
-  /// 初期化
-	virtual void Init();
+		/// 初期化
+		virtual void Init();
 
-  /// 更新
-	virtual void Update();
+		/// 更新
+		virtual void Update();
 
-  /// 描画
-  virtual void Draw();
-  
-  /// モデルの設定
-  /// @param key AssetServerに登録済みのキー
-  /// @return 実際に登録し通し番号
-  virtual int SetModel(std::string_view key, int no = 0);
+		/// 描画
+		virtual void Draw();
 
-  /// 座標の設定.
-  /// @param[in] position 座標x,y,z
-  virtual void SetPosition(VECTOR position);
+		//仮とした壊せる壁のコリジョンを描画しない
+		void BrokenDraw();
 
-  /// 回転角度の設定.
-  /// @param[in] rotation 回転角度x,y,z
-  virtual void SetRotation(VECTOR rotation);
+		/// @param collisionName コリジョンの名前
+		void SetModelGimmick(std::string key, std::string collsionName, int no);
 
-  /// 拡大率の設定.
-  /// @param[in] scale 拡大率
-  virtual void SetScale(VECTOR scale);
+		std::unordered_map<int, int> GetModelGimmick() const { return _gimmickHandle; }
 
-  /// ワールド行列の設定
-  /// @param world 
-  virtual void SetMatrix(MATRIX& world);
+		///**
+		// * @brief 描画 
+		// * @param pos
+		// * @param rot
+		// * @param scale
+		// */
+		//virtual void Draw(Math::Vector4 pos, Math::Vector4 rot, Math::Vector4 scale);
 
-  void SetHandle(int handle) { _handle = handle; }
-  int GetHandle() { return _handle; }
-  void SetColor(int index, float r, float g, float b);
+		/// モデルの設定
+		/// @param key AssetServerに登録済みのキー
+		/// @return 実際に登録した通し番号
+		virtual int SetModel(std::string_view key, int no = 0);
 
-protected:
-  Actor& _owner;
-  int _handle{-1};
-  bool _isLighting{true};
-};
+		/**
+		 * @brief  ステージモデルの設定       
+		 * @param  key AssetServerに登録済みのキー
+		 * @return 実際に登録した通し番号
+		 */
+		int SetMap(std::string key, int no = 0);
+
+
+		/// 座標の設定.
+		/// @param[in] position 座標x,y,z
+		virtual void SetPosition(VECTOR position);
+
+
+		void SetPosition(VECTOR position, float diameter);
+
+		/// 回転角度の設定.
+		/// @param[in] rotation 回転角度x,y,z
+		virtual void SetRotation(VECTOR rotation);
+
+		/// 拡大率の設定.
+		/// @param[in] scale 拡大率
+		virtual void SetScale(VECTOR scale);
+
+		/// ワールド行列の設定
+		/// @param world 
+		virtual void SetMatrix(MATRIX& world);
+
+		/**
+		 * @brief  ステージ番号を取得       
+		 * @return _stageNum
+		 */
+		int GetStageNum() { return _stageNum; }
+
+		/**
+		 * @brief  ステージ番号を設定       
+		 * @param  num
+		 */
+		void SetStageNum(int num) { _stageNum = num; }
+
+		void SetHandle(const int handle) { _handle = handle; }
+		int GetHandle() const { return _handle; }
+		void SetColor(int index, float r, float g, float b);
+
+
+
+	protected:
+		Actor::Actor& _owner;
+		int _handle{ -1 };
+		bool _isLighting{ true };
+		int _stageNum{-1};
+		std::unordered_map<int, int> _gimmickHandle; //!< キー: ハンドル バリュー: フレームコリジョン
+	};
+}
+
 

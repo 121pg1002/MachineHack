@@ -1,0 +1,5 @@
+{
+"StageEnemy":[
+		{"filename":"TackleEnemy","handlename":"TackleEnemy","tx":400,"ty":0,"tz":500,"rx":-0,"ry":-0,"rz":0,"sx":1,"sy":1,"sz":1, "numrange": 400, "routine": 2}
+	]
+}

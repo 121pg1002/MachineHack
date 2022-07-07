@@ -1,17 +1,21 @@
-///
-/// @file    CameraComponent.cpp
-/// @brief   カメラコンポーネント
-/// @date    2021/11/26
-/// @author yamawaki kota
-/// @copyright (C) Amusement Media Academy All rights Resved.
-///
+/*****************************************************************//**
+ * @file   CameraComponent.cpp
+ * @brief  カメラコンポーネント
+ *
+ * @author yamawaki kota
+ * @date   December 19 2021
+ *********************************************************************/
+
 #include "CameraComponent.h"
 #include "AppFrame.h"
 #include <DxLib.h>
 #include <algorithm>
 #include <cmath>
-#include <numbers>
-//namespace Camera {
+#include "../Flag/FlagData.h"
+//#include <numbers>
+
+namespace MachineHuck::Camera {
+
 	///
 	/// コンストラクタ.
 	///
@@ -22,40 +26,74 @@
 	/// 初期化.
 	///
 	void CameraComponent::Init() {
-		SetCameraNearFar(50.0f, 10000.0f);
+		SetCameraNearFar(50.0f, 50000.0f);
 	}
-	void CameraComponent::Input(InputComponent& input) {
+	void CameraComponent::Input(AppFrame::Input::InputComponent& input) {
+
+		//if(input.GetJoypad().)
+
+		//_lx = 0.0, _ly = 0.0;
+
+		//if (input.GetJoypad().LHorison() != 0.0) {
+		//	_lx = input.GetJoypad().LHorison() / 1000.0;
+		//}
+
+
+
+		//if (input.GetJoypad().LVertical() != 0.0) {
+		//	_ly = input.GetJoypad().LVertical() / 1000.0;
+		//}
+
 	}
 	///
 	/// 更新.
 	///
-	void CameraComponent::Update(math::Vector4 move) {
-		//// ターゲットの向き※Yは無視
-		//auto forward = _forwardOfTarget;
-		//forward.y = 0.f;
-		//// ターゲットの向きの真逆に長さをtargetDist
-		//auto fromTarget = VScale(forward, -targetDist);
-		//fromTarget.y = vertDist;
+	void CameraComponent::Update(Math::Vector4 move) {
+
+		//Math::Vector4 cameraMove = { 0.0, 0.0, move.GetZ() };
+
 		// カメラの位置をプレイヤーの後方の位置にする
-		_position = _position + move;
-		_target = _target + move;
+		_position = _position + move / 4;
+
+		//Math::Vector4 cameraMove = { 0.0, 0.0, move.GetZ() };
+
+			_target = _target + move / 2;
+
+		
 
 		SetCameraPositionAndTarget_UpVecY(ToDX(_position), ToDX(_target));
 
+	}
+
+
+	void CameraComponent::FloorPos(Math::Vector4 pos) {
+	
+		_position = pos + _positionInitDif;
+		_target = pos + _targetInitDif;
+
+		//_target = pos;
+
+		
+		SetCameraPositionAndTarget_UpVecY(ToDX(_position), ToDX(_target));
+		SetCameraMatrix();
+		//Flag::FlagData::SetCameraPos(ToDX(pos));
 
 	}
+
 	///
 	/// 描画.
 	///
 	void CameraComponent::Draw(bool isHit) {
-		if (isHit)
-		{
-			DrawString(0, 0, "当たっている", GetColor(255, 255, 0));
-		}
-		else
-		{
-			DrawString(0, 0, "当たっていない", GetColor(255, 0, 0));
-		}
+
+
+		//if (isHit)
+		//{
+		//	DrawString(0, 0, "当たっている", GetColor(255, 255, 0));
+		//}
+		//else
+		//{
+		//	DrawString(0, 0, "当たっていない", GetColor(255, 0, 0));
+		//}
 		//// カメラ情報表示
 		//
 		//	int x = 0, y = 0, size = 16;
@@ -80,35 +118,66 @@
 
 	}
 
+	void CameraComponent::SetRefleshPosition(Math::Vector4 position) {
+	
+		_position = position + _positionInitDif;
+	}
 
-	//MATRIX GetCameraViewMatrix(VECTOR& cameraPosition, VECTOR& cameraTarget, VECTOR& cameraUp) {
-	//    //SetCameraPositionAndTargetAndUpVec(camera_position, camera_target, camera_up);
-	//    //MATRIX camera_matrix = GetCameraViewMatrix();
-	//    // ↑ 上記と同じ MATRIX の内容を計算する
-	//
-	//    // カメラの姿勢での XYZ を作成
-	//    VECTOR camera_z = VNorm(VSub(cameraTarget, cameraPosition));
-	//    VECTOR camera_x = VNorm(VCross(cameraUp, camera_z));
-	//    VECTOR camera_y = VCross(camera_z, camera_x);
-	//
-	//    MATRIX camera_matrix = MGetIdent();
-	//
-	//    camera_matrix.m[0][0] = camera_x.x;
-	//    camera_matrix.m[0][1] = camera_y.x;
-	//    camera_matrix.m[0][2] = camera_z.x;
-	//
-	//    camera_matrix.m[1][0] = camera_x.y;
-	//    camera_matrix.m[1][1] = camera_y.y;
-	//    camera_matrix.m[1][2] = camera_z.y;
-	//
-	//    camera_matrix.m[2][0] = camera_x.z;
-	//    camera_matrix.m[2][1] = camera_y.z;
-	//    camera_matrix.m[2][2] = camera_z.z;
-	//    // DX ライブラリには VECTOR にマイナス演算子をつける機能はないので VScale でマイナスにする
-	//    camera_matrix.m[3][0] = VDot(VScale(camera_x, -1.0f), cameraPosition);
-	//    camera_matrix.m[3][1] = VDot(VScale(camera_y, -1.0f), cameraPosition);
-	//    camera_matrix.m[3][2] = VDot(VScale(camera_z, -1.0f), cameraPosition);
-	//
-	//    return camera_matrix;
-	//}
-//}
+	void CameraComponent::SetRefleshTarget(Math::Vector4 position) {
+
+		_target = position + _targetInitDif;
+	}
+
+	void CameraComponent::SetCameraMatrix() {
+	
+		// 現在のクライアント領域のサイズを取得
+		int wwid = 1920, whei = 1080;
+		//GetWindowSize(&wwid, &whei);
+
+		//// 射影行列を設定
+		//MATRIX ProjectionMatrix;
+		//CreatePerspectiveFovMatrix(&ProjectionMatrix, tan(DX_PI_F / 3.0 / 2.0) * whei / wwid, 0.001f, 10000.0f, (float)whei / wwid);
+		//SetTransformToProjection(&ProjectionMatrix); //!< カメラ行列を射影行列に変換している
+		////SetupCamera_ProjectionMatrix(ProjectionMatrix);
+
+		//// ビューポート行列を設定
+		//MATRIX ViewportMatrix;
+		//CreateViewportMatrix(&ViewportMatrix, wwid / 2.0f, whei / 2.0f, (float)wwid, (float)whei);
+		//SetTransformToViewport(&ViewportMatrix);//!< カメラ行列をViewPort行列に変換している
+
+		//// 描画領域を設定
+		//SetDrawArea(0, 0, wwid, whei);
+
+		SetupCamera_Perspective(tan(DX_PI_F / 3.0 / 2.0) * whei / wwid);
+	
+	}
+
+	//ワープ時のカメラ移動
+	void CameraComponent::WarpMoveCamera(Math::Vector4 rot, double moveSpeed) {
+		Math::Vector4 move = { 0.0, 0.0, 0.0 };
+	
+		if (rot.GetY() < -2.35 || 2.35 < rot.GetY()) {
+		
+			//上から来た(下向き)
+			move = { 0.0, 0.0, moveSpeed };
+
+		}
+		else if (-2.35 <= rot.GetY() && rot.GetY() <= -0.78) {
+		    //右から来た(左向き)
+			move = { moveSpeed, 0.0, 0.0 };
+		}
+		else if (-0.78 < rot.GetY() && rot.GetY() < 0.78) {
+		    //下から来た(上向き)
+			move = { 0.0, 0.0, -moveSpeed };
+		}
+		else {
+		    //左から来た(右向き)
+			move = { -moveSpeed, 0.0, 0.0 };
+		}
+
+		_target = _target + move;
+
+		SetCameraPositionAndTarget_UpVecY(ToDX(_position), ToDX(_target));
+	}
+}
+

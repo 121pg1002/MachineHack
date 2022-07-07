@@ -72,6 +72,15 @@
       <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="source\Game.h" />
+    <ClInclude Include="source\Input\JoypadState.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Input\KeyBoardState.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Input\MouseState.h">
+      <Filter>Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Asset">

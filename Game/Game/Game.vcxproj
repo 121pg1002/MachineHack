@@ -24,23 +24,63 @@
     <ClCompile Include="source\Actor\ActorServer.cpp" />
     <ClCompile Include="source\Camera\CameraComponent.cpp" />
     <ClCompile Include="source\Collision\CollisionComponent.cpp" />
+    <ClCompile Include="source\Effect\EffectBase.cpp" />
+    <ClCompile Include="source\Effect\EffectLaser.cpp" />
+    <ClCompile Include="source\Effect\EffectServer.cpp" />
+    <ClCompile Include="source\Effect\EffectWind.cpp" />
+    <ClCompile Include="source\Enemy\CatchEnemy.cpp" />
     <ClCompile Include="source\Enemy\TackleEnemy.cpp" />
     <ClCompile Include="source\Enemy\EnemyBase.cpp" />
     <ClCompile Include="source\Enemy\EnemyParameter.cpp" />
+    <ClCompile Include="source\Flag\FlagData.cpp" />
     <ClCompile Include="source\Game.cpp" />
-    <ClCompile Include="source\Gimmick\Gimmick.cpp" />
+    <ClCompile Include="source\Gauge\GaugeBase.cpp" />
+    <ClCompile Include="source\Gauge\GaugeEnemy.cpp" />
+    <ClCompile Include="source\Gauge\GaugePlayer.cpp" />
+    <ClCompile Include="source\Gimmick\BrokenWall.cpp" />
+    <ClCompile Include="source\Gimmick\DamageFloorGimmick.cpp" />
     <ClCompile Include="source\Gimmick\GimmickBase.cpp" />
+    <ClCompile Include="source\Gimmick\GimmickParameter.cpp" />
+    <ClCompile Include="source\Gimmick\Hole.cpp" />
+    <ClCompile Include="source\Gimmick\RecoveryFloorGimmick.cpp" />
+    <ClCompile Include="source\Gimmick\Restrictiongate.cpp" />
+    <ClCompile Include="source\Item\Item.cpp" />
+    <ClCompile Include="source\Item\ItemParameter.cpp" />
+    <ClCompile Include="source\JsonSave\JsonSave.cpp" />
     <ClCompile Include="source\Load\Load.cpp" />
     <ClCompile Include="source\Model\ModelAnimComponent.cpp" />
     <ClCompile Include="source\Model\ModelComponent.cpp" />
+    <ClCompile Include="source\Motion\MotionBase.cpp" />
+    <ClCompile Include="source\Motion\MotionHuck.cpp" />
+    <ClCompile Include="source\Parameter\EParam.cpp" />
+    <ClCompile Include="source\Parameter\EStageParam.cpp" />
+    <ClCompile Include="source\Parameter\GParam.cpp" />
+    <ClCompile Include="source\Parameter\GStageParam.cpp" />
+    <ClCompile Include="source\Parameter\IStageParam.cpp" />
+    <ClCompile Include="source\Parameter\StageParam.cpp" />
+    <ClCompile Include="source\Parameter\StageParameterBase.cpp" />
     <ClCompile Include="source\Player\Player.cpp" />
-    <ClCompile Include="source\Scene\EffectServer.cpp" />
     <ClCompile Include="source\Scene\SceneAMG.cpp" />
+    <ClCompile Include="source\Scene\SceneEpilogue.cpp" />
+    <ClCompile Include="source\Scene\SceneGameOver.cpp" />
     <ClCompile Include="source\Scene\SceneInGame.cpp" />
+    <ClCompile Include="source\Scene\SceneItem.cpp" />
+    <ClCompile Include="source\Scene\SceneLoading.cpp" />
+    <ClCompile Include="source\Scene\SceneMap.cpp" />
+    <ClCompile Include="source\Scene\ScenePrologue.cpp" />
+    <ClCompile Include="source\Scene\SceneSlideIn.cpp" />
+    <ClCompile Include="source\Scene\SceneSlideOut.cpp" />
     <ClCompile Include="source\Scene\SceneTeam.cpp" />
     <ClCompile Include="source\Scene\SceneTitle.cpp" />
+    <ClCompile Include="source\Shader\Shader.cpp" />
+    <ClCompile Include="source\ShadowMap\Shadowmap.cpp" />
     <ClCompile Include="source\Stage\Stage.cpp" />
+    <ClCompile Include="source\Stage\StageParameter.cpp" />
     <ClCompile Include="source\State\StateComponent.cpp" />
+    <ClCompile Include="source\UI\AnimeSprite.cpp" />
+    <ClCompile Include="source\UI\Sprite.cpp" />
+    <ClCompile Include="source\UI\SpriteServer.cpp" />
+    <ClCompile Include="source\UI\UIComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Actor\Actor.h" />
@@ -48,23 +88,64 @@
     <ClInclude Include="source\Actor\ActorServer.h" />
     <ClInclude Include="source\Camera\CameraComponent.h" />
     <ClInclude Include="source\Collision\CollisionComponent.h" />
+    <ClInclude Include="source\Effect\EffectBase.h" />
+    <ClInclude Include="source\Effect\EffectLaser.h" />
+    <ClInclude Include="source\Effect\EffectServer.h" />
+    <ClInclude Include="source\Effect\EffectWind.h" />
+    <ClInclude Include="source\Enemy\CatchEnemy.h" />
     <ClInclude Include="source\Enemy\TackleEnemy.h" />
     <ClInclude Include="source\Enemy\EnemyBase.h" />
     <ClInclude Include="source\Enemy\EnemyParameter.h" />
-    <ClInclude Include="source\Gimmick\Gimmick.h" />
+    <ClInclude Include="source\Flag\FlagData.h" />
+    <ClInclude Include="source\Gauge\GaugeBase.h" />
+    <ClInclude Include="source\Gauge\GaugeEnemy.h" />
+    <ClInclude Include="source\Gauge\GaugePlayer.h" />
+    <ClInclude Include="source\Gimmick\BrokenWall.h" />
+    <ClInclude Include="source\Gimmick\DamageFloorGimmick.h" />
     <ClInclude Include="source\Gimmick\GimmickBase.h" />
+    <ClInclude Include="source\Gimmick\GimmickParameter.h" />
+    <ClInclude Include="source\Gimmick\Hole.h" />
+    <ClInclude Include="source\Gimmick\RecoveryFloorGimmick.h" />
+    <ClInclude Include="source\Gimmick\Restrictiongate.h" />
+    <ClInclude Include="source\Item\Item.h" />
+    <ClInclude Include="source\Item\ItemParameter.h" />
+    <ClInclude Include="source\JsonSave\JsonSave.h" />
     <ClInclude Include="source\Load\Load.h" />
     <ClInclude Include="source\Model\ModelAnimComponent.h" />
     <ClInclude Include="source\Model\ModelComponent.h" />
+    <ClInclude Include="source\Motion\MotionBase.h" />
+    <ClInclude Include="source\Motion\MotionHuck.h" />
     <ClInclude Include="source\nlohmann\json.hpp" />
+    <ClInclude Include="source\Parameter\EParam.h" />
+    <ClInclude Include="source\Parameter\EStageParam.h" />
+    <ClInclude Include="source\Parameter\GParam.h" />
+    <ClInclude Include="source\Parameter\GStageParam.h" />
+    <ClInclude Include="source\Parameter\IStageParam.h" />
+    <ClInclude Include="source\Parameter\StageParam.h" />
+    <ClInclude Include="source\Parameter\StageParameterBase.h" />
     <ClInclude Include="source\Player\Player.h" />
-    <ClInclude Include="source\Scene\EffectServer.h" />
     <ClInclude Include="source\Scene\SceneAMG.h" />
+    <ClInclude Include="source\Scene\SceneEpilogue.h" />
+    <ClInclude Include="source\Scene\SceneGameOver.h" />
     <ClInclude Include="source\Scene\SceneInGame.h" />
+    <ClInclude Include="source\Scene\SceneItem.h" />
+    <ClInclude Include="source\Scene\SceneLoading.h" />
+    <ClInclude Include="source\Scene\SceneMap.h" />
+    <ClInclude Include="source\Scene\ScenePrologue.h" />
+    <ClInclude Include="source\Scene\SceneSlideIn.h" />
+    <ClInclude Include="source\Scene\SceneSlideOut.h" />
     <ClInclude Include="source\Scene\SceneTeam.h" />
     <ClInclude Include="source\Scene\SceneTitle.h" />
+    <ClInclude Include="source\Shader\Shader.h" />
+    <ClInclude Include="source\ShadowMap\Shadowmap.h" />
     <ClInclude Include="source\Stage\Stage.h" />
+    <ClInclude Include="source\Stage\StageParameter.h" />
+    <ClInclude Include="source\State\StateBaseRoot.h" />
     <ClInclude Include="source\State\StateComponent.h" />
+    <ClInclude Include="source\UI\AnimeSprite.h" />
+    <ClInclude Include="source\UI\Sprite.h" />
+    <ClInclude Include="source\UI\SpriteServer.h" />
+    <ClInclude Include="source\UI\UIComponent.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -149,7 +230,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -165,7 +246,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -181,7 +262,7 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -197,7 +278,7 @@
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

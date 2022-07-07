@@ -1,0 +1,29 @@
+{
+  "tackle": [
+    {
+      "level": 1,
+      "energy": 100.0,
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "r": 150.0,
+      "searchrange": 30.0,
+      "speed": 5.0
+    },
+
+    {
+      "level": 2,
+      "energy": 100.0,
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "r": 200.0,
+      "searchrange": 60.0,
+      "speed": 7.0
+    }
+  ]
+}
